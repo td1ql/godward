@@ -6,6 +6,7 @@ var discard_pile: Array[String] = []
 
 var player_hp := 50
 var player_block := 0
+var player_energy := 3
 var enemy_hp := 30
 var enemy_attack := 5
 
@@ -14,6 +15,7 @@ var card_buttons: Array[Button] = []
 
 const HAND_SIZE := 5
 const TOTAL_CARDS := 20
+const MAX_ENERGY := 3
 
 const CARD_DB := {
 	"打击": {"cost": 1, "damage": 6, "block": 0},
@@ -46,7 +48,6 @@ func _draw_cards(n: int) -> void:
 			draw_pile.shuffle()
 		hand.append(draw_pile.pop_back())
 
-# 根据当前手牌，重新生成一排可点击的按钮
 func _rebuild_hand_buttons() -> void:
 	for b in card_buttons:
 		b.queue_free()
@@ -57,10 +58,11 @@ func _rebuild_hand_buttons() -> void:
 		var btn := Button.new()
 		btn.position = Vector2(20 + i * 130, 300)
 		btn.size = Vector2(120, 110)
+		btn.disabled = player_energy < d["cost"]
 		if d["damage"] > 0:
-			btn.text = "%s\n%d 伤害" % [c, d["damage"]]
+			btn.text = "%s\n[%d费] %d 伤害" % [c, d["cost"], d["damage"]]
 		else:
-			btn.text = "%s\n%d 格挡" % [c, d["block"]]
+			btn.text = "%s\n[%d费] %d 格挡" % [c, d["cost"], d["block"]]
 		btn.pressed.connect(_on_card_pressed.bind(i))
 		add_child(btn)
 		card_buttons.append(btn)
@@ -72,6 +74,9 @@ func _on_card_pressed(index: int) -> void:
 		return
 	var c: String = hand[index]
 	var d: Dictionary = CARD_DB[c]
+	if player_energy < d["cost"]:
+		return
+	player_energy -= d["cost"]
 	if d["damage"] > 0:
 		enemy_hp = max(0, enemy_hp - d["damage"])
 	if d["block"] > 0:
@@ -85,12 +90,11 @@ func _on_card_pressed(index: int) -> void:
 func _on_end_turn_pressed() -> void:
 	if game_over:
 		return
-	# 敌人攻击：先被格挡抵消
 	var incoming: int = max(0, enemy_attack - player_block)
 	player_hp = max(0, player_hp - incoming)
 	player_block = 0
+	player_energy = MAX_ENERGY
 	_check_game_over()
-	# 弃掉手牌，重新抽 5 张
 	discard_pile.append_array(hand)
 	hand.clear()
 	_draw_cards(HAND_SIZE)
@@ -103,8 +107,8 @@ func _check_game_over() -> void:
 
 func _update_ui() -> void:
 	var total := draw_pile.size() + hand.size() + discard_pile.size()
-	info_label.text = "抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d/%d" % [
-		draw_pile.size(), hand.size(), discard_pile.size(), total, TOTAL_CARDS
+	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d/%d" % [
+		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total, TOTAL_CARDS
 	]
 	combat_label.text = "玩家 HP: %d  格挡: %d\n敌人 HP: %d" % [player_hp, player_block, enemy_hp]
 	if enemy_hp <= 0:
