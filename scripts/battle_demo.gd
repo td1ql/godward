@@ -197,6 +197,7 @@ func _choose_reward(card_name: String) -> void:
 	_finish_reward()
 
 func _finish_reward() -> void:
+	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _show_game_over() -> void:

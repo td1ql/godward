@@ -9,6 +9,7 @@ const CARDS := {
 	"毒刃": {"cost": 1, "damage": 0, "block": 0, "poison": 3},
 	"双重打击": {"cost": 1, "damage": 4, "block": 0, "hits": 2},
 	"急救": {"cost": 1, "damage": 0, "block": 0, "heal": 6},
+	"火球": {"cost": 2, "damage": 12, "block": 0},
 	"快速思考": {"cost": 0, "damage": 0, "block": 0, "draw": 2},
 }
 

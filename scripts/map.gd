@@ -44,6 +44,7 @@ func _ready() -> void:
 
 	current_id = GameState.current_node_id
 	_rebuild_view()
+	GameState.save_game()
 
 func _process(_delta: float) -> void:
 	if is_moving:
@@ -158,6 +159,7 @@ func _after_fade_out(id: int) -> void:
 	var center_btn: Button = node_buttons[id]
 	current_id = id
 	GameState.current_node_id = id
+	GameState.save_game()
 	center_btn.position = CENTER - NODE_SIZE / 2.0
 	center_btn.modulate.a = 1.0
 
@@ -322,4 +324,5 @@ func _close_encounter() -> void:
 	if overlay:
 		overlay.queue_free()
 		overlay = null
+	GameState.save_game()
 	_continue_children()
