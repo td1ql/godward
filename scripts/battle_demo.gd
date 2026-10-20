@@ -56,7 +56,7 @@ func _rebuild_hand_buttons() -> void:
 		var c: String = hand[i]
 		var d: Dictionary = CARD_DB[c]
 		var btn := Button.new()
-		btn.position = Vector2(20 + i * 130, 300)
+		btn.position = Vector2(200 + i * 130, 520)
 		btn.size = Vector2(120, 110)
 		btn.disabled = player_energy < d["cost"]
 		if d["damage"] > 0:
