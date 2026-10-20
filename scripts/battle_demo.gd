@@ -31,9 +31,8 @@ const CARD_DB := {
 
 func _ready() -> void:
 	player_hp = GameState.player_hp
-	var card_ids := ["打击", "防御", "重击", "铁壁", "疾风斩"]
-	for i in range(TOTAL_CARDS):
-		draw_pile.append(card_ids[i % card_ids.size()])
+	draw_pile = GameState.deck.duplicate()
+	draw_pile.shuffle()
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	_draw_cards(HAND_SIZE)
 	_rebuild_hand_buttons()
@@ -116,8 +115,8 @@ func _check_game_over() -> void:
 
 func _update_ui() -> void:
 	var total := draw_pile.size() + hand.size() + discard_pile.size()
-	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d/%d" % [
-		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total, TOTAL_CARDS
+	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d" % [
+		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total
 	]
 	combat_label.text = "玩家 HP: %d  格挡: %d\n敌人 HP: %d" % [player_hp, player_block, enemy_hp]
 	if enemy_hp <= 0:

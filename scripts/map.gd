@@ -25,6 +25,7 @@ var next_id := 0
 var is_moving := false
 var map_offset := Vector2.ZERO
 var pan_target := Vector2.ZERO
+var overlay: Control
 
 func _ready() -> void:
 	var hint := Label.new()
@@ -172,6 +173,13 @@ func _after_fade_out(id: int) -> void:
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
 
+	if t == "shop" or t == "rest" or t == "event":
+		_show_encounter(t)
+		return
+
+	_continue_children()
+
+func _continue_children() -> void:
 	var kids: Array = nodes[current_id]["children"]
 	var n := kids.size()
 	var tw := create_tween().set_parallel(true)
@@ -201,3 +209,117 @@ func _draw() -> void:
 			continue
 		var to_pos: Vector2 = b.position + NODE_SIZE / 2.0
 		draw_line(from_pos, to_pos, Color(0.45, 0.55, 0.75, b.modulate.a), 3.0)
+# ========== 遭遇界面：商店 / 休息 / 事件 ==========
+func _show_encounter(t: String) -> void:
+	overlay = Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.65)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var panel := ColorRect.new()
+	panel.color = Color(0.13, 0.14, 0.19)
+	panel.position = Vector2(390, 90)
+	panel.size = Vector2(500, 540)
+	overlay.add_child(panel)
+
+	var vbox := VBoxContainer.new()
+	vbox.position = Vector2(420, 120)
+	vbox.size = Vector2(440, 480)
+	overlay.add_child(vbox)
+
+	var title := Label.new()
+	title.add_theme_font_size_override("font_size", 26)
+	vbox.add_child(title)
+
+	var body := Label.new()
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	body.custom_minimum_size = Vector2(440, 100)
+	body.add_theme_font_size_override("font_size", 18)
+	vbox.add_child(body)
+
+	match t:
+		"rest":
+			_encounter_rest(title, body, vbox)
+		"event":
+			_encounter_event(title, body, vbox)
+		"shop":
+			_encounter_shop(title, body, vbox)
+
+func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var heal := int(GameState.player_max_hp * 0.3)
+	GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + heal)
+	title.text = "休息"
+	body.text = "你在篝火旁坐下，恢复了 %d 点生命。\n当前 HP: %d / %d" % [heal, GameState.player_hp, GameState.player_max_hp]
+	var b := Button.new()
+	b.text = "继续前进"
+	b.pressed.connect(_close_encounter)
+	vbox.add_child(b)
+
+func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var events := [
+		{"text": "你发现一眼清澈的神秘泉水。", "choices": [
+			{"label": "喝一口（回复 15 HP）", "hp": 15},
+			{"label": "不喝，离开", "hp": 0},
+		]},
+		{"text": "一个路过的商人想和你玩个赌局。", "choices": [
+			{"label": "赌一把（失去 8 HP，得到 60 金币）", "hp": -8, "gold": 60},
+			{"label": "拒绝", "hp": 0},
+		]},
+		{"text": "地上有个破旧的箱子，似乎还能用。", "choices": [
+			{"label": "撬开（得到 40 金币）", "gold": 40},
+			{"label": "无视它", "hp": 0},
+		]},
+	]
+	var ev: Dictionary = events[randi() % events.size()]
+	title.text = "事件"
+	body.text = ev["text"]
+	for c in ev["choices"]:
+		var b := Button.new()
+		b.text = c["label"]
+		b.pressed.connect(_apply_event_choice.bind(c))
+		vbox.add_child(b)
+
+func _apply_event_choice(c: Dictionary) -> void:
+	if c.has("hp"):
+		var h: int = c["hp"]
+		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
+	if c.has("gold"):
+		GameState.gold += c["gold"]
+	_close_encounter()
+
+func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var price := 40
+	var pool := ["打击", "防御", "重击", "铁壁", "疾风斩"]
+	pool.shuffle()
+	title.text = "商店"
+	body.text = "金币: %d\n挑一张卡牌加入你的牌组吧。" % GameState.gold
+	for i in range(3):
+		var card_name: String = pool[i]
+		var b := Button.new()
+		b.text = "购买 %s（%d 金币）" % [card_name, price]
+		b.disabled = GameState.gold < price
+		b.pressed.connect(_buy_card.bind(card_name, price, b))
+		vbox.add_child(b)
+	var leave := Button.new()
+	leave.text = "离开"
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
+
+func _buy_card(card_name: String, price: int, b: Button) -> void:
+	if GameState.gold < price:
+		return
+	GameState.gold -= price
+	GameState.deck.append(card_name)
+	b.disabled = true
+	b.text = "已购买 %s（剩余 %d 金币）" % [card_name, GameState.gold]
+
+func _close_encounter() -> void:
+	if overlay:
+		overlay.queue_free()
+		overlay = null
+	_continue_children()
