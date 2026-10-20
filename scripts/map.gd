@@ -32,11 +32,22 @@ func _ready() -> void:
 	hint.add_theme_font_size_override("font_size", 18)
 	hint.text = "选择要前往的节点"
 	add_child(hint)
-	_generate_map()
+
+	if not GameState.map_generated:
+		_generate_map()
+		GameState.map_nodes = nodes
+		GameState.map_generated = true
+		GameState.current_node_id = 0
+	else:
+		nodes = GameState.map_nodes
+
+	current_id = GameState.current_node_id
 	_rebuild_view()
+
 func _process(_delta: float) -> void:
 	if is_moving:
 		queue_redraw()
+
 func _generate_map() -> void:
 	nodes.clear()
 	next_id = 1
@@ -122,14 +133,12 @@ func _on_node_pressed(id: int) -> void:
 	var dest_local := CENTER + Vector2(cos(angle), sin(angle)) * RADIUS
 	pan_target = CENTER - dest_local
 
-	# 第一阶段：整张地图平移，把选中节点送到中心（玩家不动）
 	var tw := create_tween()
 	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tw.tween_method(_set_pan, 0.0, 1.0, PAN_TIME)
 	tw.finished.connect(_after_pan.bind(id))
 
 func _after_pan(id: int) -> void:
-	# 第二阶段：除选中节点外，其他节点淡出
 	var tw := create_tween().set_parallel(true)
 	for other_id in node_buttons.keys():
 		if other_id == id:
@@ -138,17 +147,16 @@ func _after_pan(id: int) -> void:
 	tw.finished.connect(_after_fade_out.bind(id))
 
 func _after_fade_out(id: int) -> void:
-	# 清掉旧节点，只保留被选中的那个作为新中心
 	for other_id in node_buttons.keys():
 		if other_id == id:
 			continue
 		var b: Button = node_buttons[other_id]
 		b.visible = false
-		queue_redraw()
 		b.queue_free()
 
 	var center_btn: Button = node_buttons[id]
 	current_id = id
+	GameState.current_node_id = id
 	center_btn.position = CENTER - NODE_SIZE / 2.0
 	center_btn.modulate.a = 1.0
 
@@ -159,7 +167,11 @@ func _after_fade_out(id: int) -> void:
 	map_offset = Vector2.ZERO
 	pan_target = Vector2.ZERO
 
-	# 第三阶段：新子节点从透明淡入
+	var t: String = nodes[id]["type"]
+	if t == "battle" or t == "elite" or t == "boss":
+		get_tree().change_scene_to_file("res://scenes/main.tscn")
+		return
+
 	var kids: Array = nodes[current_id]["children"]
 	var n := kids.size()
 	var tw := create_tween().set_parallel(true)
@@ -170,6 +182,7 @@ func _after_fade_out(id: int) -> void:
 		child_btn.modulate.a = 0.0
 		tw.tween_property(child_btn, "modulate:a", 1.0, FADE_TIME)
 	tw.finished.connect(_after_fade_in)
+	queue_redraw()
 
 func _after_fade_in() -> void:
 	is_moving = false
@@ -177,7 +190,6 @@ func _after_fade_in() -> void:
 func _draw() -> void:
 	if not nodes.has(current_id):
 		return
-	# 玩家固定标记
 	draw_circle(CENTER, 92, Color(0.35, 0.55, 0.95, 0.10))
 	var from_pos: Vector2 = CENTER + map_offset
 	var kids: Array = nodes[current_id]["children"]

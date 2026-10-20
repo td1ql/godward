@@ -30,6 +30,7 @@ const CARD_DB := {
 @onready var end_turn_button: Button = $EndTurnButton
 
 func _ready() -> void:
+	player_hp = GameState.player_hp
 	var card_ids := ["打击", "防御", "重击", "铁壁", "疾风斩"]
 	for i in range(TOTAL_CARDS):
 		draw_pile.append(card_ids[i % card_ids.size()])
@@ -102,8 +103,16 @@ func _on_end_turn_pressed() -> void:
 	_update_ui()
 
 func _check_game_over() -> void:
-	if enemy_hp <= 0 or player_hp <= 0:
+	if enemy_hp <= 0:
 		game_over = true
+		GameState.player_hp = max(1, player_hp)
+		await get_tree().create_timer(1.2).timeout
+		get_tree().change_scene_to_file("res://scenes/map.tscn")
+	elif player_hp <= 0:
+		game_over = true
+		await get_tree().create_timer(1.5).timeout
+		GameState.player_hp = GameState.player_max_hp
+		get_tree().reload_current_scene()
 
 func _update_ui() -> void:
 	var total := draw_pile.size() + hand.size() + discard_pile.size()

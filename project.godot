@@ -12,8 +12,12 @@ config_version=5
 
 config/name="Slay the Tower"
 config/description="Slay the Tower - tower defense roguelike"
-run/main_scene="res://scenes/main.tscn"
+run/main_scene="uid://dxt5cmh30nmp2"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[autoload]
+
+GameState="*res://scripts/game_state.gd"
 
 [display]
 
