@@ -1,28 +1,47 @@
 extends Node2D
 
-# 三个"牌堆"，用数组表示
 var draw_pile: Array[String] = []
 var hand: Array[String] = []
 var discard_pile: Array[String] = []
 
-# 引用场景里的两个节点（名字必须和场景里一致）
+const HAND_SIZE := 5
+const TOTAL_CARDS := 20
+
 @onready var info_label: Label = $InfoLabel
 @onready var draw_button: Button = $DrawButton
+@onready var end_turn_button: Button = $EndTurnButton
 
 func _ready() -> void:
-	# 开局给牌堆塞 5 张牌
-	draw_pile = ["打击", "打击", "防御", "防御", "打击"]
-	# 把按钮的"点击"事件绑定到下面这个函数
+	# 生成 20 张牌：一半打击、一半防御
+	for i in range(TOTAL_CARDS):
+		draw_pile.append("打击" if i % 2 == 0 else "防御")
 	draw_button.pressed.connect(_on_draw_pressed)
+	end_turn_button.pressed.connect(_on_end_turn_pressed)
+	_draw_cards(HAND_SIZE)
 	_update_ui()
 
 func _on_draw_pressed() -> void:
-	if draw_pile.is_empty():
-		info_label.text = "牌堆空了！"
-		return
-	var card: String = draw_pile.pop_back()
-	hand.append(card)
+	_draw_cards(1)
 	_update_ui()
+
+func _on_end_turn_pressed() -> void:
+	# 手牌全部丢进弃牌堆
+	discard_pile.append_array(hand)
+	hand.clear()
+	# 重新抽 5 张
+	_draw_cards(HAND_SIZE)
+	_update_ui()
+
+func _draw_cards(n: int) -> void:
+	for i in range(n):
+		# 抽牌堆空了：把弃牌堆洗回来
+		if draw_pile.is_empty():
+			if discard_pile.is_empty():
+				return
+			draw_pile = discard_pile.duplicate()
+			discard_pile.clear()
+			draw_pile.shuffle()
+		hand.append(draw_pile.pop_back())
 
 func _update_ui() -> void:
 	var hand_text := ""
@@ -30,6 +49,8 @@ func _update_ui() -> void:
 		hand_text += c + "  "
 	if hand_text == "":
 		hand_text = "（空）"
-	info_label.text = "牌堆: %d    弃牌: %d\n手牌: %s" % [
-		draw_pile.size(), discard_pile.size(), hand_text
+	var total := draw_pile.size() + hand.size() + discard_pile.size()
+	info_label.text = "抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d/%d\n手牌内容: %s" % [
+		draw_pile.size(), hand.size(), discard_pile.size(),
+		total, TOTAL_CARDS, hand_text
 	]
