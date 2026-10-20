@@ -105,8 +105,7 @@ func _check_game_over() -> void:
 	if enemy_hp <= 0:
 		game_over = true
 		GameState.player_hp = max(1, player_hp)
-		await get_tree().create_timer(1.2).timeout
-		get_tree().change_scene_to_file("res://scenes/map.tscn")
+		_show_reward()
 	elif player_hp <= 0:
 		game_over = true
 		await get_tree().create_timer(1.5).timeout
@@ -123,3 +122,50 @@ func _update_ui() -> void:
 		combat_label.text += "\n你赢了！"
 	elif player_hp <= 0:
 		combat_label.text += "\n你被打败了..."
+# ========== 战斗胜利奖励 ==========
+func _show_reward() -> void:
+	var pool := ["打击", "防御", "重击", "铁壁", "疾风斩"]
+	pool.shuffle()
+
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.7)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "战斗胜利！选择一张卡加入牌组"
+	title.position = Vector2(380, 150)
+	title.add_theme_font_size_override("font_size", 24)
+	overlay.add_child(title)
+
+	for i in range(3):
+		var card_name: String = pool[i]
+		var d: Dictionary = CARD_DB[card_name]
+		var btn := Button.new()
+		btn.size = Vector2(220, 170)
+		btn.position = Vector2(240 + i * 250, 280)
+		if d["damage"] > 0:
+			btn.text = "%s\n[%d费] %d 伤害\n\n点击选择" % [card_name, d["cost"], d["damage"]]
+		else:
+			btn.text = "%s\n[%d费] %d 格挡\n\n点击选择" % [card_name, d["cost"], d["block"]]
+		btn.pressed.connect(_choose_reward.bind(card_name))
+		overlay.add_child(btn)
+
+	var skip := Button.new()
+	skip.text = "跳过奖励"
+	skip.size = Vector2(200, 50)
+	skip.position = Vector2(540, 520)
+	skip.pressed.connect(_finish_reward)
+	overlay.add_child(skip)
+
+func _choose_reward(card_name: String) -> void:
+	GameState.deck.append(card_name)
+	_finish_reward()
+
+func _finish_reward() -> void:
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
