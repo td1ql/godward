@@ -294,7 +294,7 @@ func _apply_event_choice(c: Dictionary) -> void:
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var price := 40
-	var pool := ["打击", "防御", "重击", "铁壁", "疾风斩"]
+	var pool: Array = CardDB.all_ids()
 	pool.shuffle()
 	title.text = "商店"
 	body.text = "金币: %d\n挑一张卡牌加入你的牌组吧。" % GameState.gold

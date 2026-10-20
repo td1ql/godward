@@ -9,6 +9,7 @@ var player_block := 0
 var player_energy := 3
 var enemy_hp := 30
 var enemy_attack := 5
+var enemy_poison := 0
 var enemy_label_name := "敌人"
 
 var game_over := false
@@ -17,14 +18,6 @@ var card_buttons: Array[Button] = []
 const HAND_SIZE := 5
 const MAX_ENERGY := 3
 
-const CARD_DB := {
-	"打击": {"cost": 1, "damage": 6, "block": 0},
-	"防御": {"cost": 1, "damage": 0, "block": 5},
-	"重击": {"cost": 2, "damage": 10, "block": 0},
-	"铁壁": {"cost": 2, "damage": 0, "block": 10},
-	"疾风斩": {"cost": 1, "damage": 8, "block": 0},
-}
-
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
 @onready var end_turn_button: Button = $EndTurnButton
@@ -32,7 +25,6 @@ const CARD_DB := {
 func _ready() -> void:
 	player_hp = GameState.player_hp
 
-	# 根据当前节点类型决定敌人强度
 	var node_type := ""
 	if GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
@@ -73,15 +65,12 @@ func _rebuild_hand_buttons() -> void:
 	card_buttons.clear()
 	for i in range(hand.size()):
 		var c: String = hand[i]
-		var d: Dictionary = CARD_DB[c]
+		var d: Dictionary = CardDB.get_card(c)
 		var btn := Button.new()
 		btn.position = Vector2(200 + i * 130, 520)
 		btn.size = Vector2(120, 110)
 		btn.disabled = player_energy < d["cost"]
-		if d["damage"] > 0:
-			btn.text = "%s\n[%d费] %d 伤害" % [c, d["cost"], d["damage"]]
-		else:
-			btn.text = "%s\n[%d费] %d 格挡" % [c, d["cost"], d["block"]]
+		btn.text = CardDB.card_text(c)
 		btn.pressed.connect(_on_card_pressed.bind(i))
 		add_child(btn)
 		card_buttons.append(btn)
@@ -92,16 +81,25 @@ func _on_card_pressed(index: int) -> void:
 	if index < 0 or index >= hand.size():
 		return
 	var c: String = hand[index]
-	var d: Dictionary = CARD_DB[c]
+	var d: Dictionary = CardDB.get_card(c)
 	if player_energy < d["cost"]:
 		return
 	player_energy -= d["cost"]
+
+	var hits: int = d.get("hits", 1)
 	if d["damage"] > 0:
-		enemy_hp = max(0, enemy_hp - d["damage"])
-	if d["block"] > 0:
-		player_block += d["block"]
+		enemy_hp = max(0, enemy_hp - d["damage"] * hits)
+	player_block += d["block"]
+	enemy_poison += d.get("poison", 0)
+	if d.get("heal", 0) > 0:
+		player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
+
 	hand.remove_at(index)
 	discard_pile.append(c)
+
+	if d.get("draw", 0) > 0:
+		_draw_cards(d["draw"])
+
 	_check_game_over()
 	_rebuild_hand_buttons()
 	_update_ui()
@@ -109,11 +107,24 @@ func _on_card_pressed(index: int) -> void:
 func _on_end_turn_pressed() -> void:
 	if game_over:
 		return
+
+	if enemy_poison > 0:
+		enemy_hp = max(0, enemy_hp - enemy_poison)
+		enemy_poison = max(0, enemy_poison - 1)
+		_check_game_over()
+		_update_ui()
+		if game_over:
+			return
+
 	var incoming: int = max(0, enemy_attack - player_block)
 	player_hp = max(0, player_hp - incoming)
 	player_block = 0
 	player_energy = MAX_ENERGY
 	_check_game_over()
+	_update_ui()
+	if game_over:
+		return
+
 	discard_pile.append_array(hand)
 	hand.clear()
 	_draw_cards(HAND_SIZE)
@@ -135,15 +146,17 @@ func _update_ui() -> void:
 	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d" % [
 		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total
 	]
-	combat_label.text = "玩家 HP: %d  格挡: %d\n%s HP: %d" % [player_hp, player_block, enemy_label_name, enemy_hp]
+	var combat := "玩家 HP: %d  格挡: %d\n%s HP: %d" % [player_hp, player_block, enemy_label_name, enemy_hp]
+	if enemy_poison > 0:
+		combat += "（中毒 %d）" % enemy_poison
+	combat_label.text = combat
 	if enemy_hp <= 0:
 		combat_label.text += "\n你赢了！"
 	elif player_hp <= 0:
 		combat_label.text += "\n你被打败了..."
 
-# ========== 战斗胜利奖励 ==========
 func _show_reward() -> void:
-	var pool := ["打击", "防御", "重击", "铁壁", "疾风斩"]
+	var pool := CardDB.all_ids()
 	pool.shuffle()
 
 	var overlay := Control.new()
@@ -165,14 +178,10 @@ func _show_reward() -> void:
 
 	for i in range(3):
 		var card_name: String = pool[i]
-		var d: Dictionary = CARD_DB[card_name]
 		var btn := Button.new()
 		btn.size = Vector2(220, 170)
 		btn.position = Vector2(240 + i * 250, 280)
-		if d["damage"] > 0:
-			btn.text = "%s\n[%d费] %d 伤害\n\n点击选择" % [card_name, d["cost"], d["damage"]]
-		else:
-			btn.text = "%s\n[%d费] %d 格挡\n\n点击选择" % [card_name, d["cost"], d["block"]]
+		btn.text = CardDB.card_text(card_name) + "\n\n点击选择"
 		btn.pressed.connect(_choose_reward.bind(card_name))
 		overlay.add_child(btn)
 
@@ -190,7 +199,6 @@ func _choose_reward(card_name: String) -> void:
 func _finish_reward() -> void:
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
-# ========== 失败结算 ==========
 func _show_game_over() -> void:
 	var overlay := Control.new()
 	overlay.size = Vector2(1280, 720)

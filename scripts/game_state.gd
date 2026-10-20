@@ -12,10 +12,7 @@ func _ready() -> void:
 	reset_deck()
 
 func reset_deck() -> void:
-	deck.clear()
-	var card_ids := ["打击", "防御", "重击", "铁壁", "疾风斩"]
-	for i in range(20):
-		deck.append(card_ids[i % card_ids.size()])
+	deck = CardDB.starter_deck()
 
 func reset_run() -> void:
 	player_hp = player_max_hp
