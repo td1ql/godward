@@ -5,7 +5,12 @@ var hand: Array[String] = []
 var discard_pile: Array[String] = []
 
 var player_hp := 50
+var player_block := 0
 var enemy_hp := 30
+var enemy_attack := 5
+
+var game_over := false
+var card_buttons: Array[Button] = []
 
 const HAND_SIZE := 5
 const TOTAL_CARDS := 20
@@ -20,38 +25,15 @@ const CARD_DB := {
 
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
-@onready var draw_button: Button = $DrawButton
 @onready var end_turn_button: Button = $EndTurnButton
-@onready var attack_button: Button = $AttackButton
 
 func _ready() -> void:
 	var card_ids := ["打击", "防御", "重击", "铁壁", "疾风斩"]
 	for i in range(TOTAL_CARDS):
 		draw_pile.append(card_ids[i % card_ids.size()])
-	draw_button.pressed.connect(_on_draw_pressed)
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
-	attack_button.pressed.connect(_on_attack_pressed)
 	_draw_cards(HAND_SIZE)
-	_update_ui()
-
-func _on_draw_pressed() -> void:
-	_draw_cards(1)
-	_update_ui()
-
-func _on_end_turn_pressed() -> void:
-	discard_pile.append_array(hand)
-	hand.clear()
-	_draw_cards(HAND_SIZE)
-	_update_ui()
-
-func _on_attack_pressed() -> void:
-	if enemy_hp <= 0 or player_hp <= 0:
-		return
-	# 玩家攻击（先用固定 6 点伤害模拟）
-	enemy_hp = max(0, enemy_hp - 6)
-	# 敌人没死就反击
-	if enemy_hp > 0:
-		player_hp = max(0, player_hp - 5)
+	_rebuild_hand_buttons()
 	_update_ui()
 
 func _draw_cards(n: int) -> void:
@@ -64,22 +46,67 @@ func _draw_cards(n: int) -> void:
 			draw_pile.shuffle()
 		hand.append(draw_pile.pop_back())
 
-func _update_ui() -> void:
-	var hand_text := ""
-	for c in hand:
+# 根据当前手牌，重新生成一排可点击的按钮
+func _rebuild_hand_buttons() -> void:
+	for b in card_buttons:
+		b.queue_free()
+	card_buttons.clear()
+	for i in range(hand.size()):
+		var c: String = hand[i]
 		var d: Dictionary = CARD_DB[c]
+		var btn := Button.new()
+		btn.position = Vector2(20 + i * 130, 300)
+		btn.size = Vector2(120, 110)
 		if d["damage"] > 0:
-			hand_text += "%s(%d伤) " % [c, d["damage"]]
+			btn.text = "%s\n%d 伤害" % [c, d["damage"]]
 		else:
-			hand_text += "%s(%d挡) " % [c, d["block"]]
-	if hand_text == "":
-		hand_text = "（空）"
+			btn.text = "%s\n%d 格挡" % [c, d["block"]]
+		btn.pressed.connect(_on_card_pressed.bind(i))
+		add_child(btn)
+		card_buttons.append(btn)
+
+func _on_card_pressed(index: int) -> void:
+	if game_over:
+		return
+	if index < 0 or index >= hand.size():
+		return
+	var c: String = hand[index]
+	var d: Dictionary = CARD_DB[c]
+	if d["damage"] > 0:
+		enemy_hp = max(0, enemy_hp - d["damage"])
+	if d["block"] > 0:
+		player_block += d["block"]
+	hand.remove_at(index)
+	discard_pile.append(c)
+	_check_game_over()
+	_rebuild_hand_buttons()
+	_update_ui()
+
+func _on_end_turn_pressed() -> void:
+	if game_over:
+		return
+	# 敌人攻击：先被格挡抵消
+	var incoming: int = max(0, enemy_attack - player_block)
+	player_hp = max(0, player_hp - incoming)
+	player_block = 0
+	_check_game_over()
+	# 弃掉手牌，重新抽 5 张
+	discard_pile.append_array(hand)
+	hand.clear()
+	_draw_cards(HAND_SIZE)
+	_rebuild_hand_buttons()
+	_update_ui()
+
+func _check_game_over() -> void:
+	if enemy_hp <= 0 or player_hp <= 0:
+		game_over = true
+
+func _update_ui() -> void:
 	var total := draw_pile.size() + hand.size() + discard_pile.size()
-	info_label.text = "抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d/%d\n手牌: %s" % [
-		draw_pile.size(), hand.size(), discard_pile.size(),
-		total, TOTAL_CARDS, hand_text
+	info_label.text = "抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d/%d" % [
+		draw_pile.size(), hand.size(), discard_pile.size(), total, TOTAL_CARDS
 	]
-	combat_label.text = "玩家 HP: %d    敌人 HP: %d" % [player_hp, enemy_hp]
+	combat_label.text = "玩家 HP: %d  格挡: %d\n敌人 HP: %d" % [player_hp, player_block, enemy_hp]
 	if enemy_hp <= 0:
 		combat_label.text += "\n你赢了！"
 	elif player_hp <= 0:
