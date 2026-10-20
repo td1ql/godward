@@ -9,12 +9,12 @@ var player_block := 0
 var player_energy := 3
 var enemy_hp := 30
 var enemy_attack := 5
+var enemy_label_name := "敌人"
 
 var game_over := false
 var card_buttons: Array[Button] = []
 
 const HAND_SIZE := 5
-const TOTAL_CARDS := 20
 const MAX_ENERGY := 3
 
 const CARD_DB := {
@@ -31,6 +31,25 @@ const CARD_DB := {
 
 func _ready() -> void:
 	player_hp = GameState.player_hp
+
+	# 根据当前节点类型决定敌人强度
+	var node_type := ""
+	if GameState.map_nodes.has(GameState.current_node_id):
+		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
+	match node_type:
+		"elite":
+			enemy_hp = 60
+			enemy_attack = 8
+			enemy_label_name = "精英敌人"
+		"boss":
+			enemy_hp = 100
+			enemy_attack = 12
+			enemy_label_name = "首领"
+		_:
+			enemy_hp = 30
+			enemy_attack = 5
+			enemy_label_name = "敌人"
+
 	draw_pile = GameState.deck.duplicate()
 	draw_pile.shuffle()
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
@@ -108,20 +127,20 @@ func _check_game_over() -> void:
 		_show_reward()
 	elif player_hp <= 0:
 		game_over = true
-		await get_tree().create_timer(1.5).timeout
-		GameState.player_hp = GameState.player_max_hp
-		get_tree().reload_current_scene()
+		await get_tree().create_timer(1.0).timeout
+		_show_game_over()
 
 func _update_ui() -> void:
 	var total := draw_pile.size() + hand.size() + discard_pile.size()
 	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d" % [
 		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total
 	]
-	combat_label.text = "玩家 HP: %d  格挡: %d\n敌人 HP: %d" % [player_hp, player_block, enemy_hp]
+	combat_label.text = "玩家 HP: %d  格挡: %d\n%s HP: %d" % [player_hp, player_block, enemy_label_name, enemy_hp]
 	if enemy_hp <= 0:
 		combat_label.text += "\n你赢了！"
 	elif player_hp <= 0:
 		combat_label.text += "\n你被打败了..."
+
 # ========== 战斗胜利奖励 ==========
 func _show_reward() -> void:
 	var pool := ["打击", "防御", "重击", "铁壁", "疾风斩"]
@@ -130,6 +149,7 @@ func _show_reward() -> void:
 	var overlay := Control.new()
 	overlay.size = Vector2(1280, 720)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
 	add_child(overlay)
 
 	var dim := ColorRect.new()
@@ -168,4 +188,40 @@ func _choose_reward(card_name: String) -> void:
 	_finish_reward()
 
 func _finish_reward() -> void:
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+# ========== 失败结算 ==========
+func _show_game_over() -> void:
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.85)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "你被打倒了……"
+	title.position = Vector2(480, 260)
+	title.add_theme_font_size_override("font_size", 34)
+	overlay.add_child(title)
+
+	var sub := Label.new()
+	sub.text = "这次冒险到此为止。"
+	sub.position = Vector2(510, 320)
+	sub.add_theme_font_size_override("font_size", 18)
+	overlay.add_child(sub)
+
+	var btn := Button.new()
+	btn.text = "重新开始一局"
+	btn.size = Vector2(220, 60)
+	btn.position = Vector2(530, 400)
+	btn.pressed.connect(_restart_run)
+	overlay.add_child(btn)
+
+func _restart_run() -> void:
+	GameState.reset_run()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
