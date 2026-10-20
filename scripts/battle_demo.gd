@@ -25,22 +25,13 @@ const MAX_ENERGY := 3
 func _ready() -> void:
 	player_hp = GameState.player_hp
 
-	var node_type := ""
+	var node_type := "battle"
 	if GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
-	match node_type:
-		"elite":
-			enemy_hp = 60
-			enemy_attack = 8
-			enemy_label_name = "精英敌人"
-		"boss":
-			enemy_hp = 100
-			enemy_attack = 12
-			enemy_label_name = "首领"
-		_:
-			enemy_hp = 30
-			enemy_attack = 5
-			enemy_label_name = "敌人"
+	var e: Dictionary = EnemyDB.pick_for_node(node_type)
+	enemy_hp = int(e["hp"])
+	enemy_attack = int(e["attack"])
+	enemy_label_name = str(e["name"])
 
 	draw_pile = GameState.deck.duplicate()
 	draw_pile.shuffle()
