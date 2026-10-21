@@ -240,21 +240,7 @@ func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	vbox.add_child(b)
 
 func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	var events := [
-		{"text": "你发现一眼清澈的神秘泉水。", "choices": [
-			{"label": "喝一口（回复 15 HP）", "hp": 15},
-			{"label": "不喝，离开", "hp": 0},
-		]},
-		{"text": "一个路过的商人想和你玩个赌局。", "choices": [
-			{"label": "赌一把（失去 8 HP，得到 60 金币）", "hp": -8, "gold": 60},
-			{"label": "拒绝", "hp": 0},
-		]},
-		{"text": "地上有个破旧的箱子，似乎还能用。", "choices": [
-			{"label": "撬开（得到 40 金币）", "gold": 40},
-			{"label": "无视它", "hp": 0},
-		]},
-	]
-	var ev: Dictionary = events[randi() % events.size()]
+	var ev: Dictionary = EventDB.pick()
 	title.text = "事件"
 	body.text = ev["text"]
 	for c in ev["choices"]:
@@ -272,13 +258,11 @@ func _apply_event_choice(c: Dictionary) -> void:
 	_close_encounter()
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	var price := 40
-	var pool: Array = CardDB.all_ids()
-	pool.shuffle()
+	var cards: Array = ShopDB.pick_cards()
 	title.text = "商店"
 	body.text = "金币: %d\n挑一张卡牌加入你的牌组吧。" % GameState.gold
-	for i in range(3):
-		var card_name: String = pool[i]
+	for card_name in cards:
+		var price: int = CardDB.price_of(card_name)
 		var b := Button.new()
 		b.text = "购买 %s（%d 金币）" % [card_name, price]
 		b.disabled = GameState.gold < price

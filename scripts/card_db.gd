@@ -1,18 +1,20 @@
 extends Node
 
+const DEFAULT_PRICE := 40
+
 const CARDS := {
-	"打击": {"cost": 1, "damage": 6, "block": 0},
-	"防御": {"cost": 1, "damage": 0, "block": 5},
-	"重击": {"cost": 2, "damage": 10, "block": 0},
-	"铁壁": {"cost": 2, "damage": 0, "block": 10},
-	"疾风斩": {"cost": 1, "damage": 8, "block": 0},
-	"毒刃": {"cost": 1, "damage": 0, "block": 0, "status": {"中毒": 3}},
-	"削弱": {"cost": 1, "damage": 0, "block": 0, "status": {"虚弱": 2}},
-	"力量药剂": {"cost": 1, "damage": 0, "block": 0, "self_status": {"力量": 2}},
-	"双重打击": {"cost": 1, "damage": 4, "block": 0, "hits": 2},
-	"急救": {"cost": 1, "damage": 0, "block": 0, "heal": 6},
-	"快速思考": {"cost": 0, "damage": 0, "block": 0, "draw": 2},
-	"火球": {"cost": 2, "damage": 12, "block": 0},
+	"打击": {"cost": 1, "damage": 6, "block": 0, "price": 30},
+	"防御": {"cost": 1, "damage": 0, "block": 5, "price": 30},
+	"重击": {"cost": 2, "damage": 10, "block": 0, "price": 50},
+	"铁壁": {"cost": 2, "damage": 0, "block": 10, "price": 50},
+	"疾风斩": {"cost": 1, "damage": 8, "block": 0, "price": 45},
+	"毒刃": {"cost": 1, "damage": 0, "block": 0, "status": {"中毒": 3}, "price": 55},
+	"削弱": {"cost": 1, "damage": 0, "block": 0, "status": {"虚弱": 2}, "price": 45},
+	"力量药剂": {"cost": 1, "damage": 0, "block": 0, "self_status": {"力量": 2}, "price": 60},
+	"双重打击": {"cost": 1, "damage": 4, "block": 0, "hits": 2, "price": 45},
+	"急救": {"cost": 1, "damage": 0, "block": 0, "heal": 6, "price": 40},
+	"快速思考": {"cost": 0, "damage": 0, "block": 0, "draw": 2, "price": 50},
+	"火球": {"cost": 2, "damage": 12, "block": 0, "price": 70},
 }
 
 const STARTER := ["打击", "防御", "重击", "铁壁", "疾风斩"]
@@ -22,6 +24,9 @@ func all_ids() -> Array:
 
 func get_card(id: String) -> Dictionary:
 	return CARDS[id]
+
+func price_of(id: String) -> int:
+	return int(CARDS[id].get("price", DEFAULT_PRICE))
 
 func card_text(id: String) -> String:
 	var d: Dictionary = CARDS[id]

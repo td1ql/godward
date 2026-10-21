@@ -22,6 +22,8 @@ GameState="*res://scripts/game_state.gd"
 EnemyDB="*res://scripts/enemy_db.gd"
 StatusDB="*res://scripts/status_db.gd"
 MapDB="*res://scripts/map_db.gd"
+EventDB="*res://scripts/event_db.gd"
+ShopDB="*res://scripts/shop_db.gd"
 
 [display]
 
