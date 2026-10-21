@@ -2,21 +2,14 @@ extends Node2D
 
 var deck := Deck.new()
 var hand_view: HandView
+var enemy := EnemyState.new()
 
 var player_hp := 0
 var player_block := 0
 var player_energy := 0
 var player_status := {}
 
-var enemy_hp := 0
-var enemy_attack := 0
-var enemy_status := {}
-var enemy_on_hit := {}
-var enemy_pattern: Array = [1]
-var enemy_label_name := "敌人"
-var turn_index := 0
 var node_type := "battle"
-
 var game_over := false
 
 var pending_effect := -1
@@ -34,12 +27,7 @@ func _ready() -> void:
 	node_type = "battle"
 	if GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
-	var e: Dictionary = EnemyDB.pick_for_node(node_type)
-	enemy_hp = int(e["hp"])
-	enemy_attack = int(e["attack"])
-	enemy_label_name = str(e["name"])
-	enemy_pattern = e.get("pattern", [1])
-	enemy_on_hit = e.get("on_hit", {})
+	enemy.setup(EnemyDB.pick_for_node(node_type))
 
 	deck.setup(GameState.deck)
 
@@ -75,21 +63,16 @@ func _draw_cards(n: int) -> void:
 			msg += e
 		Toast.show_text("遭遇牌：" + msg)
 
-func _intent_damage() -> int:
-	if enemy_pattern.is_empty():
-		return enemy_attack
-	return enemy_attack * int(enemy_pattern[turn_index % enemy_pattern.size()])
-
 func _apply_card_effects(c: String) -> void:
 	var d: Dictionary = CardDB.get_card(c)
 	var hits: int = d.get("hits", 1)
 	if d["damage"] > 0:
-		var per := DamageCalc.compute(d["damage"], player_status, enemy_status)
-		enemy_hp = max(0, enemy_hp - per * hits)
+		var per := DamageCalc.compute(d["damage"], player_status, enemy.status)
+		enemy.hp = max(0, enemy.hp - per * hits)
 		AudioManager.play("hit")
 	player_block += d["block"]
 	if d.has("status"):
-		StatusSystem.apply(enemy_status, d["status"])
+		StatusSystem.apply(enemy.status, d["status"])
 	if d.has("self_status"):
 		StatusSystem.apply(player_status, d["self_status"])
 	if d.get("heal", 0) > 0:
@@ -170,35 +153,41 @@ func _resolve_effect() -> void:
 	_render_hand()
 	_update_ui()
 
+# ===== 回合流程（分阶段）=====
 func _on_end_turn_pressed() -> void:
 	if game_over or pending_effect >= 0:
 		return
-
-	var pp := StatusSystem.tick_damage(player_status)
-	if pp > 0:
-		player_hp = max(0, player_hp - pp)
-
-	var dmg := DamageCalc.compute(_intent_damage(), enemy_status, player_status)
-	dmg = max(0, dmg - player_block)
-	player_hp = max(0, player_hp - dmg)
-	player_block = 0
-	turn_index += 1
-
-	var ep := StatusSystem.tick_damage(enemy_status)
-	if ep > 0:
-		enemy_hp = max(0, enemy_hp - ep)
-
-	StatusSystem.decay(player_status)
-	StatusSystem.decay(enemy_status)
-
-	if not enemy_on_hit.is_empty():
-		StatusSystem.apply(player_status, enemy_on_hit)
-
+	_end_player_turn()
+	_resolve_enemy_turn()
 	_check_game_over()
 	_update_ui()
 	if game_over:
 		return
+	_start_new_turn()
 
+func _end_player_turn() -> void:
+	var pp := StatusSystem.tick_damage(player_status)
+	if pp > 0:
+		player_hp = max(0, player_hp - pp)
+
+func _resolve_enemy_turn() -> void:
+	var dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
+	dmg = max(0, dmg - player_block)
+	player_hp = max(0, player_hp - dmg)
+	player_block = 0
+	enemy.turn_index += 1
+
+	var ep := StatusSystem.tick_damage(enemy.status)
+	if ep > 0:
+		enemy.hp = max(0, enemy.hp - ep)
+
+	StatusSystem.decay(player_status)
+	StatusSystem.decay(enemy.status)
+
+	if not enemy.on_hit.is_empty():
+		StatusSystem.apply(player_status, enemy.on_hit)
+
+func _start_new_turn() -> void:
 	var draw_count: int = RunConfig.BASE_DRAW + player_energy
 	if draw_count > 0:
 		_draw_cards(draw_count)
@@ -207,7 +196,7 @@ func _on_end_turn_pressed() -> void:
 	_update_ui()
 
 func _check_game_over() -> void:
-	if enemy_hp <= 0:
+	if enemy.hp <= 0:
 		game_over = true
 		AudioManager.play("victory")
 		GameState.player_hp = max(1, player_hp)
@@ -227,20 +216,20 @@ func _update_ui() -> void:
 	var ps := StatusSystem.text(player_status)
 	if ps != "":
 		combat += "  [%s]" % ps
-	combat += "\n%s HP: %d" % [enemy_label_name, enemy_hp]
-	var es := StatusSystem.text(enemy_status)
+	combat += "\n%s HP: %d" % [enemy.label_name, enemy.hp]
+	var es := StatusSystem.text(enemy.status)
 	if es != "":
 		combat += "  [%s]" % es
-	if enemy_hp > 0 and player_hp > 0:
-		var intent := "意图：攻击 %d" % DamageCalc.compute(_intent_damage(), enemy_status, player_status)
-		var hit_extra := StatusSystem.text(enemy_on_hit)
+	if enemy.hp > 0 and player_hp > 0:
+		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
+		var hit_extra := StatusSystem.text(enemy.on_hit)
 		if hit_extra != "":
 			intent += " + %s" % hit_extra
 		combat += "\n" + intent
 	if pending_effect >= 0:
 		combat += "\n选择 %d 张手牌消耗（已选 %d，点效果牌取消）" % [pending_need, pending_selected.size()]
 	combat_label.text = combat
-	if enemy_hp <= 0:
+	if enemy.hp <= 0:
 		combat_label.text += "\n你赢了！"
 	elif player_hp <= 0:
 		combat_label.text += "\n你被打败了..."
