@@ -20,15 +20,13 @@ var turn_index := 0
 var game_over := false
 var card_buttons: Array[Button] = []
 
-const HAND_SIZE := 5
-const MAX_ENERGY := 3
-
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
 @onready var end_turn_button: Button = $EndTurnButton
 
 func _ready() -> void:
 	player_hp = GameState.player_hp
+	player_energy = RunConfig.MAX_ENERGY
 
 	var node_type := "battle"
 	if GameState.map_nodes.has(GameState.current_node_id):
@@ -43,7 +41,7 @@ func _ready() -> void:
 	draw_pile = GameState.deck.duplicate()
 	draw_pile.shuffle()
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
-	_draw_cards(HAND_SIZE)
+	_draw_cards(RunConfig.HAND_SIZE)
 	_rebuild_hand_buttons()
 	_update_ui()
 
@@ -188,8 +186,8 @@ func _on_end_turn_pressed() -> void:
 	# 6. 新回合
 	discard_pile.append_array(hand)
 	hand.clear()
-	_draw_cards(HAND_SIZE)
-	player_energy = MAX_ENERGY
+	_draw_cards(RunConfig.HAND_SIZE)
+	player_energy = RunConfig.MAX_ENERGY
 	_rebuild_hand_buttons()
 	_update_ui()
 func _check_game_over() -> void:
@@ -205,7 +203,7 @@ func _check_game_over() -> void:
 func _update_ui() -> void:
 	var total := draw_pile.size() + hand.size() + discard_pile.size()
 	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d" % [
-		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total
+		player_energy, RunConfig.MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total
 	]
 	var combat := "玩家 HP: %d  格挡: %d" % [player_hp, player_block]
 	var ps := _status_text(player_status)
@@ -248,7 +246,7 @@ func _show_reward() -> void:
 	title.add_theme_font_size_override("font_size", 24)
 	overlay.add_child(title)
 
-	for i in range(3):
+	for i in range(RunConfig.REWARD_COUNT):
 		var card_name: String = pool[i]
 		var btn := Button.new()
 		btn.size = Vector2(220, 170)
@@ -256,13 +254,13 @@ func _show_reward() -> void:
 		btn.text = CardDB.card_text(card_name) + "\n\n点击选择"
 		btn.pressed.connect(_choose_reward.bind(card_name))
 		overlay.add_child(btn)
-
-	var skip := Button.new()
-	skip.text = "跳过奖励"
-	skip.size = Vector2(200, 50)
-	skip.position = Vector2(540, 520)
-	skip.pressed.connect(_finish_reward)
-	overlay.add_child(skip)
+	if RunConfig.ALLOW_SKIP:
+		var skip := Button.new()
+		skip.text = "跳过奖励"
+		skip.size = Vector2(200, 50)
+		skip.position = Vector2(540, 520)
+		skip.pressed.connect(_finish_reward)
+		overlay.add_child(skip)
 
 func _choose_reward(card_name: String) -> void:
 	GameState.deck.append(card_name)

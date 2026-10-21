@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
 
+RunConfig="*res://scripts/run_config.gd"
 CardDB="*res://scripts/card_db.gd"
 GameState="*res://scripts/game_state.gd"
 EnemyDB="*res://scripts/enemy_db.gd"

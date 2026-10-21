@@ -14,11 +14,12 @@ func _ready() -> void:
 	reset_deck()
 
 func reset_deck() -> void:
-	deck = CardDB.starter_deck()
+	deck = CardDB.starter_deck(RunConfig.DECK_SIZE)
 
 func reset_run() -> void:
+	player_max_hp = RunConfig.START_HP
 	player_hp = player_max_hp
-	gold = 100
+	gold = RunConfig.START_GOLD
 	current_node_id = 0
 	map_generated = false
 	map_nodes.clear()

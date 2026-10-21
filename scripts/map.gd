@@ -230,7 +230,7 @@ func _show_encounter(t: String) -> void:
 			_encounter_shop(title, body, vbox)
 
 func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	var heal := int(GameState.player_max_hp * 0.3)
+	var heal := int(GameState.player_max_hp * RunConfig.REST_HEAL_RATIO)
 	GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + heal)
 	title.text = "休息"
 	body.text = "你在篝火旁坐下，恢复了 %d 点生命。\n当前 HP: %d / %d" % [heal, GameState.player_hp, GameState.player_max_hp]

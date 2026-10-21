@@ -56,8 +56,8 @@ func card_text(id: String) -> String:
 		effect += p
 	return "%s\n[%d费] %s" % [id, d["cost"], effect]
 
-func starter_deck() -> Array[String]:
+func starter_deck(size: int = 20) -> Array[String]:
 	var result: Array[String] = []
-	for i in range(20):
+	for i in range(size):
 		result.append(STARTER[i % STARTER.size()])
 	return result
