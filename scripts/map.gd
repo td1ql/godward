@@ -3,19 +3,8 @@ extends Node2D
 const CENTER := Vector2(640, 360)
 const RADIUS := 230.0
 const NODE_SIZE := Vector2(140, 64)
-const MAX_DEPTH := 4
 const PAN_TIME := 0.45
 const FADE_TIME := 0.22
-
-const TYPE_INFO := {
-	"start": {"label": "起点", "color": Color(0.85, 0.85, 0.85)},
-	"battle": {"label": "战斗", "color": Color(0.95, 0.45, 0.45)},
-	"elite": {"label": "精英", "color": Color(0.75, 0.45, 0.95)},
-	"shop": {"label": "商店", "color": Color(0.95, 0.85, 0.35)},
-	"event": {"label": "事件", "color": Color(0.45, 0.75, 0.95)},
-	"rest": {"label": "休息", "color": Color(0.45, 0.9, 0.55)},
-	"boss": {"label": "首领", "color": Color(1.0, 0.25, 0.25)},
-}
 
 var nodes := {}
 var node_buttons := {}
@@ -54,33 +43,21 @@ func _generate_map() -> void:
 	nodes.clear()
 	next_id = 1
 	nodes[0] = {"type": "start", "children": [], "depth": 0}
-	_gen_children(0, 1, 5)
+	_gen_children(0, 1, MapDB.ROOT_BRANCHES)
 
 func _gen_children(parent_id: int, depth: int, count: int) -> void:
-	if depth > MAX_DEPTH:
+	if depth > MapDB.MAX_DEPTH:
 		return
 	for i in range(count):
 		var id := next_id
 		next_id += 1
 		nodes[id] = {"type": _pick_type(depth), "children": [], "depth": depth}
 		nodes[parent_id]["children"].append(id)
-		if depth < MAX_DEPTH:
-			_gen_children(id, depth + 1, randi_range(2, 4))
+		if depth < MapDB.MAX_DEPTH:
+			_gen_children(id, depth + 1, randi_range(MapDB.MIN_BRANCHES, MapDB.MAX_BRANCHES))
 
 func _pick_type(depth: int) -> String:
-	if depth >= MAX_DEPTH:
-		return "boss"
-	match depth:
-		1:
-			return "battle"
-		2:
-			var pool := ["battle", "battle", "event"]
-			return pool[randi() % pool.size()]
-		3:
-			var pool := ["elite", "shop", "rest", "event"]
-			return pool[randi() % pool.size()]
-		_:
-			return "battle"
+	return MapDB.pick_type(depth)
 
 func _rebuild_view() -> void:
 	map_offset = Vector2.ZERO
@@ -103,7 +80,7 @@ func _rebuild_view() -> void:
 	queue_redraw()
 
 func _make_node_button(id: int, pos: Vector2) -> Button:
-	var info: Dictionary = TYPE_INFO[nodes[id]["type"]]
+	var info: Dictionary = MapDB.info_of(nodes[id]["type"])
 	var b := Button.new()
 	b.text = info["label"]
 	b.size = NODE_SIZE
