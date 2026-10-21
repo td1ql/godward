@@ -25,6 +25,7 @@ StatusDB="*res://scripts/status_db.gd"
 MapDB="*res://scripts/map_db.gd"
 EventDB="*res://scripts/event_db.gd"
 ShopDB="*res://scripts/shop_db.gd"
+AudioManager="*res://scripts/audio_manager.gd"
 
 [display]
 

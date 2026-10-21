@@ -105,6 +105,7 @@ func _on_node_pressed(id: int) -> void:
 	if is_moving or id == current_id:
 		return
 	is_moving = true
+	AudioManager.play("click")
 	var kids: Array = nodes[current_id]["children"]
 	var index := kids.find(id)
 	var n := kids.size()

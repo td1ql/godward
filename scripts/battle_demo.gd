@@ -125,18 +125,21 @@ func _on_card_pressed(index: int) -> void:
 	var d: Dictionary = CardDB.get_card(c)
 	if player_energy < d["cost"]:
 		return
+		AudioManager.play("click")
 	player_energy -= d["cost"]
 
 	var hits: int = d.get("hits", 1)
 	if d["damage"] > 0:
 		var per := _calc_damage(d["damage"], player_status, enemy_status)
 		enemy_hp = max(0, enemy_hp - per * hits)
+		AudioManager.play("hit")
 	player_block += d["block"]
 	if d.has("status"):
 		_apply_status(enemy_status, d["status"])
 	if d.has("self_status"):
 		_apply_status(player_status, d["self_status"])
 	if d.get("heal", 0) > 0:
+		AudioManager.play("heal")
 		player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
 
 	hand.remove_at(index)
@@ -193,10 +196,12 @@ func _on_end_turn_pressed() -> void:
 func _check_game_over() -> void:
 	if enemy_hp <= 0:
 		game_over = true
+		AudioManager.play("victory")
 		GameState.player_hp = max(1, player_hp)
 		_show_reward()
 	elif player_hp <= 0:
 		game_over = true
+		AudioManager.play("defeat")
 		await get_tree().create_timer(1.0).timeout
 		_show_game_over()
 
