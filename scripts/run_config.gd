@@ -9,6 +9,9 @@ const DECK_SIZE := 20
 const MAX_ENERGY := 3
 const HAND_SIZE := 5
 const BASE_DRAW := 2
+const GOLD_BATTLE := 15
+const GOLD_ELITE := 40
+const GOLD_BOSS := 100
 
 # ===== 战斗奖励 =====
 const REWARD_COUNT := 4

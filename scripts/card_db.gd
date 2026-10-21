@@ -53,7 +53,7 @@ const CARDS := {
 	"圣光": {"kind": "encounter", "cost": -1, "damage": 0, "block": 8, "price": 0},
 }
 
-const STARTER := ["打击", "防御", "重击", "铁壁", "疾风斩", "圣光", "陷阱"]
+const STARTER := ["打击", "防御", "重击", "铁壁", "疾风斩"]
 
 func kind_of(id: String) -> String:
 	return CARDS[id].get("kind", "action")

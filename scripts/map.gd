@@ -15,6 +15,8 @@ var is_moving := false
 var map_offset := Vector2.ZERO
 var pan_target := Vector2.ZERO
 var overlay: Control
+var gold_label: Label
+var hp_label: Label
 
 func _ready() -> void:
 	var hint := Label.new()
@@ -28,6 +30,24 @@ func _ready() -> void:
 	hint.add_theme_font_size_override("font_size", 18)
 	hint.text = "选择要前往的节点"
 	add_child(hint)
+	gold_label = Label.new()
+	gold_label.position = Vector2(20, 50)
+	gold_label.add_theme_font_size_override("font_size", 18)
+	gold_label.text = "金币: %d" % GameState.gold
+	add_child(gold_label)
+	hp_label = Label.new()
+	hp_label.position = Vector2(20, 80)
+	hp_label.add_theme_font_size_override("font_size", 18)
+	hp_label.text = "HP: %d / %d" % [GameState.player_hp, GameState.player_max_hp]
+	add_child(hp_label)
+	var deck_btn := Button.new()
+	deck_btn.text = "牌库"
+	deck_btn.position = Vector2(20, 120)
+	deck_btn.size = Vector2(110, 40)
+	deck_btn.pressed.connect(DeckViewer.toggle)
+	add_child(deck_btn)
+
+
 
 	if not GameState.map_generated:
 		_generate_map()
@@ -249,19 +269,29 @@ func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var ev: Dictionary = EventDB.pick()
 	title.text = "事件"
-	body.text = ev["text"]
+	body.text = ev["text"] + "\n\n（当前金币: %d）" % GameState.gold
 	for c in ev["choices"]:
 		var b := Button.new()
 		b.text = c["label"]
+		var cost: int = int(c.get("gold", 0))
+		if cost < 0 and GameState.gold + cost < 0:
+			b.disabled = true
+			b.text += "（金币不足）"
 		b.pressed.connect(_apply_event_choice.bind(c))
 		vbox.add_child(b)
 
 func _apply_event_choice(c: Dictionary) -> void:
+	if c.has("gold"):
+		var g: int = int(c["gold"])
+		if g < 0 and GameState.gold + g < 0:
+			return
+		GameState.gold += g
 	if c.has("hp"):
 		var h: int = c["hp"]
 		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
-	if c.has("gold"):
-		GameState.gold += c["gold"]
+	if c.has("cards"):
+		for id in c["cards"]:
+			GameState.deck.append(str(id))
 	_close_encounter()
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
@@ -293,7 +323,13 @@ func _close_encounter() -> void:
 		overlay.queue_free()
 		overlay = null
 	GameState.save_game()
+	_update_hud()
 	_continue_children()
 func _on_back_to_menu() -> void:
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+func _update_hud() -> void:
+	if gold_label:
+		gold_label.text = "金币: %d" % GameState.gold
+	if hp_label:
+		hp_label.text = "HP: %d / %d" % [GameState.player_hp, GameState.player_max_hp]

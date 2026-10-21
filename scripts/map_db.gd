@@ -4,7 +4,7 @@ extends Node
 const MAX_DEPTH := 8          # 总层数（中心 → 4 步 → 首领）
 const ROOT_BRANCHES := 5      # 起点连出的分支数
 const MIN_BRANCHES := 2       # 每层最少分支
-const MAX_BRANCHES := 6     # 每层最多分支
+const MAX_BRANCHES := 4     # 每层最多分支
 
 # ===== 每层可出现的节点类型（重复写 = 提高权重）=====
 const LAYER_POOLS := {
@@ -12,6 +12,9 @@ const LAYER_POOLS := {
 	2: ["battle", "battle", "event"],
 	3: ["elite", "shop", "rest", "event"],
 	4: ["battle", "battle", "event", "shop"],
+	5: ["elite", "battle", "rest", "event"],
+	6: ["battle", "battle", "shop", "event"],
+	7: ["elite", "elite", "rest", "shop"],
 }
 
 # 最后一层固定类型

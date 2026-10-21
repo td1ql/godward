@@ -2,6 +2,7 @@ extends Node2D
 
 var deck := Deck.new()
 var hand_view: HandView
+var player_label: Label
 var enemy := EnemyState.new()
 
 var player_hp := 0
@@ -11,6 +12,7 @@ var player_status := {}
 
 var node_type := "battle"
 var game_over := false
+var last_gold_gain := 0
 
 var pending_effect := -1
 var pending_need := 0
@@ -36,6 +38,16 @@ func _ready() -> void:
 	hand_view.card_pressed.connect(_on_card_pressed)
 
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
+	player_label = Label.new()
+	player_label.position = Vector2(20, 150)
+	player_label.add_theme_font_size_override("font_size", 20)
+	add_child(player_label)
+	var deck_btn := Button.new()
+	deck_btn.text = "牌库"
+	deck_btn.position = Vector2(20, 655)
+	deck_btn.size = Vector2(110, 40)
+	deck_btn.pressed.connect(DeckViewer.toggle)
+	add_child(deck_btn)
 	_draw_cards(RunConfig.HAND_SIZE)
 	_render_hand()
 	_update_ui()
@@ -200,40 +212,56 @@ func _check_game_over() -> void:
 		game_over = true
 		AudioManager.play("victory")
 		GameState.player_hp = max(1, player_hp)
-		_show_reward()
+		last_gold_gain = _gold_for_node()
+		GameState.gold += last_gold_gain
+		if node_type == "boss":
+			_show_victory()
+		else:
+			_show_reward()
 	elif player_hp <= 0:
 		game_over = true
 		AudioManager.play("defeat")
 		await get_tree().create_timer(1.0).timeout
 		_show_game_over()
 
+func _gold_for_node() -> int:
+	if node_type == "boss":
+		return RunConfig.GOLD_BOSS
+	elif node_type == "elite":
+		return RunConfig.GOLD_ELITE
+	return RunConfig.GOLD_BATTLE
+
 func _update_ui() -> void:
-	var total := deck.total()
-	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d" % [
-		player_energy, RunConfig.MAX_ENERGY, deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(), total
+	info_label.text = "能量: %d/%d    抽牌堆: %d    手牌: %d    弃牌堆: %d    金币: %d" % [
+		player_energy, RunConfig.MAX_ENERGY,
+		deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(),
+		GameState.gold
 	]
-	var combat := "玩家 HP: %d  格挡: %d" % [player_hp, player_block]
+
+	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
 	var ps := StatusSystem.text(player_status)
 	if ps != "":
-		combat += "  [%s]" % ps
-	combat += "\n%s HP: %d" % [enemy.label_name, enemy.hp]
+		ptext += "\n状态: %s" % ps
+	if pending_effect >= 0:
+		ptext += "\n选择 %d 张手牌消耗（已选 %d）" % [pending_need, pending_selected.size()]
+	player_label.text = ptext
+
+	var etext := "【%s】\nHP: %d" % [enemy.label_name, enemy.hp]
 	var es := StatusSystem.text(enemy.status)
 	if es != "":
-		combat += "  [%s]" % es
+		etext += "\n状态: %s" % es
 	if enemy.hp > 0 and player_hp > 0:
 		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 		var hit_extra := StatusSystem.text(enemy.on_hit)
 		if hit_extra != "":
 			intent += " + %s" % hit_extra
-		combat += "\n" + intent
-	if pending_effect >= 0:
-		combat += "\n选择 %d 张手牌消耗（已选 %d，点效果牌取消）" % [pending_need, pending_selected.size()]
-	combat_label.text = combat
+		etext += "\n" + intent
 	if enemy.hp <= 0:
-		combat_label.text += "\n你赢了！"
+		etext += "\n你赢了！"
 	elif player_hp <= 0:
-		combat_label.text += "\n你被打败了..."
-
+		etext += "\n你被打败了..."
+	combat_label.text = etext
+	
 func _show_reward() -> void:
 	hand_view.hide_cards()
 
@@ -251,7 +279,7 @@ func _show_reward() -> void:
 	overlay.add_child(dim)
 
 	var title := Label.new()
-	title.text = "战斗胜利！选择一张卡加入牌组"
+	title.text = "战斗胜利！金币 +%d　选择一张卡" % last_gold_gain
 	title.position = Vector2(380, 120)
 	title.add_theme_font_size_override("font_size", 24)
 	overlay.add_child(title)
@@ -320,3 +348,52 @@ func _show_game_over() -> void:
 func _restart_run() -> void:
 	GameState.reset_run()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
+func _show_victory() -> void:
+	hand_view.hide_cards()
+
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.9)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "通关！你击败了塔主"
+	title.position = Vector2(0, 150)
+	title.size = Vector2(1280, 70)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 46)
+	overlay.add_child(title)
+
+	var stats := Label.new()
+	stats.text = "剩余生命: %d / %d\n金币: %d\n牌组张数: %d" % [
+		player_hp, GameState.player_max_hp, GameState.gold, GameState.deck.size()
+	]
+	stats.position = Vector2(0, 260)
+	stats.size = Vector2(1280, 160)
+	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stats.add_theme_font_size_override("font_size", 26)
+	overlay.add_child(stats)
+
+	var again := Button.new()
+	again.text = "再来一局"
+	again.size = Vector2(240, 60)
+	again.position = Vector2(390, 470)
+	again.pressed.connect(_restart_run)
+	overlay.add_child(again)
+
+	var menu := Button.new()
+	menu.text = "返回主菜单"
+	menu.size = Vector2(240, 60)
+	menu.position = Vector2(650, 470)
+	menu.pressed.connect(_back_to_menu)
+	overlay.add_child(menu)
+
+func _back_to_menu() -> void:
+	GameState.delete_save()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

@@ -13,7 +13,7 @@ func render(cards: Array[String], energy: int, pending_effect: int, pending_sele
 	if n == 0:
 		return
 	var card_w: float = min(140.0, (1280.0 - 80.0) / n - 8.0)
-	var card_h: float = card_w * 1.3
+	var card_h: float = card_w * 1.2
 	var spacing := card_w + 8.0
 	var total := (n - 1) * spacing + card_w
 	var start_x := (1280.0 - total) / 2.0
@@ -22,7 +22,7 @@ func render(cards: Array[String], energy: int, pending_effect: int, pending_sele
 		var d: Dictionary = CardDB.get_card(c)
 		var btn := CardUI.make_button(c)
 		btn.size = Vector2(card_w, card_h)
-		btn.position = Vector2(start_x + i * spacing, 470)
+		btn.position = Vector2(start_x + i * spacing, 420)
 		if pending_effect >= 0:
 			if i == pending_effect:
 				btn.modulate = Color(1, 1, 0.55, 1)
