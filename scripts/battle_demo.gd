@@ -10,6 +10,8 @@ var player_energy := 3
 var enemy_hp := 30
 var enemy_attack := 5
 var enemy_poison := 0
+var enemy_pattern: Array = [1]
+var turn_index := 0
 var enemy_label_name := "敌人"
 
 var game_over := false
@@ -32,6 +34,7 @@ func _ready() -> void:
 	enemy_hp = int(e["hp"])
 	enemy_attack = int(e["attack"])
 	enemy_label_name = str(e["name"])
+	enemy_pattern = e.get("pattern", [1])
 
 	draw_pile = GameState.deck.duplicate()
 	draw_pile.shuffle()
@@ -49,6 +52,11 @@ func _draw_cards(n: int) -> void:
 			discard_pile.clear()
 			draw_pile.shuffle()
 		hand.append(draw_pile.pop_back())
+
+func _intent_damage() -> int:
+	if enemy_pattern.is_empty():
+		return enemy_attack
+	return enemy_attack * int(enemy_pattern[turn_index % enemy_pattern.size()])
 
 func _rebuild_hand_buttons() -> void:
 	for b in card_buttons:
@@ -107,10 +115,11 @@ func _on_end_turn_pressed() -> void:
 		if game_over:
 			return
 
-	var incoming: int = max(0, enemy_attack - player_block)
+	var incoming: int = max(0, _intent_damage() - player_block)
 	player_hp = max(0, player_hp - incoming)
 	player_block = 0
 	player_energy = MAX_ENERGY
+	turn_index += 1
 	_check_game_over()
 	_update_ui()
 	if game_over:
@@ -140,6 +149,8 @@ func _update_ui() -> void:
 	var combat := "玩家 HP: %d  格挡: %d\n%s HP: %d" % [player_hp, player_block, enemy_label_name, enemy_hp]
 	if enemy_poison > 0:
 		combat += "（中毒 %d）" % enemy_poison
+	if enemy_hp > 0 and player_hp > 0:
+		combat += "\n意图：攻击 %d" % _intent_damage()
 	combat_label.text = combat
 	if enemy_hp <= 0:
 		combat_label.text += "\n你赢了！"
