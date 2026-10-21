@@ -27,19 +27,24 @@ jobs:
           path: |
             ~/godot
             ~/.local/share/godot/export_templates
-          key: godot-${{ env.GODOT_VERSION }}
+          key: godot-android-v2-${{ env.GODOT_VERSION }}
 
-      - name: Download Godot editor and templates
+      - name: Download Godot editor and Android templates
         if: steps.godot-cache.outputs.cache-hit != 'true'
         run: |
           mkdir -p ~/godot
           curl -L -o ~/godot/godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
           unzip -q ~/godot/godot.zip -d ~/godot
+          rm -f ~/godot/godot.zip
           chmod +x ~/godot/Godot_v${GODOT_VERSION}-stable_linux.x86_64
+
           mkdir -p ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
           curl -L -o /tmp/templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
-          unzip -q /tmp/templates.tpz -d /tmp/templates
-          mv /tmp/templates/templates/* ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+          unzip -j -q /tmp/templates.tpz "templates/android*" "templates/version.txt" -d ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
+          rm -f /tmp/templates.tpz
+
+          echo "=== templates ==="
+          ls -lh ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable/
 
       - name: Setup JDK 17
         uses: actions/setup-java@v4
@@ -65,6 +70,7 @@ jobs:
         run: |
           mkdir -p "$HOME/.config/godot"
           printf '[gd_resource type="EditorSettings" format=3]\n\n[resource]\nexport/android/android_sdk_path = "%s"\nexport/android/debug_keystore = "%s"\nexport/android/debug_keystore_user = "androiddebugkey"\nexport/android/debug_keystore_pass = "android"\n' "$ANDROID_SDK_ROOT" "$HOME/.android/debug.keystore" > "$HOME/.config/godot/editor_settings-4.tres"
+          cp "$HOME/.config/godot/editor_settings-4.tres" "$HOME/.config/godot/editor_settings-4.7.tres"
           cat "$HOME/.config/godot/editor_settings-4.tres"
 
       - name: Import project
