@@ -2,12 +2,13 @@ extends Node
 
 # ===== 一局起始 =====
 const START_HP := 100
-const START_GOLD := 1000
-const DECK_SIZE := 10
+const START_GOLD := 50
+const DECK_SIZE := 20
 
 # ===== 战斗 =====
-const MAX_ENERGY := 8
-const HAND_SIZE := 4
+const MAX_ENERGY := 3
+const HAND_SIZE := 5
+const BASE_DRAW := 2
 
 # ===== 战斗奖励 =====
 const REWARD_COUNT := 4

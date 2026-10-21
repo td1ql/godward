@@ -26,6 +26,8 @@ MapDB="*res://scripts/map_db.gd"
 EventDB="*res://scripts/event_db.gd"
 ShopDB="*res://scripts/shop_db.gd"
 AudioManager="*res://scripts/audio_manager.gd"
+RewardDB="*res://scripts/reward_db.gd"
+Toast="*res://scripts/toast.gd"
 
 [display]
 
