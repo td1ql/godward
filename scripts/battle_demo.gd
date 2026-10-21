@@ -7,12 +7,15 @@ var discard_pile: Array[String] = []
 var player_hp := 50
 var player_block := 0
 var player_energy := 3
+var player_status := {}
+
 var enemy_hp := 30
 var enemy_attack := 5
-var enemy_poison := 0
+var enemy_status := {}
+var enemy_on_hit := {}
 var enemy_pattern: Array = [1]
-var turn_index := 0
 var enemy_label_name := "敌人"
+var turn_index := 0
 
 var game_over := false
 var card_buttons: Array[Button] = []
@@ -35,6 +38,7 @@ func _ready() -> void:
 	enemy_attack = int(e["attack"])
 	enemy_label_name = str(e["name"])
 	enemy_pattern = e.get("pattern", [1])
+	enemy_on_hit = e.get("on_hit", {})
 
 	draw_pile = GameState.deck.duplicate()
 	draw_pile.shuffle()
@@ -57,6 +61,46 @@ func _intent_damage() -> int:
 	if enemy_pattern.is_empty():
 		return enemy_attack
 	return enemy_attack * int(enemy_pattern[turn_index % enemy_pattern.size()])
+
+func _calc_damage(base: int, attacker: Dictionary, target: Dictionary) -> int:
+	var dmg := float(base) + float(attacker.get("力量", 0))
+	if attacker.get("虚弱", 0) > 0:
+		dmg *= 0.75
+	if target.get("易伤", 0) > 0:
+		dmg *= 1.5
+	return max(0, int(floor(dmg)))
+
+func _apply_status(target: Dictionary, st: Dictionary) -> void:
+	for key in st:
+		target[key] = int(target.get(key, 0)) + int(st[key])
+
+func _tick_poison(st: Dictionary) -> int:
+	var p: int = int(st.get("中毒", 0))
+	if p <= 0:
+		return 0
+	st["中毒"] = p - 1
+	if st["中毒"] <= 0:
+		st.erase("中毒")
+	return p
+
+func _decay_status(st: Dictionary) -> void:
+	var to_erase: Array = []
+	for key in st.keys():
+		if key == "中毒" or key == "力量":
+			continue
+		st[key] = int(st[key]) - 1
+		if st[key] <= 0:
+			to_erase.append(key)
+	for key in to_erase:
+		st.erase(key)
+
+func _status_text(st: Dictionary) -> String:
+	var s := ""
+	for key in st:
+		if s != "":
+			s += " "
+		s += "%s%d" % [key, st[key]]
+	return s
 
 func _rebuild_hand_buttons() -> void:
 	for b in card_buttons:
@@ -87,9 +131,13 @@ func _on_card_pressed(index: int) -> void:
 
 	var hits: int = d.get("hits", 1)
 	if d["damage"] > 0:
-		enemy_hp = max(0, enemy_hp - d["damage"] * hits)
+		var per := _calc_damage(d["damage"], player_status, enemy_status)
+		enemy_hp = max(0, enemy_hp - per * hits)
 	player_block += d["block"]
-	enemy_poison += d.get("poison", 0)
+	if d.has("status"):
+		_apply_status(enemy_status, d["status"])
+	if d.has("self_status"):
+		_apply_status(player_status, d["self_status"])
 	if d.get("heal", 0) > 0:
 		player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
 
@@ -107,30 +155,43 @@ func _on_end_turn_pressed() -> void:
 	if game_over:
 		return
 
-	if enemy_poison > 0:
-		enemy_hp = max(0, enemy_hp - enemy_poison)
-		enemy_poison = max(0, enemy_poison - 1)
-		_check_game_over()
-		_update_ui()
-		if game_over:
-			return
+	# 1. 玩家中毒结算（玩家回合结束）
+	var pp := _tick_poison(player_status)
+	if pp > 0:
+		player_hp = max(0, player_hp - pp)
 
-	var incoming: int = max(0, _intent_damage() - player_block)
-	player_hp = max(0, player_hp - incoming)
+	# 2. 敌人攻击（受敌人虚弱 / 玩家易伤影响）
+	var dmg := _calc_damage(_intent_damage(), enemy_status, player_status)
+	dmg = max(0, dmg - player_block)
+	player_hp = max(0, player_hp - dmg)
 	player_block = 0
-	player_energy = MAX_ENERGY
 	turn_index += 1
+
+	# 3. 敌人中毒结算（敌人回合结束）
+	var ep := _tick_poison(enemy_status)
+	if ep > 0:
+		enemy_hp = max(0, enemy_hp - ep)
+
+	# 4. 状态衰减（虚弱 / 易伤 -1）
+	_decay_status(player_status)
+	_decay_status(enemy_status)
+
+	# 5. 敌人攻击附带的状态：本回合挂上，保留到下一回合再生效
+	if not enemy_on_hit.is_empty():
+		_apply_status(player_status, enemy_on_hit)
+
 	_check_game_over()
 	_update_ui()
 	if game_over:
 		return
 
+	# 6. 新回合
 	discard_pile.append_array(hand)
 	hand.clear()
 	_draw_cards(HAND_SIZE)
+	player_energy = MAX_ENERGY
 	_rebuild_hand_buttons()
 	_update_ui()
-
 func _check_game_over() -> void:
 	if enemy_hp <= 0:
 		game_over = true
@@ -146,11 +207,20 @@ func _update_ui() -> void:
 	info_label.text = "能量: %d/%d  抽牌堆: %d  手牌: %d  弃牌堆: %d  总计: %d" % [
 		player_energy, MAX_ENERGY, draw_pile.size(), hand.size(), discard_pile.size(), total
 	]
-	var combat := "玩家 HP: %d  格挡: %d\n%s HP: %d" % [player_hp, player_block, enemy_label_name, enemy_hp]
-	if enemy_poison > 0:
-		combat += "（中毒 %d）" % enemy_poison
+	var combat := "玩家 HP: %d  格挡: %d" % [player_hp, player_block]
+	var ps := _status_text(player_status)
+	if ps != "":
+		combat += "  [%s]" % ps
+	combat += "\n%s HP: %d" % [enemy_label_name, enemy_hp]
+	var es := _status_text(enemy_status)
+	if es != "":
+		combat += "  [%s]" % es
 	if enemy_hp > 0 and player_hp > 0:
-		combat += "\n意图：攻击 %d" % _intent_damage()
+		var intent := "意图：攻击 %d" % _calc_damage(_intent_damage(), enemy_status, player_status)
+		var hit_extra := _status_text(enemy_on_hit)
+		if hit_extra != "":
+			intent += " + %s" % hit_extra
+		combat += "\n" + intent
 	combat_label.text = combat
 	if enemy_hp <= 0:
 		combat_label.text += "\n你赢了！"
