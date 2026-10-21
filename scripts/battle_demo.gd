@@ -99,19 +99,58 @@ func _status_text(st: Dictionary) -> String:
 			s += " "
 		s += "%s%d" % [key, st[key]]
 	return s
+func _card_color(d: Dictionary) -> Color:
+	if d.has("self_status"):
+		return Color(0.55, 0.45, 0.2)
+	if d.has("status"):
+		return Color(0.45, 0.32, 0.55)
+	if d["damage"] > 0:
+		return Color(0.5, 0.25, 0.25)
+	return Color(0.24, 0.4, 0.34)
+
+func _card_style(bg: Color, border: Color) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = bg
+	sb.border_color = border
+	sb.set_border_width_all(2)
+	sb.set_corner_radius_all(10)
+	sb.content_margin_left = 8
+	sb.content_margin_right = 8
+	sb.content_margin_top = 8
+	sb.content_margin_bottom = 8
+	return sb
+
+func _make_card_button(c: String, d: Dictionary) -> Button:
+	var btn := Button.new()
+	btn.size = Vector2(130, 160)
+	btn.text = CardDB.card_text(c)
+	btn.add_theme_font_size_override("font_size", 17)
+	btn.add_theme_color_override("font_color", Color(1, 1, 1))
+	btn.add_theme_color_override("font_disabled_color", Color(0.55, 0.55, 0.55))
+	var bg := _card_color(d)
+	btn.add_theme_stylebox_override("normal", _card_style(bg, bg.lightened(0.35)))
+	btn.add_theme_stylebox_override("hover", _card_style(bg.lightened(0.12), Color.WHITE))
+	btn.add_theme_stylebox_override("pressed", _card_style(bg.darkened(0.2), Color.WHITE))
+	btn.add_theme_stylebox_override("disabled", _card_style(bg.darkened(0.5), bg.darkened(0.3)))
+	return btn
 
 func _rebuild_hand_buttons() -> void:
 	for b in card_buttons:
 		b.queue_free()
 	card_buttons.clear()
-	for i in range(hand.size()):
+	var n := hand.size()
+	if n == 0:
+		return
+	var spacing := 150.0
+	var card_w := 130.0
+	var total := (n - 1) * spacing + card_w
+	var start_x := (1280.0 - total) / 2.0
+	for i in range(n):
 		var c: String = hand[i]
 		var d: Dictionary = CardDB.get_card(c)
-		var btn := Button.new()
-		btn.position = Vector2(200 + i * 130, 520)
-		btn.size = Vector2(120, 110)
+		var btn := _make_card_button(c, d)
+		btn.position = Vector2(start_x + i * spacing, 480)
 		btn.disabled = player_energy < d["cost"]
-		btn.text = CardDB.card_text(c)
 		btn.pressed.connect(_on_card_pressed.bind(i))
 		add_child(btn)
 		card_buttons.append(btn)
@@ -125,7 +164,7 @@ func _on_card_pressed(index: int) -> void:
 	var d: Dictionary = CardDB.get_card(c)
 	if player_energy < d["cost"]:
 		return
-		AudioManager.play("click")
+	AudioManager.play("click")
 	player_energy -= d["cost"]
 
 	var hits: int = d.get("hits", 1)
@@ -149,9 +188,10 @@ func _on_card_pressed(index: int) -> void:
 		_draw_cards(d["draw"])
 
 	_check_game_over()
-	_rebuild_hand_buttons()
+	if not game_over:
+		_rebuild_hand_buttons()
 	_update_ui()
-
+	
 func _on_end_turn_pressed() -> void:
 	if game_over:
 		return
@@ -231,6 +271,9 @@ func _update_ui() -> void:
 		combat_label.text += "\n你被打败了..."
 
 func _show_reward() -> void:
+	for b in card_buttons:
+		b.visible = false
+
 	var pool := CardDB.all_ids()
 	pool.shuffle()
 
@@ -241,24 +284,30 @@ func _show_reward() -> void:
 	add_child(overlay)
 
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.7)
+	dim.color = Color(0, 0, 0, 0.85)
 	dim.size = Vector2(1280, 720)
 	overlay.add_child(dim)
 
 	var title := Label.new()
 	title.text = "战斗胜利！选择一张卡加入牌组"
-	title.position = Vector2(380, 150)
+	title.position = Vector2(380, 120)
 	title.add_theme_font_size_override("font_size", 24)
 	overlay.add_child(title)
 
-	for i in range(RunConfig.REWARD_COUNT):
+	var n: int = RunConfig.REWARD_COUNT
+	var spacing := 250.0
+	var card_w := 200.0
+	var total := (n - 1) * spacing + card_w
+	var start_x := (1280.0 - total) / 2.0
+	for i in range(n):
 		var card_name: String = pool[i]
-		var btn := Button.new()
-		btn.size = Vector2(220, 170)
-		btn.position = Vector2(240 + i * 250, 280)
+		var btn := _make_card_button(card_name, CardDB.get_card(card_name))
+		btn.size = Vector2(card_w, 240)
+		btn.position = Vector2(start_x + i * spacing, 200)
 		btn.text = CardDB.card_text(card_name) + "\n\n点击选择"
 		btn.pressed.connect(_choose_reward.bind(card_name))
 		overlay.add_child(btn)
+
 	if RunConfig.ALLOW_SKIP:
 		var skip := Button.new()
 		skip.text = "跳过奖励"
