@@ -39,7 +39,7 @@ window/stretch/mode="canvas_items"
 
 [gui]
 
-theme/custom_font="uid://fr6v0xvkh75b"
+theme/custom_font="res://assets/fonts/NotoSansSC-Regular.otf"
 
 [rendering]
 
