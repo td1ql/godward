@@ -6,3 +6,6 @@ export_presets.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# 导出产物
+build/
