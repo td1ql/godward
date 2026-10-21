@@ -18,6 +18,12 @@ var overlay: Control
 
 func _ready() -> void:
 	var hint := Label.new()
+	var back := Button.new()
+	back.text = "返回主菜单"
+	back.position = Vector2(1080, 20)
+	back.size = Vector2(170, 40)
+	back.pressed.connect(_on_back_to_menu)
+	add_child(back)
 	hint.position = Vector2(20, 20)
 	hint.add_theme_font_size_override("font_size", 18)
 	hint.text = "选择要前往的节点"
@@ -288,3 +294,6 @@ func _close_encounter() -> void:
 		overlay = null
 	GameState.save_game()
 	_continue_children()
+func _on_back_to_menu() -> void:
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
