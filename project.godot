@@ -37,6 +37,10 @@ window/size/viewport_height=720
 window/size/mode=3
 window/stretch/mode="canvas_items"
 
+[gui]
+
+theme/custom_font="uid://fr6v0xvkh75b"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
