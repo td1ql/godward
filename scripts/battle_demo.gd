@@ -20,6 +20,7 @@ var pending_effect := -1
 var pending_need := 0
 var pending_selected: Array = []
 var _draw_depth := 0
+var max_energy: int = RunConfig.MAX_ENERGY
 
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
@@ -27,7 +28,11 @@ var _draw_depth := 0
 
 func _ready() -> void:
 	player_hp = GameState.player_hp
-	player_energy = RunConfig.MAX_ENERGY
+	max_energy = GameState.initial_energy()
+	player_energy = max_energy
+	var bonus_strength: int = TraitDB.total_strength(GameState.traits)
+	if bonus_strength != 0:
+		player_status["力量"] = bonus_strength
 
 	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
 	node_type = "battle"
@@ -330,7 +335,7 @@ func _start_new_turn() -> void:
 	var draw_count: int = RunConfig.BASE_DRAW + player_energy
 	if draw_count > 0:
 		_draw_cards(draw_count)
-	player_energy = RunConfig.MAX_ENERGY
+	player_energy = max_energy
 	_render_hand()
 	_update_ui()
 
@@ -455,7 +460,7 @@ func _start_next_cleanup() -> void:
 
 func _update_ui() -> void:
 	info_label.text = "能量: %d/%d    抽牌堆: %d    手牌: %d    弃牌堆: %d    金币: %d" % [
-		player_energy, RunConfig.MAX_ENERGY,
+		player_energy, max_energy,
 		deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(),
 		GameState.gold
 	]
@@ -534,8 +539,13 @@ func _discard_card(index: int) -> void:
 
 func _show_game_over() -> void:
 	var overlay := Modal.open(self, 0.85)
-	Modal.title(overlay, StoryDB.t("gameover_title"), 240, 34)
-	Modal.text(overlay, StoryDB.t("gameover_body"), 310, 18, 50)
+	var title_key := "gameover_title"
+	var body_key := "gameover_body"
+	if GameState.transmigration >= 10:
+		title_key = "gameover_loop_title"
+		body_key = "gameover_loop_body"
+	Modal.title(overlay, StoryDB.t(title_key), 240, 34)
+	Modal.text(overlay, StoryDB.t(body_key), 310, 18, 50)
 	Modal.button(overlay, StoryDB.t("gameover_restart"), 530, 400, 220, 60, _restart_run)
 
 func _restart_run() -> void:

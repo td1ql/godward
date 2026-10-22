@@ -9,6 +9,8 @@ const TEXTS := {
 	"cleanup_result_empty": "什么也没留下。",
 	"cleanup_continue": "继续清算（剩 %d 人）",
 	"cleanup_go": "前往神堂",
+	"gameover_loop_title": "教皇还在等你",
+	"gameover_loop_body": "你在神国里倒下。\n教皇没有看你。\n——第 10 次转生，重新开始。",
 
 	# 战斗奖励
 	"reward_title": "战斗胜利！金币 +%d　选择一张卡",

@@ -80,6 +80,9 @@ func _apply_traits() -> void:
 func initial_hand_size() -> int:
 	return max(1, RunConfig.HAND_SIZE + TraitDB.total_hand(traits))
 
+func initial_energy() -> int:
+	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits))
+
 func _slot_path(slot: int) -> String:
 	return "user://save_%d.txt" % slot
 
