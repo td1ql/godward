@@ -10,6 +10,8 @@ var map_nodes: Dictionary = {}
 var map_generated: bool = false
 var deck: Array[String] = []
 var current_slot := 0
+var pending_node: int = -1
+var pending_snapshot: Dictionary = {}
 var transmigration := 1
 var traits: Array[String] = []
 var contestants: Array[String] = []
@@ -48,6 +50,8 @@ func _apply_traits() -> void:
 	contestants = ContestantDB.pick_roster(5)
 	met_contestants.clear()
 	eliminated.clear()
+	pending_node = -1
+	pending_snapshot = {}
 	allies.clear()
 
 func initial_hand_size() -> int:
@@ -58,6 +62,9 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"pending_snapshot": pending_snapshot,
+		"pending_contestant": pending_contestant,
+		"pending_node": pending_node,
 		"player_hp": player_hp,
 		"gold": gold,
 		"current_node_id": current_node_id,
@@ -116,6 +123,9 @@ func load_game(slot: int = -1) -> bool:
 	allies.clear()
 	for c in data.get("allies", []):
 		allies.append(str(c))
+	pending_node = int(data.get("pending_node", -1))
+	pending_snapshot = data.get("pending_snapshot", {})
+	pending_contestant = str(data.get("pending_contestant", ""))
 	current_slot = s
 	return true
 

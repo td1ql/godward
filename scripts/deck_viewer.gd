@@ -56,6 +56,66 @@ func open() -> void:
 	close.pressed.connect(_close)
 	_root.add_child(close)
 
+func open_piles(draw: Array, hand: Array, discard: Array) -> void:
+	_show_columns("牌堆", [
+		{"title": "抽牌堆（%d）　顶部在下" % draw.size(), "cards": draw},
+		{"title": "手牌（%d）" % hand.size(), "cards": hand},
+		{"title": "弃牌堆（%d）　顶部在下" % discard.size(), "cards": discard},
+	])
+
+func _show_columns(title_text: String, sections: Array) -> void:
+	if _root:
+		return
+	_root = Control.new()
+	_root.size = Vector2(1280, 720)
+	_root.mouse_filter = Control.MOUSE_FILTER_STOP
+	_layer.add_child(_root)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.92)
+	dim.size = Vector2(1280, 720)
+	_root.add_child(dim)
+
+	var title := Label.new()
+	title.text = title_text
+	title.position = Vector2(0, 18)
+	title.size = Vector2(1280, 44)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 28)
+	_root.add_child(title)
+
+	var n := sections.size()
+	var col_w := 1180.0 / n
+	for i in range(n):
+		var sec: Dictionary = sections[i]
+		var x := 50.0 + i * col_w
+
+		var head := Label.new()
+		head.text = str(sec.get("title", ""))
+		head.position = Vector2(x, 80)
+		head.size = Vector2(col_w - 20, 30)
+		head.add_theme_font_size_override("font_size", 18)
+		head.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
+		_root.add_child(head)
+
+		var cards: Array = sec["cards"]
+		var s := ""
+		for j in range(cards.size()):
+			s += "%d. %s\n" % [j + 1, str(cards[j])]
+		var body := Label.new()
+		body.text = s
+		body.position = Vector2(x, 116)
+		body.size = Vector2(col_w - 20, 520)
+		body.add_theme_font_size_override("font_size", 16)
+		_root.add_child(body)
+
+	var close := Button.new()
+	close.text = "关闭"
+	close.size = Vector2(200, 54)
+	close.position = Vector2(540, 645)
+	close.pressed.connect(_close)
+	_root.add_child(close)
+
 func _close() -> void:
 	if _root:
 		_root.queue_free()

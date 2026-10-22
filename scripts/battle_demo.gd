@@ -3,6 +3,8 @@ extends Node2D
 var deck := Deck.new()
 var hand_view: HandView
 var player_label: Label
+var ally_label: Label
+var ally_fighters: Array = []
 var enemy := EnemyState.new()
 
 var player_hp := 0
@@ -31,7 +33,10 @@ func _ready() -> void:
 	if GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
 	var enemy_data: Dictionary
-	if not GameState.pending_enemy.is_empty():
+	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
+	if kind == "battle" or kind == "contestant_fight":
+		enemy_data = GameState.pending_snapshot["enemy"]
+	elif not GameState.pending_enemy.is_empty():
 		enemy_data = GameState.pending_enemy
 		GameState.pending_enemy = {}
 	else:
@@ -49,16 +54,57 @@ func _ready() -> void:
 	player_label.position = Vector2(20, 150)
 	player_label.add_theme_font_size_override("font_size", 20)
 	add_child(player_label)
+	ally_label = Label.new()
+	ally_label.position = Vector2(20, 320)
+	ally_label.add_theme_font_size_override("font_size", 18)
+	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
+	add_child(ally_label)
 	var deck_btn := Button.new()
 	deck_btn.text = "牌库"
 	deck_btn.position = Vector2(20, 655)
 	deck_btn.size = Vector2(110, 40)
 	deck_btn.pressed.connect(DeckViewer.toggle)
 	add_child(deck_btn)
+	var pile_btn := Button.new()
+	pile_btn.text = "牌堆"
+	pile_btn.position = Vector2(140, 655)
+	pile_btn.size = Vector2(110, 40)
+	pile_btn.pressed.connect(_open_piles)
+	add_child(pile_btn)
 	_draw_cards(GameState.initial_hand_size())
+	if node_type == "boss":
+		_setup_allies()
 	_render_hand()
 	_update_ui()
 
+func _setup_allies() -> void:
+	ally_fighters.clear()
+	var lines: Array[String] = []
+	for id in GameState.allies:
+		var c: Dictionary = ContestantDB.get_contestant(id)
+		var eff: Dictionary = c.get("ally_effect", {})
+		var t: String = str(eff.get("type", ""))
+		if t == "fighter":
+			ally_fighters.append({"name": c["name"], "damage": int(eff.get("damage", 5))})
+			lines.append("%s（每回合 %d 伤害）" % [c["name"], int(eff.get("damage", 5))])
+		else:
+			if eff.has("cards"):
+				for card in eff["cards"]:
+					deck.hand.append(str(card))
+				lines.append("%s（赠「%s」）" % [c["name"], str(eff["cards"][0])])
+			if eff.has("hp"):
+				player_hp = min(GameState.player_max_hp, player_hp + int(eff["hp"]))
+				lines.append("%s（+%d HP）" % [c["name"], int(eff["hp"])])
+
+	var text := ""
+	for line in lines:
+		if text != "":
+			text += "、"
+		text += line
+	ally_label.text = "盟友：" + text
+
+func _open_piles() -> void:
+	DeckViewer.open_piles(deck.draw_pile, deck.hand, deck.discard_pile)
 func _render_hand() -> void:
 	hand_view.render(deck.hand, player_energy, pending_effect, pending_selected)
 
@@ -112,6 +158,11 @@ func _apply_card_effects(c: String) -> void:
 		player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
 	if d.get("self_damage", 0) > 0:
 		player_hp = max(0, player_hp - d["self_damage"])
+	if d.get("gain_energy", 0) > 0:
+		player_energy += int(d["gain_energy"])
+	if d.get("retrieve_top", false):
+		if not deck.discard_pile.is_empty():
+			deck.hand.append(deck.discard_pile.pop_back())
 
 func _on_card_pressed(index: int) -> void:
 	if game_over:
@@ -175,18 +226,26 @@ func _resolve_effect() -> void:
 	AudioManager.play("click")
 	player_energy -= CardDB.get_card(c)["cost"]
 	_apply_card_effects(c)
+
+	var consumed: Array[String] = []
 	var remove_idx: Array = [idx]
 	for i in pending_selected:
+		consumed.append(deck.hand[i])
 		remove_idx.append(i)
 	remove_idx.sort()
 	remove_idx.reverse()
 	for i in remove_idx:
-		var card: String = deck.hand[i]
-		deck.discard_pile.append(card)
 		deck.hand.remove_at(i)
+
+	# 效果牌先进弃牌堆，消耗的牌盖在它上面
+	deck.discard_pile.append(c)
+	for card in consumed:
+		deck.discard_pile.append(card)
+
 	var draw_n: int = int(CardDB.get_card(c).get("draw", 0))
 	if draw_n > 0:
 		_draw_cards(draw_n)
+
 	pending_effect = -1
 	pending_need = 0
 	pending_selected.clear()
@@ -229,6 +288,13 @@ func _resolve_enemy_turn() -> void:
 		StatusSystem.apply(player_status, enemy.on_hit)
 
 func _start_new_turn() -> void:
+	for f in ally_fighters:
+		enemy.hp = max(0, enemy.hp - int(f["damage"]))
+	if not ally_fighters.is_empty():
+		AudioManager.play("hit")
+	_check_game_over()
+	if game_over:
+		return
 	var draw_count: int = RunConfig.BASE_DRAW + player_energy
 	if draw_count > 0:
 		_draw_cards(draw_count)
@@ -237,6 +303,8 @@ func _start_new_turn() -> void:
 	_update_ui()
 
 func _check_game_over() -> void:
+	if game_over:
+		return
 	if enemy.hp <= 0:
 		game_over = true
 		AudioManager.play("victory")
@@ -343,6 +411,8 @@ func _choose_reward(card_name: String) -> void:
 	_finish_reward()
 
 func _finish_reward() -> void:
+	GameState.pending_node = -1
+	GameState.pending_snapshot = {}
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
@@ -465,7 +535,7 @@ func _show_pope() -> void:
 	overlay.add_child(body)
 
 	var trans := Label.new()
-	trans.text = "第 %d 次转生\n词条：%s" % [GameState.transmigration, TraitDB.text_of(GameState.traits)]
+	trans.text = "第 %d 次转生结束 → 第 %d 次转生开始\n词条：%s" % [old_trans, GameState.transmigration, TraitDB.text_of(GameState.traits)]
 	trans.position = Vector2(0, 360)
 	trans.size = Vector2(1280, 100)
 	trans.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -548,6 +618,8 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 		GameState.deck.append(card)
 
 	GameState.pending_contestant = ""
+	GameState.pending_node = -1
+	GameState.pending_snapshot = {}
 	GameState.save_game()
 	Toast.show_text(str(reward.get("text", "")), 3.5)
 	get_tree().change_scene_to_file("res://scenes/map.tscn")

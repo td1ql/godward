@@ -13,7 +13,7 @@ const ELITE := {
 }
 
 const BOSS := {
-	"守门人": {"name": "守门人", "hp": 100, "attack": 12, "pattern": [1, 1, 1, 2], "on_hit": {"易伤": 1}},
+	"守门人": {"name": "守门人", "hp": 10, "attack": 12, "pattern": [1, 1, 1, 2], "on_hit": {"易伤": 1}},
 }
 
 func _pool_for(node_type: String) -> Dictionary:

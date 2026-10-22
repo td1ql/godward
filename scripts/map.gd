@@ -61,6 +61,21 @@ func _ready() -> void:
 	current_id = GameState.current_node_id
 	_rebuild_view()
 	GameState.save_game()
+	if GameState.pending_node == current_id:
+		_reopen_pending()
+
+func _reopen_pending() -> void:
+	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
+	if kind == "battle" or kind == "contestant_fight":
+		get_tree().change_scene_to_file("res://scenes/main.tscn")
+		return
+	var t: String = nodes[current_id]["type"]
+	if t == "shop" or t == "rest" or t == "event" or t == "contestant":
+		_show_encounter(t)
+		return
+	GameState.pending_node = -1
+	GameState.pending_snapshot = {}
+	GameState.save_game()
 
 func _process(_delta: float) -> void:
 	if is_moving:
@@ -164,6 +179,7 @@ func _after_fade_out(id: int) -> void:
 	var center_btn: Button = node_buttons[id]
 	current_id = id
 	GameState.current_node_id = id
+	GameState.pending_node = id
 	GameState.save_game()
 	center_btn.position = CENTER - NODE_SIZE / 2.0
 	center_btn.modulate.a = 1.0
@@ -177,6 +193,9 @@ func _after_fade_out(id: int) -> void:
 
 	var t: String = nodes[id]["type"]
 	if t == "battle" or t == "elite" or t == "boss":
+		if GameState.pending_snapshot.is_empty():
+			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t)}
+			GameState.save_game()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
 
@@ -184,9 +203,21 @@ func _after_fade_out(id: int) -> void:
 		_show_encounter(t)
 		return
 
+	GameState.pending_node = -1
+	GameState.save_game()
 	_continue_children()
 
 func _continue_children() -> void:
+	var stale: Array = []
+	for id in node_buttons.keys():
+		if id != current_id:
+			stale.append(id)
+	for id in stale:
+		var old_btn: Button = node_buttons[id]
+		old_btn.queue_free()
+		node_buttons.erase(id)
+		button_base.erase(id)
+
 	var kids: Array = nodes[current_id]["children"]
 	var n := kids.size()
 	var tw := create_tween().set_parallel(true)
@@ -270,7 +301,13 @@ func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	vbox.add_child(b)
 
 func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	var ev: Dictionary = EventDB.pick()
+	var ev: Dictionary
+	if GameState.pending_snapshot.get("kind", "") == "event":
+		ev = GameState.pending_snapshot["event"]
+	else:
+		ev = EventDB.pick()
+		GameState.pending_snapshot = {"kind": "event", "event": ev}
+		GameState.save_game()
 	title.text = "事件"
 	body.text = ev["text"] + "\n\n（当前金币: %d）" % GameState.gold
 	for c in ev["choices"]:
@@ -298,7 +335,14 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 		vbox.add_child(leave)
 		return
 
-	var id: String = available[randi() % available.size()]
+	var id: String = ""
+	if GameState.pending_snapshot.get("kind", "") == "contestant":
+		id = str(GameState.pending_snapshot["id"])
+	var valid := GameState.contestants.has(id) and not GameState.met_contestants.has(id) and not GameState.eliminated.has(id)
+	if id == "" or not valid:
+		id = available[randi() % available.size()]
+		GameState.pending_snapshot = {"kind": "contestant", "id": id}
+		GameState.save_game()
 	var c: Dictionary = ContestantDB.get_contestant(id)
 	title.text = "%s　·　%s" % [c["name"], c["trait"]]
 	body.text = c["desc"] + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
@@ -380,7 +424,13 @@ func _apply_event_choice(c: Dictionary) -> void:
 	_close_encounter()
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	var cards: Array = ShopDB.pick_cards()
+	var cards: Array
+	if GameState.pending_snapshot.get("kind", "") == "shop":
+		cards = GameState.pending_snapshot["cards"]
+	else:
+		cards = ShopDB.pick_cards()
+		GameState.pending_snapshot = {"kind": "shop", "cards": cards}
+		GameState.save_game()
 	title.text = "商店"
 	body.text = "金币: %d\n挑一张卡牌加入你的牌组吧。" % GameState.gold
 	for card_name in cards:
@@ -405,6 +455,12 @@ func _fight_contestant(id: String) -> void:
 		"on_hit": c.get("on_hit", {}),
 	}
 	GameState.pending_contestant = id
+	GameState.pending_snapshot = {
+		"kind": "contestant_fight",
+		"id": id,
+		"enemy": GameState.pending_enemy,
+	}
+	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 func _buy_card(card_name: String, price: int, b: Button) -> void:
@@ -419,6 +475,8 @@ func _close_encounter() -> void:
 	if overlay:
 		overlay.queue_free()
 		overlay = null
+	GameState.pending_node = -1
+	GameState.pending_snapshot = {}
 	GameState.save_game()
 	_update_hud()
 	_maybe_eliminate()

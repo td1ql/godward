@@ -47,7 +47,8 @@ const CARDS := {
 	"削弱": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "status": {"虚弱": 2}, "price": 50},
 	"终结": {"kind": "effect", "cost": 1, "consume": 2, "damage": 18, "block": 0, "price": 80},
 	"大盾": {"kind": "effect", "cost": 1, "consume": 2, "damage": 0, "block": 18, "price": 80},
-
+	"掘墓者": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "gain_energy": 1, "retrieve_top": true, "price": 70},
+	
 	# ===== 遭遇牌：抽到立即生效 =====
 	"陷阱": {"kind": "encounter", "cost": 0, "damage": 0, "block": 0, "self_damage": 5, "price": 0},
 	"圣光": {"kind": "encounter", "cost": -1, "damage": 0, "block": 8, "price": 0},
@@ -95,6 +96,10 @@ func card_text(id: String) -> String:
 		effects.append("抽 %d 张" % d["draw"])
 	if d.get("self_damage", 0) > 0:
 		effects.append("受到 %d 伤害" % d["self_damage"])
+	if d.get("gain_energy", 0) > 0:
+		effects.append("能量 +%d" % d["gain_energy"])
+	if d.get("retrieve_top", false):
+		effects.append("取回弃牌堆顶")
 	if d.has("status"):
 		for key in d["status"]:
 			effects.append("敌+%d%s" % [d["status"][key], key])

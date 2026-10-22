@@ -14,6 +14,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "你收起了刀。名册上少了一个名字。", "gold": 50},
 		"spare": {"text": "「……记住这次。」他站起来，成了你的盟友。", "ally": true, "cards": ["打击"]},
+		"ally_effect": {"type": "fighter", "damage": 6},
 	},
 	"静默者": {
 		"name": "静默者",
@@ -28,6 +29,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "他没有发出任何声音。", "gold": 30},
 		"spare": {"text": "他向你点了点头，把盾留给了你。", "cards": ["铁壁"]},
+		"ally_effect": {"type": "buff", "cards": ["铁壁"]},
 	},
 	"赌徒": {
 		"name": "赌徒",
@@ -45,6 +47,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "他的硬币滚进了缝隙里。", "gold": 70},
 		"spare": {"text": "「你会后悔的。」他笑着走了。", "cards": ["快速思考"]},
+		"ally_effect": {"type": "buff", "cards": ["快速思考"]},
 	},
 	"苦修者": {
 		"name": "苦修者",
@@ -59,6 +62,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "他的祈祷声停了。", "gold": 20},
 		"spare": {"text": "他为你祈祷了很久。", "hp": 20},
+		"ally_effect": {"type": "buff", "hp": 15},
 	},
 	"疯女": {
 		"name": "疯女",
@@ -76,6 +80,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "歌声终于停了。", "gold": 35},
 		"spare": {"text": "她把那张符文纸塞进了你手里，笑着跑了。", "cards": ["火球"]},
+		"ally_effect": {"type": "buff", "cards": ["火球"]},
 	},
 	"收藏家": {
 		"name": "收藏家",
@@ -90,6 +95,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "他的袋子散了一地。", "random_cards": 2},
 		"spare": {"text": "他把一袋金币推给你，求你别再看他。", "gold": 40},
+		"ally_effect": {"type": "buff", "cards": ["重击"]},
 	},
 	"猎手": {
 		"name": "猎手",
@@ -104,6 +110,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "她的箭没能射出去。", "gold": 45},
 		"spare": {"text": "「你走前面，我掩护。」", "ally": true},
+		"ally_effect": {"type": "fighter", "damage": 4},
 	},
 	"无名者": {
 		"name": "无名者",
@@ -118,6 +125,7 @@ const CONTESTANTS := {
 		],
 		"kill": {"text": "雾气散了，什么也没留下。", "gold": 60},
 		"spare": {"text": "「……谢谢。」你第一次听清他的声音。", "hp": 15, "gold": 15},
+		"ally_effect": {"type": "buff", "hp": 10, "gold": 10},
 	},
 }
 
