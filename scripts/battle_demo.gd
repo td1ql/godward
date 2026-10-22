@@ -62,19 +62,19 @@ func _ready() -> void:
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
 	var deck_btn := Button.new()
-	deck_btn.text = "牌库"
+	deck_btn.text = StoryDB.t("battle_deck")
 	deck_btn.position = Vector2(20, 655)
 	deck_btn.size = Vector2(110, 40)
 	deck_btn.pressed.connect(DeckViewer.toggle)
 	add_child(deck_btn)
 	var pile_btn := Button.new()
-	pile_btn.text = "牌堆"
+	pile_btn.text = StoryDB.t("battle_piles")
 	pile_btn.position = Vector2(140, 655)
 	pile_btn.size = Vector2(110, 40)
 	pile_btn.pressed.connect(_open_piles)
 	add_child(pile_btn)
 	var menu_btn := Button.new()
-	menu_btn.text = "菜单"
+	menu_btn.text = StoryDB.t("battle_menu")
 	menu_btn.position = Vector2(1080, 660)
 	menu_btn.size = Vector2(120, 40)
 	menu_btn.pressed.connect(_back_to_menu_from_battle)
@@ -338,7 +338,7 @@ func _check_game_over() -> void:
 		if node_type == "pope":
 			_show_true_ending()
 			return
-		last_gold_gain = _gold_for_node()
+		last_gold_gain = NodeRuleDB.gold_of(node_type)
 		GameState.gold += last_gold_gain
 		if node_type == "boss":
 			_after_boss()
@@ -349,13 +349,6 @@ func _check_game_over() -> void:
 		AudioManager.play("defeat")
 		await get_tree().create_timer(1.0).timeout
 		_show_game_over()
-
-func _gold_for_node() -> int:
-	if node_type == "boss":
-		return RunConfig.GOLD_BOSS
-	elif node_type == "elite":
-		return RunConfig.GOLD_ELITE
-	return RunConfig.GOLD_BATTLE
 
 func _surviving_contestants() -> Array[String]:
 	var result: Array[String] = []
@@ -390,7 +383,7 @@ func _show_cleanup_prompt() -> void:
 	overlay.add_child(dim)
 
 	var title := Label.new()
-	title.text = "神堂之门紧闭"
+	title.text = StoryDB.t("cleanup_title")
 	title.position = Vector2(0, 180)
 	title.size = Vector2(1280, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -398,7 +391,7 @@ func _show_cleanup_prompt() -> void:
 	overlay.add_child(title)
 
 	var body := Label.new()
-	body.text = "还有 %d 名参赛者活着。\n神堂不为活人开门——他们的血是钥匙。" % n
+	body.text = StoryDB.f("cleanup_body", [n])
 	body.position = Vector2(0, 290)
 	body.size = Vector2(1280, 100)
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -406,7 +399,7 @@ func _show_cleanup_prompt() -> void:
 	overlay.add_child(body)
 
 	var btn := Button.new()
-	btn.text = "开始清算"
+	btn.text = StoryDB.t("cleanup_button")
 	btn.size = Vector2(240, 64)
 	btn.position = Vector2(520, 440)
 	btn.add_theme_font_size_override("font_size", 24)
@@ -419,50 +412,14 @@ func _begin_cleanup() -> void:
 	_start_next_cleanup()
 
 func _show_cleanup_result(text: String, summary: String) -> void:
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.93)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "清 算"
-	title.position = Vector2(0, 150)
-	title.size = Vector2(1280, 70)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 44)
-	overlay.add_child(title)
-
-	var body := Label.new()
-	body.text = text
-	body.position = Vector2(0, 260)
-	body.size = Vector2(1280, 60)
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 22)
-	overlay.add_child(body)
-
-	var reward_label := Label.new()
-	reward_label.text = summary if summary != "" else "什么也没留下。"
-	reward_label.position = Vector2(0, 340)
-	reward_label.size = Vector2(1280, 80)
-	reward_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	reward_label.add_theme_font_size_override("font_size", 20)
-	reward_label.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
-	overlay.add_child(reward_label)
-
+	var overlay := Modal.open(self, 0.93)
+	Modal.title(overlay, StoryDB.t("cleanup_result_title"), 150, 44)
+	Modal.text(overlay, text, 260, 22, 60)
+	var gain := Modal.text(overlay, summary if summary != "" else StoryDB.t("cleanup_result_empty"), 340, 20, 80)
+	gain.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
 	var left := _surviving_contestants().size()
-	var btn := Button.new()
-	btn.text = "继续清算（剩 %d 人）" % left if left > 0 else "前往神堂"
-	btn.size = Vector2(280, 64)
-	btn.position = Vector2(500, 470)
-	btn.add_theme_font_size_override("font_size", 22)
-	btn.pressed.connect(_start_next_cleanup)
-	overlay.add_child(btn)
+	var label := StoryDB.f("cleanup_continue", [left]) if left > 0 else StoryDB.t("cleanup_go")
+	Modal.button(overlay, label, 500, 470, 280, 64, _start_next_cleanup)
 
 func _start_next_cleanup() -> void:
 	var targets := _surviving_contestants()
@@ -521,24 +478,9 @@ func _update_ui() -> void:
 func _show_reward() -> void:
 	hand_view.hide_cards()
 
-	var pool: Array = RewardDB.pick_cards(node_type, RunConfig.REWARD_COUNT, GameState.act)
-
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.85)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "战斗胜利！金币 +%d　选择一张卡" % last_gold_gain
-	title.position = Vector2(380, 120)
-	title.add_theme_font_size_override("font_size", 24)
-	overlay.add_child(title)
+	var pool: Array = RewardDB.pick_cards(node_type, NodeRuleDB.cards_of(node_type), GameState.act)
+	var overlay := Modal.open(self, 0.85)
+	Modal.title(overlay, StoryDB.f("reward_title", [last_gold_gain]), 110, 24)
 
 	var n: int = pool.size()
 	var spacing := 250.0
@@ -550,17 +492,12 @@ func _show_reward() -> void:
 		var btn := CardUI.make_button(card_name, 18)
 		btn.size = Vector2(card_w, 240)
 		btn.position = Vector2(start_x + i * spacing, 200)
-		btn.text = CardDB.card_text(card_name) + "\n\n点击选择"
+		btn.text = CardDB.card_text(card_name) + "\n\n" + StoryDB.t("reward_pick")
 		btn.pressed.connect(_choose_reward.bind(card_name))
 		overlay.add_child(btn)
 
 	if RunConfig.ALLOW_SKIP:
-		var skip := Button.new()
-		skip.text = "跳过奖励"
-		skip.size = Vector2(200, 50)
-		skip.position = Vector2(540, 520)
-		skip.pressed.connect(_finish_reward)
-		overlay.add_child(skip)
+		Modal.button(overlay, StoryDB.t("reward_skip"), 540, 520, 200, 50, _finish_reward)
 
 func _choose_reward(card_name: String) -> void:
 	GameState.deck.append(card_name)
@@ -570,7 +507,7 @@ func _finish_reward() -> void:
 	GameState.pending_node = -1
 	GameState.pending_snapshot = {}
 	GameState.save_game()
-	if node_type == "elite" or node_type == "divine_elite":
+	if NodeRuleDB.discard_of(node_type):
 		_offer_discard()
 		return
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
@@ -587,196 +524,50 @@ func _discard_card(index: int) -> void:
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _show_game_over() -> void:
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.85)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "你被打倒了……"
-	title.position = Vector2(480, 260)
-	title.add_theme_font_size_override("font_size", 34)
-	overlay.add_child(title)
-
-	var sub := Label.new()
-	sub.text = "这次冒险到此为止。"
-	sub.position = Vector2(510, 320)
-	sub.add_theme_font_size_override("font_size", 18)
-	overlay.add_child(sub)
-
-	var btn := Button.new()
-	btn.text = "重新开始一局"
-	btn.size = Vector2(220, 60)
-	btn.position = Vector2(530, 400)
-	btn.pressed.connect(_restart_run)
-	overlay.add_child(btn)
+	var overlay := Modal.open(self, 0.85)
+	Modal.title(overlay, StoryDB.t("gameover_title"), 240, 34)
+	Modal.text(overlay, StoryDB.t("gameover_body"), 310, 18, 50)
+	Modal.button(overlay, StoryDB.t("gameover_restart"), 530, 400, 220, 60, _restart_run)
 
 func _restart_run() -> void:
 	GameState.restart_run()
 	get_tree().change_scene_to_file("res://scenes/run_intro.tscn")
 
-func _show_victory() -> void:
-	hand_view.hide_cards()
-
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.9)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "你击败了守门人"
-	title.position = Vector2(0, 150)
-	title.size = Vector2(1280, 70)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 46)
-	overlay.add_child(title)
-
-	var stats := Label.new()
-	stats.text = "剩余生命: %d / %d\n金币: %d\n牌组张数: %d" % [
-		player_hp, GameState.player_max_hp, GameState.gold, GameState.deck.size()
-	]
-	stats.position = Vector2(0, 260)
-	stats.size = Vector2(1280, 160)
-	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stats.add_theme_font_size_override("font_size", 26)
-	overlay.add_child(stats)
-
-	var again := Button.new()
-	again.text = "再来一局"
-	again.size = Vector2(240, 60)
-	again.position = Vector2(390, 470)
-	again.pressed.connect(_restart_run)
-	overlay.add_child(again)
-
-	var menu := Button.new()
-	menu.text = "返回主菜单"
-	menu.size = Vector2(240, 60)
-	menu.position = Vector2(650, 470)
-	menu.pressed.connect(_back_to_menu)
-	overlay.add_child(menu)
-
 func _back_to_menu() -> void:
 	GameState.delete_save()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
 func _show_pope() -> void:
 	hand_view.hide_cards()
 	var old_trans: int = GameState.transmigration
 	GameState.advance_transmigration()
 
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.93)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = " 教 皇 "
-	title.position = Vector2(0, 140)
-	title.size = Vector2(1280, 70)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 44)
-	overlay.add_child(title)
-
-	var body := Label.new()
-	body.text = "你走进教堂。教皇甚至没有抬头。\n一只手落在你的额头上——\n然后，一切暗了下去。"
-	body.position = Vector2(0, 240)
-	body.size = Vector2(1280, 100)
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 22)
-	overlay.add_child(body)
-
-	var trans := Label.new()
-	trans.text = "第 %d 次转生结束 → 第 %d 次转生开始\n职业：%s\n词条：%s" % [old_trans, GameState.transmigration, GameState.vocation, TraitDB.text_of(GameState.traits)]
-	trans.position = Vector2(0, 360)
-	trans.size = Vector2(1280, 100)
-	trans.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	trans.add_theme_font_size_override("font_size", 20)
+	var overlay := Modal.open(self, 0.93)
+	Modal.title(overlay, StoryDB.t("pope_title"), 140, 44)
+	Modal.text(overlay, StoryDB.t("pope_body"), 240, 22, 100)
+	var trans := Modal.text(overlay, "第 %d 次转生结束 → 第 %d 次转生开始\n职业：%s\n词条：%s" % [old_trans, GameState.transmigration, GameState.vocation, TraitDB.text_of(GameState.traits)], 360, 20, 100)
 	trans.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
-	overlay.add_child(trans)
-
-	var btn := Button.new()
-	btn.text = "转生"
-	btn.size = Vector2(220, 60)
-	btn.position = Vector2(530, 500)
-	btn.pressed.connect(_transmigrate)
-	overlay.add_child(btn)
+	Modal.button(overlay, StoryDB.t("pope_button"), 530, 500, 220, 60, _transmigrate)
 
 func _transmigrate() -> void:
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
 func _show_contestant_aftermath() -> void:
 	var id: String = GameState.pending_contestant
 	var c: Dictionary = ContestantDB.scaled(id)
 	hand_view.hide_cards()
 
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.92)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "%s 倒下了" % c["name"]
-	title.position = Vector2(0, 220)
-	title.size = Vector2(1280, 70)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 42)
-	overlay.add_child(title)
-
-	var body := Label.new()
-	if GameState.pending_cleanup:
-		body.text = "神堂的门只为死人打开。\n他必须留在这里。"
-	else:
-		body.text = "他还有呼吸。神域的风从你们之间穿过。"
-	body.position = Vector2(0, 320)
-	body.size = Vector2(1280, 60)
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 22)
-	overlay.add_child(body)
+	var overlay := Modal.open(self, 0.92)
+	Modal.title(overlay, StoryDB.f("aftermath_title", [c["name"]]), 220, 42)
+	var body_text := StoryDB.t("aftermath_cleanup") if GameState.pending_cleanup else StoryDB.t("aftermath_normal")
+	Modal.text(overlay, body_text, 320, 22, 60)
 
 	if GameState.pending_cleanup:
-		var kill_only := Button.new()
-		kill_only.text = "杀死他"
-		kill_only.size = Vector2(240, 60)
-		kill_only.position = Vector2(520, 430)
-		kill_only.pressed.connect(_choose_aftermath.bind(id, true))
-		overlay.add_child(kill_only)
+		Modal.button(overlay, StoryDB.t("aftermath_kill"), 520, 430, 240, 60, _choose_aftermath.bind(id, true))
 	else:
-		var kill_btn := Button.new()
-		kill_btn.text = "杀死他"
-		kill_btn.size = Vector2(200, 60)
-		kill_btn.position = Vector2(390, 430)
-		kill_btn.pressed.connect(_choose_aftermath.bind(id, true))
-		overlay.add_child(kill_btn)
-
-		var spare_btn := Button.new()
-		spare_btn.text = "饶恕他"
-		spare_btn.size = Vector2(200, 60)
-		spare_btn.position = Vector2(690, 430)
-		spare_btn.pressed.connect(_choose_aftermath.bind(id, false))
-		overlay.add_child(spare_btn)
+		Modal.button(overlay, StoryDB.t("aftermath_kill"), 390, 430, 200, 60, _choose_aftermath.bind(id, true))
+		Modal.button(overlay, StoryDB.t("aftermath_spare"), 690, 430, 200, 60, _choose_aftermath.bind(id, false))
 
 func _choose_aftermath(id: String, kill: bool) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)
@@ -786,36 +577,11 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 		GameState.eliminated.append(id)
 	else:
 		GameState.met_contestants.append(id)
-		if reward.get("ally", false) and not GameState.allies.has(id):
-			GameState.allies.append(id)
 
-	var gains: Array[String] = []
-	if reward.has("gold"):
-		var g: int = int(reward["gold"])
-		GameState.gold = max(0, GameState.gold + g)
-		gains.append("金币 %s%d" % ["+" if g >= 0 else "", g])
-	if reward.has("hp"):
-		var h: int = int(reward["hp"])
-		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
-		gains.append("生命 %s%d" % ["+" if h >= 0 else "", h])
-
-	var cards: Array[String] = ContestantDB.resolve_cards(reward)
-	for card in cards:
-		GameState.deck.append(card)
-		gains.append("获得「%s」" % card)
-
-	if reward.get("ally", false):
-		gains.append("「%s」成为盟友" % c["name"])
-
-	var summary := ""
-	for g in gains:
-		if summary != "":
-			summary += "　"
-		summary += g
+	var summary := Reward.apply(reward, id)
 
 	GameState.pending_contestant = ""
 	GameState.pending_snapshot = {}
-	Toast.show_text("%s\n%s" % [str(reward.get("text", "")), summary], 3.5)
 
 	if GameState.pending_cleanup:
 		GameState.save_game()
@@ -824,44 +590,15 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 
 	GameState.pending_node = -1
 	GameState.save_game()
+	Toast.show_text("%s\n%s" % [str(reward.get("text", "")), summary], 3.5)
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _show_church() -> void:
 	hand_view.hide_cards()
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.95)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "教 堂"
-	title.position = Vector2(0, 150)
-	title.size = Vector2(1280, 80)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 52)
-	overlay.add_child(title)
-
-	var body := Label.new()
-	body.text = "清算结束了。\n教堂的门，为你打开了。"
-	body.position = Vector2(0, 270)
-	body.size = Vector2(1280, 100)
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 24)
-	overlay.add_child(body)
-
-	var btn := Button.new()
-	btn.text = "进入教堂"
-	btn.size = Vector2(260, 64)
-	btn.position = Vector2(510, 480)
-	btn.add_theme_font_size_override("font_size", 24)
-	btn.pressed.connect(_enter_church)
-	overlay.add_child(btn)
+	var overlay := Modal.open(self, 0.95)
+	Modal.title(overlay, StoryDB.t("church_title"), 150, 52)
+	Modal.text(overlay, StoryDB.t("church_body"), 270, 24, 100)
+	Modal.button(overlay, StoryDB.t("church_button"), 510, 480, 260, 64, _enter_church)
 
 func _enter_church() -> void:
 	GameState.player_hp = GameState.player_max_hp
@@ -873,49 +610,13 @@ func _enter_church() -> void:
 
 func _show_true_ending() -> void:
 	hand_view.hide_cards()
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.97)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = "神 堂"
-	title.position = Vector2(0, 130)
-	title.size = Vector2(1280, 80)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 52)
+	var overlay := Modal.open(self, 0.97)
+	var title := Modal.title(overlay, StoryDB.t("ending_title"), 130, 52)
 	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
-	overlay.add_child(title)
-
-	var body := Label.new()
-	body.text = "教皇倒下时，穹顶裂开了。\n里面没有神，只有一片安静的白。\n\n你终于想起自己是谁。"
-	body.position = Vector2(0, 260)
-	body.size = Vector2(1280, 200)
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 24)
-	overlay.add_child(body)
-
-	var stats := Label.new()
-	stats.text = "第 %d 次转生\n剩余生命: %d / %d" % [GameState.transmigration, player_hp, GameState.player_max_hp]
-	stats.position = Vector2(0, 470)
-	stats.size = Vector2(1280, 80)
-	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	stats.add_theme_font_size_override("font_size", 20)
+	Modal.text(overlay, StoryDB.t("ending_body"), 260, 24, 200)
+	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d" % [GameState.transmigration, player_hp, GameState.player_max_hp], 470, 20, 80)
 	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
-	overlay.add_child(stats)
-
-	var btn := Button.new()
-	btn.text = "回到主菜单"
-	btn.size = Vector2(240, 60)
-	btn.position = Vector2(520, 580)
-	btn.pressed.connect(_end_true_run)
-	overlay.add_child(btn)
+	Modal.button(overlay, StoryDB.t("ending_button"), 520, 580, 240, 60, _end_true_run)
 
 func _end_true_run() -> void:
 	GameState.delete_save()

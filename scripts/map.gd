@@ -412,24 +412,8 @@ func _encounter_remnant(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	vbox.add_child(leave)
 
 func _take_remnant(r: Dictionary) -> void:
-	var gains: Array[String] = []
-	for card in r.get("cards", []):
-		GameState.deck.append(str(card))
-		gains.append("获得「%s」" % str(card))
-	if r.has("hp"):
-		GameState.player_hp = clamp(GameState.player_hp + int(r["hp"]), 1, GameState.player_max_hp)
-		gains.append("生命 +%d" % int(r["hp"]))
-	if r.has("gold"):
-		GameState.gold = max(0, GameState.gold + int(r["gold"]))
-		gains.append("金币 +%d" % int(r["gold"]))
-
-	var s := ""
-	for x in gains:
-		if s != "":
-			s += "　"
-		s += x
-
-	Toast.show_text("%s\n%s" % [str(r["name"]), s], 3.0)
+	var summary := Reward.apply(r)
+	Toast.show_text("%s\n%s" % [str(r["name"]), summary], 3.0)
 	_close_encounter()
 
 func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> void:
@@ -490,37 +474,12 @@ func _contestant_choice(id: String, choice: Dictionary) -> void:
 		_fight_contestant(id)
 		return
 
+	if not Reward.can_apply(result):
+		Toast.show_text("金币不足。")
+		return
+
 	GameState.met_contestants.append(id)
-
-	var gains: Array[String] = []
-
-	if result.has("gold"):
-		var g: int = int(result["gold"])
-		if g < 0 and GameState.gold + g < 0:
-			Toast.show_text("金币不足。")
-			return
-		GameState.gold += g
-		gains.append("金币 %s%d" % ["+" if g >= 0 else "", g])
-	if result.has("hp"):
-		var h: int = int(result["hp"])
-		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
-		gains.append("生命 %s%d" % ["+" if h >= 0 else "", h])
-
-	var cards: Array[String] = ContestantDB.resolve_cards(result)
-	for card in cards:
-		GameState.deck.append(card)
-		gains.append("获得「%s」" % card)
-
-	if result.get("ally", false) and not GameState.allies.has(id):
-		GameState.allies.append(id)
-		gains.append("「%s」成为盟友" % ContestantDB.name_of(id))
-
-	var summary := ""
-	for g in gains:
-		if summary != "":
-			summary += "　"
-		summary += g
-
+	var summary := Reward.apply(result, id)
 	Toast.show_text("%s\n%s" % [str(result.get("text", "")), summary], 3.2)
 	_close_encounter()
 
@@ -538,17 +497,10 @@ func _maybe_eliminate() -> void:
 		Toast.show_text("%s 被淘汰了。" % ContestantDB.name_of(id))
 
 func _apply_event_choice(c: Dictionary) -> void:
-	if c.has("gold"):
-		var g: int = int(c["gold"])
-		if g < 0 and GameState.gold + g < 0:
-			return
-		GameState.gold += g
-	if c.has("hp"):
-		var h: int = c["hp"]
-		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
-	if c.has("cards"):
-		for id in c["cards"]:
-			GameState.deck.append(str(id))
+	if not Reward.can_apply(c):
+		Toast.show_text("金币不足。")
+		return
+	Reward.apply(c)
 	_close_encounter()
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
