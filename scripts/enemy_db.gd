@@ -16,12 +16,18 @@ const BOSS := {
 	"守门人": {"name": "守门人", "hp": 10, "attack": 12, "pattern": [1, 1, 1, 2], "on_hit": {"易伤": 1}},
 }
 
+const POPE := {
+	"教皇": {"name": "教皇", "hp": 240, "attack": 16, "pattern": [1, 2, 1, 2], "on_hit": {"易伤": 1}},
+}
+
 func _pool_for(node_type: String) -> Dictionary:
 	match node_type:
 		"elite":
 			return ELITE
 		"boss":
 			return BOSS
+		"pope":
+			return POPE
 		"contestant":
 			var result := {}
 			for id in ContestantDB.CONTESTANTS.keys():

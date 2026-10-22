@@ -14,6 +14,7 @@ var pending_node: int = -1
 var pending_snapshot: Dictionary = {}
 var transmigration := 1
 var traits: Array[String] = []
+var vocation := ""
 var contestants: Array[String] = []
 var met_contestants: Array[String] = []
 var eliminated: Array[String] = []
@@ -29,12 +30,18 @@ func reset_deck() -> void:
 
 func reset_run() -> void:
 	transmigration = 1
-	traits = TraitDB.roll()
-	_apply_traits()
+	_roll_vocation()
 
 func advance_transmigration() -> void:
 	transmigration += 1
-	traits = TraitDB.roll()
+	_roll_vocation()
+
+func _roll_vocation() -> void:
+	vocation = TraitDB.roll_vocation()
+	traits = TraitDB.traits_of(vocation)
+	_apply_traits()
+
+func restart_run() -> void:
 	_apply_traits()
 
 func _apply_traits() -> void:
@@ -62,6 +69,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"vocation": vocation,
 		"pending_snapshot": pending_snapshot,
 		"pending_contestant": pending_contestant,
 		"pending_node": pending_node,
@@ -126,6 +134,7 @@ func load_game(slot: int = -1) -> bool:
 	pending_node = int(data.get("pending_node", -1))
 	pending_snapshot = data.get("pending_snapshot", {})
 	pending_contestant = str(data.get("pending_contestant", ""))
+	vocation = str(data.get("vocation", ""))
 	current_slot = s
 	return true
 

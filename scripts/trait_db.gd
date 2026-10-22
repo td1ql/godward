@@ -9,6 +9,33 @@ const TRAITS := {
 	"神眷": {"desc": "开局获得一张「火球」", "card": "火球"},
 }
 
+const VOCATIONS := {
+	"等待丈夫的新娘": {"desc": "她在神域尽头等了太久。", "traits": ["敏锐", "神眷", "残躯"]},
+	"失明的守钟人": {"desc": "他听不见钟声，却一直在敲。", "traits": ["健忘", "强健", "敏锐"]},
+	"饥饿的朝圣者": {"desc": "他走了很远，胃里空空。", "traits": ["残躯", "富裕", "健忘"]},
+	"沉默的执剑人": {"desc": "剑比话多。", "traits": ["强健", "健忘", "神眷"]},
+	"疯癫的先知": {"desc": "她看见了不该看见的东西。", "traits": ["神眷", "残躯", "敏锐"]},
+	"褴褛的记账人": {"desc": "他记着每一笔债。", "traits": ["富裕", "健忘", "残躯"]},
+	"断臂的旗手": {"desc": "旗还在，手没了。", "traits": ["强健", "残躯", "富裕"]},
+	"无名的旅人": {"desc": "你记不住他的脸。", "traits": ["敏锐", "富裕", "强健"]},
+}
+
+func roll_vocation() -> String:
+	var pool: Array = VOCATIONS.keys()
+	return str(pool[randi() % pool.size()])
+
+func traits_of(vocation: String) -> Array[String]:
+	var result: Array[String] = []
+	if VOCATIONS.has(vocation):
+		for t in VOCATIONS[vocation]["traits"]:
+			result.append(str(t))
+	return result
+
+func vocation_text(vocation: String) -> String:
+	if not VOCATIONS.has(vocation):
+		return ""
+	return "%s（%s）" % [vocation, VOCATIONS[vocation]["desc"]]
+
 func roll() -> Array[String]:
 	var pool: Array = TRAITS.keys()
 	pool.shuffle()

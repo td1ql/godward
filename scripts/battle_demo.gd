@@ -29,12 +29,14 @@ func _ready() -> void:
 	player_hp = GameState.player_hp
 	player_energy = RunConfig.MAX_ENERGY
 
+	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
 	node_type = "battle"
 	if GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
+	if kind == "pope":
+		node_type = "pope"
 	var enemy_data: Dictionary
-	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
-	if kind == "battle" or kind == "contestant_fight":
+	if kind == "battle" or kind == "contestant_fight" or kind == "pope":
 		enemy_data = GameState.pending_snapshot["enemy"]
 	elif not GameState.pending_enemy.is_empty():
 		enemy_data = GameState.pending_enemy
@@ -71,11 +73,22 @@ func _ready() -> void:
 	pile_btn.size = Vector2(110, 40)
 	pile_btn.pressed.connect(_open_piles)
 	add_child(pile_btn)
+	var menu_btn := Button.new()
+	menu_btn.text = "菜单"
+	menu_btn.position = Vector2(1080, 660)
+	menu_btn.size = Vector2(120, 40)
+	menu_btn.pressed.connect(_back_to_menu_from_battle)
+	add_child(menu_btn)
 	_draw_cards(GameState.initial_hand_size())
 	if node_type == "boss":
 		_setup_allies()
 	_render_hand()
 	_update_ui()
+
+func _back_to_menu_from_battle() -> void:
+	GameState.player_hp = max(1, player_hp)
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _setup_allies() -> void:
 	ally_fighters.clear()
@@ -312,10 +325,16 @@ func _check_game_over() -> void:
 		if GameState.pending_contestant != "":
 			_show_contestant_aftermath()
 			return
+		if node_type == "pope":
+			_show_true_ending()
+			return
 		last_gold_gain = _gold_for_node()
 		GameState.gold += last_gold_gain
 		if node_type == "boss":
-			_show_pope()
+			if GameState.transmigration >= 10:
+				_show_pope_final()
+			else:
+				_show_pope()
 		else:
 			_show_reward()
 	elif player_hp <= 0:
@@ -448,8 +467,9 @@ func _show_game_over() -> void:
 	overlay.add_child(btn)
 
 func _restart_run() -> void:
-	GameState.reset_run()
+	GameState.restart_run()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
 func _show_victory() -> void:
 	hand_view.hide_cards()
 
@@ -535,7 +555,7 @@ func _show_pope() -> void:
 	overlay.add_child(body)
 
 	var trans := Label.new()
-	trans.text = "第 %d 次转生结束 → 第 %d 次转生开始\n词条：%s" % [old_trans, GameState.transmigration, TraitDB.text_of(GameState.traits)]
+	trans.text = "第 %d 次转生结束 → 第 %d 次转生开始\n职业：%s\n词条：%s" % [old_trans, GameState.transmigration, GameState.vocation, TraitDB.text_of(GameState.traits)]
 	trans.position = Vector2(0, 360)
 	trans.size = Vector2(1280, 100)
 	trans.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -610,16 +630,127 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 		if reward.get("ally", false) and not GameState.allies.has(id):
 			GameState.allies.append(id)
 
+	var gains: Array[String] = []
 	if reward.has("gold"):
-		GameState.gold = max(0, GameState.gold + int(reward["gold"]))
+		var g: int = int(reward["gold"])
+		GameState.gold = max(0, GameState.gold + g)
+		gains.append("金币 %s%d" % ["+" if g >= 0 else "", g])
 	if reward.has("hp"):
-		GameState.player_hp = clamp(GameState.player_hp + int(reward["hp"]), 1, GameState.player_max_hp)
-	for card in ContestantDB.resolve_cards(reward):
+		var h: int = int(reward["hp"])
+		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
+		gains.append("生命 %s%d" % ["+" if h >= 0 else "", h])
+
+	var cards: Array[String] = ContestantDB.resolve_cards(reward)
+	for card in cards:
 		GameState.deck.append(card)
+		gains.append("获得「%s」" % card)
+
+	if reward.get("ally", false):
+		gains.append("「%s」成为盟友" % c["name"])
+
+	var summary := ""
+	for g in gains:
+		if summary != "":
+			summary += "　"
+		summary += g
 
 	GameState.pending_contestant = ""
 	GameState.pending_node = -1
 	GameState.pending_snapshot = {}
 	GameState.save_game()
-	Toast.show_text(str(reward.get("text", "")), 3.5)
+	Toast.show_text("%s\n%s" % [str(reward.get("text", "")), summary], 3.5)
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+func _show_pope_final() -> void:
+	hand_view.hide_cards()
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.95)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "教 堂"
+	title.position = Vector2(0, 150)
+	title.size = Vector2(1280, 80)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 52)
+	overlay.add_child(title)
+
+	var body := Label.new()
+	body.text = "守门人倒下后，门后的那个人站了起来。\n「你走到了这里。」教皇说，\n「那就让我看看，神的碎片能烧到什么程度。」"
+	body.position = Vector2(0, 270)
+	body.size = Vector2(1280, 160)
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 24)
+	overlay.add_child(body)
+
+	var btn := Button.new()
+	btn.text = "与教皇决战"
+	btn.size = Vector2(260, 64)
+	btn.position = Vector2(510, 480)
+	btn.add_theme_font_size_override("font_size", 24)
+	btn.pressed.connect(_start_pope_fight)
+	overlay.add_child(btn)
+
+func _start_pope_fight() -> void:
+	GameState.pending_snapshot = {"kind": "pope", "enemy": EnemyDB.POPE["教皇"]}
+	GameState.pending_node = -1
+	GameState.pending_contestant = ""
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
+func _show_true_ending() -> void:
+	hand_view.hide_cards()
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.97)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "神 堂"
+	title.position = Vector2(0, 130)
+	title.size = Vector2(1280, 80)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 52)
+	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
+	overlay.add_child(title)
+
+	var body := Label.new()
+	body.text = "教皇倒下时，穹顶裂开了。\n里面没有神，只有一片安静的白。\n\n你终于想起自己是谁。"
+	body.position = Vector2(0, 260)
+	body.size = Vector2(1280, 200)
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 24)
+	overlay.add_child(body)
+
+	var stats := Label.new()
+	stats.text = "第 %d 次转生\n剩余生命: %d / %d" % [GameState.transmigration, player_hp, GameState.player_max_hp]
+	stats.position = Vector2(0, 470)
+	stats.size = Vector2(1280, 80)
+	stats.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stats.add_theme_font_size_override("font_size", 20)
+	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
+	overlay.add_child(stats)
+
+	var btn := Button.new()
+	btn.text = "回到主菜单"
+	btn.size = Vector2(240, 60)
+	btn.position = Vector2(520, 580)
+	btn.pressed.connect(_end_true_run)
+	overlay.add_child(btn)
+
+func _end_true_run() -> void:
+	GameState.delete_save()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

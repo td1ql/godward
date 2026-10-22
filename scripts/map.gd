@@ -54,11 +54,14 @@ func _ready() -> void:
 		GameState.map_nodes = nodes
 		GameState.map_generated = true
 		GameState.current_node_id = 0
-		Toast.show_text("第 %d 次转生\n词条：%s" % [GameState.transmigration, TraitDB.text_of(GameState.traits)], 3.5)
 	else:
 		nodes = GameState.map_nodes
+		next_id = 0
+		for k in nodes.keys():
+			next_id = max(next_id, int(k) + 1)
 
 	current_id = GameState.current_node_id
+	_ensure_children(current_id)
 	_rebuild_view()
 	GameState.save_game()
 	if GameState.pending_node == current_id:
@@ -83,9 +86,11 @@ func _process(_delta: float) -> void:
 
 func _generate_map() -> void:
 	nodes.clear()
-	next_id = 1
+	next_id = 0
 	nodes[0] = {"type": "start", "children": [], "depth": 0}
-	_gen_children(0, 1, MapDB.ROOT_BRANCHES)
+	_ensure_children(0)
+	GameState.map_nodes = nodes
+	GameState.map_generated = true
 
 func _gen_children(parent_id: int, depth: int, count: int) -> void:
 	if depth > MapDB.MAX_DEPTH:
@@ -93,10 +98,31 @@ func _gen_children(parent_id: int, depth: int, count: int) -> void:
 	for i in range(count):
 		var id := next_id
 		next_id += 1
-		nodes[id] = {"type": _pick_type(depth), "children": [], "depth": depth}
+		var parent_type: String = nodes[parent_id]["type"]
+		var t: String = _pick_type(depth)
+		if (t == "elite" or t == "rest") and t == parent_type:
+			t = "battle"
+		nodes[id] = {"type": t, "children": [], "depth": depth}
 		nodes[parent_id]["children"].append(id)
-		if depth < MapDB.MAX_DEPTH:
-			_gen_children(id, depth + 1, randi_range(MapDB.MIN_BRANCHES, MapDB.MAX_BRANCHES))
+
+func _ensure_children(id: int) -> void:
+	if not nodes.has(id):
+		return
+	var d: int = int(nodes[id]["depth"])
+	if d >= MapDB.MAX_DEPTH:
+		return
+	if not nodes[id]["children"].is_empty():
+		return
+	var count: int = MapDB.ROOT_BRANCHES if d == 0 else randi_range(MapDB.MIN_BRANCHES, MapDB.MAX_BRANCHES)
+	_gen_children(id, d + 1, count)
+
+func _prune(id: int) -> void:
+	var keep := {}
+	keep[id] = nodes[id]
+	for child in nodes[id]["children"]:
+		if nodes.has(child):
+			keep[child] = nodes[child]
+	nodes = keep
 
 func _pick_type(depth: int) -> String:
 	return MapDB.pick_type(depth)
@@ -180,7 +206,6 @@ func _after_fade_out(id: int) -> void:
 	current_id = id
 	GameState.current_node_id = id
 	GameState.pending_node = id
-	GameState.save_game()
 	center_btn.position = CENTER - NODE_SIZE / 2.0
 	center_btn.modulate.a = 1.0
 
@@ -190,6 +215,11 @@ func _after_fade_out(id: int) -> void:
 	button_base[id] = CENTER - NODE_SIZE / 2.0
 	map_offset = Vector2.ZERO
 	pan_target = Vector2.ZERO
+
+	_prune(id)
+	_ensure_children(id)
+	GameState.map_nodes = nodes
+	GameState.save_game()
 
 	var t: String = nodes[id]["type"]
 	if t == "battle" or t == "elite" or t == "boss":
@@ -380,20 +410,36 @@ func _contestant_choice(id: String, choice: Dictionary) -> void:
 
 	GameState.met_contestants.append(id)
 
+	var gains: Array[String] = []
+
 	if result.has("gold"):
 		var g: int = int(result["gold"])
 		if g < 0 and GameState.gold + g < 0:
 			Toast.show_text("金币不足。")
 			return
 		GameState.gold += g
+		gains.append("金币 %s%d" % ["+" if g >= 0 else "", g])
 	if result.has("hp"):
-		GameState.player_hp = clamp(GameState.player_hp + int(result["hp"]), 1, GameState.player_max_hp)
-	for card in ContestantDB.resolve_cards(result):
+		var h: int = int(result["hp"])
+		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
+		gains.append("生命 %s%d" % ["+" if h >= 0 else "", h])
+
+	var cards: Array[String] = ContestantDB.resolve_cards(result)
+	for card in cards:
 		GameState.deck.append(card)
+		gains.append("获得「%s」" % card)
+
 	if result.get("ally", false) and not GameState.allies.has(id):
 		GameState.allies.append(id)
+		gains.append("「%s」成为盟友" % ContestantDB.name_of(id))
 
-	Toast.show_text(str(result.get("text", "")), 3.0)
+	var summary := ""
+	for g in gains:
+		if summary != "":
+			summary += "　"
+		summary += g
+
+	Toast.show_text("%s\n%s" % [str(result.get("text", "")), summary], 3.2)
 	_close_encounter()
 
 func _maybe_eliminate() -> void:
@@ -481,9 +527,11 @@ func _close_encounter() -> void:
 	_update_hud()
 	_maybe_eliminate()
 	_continue_children()
+
 func _on_back_to_menu() -> void:
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
 func _update_hud() -> void:
 	if gold_label:
 		gold_label.text = "金币: %d" % GameState.gold

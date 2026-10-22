@@ -1,6 +1,7 @@
 extends Node
 
 var _layer: CanvasLayer
+var _active: Array[Control] = []
 
 func _ready() -> void:
 	_layer = CanvasLayer.new()
@@ -9,7 +10,7 @@ func _ready() -> void:
 
 func show_text(text: String, duration: float = 2.8) -> void:
 	var panel := Panel.new()
-	panel.position = Vector2(340, 250)
+	panel.position = Vector2(340, 250 + _active.size() * 130)
 	panel.size = Vector2(600, 120)
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(0.1, 0.1, 0.15, 0.95)
@@ -29,7 +30,13 @@ func show_text(text: String, duration: float = 2.8) -> void:
 	lbl.add_theme_font_size_override("font_size", 17)
 	panel.add_child(lbl)
 
+	_active.append(panel)
+
 	var tw := panel.create_tween()
 	tw.tween_interval(duration)
 	tw.tween_property(panel, "modulate:a", 0.0, 0.5)
-	tw.finished.connect(panel.queue_free)
+	tw.finished.connect(_on_done.bind(panel))
+
+func _on_done(panel: Control) -> void:
+	_active.erase(panel)
+	panel.queue_free()

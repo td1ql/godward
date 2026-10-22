@@ -69,13 +69,16 @@ func _build_slot(i: int) -> void:
 
 func _continue(slot: int) -> void:
 	if GameState.load_game(slot):
-		get_tree().change_scene_to_file("res://scenes/map.tscn")
+		if GameState.map_generated:
+			get_tree().change_scene_to_file("res://scenes/map.tscn")
+		else:
+			get_tree().change_scene_to_file("res://scenes/run_intro.tscn")
 
 func _new_game(slot: int) -> void:
 	GameState.current_slot = slot
 	GameState.reset_run()
 	GameState.save_game()
-	get_tree().change_scene_to_file("res://scenes/map.tscn")
+	get_tree().change_scene_to_file("res://scenes/run_intro.tscn")
 
 func _delete(slot: int) -> void:
 	GameState.delete_save(slot)
