@@ -54,6 +54,7 @@ func _ready() -> void:
 		GameState.map_nodes = nodes
 		GameState.map_generated = true
 		GameState.current_node_id = 0
+		Toast.show_text("第 %d 次转生\n词条：%s" % [GameState.transmigration, TraitDB.text_of(GameState.traits)], 3.5)
 	else:
 		nodes = GameState.map_nodes
 
@@ -179,7 +180,7 @@ func _after_fade_out(id: int) -> void:
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
 
-	if t == "shop" or t == "rest" or t == "event":
+	if t == "shop" or t == "rest" or t == "event" or t == "contestant":
 		_show_encounter(t)
 		return
 
@@ -255,6 +256,8 @@ func _show_encounter(t: String) -> void:
 			_encounter_event(title, body, vbox)
 		"shop":
 			_encounter_shop(title, body, vbox)
+		"contestant":
+			_encounter_contestant(title, body, vbox)
 
 func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var heal := int(GameState.player_max_hp * RunConfig.REST_HEAL_RATIO)
@@ -279,6 +282,88 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 			b.text += "（金币不足）"
 		b.pressed.connect(_apply_event_choice.bind(c))
 		vbox.add_child(b)
+
+func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var available: Array = []
+	for id in GameState.contestants:
+		if GameState.met_contestants.has(id) or GameState.eliminated.has(id):
+			continue
+		available.append(id)
+	if available.is_empty():
+		title.text = "参赛者"
+		body.text = "这里空无一人，只剩风穿过神域的裂隙。"
+		var leave := Button.new()
+		leave.text = "离开"
+		leave.pressed.connect(_close_encounter)
+		vbox.add_child(leave)
+		return
+
+	var id: String = available[randi() % available.size()]
+	var c: Dictionary = ContestantDB.get_contestant(id)
+	title.text = "%s　·　%s" % [c["name"], c["trait"]]
+	body.text = c["desc"] + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
+
+	for choice in c["choices"]:
+		var b := Button.new()
+		b.text = choice["label"]
+		b.pressed.connect(_contestant_choice.bind(id, choice))
+		vbox.add_child(b)
+
+func _alive_count() -> int:
+	var n := 0
+	for id in GameState.contestants:
+		if not GameState.eliminated.has(id):
+			n += 1
+	return n
+
+func _resolve_choice(c: Dictionary) -> Dictionary:
+	if c.has("random"):
+		var opts: Array = c["random"]
+		var picked: Dictionary = opts[randi() % opts.size()]
+		var merged := picked.duplicate()
+		merged["result"] = c.get("result", "talk")
+		if c.get("ally", false):
+			merged["ally"] = true
+		return merged
+	return c
+
+func _contestant_choice(id: String, choice: Dictionary) -> void:
+	var result := _resolve_choice(choice)
+
+	if result.get("result", "talk") == "fight":
+		_fight_contestant(id)
+		return
+
+	GameState.met_contestants.append(id)
+
+	if result.has("gold"):
+		var g: int = int(result["gold"])
+		if g < 0 and GameState.gold + g < 0:
+			Toast.show_text("金币不足。")
+			return
+		GameState.gold += g
+	if result.has("hp"):
+		GameState.player_hp = clamp(GameState.player_hp + int(result["hp"]), 1, GameState.player_max_hp)
+	for card in ContestantDB.resolve_cards(result):
+		GameState.deck.append(card)
+	if result.get("ally", false) and not GameState.allies.has(id):
+		GameState.allies.append(id)
+
+	Toast.show_text(str(result.get("text", "")), 3.0)
+	_close_encounter()
+
+func _maybe_eliminate() -> void:
+	var pool: Array = []
+	for id in GameState.contestants:
+		if GameState.met_contestants.has(id) or GameState.eliminated.has(id):
+			continue
+		pool.append(id)
+	if pool.is_empty():
+		return
+	if randf() < 0.15:
+		var id: String = pool[randi() % pool.size()]
+		GameState.eliminated.append(id)
+		Toast.show_text("%s 被淘汰了。" % ContestantDB.name_of(id))
 
 func _apply_event_choice(c: Dictionary) -> void:
 	if c.has("gold"):
@@ -310,6 +395,18 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	leave.pressed.connect(_close_encounter)
 	vbox.add_child(leave)
 
+func _fight_contestant(id: String) -> void:
+	var c: Dictionary = ContestantDB.get_contestant(id)
+	GameState.pending_enemy = {
+		"name": c["name"],
+		"hp": int(c["hp"]),
+		"attack": int(c["attack"]),
+		"pattern": c.get("pattern", [1]),
+		"on_hit": c.get("on_hit", {}),
+	}
+	GameState.pending_contestant = id
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
 func _buy_card(card_name: String, price: int, b: Button) -> void:
 	if GameState.gold < price:
 		return
@@ -324,6 +421,7 @@ func _close_encounter() -> void:
 		overlay = null
 	GameState.save_game()
 	_update_hud()
+	_maybe_eliminate()
 	_continue_children()
 func _on_back_to_menu() -> void:
 	GameState.save_game()

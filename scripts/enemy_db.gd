@@ -22,6 +22,18 @@ func _pool_for(node_type: String) -> Dictionary:
 			return ELITE
 		"boss":
 			return BOSS
+		"contestant":
+			var result := {}
+			for id in ContestantDB.CONTESTANTS.keys():
+				var c: Dictionary = ContestantDB.CONTESTANTS[id]
+				result[id] = {
+					"name": c["name"],
+					"hp": int(c["hp"]),
+					"attack": int(c["attack"]),
+					"pattern": c.get("pattern", [1]),
+					"on_hit": c.get("on_hit", {}),
+				}
+			return result
 		_:
 			return NORMAL
 

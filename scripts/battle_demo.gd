@@ -30,7 +30,13 @@ func _ready() -> void:
 	node_type = "battle"
 	if GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
-	enemy.setup(EnemyDB.pick_for_node(node_type))
+	var enemy_data: Dictionary
+	if not GameState.pending_enemy.is_empty():
+		enemy_data = GameState.pending_enemy
+		GameState.pending_enemy = {}
+	else:
+		enemy_data = EnemyDB.pick_for_node(node_type)
+	enemy.setup(enemy_data)
 
 	deck.setup(GameState.deck)
 
@@ -235,6 +241,9 @@ func _check_game_over() -> void:
 		game_over = true
 		AudioManager.play("victory")
 		GameState.player_hp = max(1, player_hp)
+		if GameState.pending_contestant != "":
+			_show_contestant_aftermath()
+			return
 		last_gold_gain = _gold_for_node()
 		GameState.gold += last_gold_gain
 		if node_type == "boss":
@@ -464,8 +473,81 @@ func _show_pope() -> void:
 	trans.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
 	overlay.add_child(trans)
 
-	trans.text = "第 %d 次转生\n词条：%s" % [GameState.transmigration, TraitDB.text_of(GameState.traits)]
+	var btn := Button.new()
+	btn.text = "转生"
+	btn.size = Vector2(220, 60)
+	btn.position = Vector2(530, 500)
+	btn.pressed.connect(_transmigrate)
+	overlay.add_child(btn)
 
 func _transmigrate() -> void:
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+func _show_contestant_aftermath() -> void:
+	var id: String = GameState.pending_contestant
+	var c: Dictionary = ContestantDB.get_contestant(id)
+	hand_view.hide_cards()
+
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.92)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "%s 倒下了" % c["name"]
+	title.position = Vector2(0, 220)
+	title.size = Vector2(1280, 70)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 42)
+	overlay.add_child(title)
+
+	var body := Label.new()
+	body.text = "他还有呼吸。神域的风从你们之间穿过。"
+	body.position = Vector2(0, 320)
+	body.size = Vector2(1280, 50)
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 22)
+	overlay.add_child(body)
+
+	var kill_btn := Button.new()
+	kill_btn.text = "杀死他"
+	kill_btn.size = Vector2(200, 60)
+	kill_btn.position = Vector2(390, 430)
+	kill_btn.pressed.connect(_choose_aftermath.bind(id, true))
+	overlay.add_child(kill_btn)
+
+	var spare_btn := Button.new()
+	spare_btn.text = "饶恕他"
+	spare_btn.size = Vector2(200, 60)
+	spare_btn.position = Vector2(690, 430)
+	spare_btn.pressed.connect(_choose_aftermath.bind(id, false))
+	overlay.add_child(spare_btn)
+
+func _choose_aftermath(id: String, kill: bool) -> void:
+	var c: Dictionary = ContestantDB.get_contestant(id)
+	var reward: Dictionary = c["kill"] if kill else c["spare"]
+
+	if kill:
+		GameState.eliminated.append(id)
+	else:
+		GameState.met_contestants.append(id)
+		if reward.get("ally", false) and not GameState.allies.has(id):
+			GameState.allies.append(id)
+
+	if reward.has("gold"):
+		GameState.gold = max(0, GameState.gold + int(reward["gold"]))
+	if reward.has("hp"):
+		GameState.player_hp = clamp(GameState.player_hp + int(reward["hp"]), 1, GameState.player_max_hp)
+	for card in ContestantDB.resolve_cards(reward):
+		GameState.deck.append(card)
+
+	GameState.pending_contestant = ""
+	GameState.save_game()
+	Toast.show_text(str(reward.get("text", "")), 3.5)
+	get_tree().change_scene_to_file("res://scenes/map.tscn")

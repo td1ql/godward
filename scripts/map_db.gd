@@ -9,11 +9,11 @@ const MAX_BRANCHES := 4     # 每层最多分支
 # ===== 每层可出现的节点类型（重复写 = 提高权重）=====
 const LAYER_POOLS := {
 	1: ["battle", "battle"],
-	2: ["battle", "battle", "event"],
+	2: ["battle", "battle", "event", "contestant"],
 	3: ["elite", "shop", "rest", "event"],
-	4: ["battle", "battle", "event", "shop"],
+	4: ["battle", "battle", "event", "shop", "contestant"],
 	5: ["elite", "battle", "rest", "event"],
-	6: ["battle", "battle", "shop", "event"],
+	6: ["battle", "battle", "shop", "event", "contestant"],
 	7: ["elite", "elite", "rest", "shop"],
 }
 
@@ -29,6 +29,7 @@ const TYPE_INFO := {
 	"event": {"label": "事件", "color": Color(0.45, 0.75, 0.95)},
 	"rest": {"label": "休息", "color": Color(0.45, 0.9, 0.55)},
 	"boss": {"label": "首领", "color": Color(1.0, 0.25, 0.25)},
+	"contestant": {"label": "参赛者", "color": Color(0.95, 0.6, 0.3)},
 }
 
 func pick_type(depth: int) -> String:

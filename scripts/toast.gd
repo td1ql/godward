@@ -9,8 +9,8 @@ func _ready() -> void:
 
 func show_text(text: String, duration: float = 2.8) -> void:
 	var panel := Panel.new()
-	panel.position = Vector2(340, 280)
-	panel.size = Vector2(600, 56)
+	panel.position = Vector2(340, 250)
+	panel.size = Vector2(600, 120)
 	var sb := StyleBoxFlat.new()
 	sb.bg_color = Color(0.1, 0.1, 0.15, 0.95)
 	sb.border_color = Color(0.85, 0.75, 0.35)
@@ -21,10 +21,11 @@ func show_text(text: String, duration: float = 2.8) -> void:
 
 	var lbl := Label.new()
 	lbl.text = text
-	lbl.position = Vector2(10, 0)
-	lbl.size = Vector2(580, 56)
+	lbl.position = Vector2(12, 8)
+	lbl.size = Vector2(576, 104)
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.add_theme_font_size_override("font_size", 17)
 	panel.add_child(lbl)
 

@@ -12,6 +12,12 @@ var deck: Array[String] = []
 var current_slot := 0
 var transmigration := 1
 var traits: Array[String] = []
+var contestants: Array[String] = []
+var met_contestants: Array[String] = []
+var eliminated: Array[String] = []
+var allies: Array[String] = []
+var pending_enemy: Dictionary = {}
+var pending_contestant: String = ""
 
 func _ready() -> void:
 	reset_deck()
@@ -39,6 +45,10 @@ func _apply_traits() -> void:
 	reset_deck()
 	for c in TraitDB.bonus_cards(traits):
 		deck.append(c)
+	contestants = ContestantDB.pick_roster(5)
+	met_contestants.clear()
+	eliminated.clear()
+	allies.clear()
 
 func initial_hand_size() -> int:
 	return max(1, RunConfig.HAND_SIZE + TraitDB.total_hand(traits))
@@ -56,6 +66,10 @@ func save_game() -> void:
 		"deck": deck,
 		"transmigration": transmigration,
 		"traits": traits,
+		"contestants": contestants,
+		"met_contestants": met_contestants,
+		"eliminated": eliminated,
+		"allies": allies,
 	}
 	var f := FileAccess.open(_slot_path(current_slot), FileAccess.WRITE)
 	if f:
@@ -90,6 +104,18 @@ func load_game(slot: int = -1) -> bool:
 	traits.clear()
 	for t in data.get("traits", []):
 		traits.append(str(t))
+	contestants.clear()
+	for c in data.get("contestants", []):
+		contestants.append(str(c))
+	met_contestants.clear()
+	for c in data.get("met_contestants", []):
+		met_contestants.append(str(c))
+	eliminated.clear()
+	for c in data.get("eliminated", []):
+		eliminated.append(str(c))
+	allies.clear()
+	for c in data.get("allies", []):
+		allies.append(str(c))
 	current_slot = s
 	return true
 

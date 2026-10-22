@@ -40,6 +40,7 @@ func open() -> void:
 	var start_x := (1280.0 - total_w) / 2.0
 	var start_y := 80.0
 	for i in range(n):
+		@warning_ignore("integer_division")
 		var row := i / per_row
 		var col := i % per_row
 		var btn := CardUI.make_button(cards[i], 14)
