@@ -17,6 +17,7 @@ var last_gold_gain := 0
 var pending_effect := -1
 var pending_need := 0
 var pending_selected: Array = []
+var _draw_depth := 0
 
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
@@ -56,17 +57,25 @@ func _render_hand() -> void:
 	hand_view.render(deck.hand, player_energy, pending_effect, pending_selected)
 
 func _draw_cards(n: int) -> void:
+	if _draw_depth >= 3:
+		return
+	_draw_depth += 1
+
 	var encounters: Array[String] = []
+	var extra_draw := 0
 	for card in deck.draw_raw(n):
 		if CardDB.kind_of(card) == "encounter":
 			_apply_card_effects(card)
 			deck.discard_pile.append(card)
 			encounters.append(CardDB.card_text(card).replace("\n", " "))
+			extra_draw += int(CardDB.get_card(card).get("draw", 0))
 			if player_hp <= 0:
 				_check_game_over()
+				_draw_depth -= 1
 				return
 		else:
 			deck.hand.append(card)
+
 	if not encounters.is_empty():
 		var msg := ""
 		for e in encounters:
@@ -74,6 +83,11 @@ func _draw_cards(n: int) -> void:
 				msg += "  |  "
 			msg += e
 		Toast.show_text("遭遇牌：" + msg)
+
+	if extra_draw > 0:
+		_draw_cards(extra_draw)
+
+	_draw_depth -= 1
 
 func _apply_card_effects(c: String) -> void:
 	var d: Dictionary = CardDB.get_card(c)
@@ -122,6 +136,12 @@ func _on_card_pressed(index: int) -> void:
 	_check_game_over()
 	_render_hand()
 	_update_ui()
+	var draw_n: int = int(d.get("draw", 0))
+	if draw_n > 0:
+		_draw_cards(draw_n)
+	_check_game_over()
+	_render_hand()
+	_update_ui()
 
 func _on_effect_select(index: int) -> void:
 	if index == pending_effect:
@@ -158,6 +178,9 @@ func _resolve_effect() -> void:
 		var card: String = deck.hand[i]
 		deck.discard_pile.append(card)
 		deck.hand.remove_at(i)
+	var draw_n: int = int(CardDB.get_card(c).get("draw", 0))
+	if draw_n > 0:
+		_draw_cards(draw_n)
 	pending_effect = -1
 	pending_need = 0
 	pending_selected.clear()
