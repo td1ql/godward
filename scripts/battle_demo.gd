@@ -363,7 +363,7 @@ func _show_victory() -> void:
 	overlay.add_child(dim)
 
 	var title := Label.new()
-	title.text = "通关！你击败了塔主"
+	title.text = "你击败了守门人"
 	title.position = Vector2(0, 150)
 	title.size = Vector2(1280, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

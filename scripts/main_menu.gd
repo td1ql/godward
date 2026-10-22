@@ -9,7 +9,7 @@ func _ready() -> void:
 	add_child(bg)
 
 	var title := Label.new()
-	title.text = "Slay the Tower"
+	title.text = "逐 神"
 	title.position = Vector2(0, 80)
 	title.size = Vector2(1280, 90)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -17,7 +17,7 @@ func _ready() -> void:
 	add_child(title)
 
 	var sub := Label.new()
-	sub.text = "杀戮塔 · Roguelike 卡牌构筑"
+	sub.text = "Godward · Roguelike 卡牌构筑"
 	sub.position = Vector2(0, 175)
 	sub.size = Vector2(1280, 40)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
