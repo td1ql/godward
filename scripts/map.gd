@@ -88,10 +88,6 @@ func _generate_map() -> void:
 	nodes.clear()
 	nodes[0] = {"type": "start", "children": [], "depth": 0}
 	next_id = 1
-	if GameState.act == 2:
-		nodes[0]["type"] = "start"
-	_ensure_children(0)
-	next_id = 1
 	_ensure_children(0)
 	GameState.map_nodes = nodes
 	GameState.map_generated = true
@@ -101,6 +97,8 @@ func _gen_children(parent_id: int, depth: int, count: int) -> void:
 	if depth > MapDB.max_depth_of(GameState.act):
 		return
 	for i in range(count):
+		while nodes.has(next_id):
+			next_id += 1
 		var id := next_id
 		next_id += 1
 		var parent_type: String = nodes[parent_id]["type"]
