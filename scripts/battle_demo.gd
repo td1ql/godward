@@ -49,7 +49,7 @@ func _ready() -> void:
 	deck_btn.size = Vector2(110, 40)
 	deck_btn.pressed.connect(DeckViewer.toggle)
 	add_child(deck_btn)
-	_draw_cards(RunConfig.HAND_SIZE)
+	_draw_cards(GameState.initial_hand_size())
 	_render_hand()
 	_update_ui()
 
@@ -238,7 +238,7 @@ func _check_game_over() -> void:
 		last_gold_gain = _gold_for_node()
 		GameState.gold += last_gold_gain
 		if node_type == "boss":
-			_show_victory()
+			_show_pope()
 		else:
 			_show_reward()
 	elif player_hp <= 0:
@@ -419,4 +419,53 @@ func _show_victory() -> void:
 
 func _back_to_menu() -> void:
 	GameState.delete_save()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+func _show_pope() -> void:
+	hand_view.hide_cards()
+	var old_trans: int = GameState.transmigration
+	GameState.advance_transmigration()
+
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.93)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "你见到了教皇"
+	title.position = Vector2(0, 140)
+	title.size = Vector2(1280, 70)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 44)
+	overlay.add_child(title)
+
+	var body := Label.new()
+	if old_trans >= 10:
+		body.text = "你的意志已足够强大。\n教皇第一次正视了你。"
+	else:
+		body.text = "他看你的眼神，像在看一件工具。\n你被留下了——但你的思绪，会在下一具身体里醒来。"
+	body.position = Vector2(0, 240)
+	body.size = Vector2(1280, 100)
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 22)
+	overlay.add_child(body)
+
+	var trans := Label.new()
+	trans.text = "第 %d 次转生\n词条：%s" % [GameState.transmigration, TraitDB.text_of(GameState.traits)]
+	trans.position = Vector2(0, 360)
+	trans.size = Vector2(1280, 100)
+	trans.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	trans.add_theme_font_size_override("font_size", 20)
+	trans.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
+	overlay.add_child(trans)
+
+	trans.text = "第 %d 次转生\n词条：%s" % [GameState.transmigration, TraitDB.text_of(GameState.traits)]
+
+func _transmigrate() -> void:
+	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")

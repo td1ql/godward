@@ -29,12 +29,12 @@ AudioManager="*res://scripts/audio_manager.gd"
 RewardDB="*res://scripts/reward_db.gd"
 Toast="*res://scripts/toast.gd"
 DeckViewer="*res://scripts/deck_viewer.gd"
+TraitDB="*res://scripts/trait_db.gd"
 
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
-window/size/mode=3
 window/stretch/mode="canvas_items"
 
 [gui]

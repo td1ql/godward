@@ -10,6 +10,8 @@ var map_nodes: Dictionary = {}
 var map_generated: bool = false
 var deck: Array[String] = []
 var current_slot := 0
+var transmigration := 1
+var traits: Array[String] = []
 
 func _ready() -> void:
 	reset_deck()
@@ -18,13 +20,28 @@ func reset_deck() -> void:
 	deck = CardDB.starter_deck(RunConfig.DECK_SIZE)
 
 func reset_run() -> void:
-	player_max_hp = RunConfig.START_HP
+	transmigration = 1
+	traits = TraitDB.roll()
+	_apply_traits()
+
+func advance_transmigration() -> void:
+	transmigration += 1
+	traits = TraitDB.roll()
+	_apply_traits()
+
+func _apply_traits() -> void:
+	player_max_hp = max(10, RunConfig.START_HP + TraitDB.total_hp(traits))
 	player_hp = player_max_hp
-	gold = RunConfig.START_GOLD
+	gold = max(0, RunConfig.START_GOLD + TraitDB.total_gold(traits))
 	current_node_id = 0
 	map_generated = false
 	map_nodes.clear()
 	reset_deck()
+	for c in TraitDB.bonus_cards(traits):
+		deck.append(c)
+
+func initial_hand_size() -> int:
+	return max(1, RunConfig.HAND_SIZE + TraitDB.total_hand(traits))
 
 func _slot_path(slot: int) -> String:
 	return "user://save_%d.txt" % slot
@@ -37,6 +54,8 @@ func save_game() -> void:
 		"map_generated": map_generated,
 		"map_nodes": map_nodes,
 		"deck": deck,
+		"transmigration": transmigration,
+		"traits": traits,
 	}
 	var f := FileAccess.open(_slot_path(current_slot), FileAccess.WRITE)
 	if f:
@@ -67,6 +86,10 @@ func load_game(slot: int = -1) -> bool:
 	deck.clear()
 	for c in data.get("deck", []):
 		deck.append(str(c))
+	transmigration = int(data.get("transmigration", 1))
+	traits.clear()
+	for t in data.get("traits", []):
+		traits.append(str(t))
 	current_slot = s
 	return true
 
@@ -86,4 +109,8 @@ func slot_summary(slot: int) -> String:
 	var data = str_to_var(text)
 	if typeof(data) != TYPE_DICTIONARY:
 		return "空"
-	return "HP %d · 金币 %d" % [int(data.get("player_hp", 0)), int(data.get("gold", 0))]
+	return "第 %d 次转生 · HP %d · 金币 %d" % [
+		int(data.get("transmigration", 1)),
+		int(data.get("player_hp", 0)),
+		int(data.get("gold", 0)),
+	]
