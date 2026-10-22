@@ -86,11 +86,12 @@ func _process(_delta: float) -> void:
 
 func _generate_map() -> void:
 	nodes.clear()
-	next_id = 0
 	nodes[0] = {"type": "start", "children": [], "depth": 0}
+	next_id = 1
 	_ensure_children(0)
 	GameState.map_nodes = nodes
 	GameState.map_generated = true
+	GameState.current_node_id = 0
 
 func _gen_children(parent_id: int, depth: int, count: int) -> void:
 	if depth > MapDB.MAX_DEPTH:
@@ -172,6 +173,9 @@ func _set_pan(p: float) -> void:
 func _on_node_pressed(id: int) -> void:
 	if is_moving or id == current_id:
 		return
+	if not nodes.has(id) or not nodes.has(current_id):
+		is_moving = false
+		return
 	is_moving = true
 	AudioManager.play("click")
 	var kids: Array = nodes[current_id]["children"]
@@ -250,6 +254,10 @@ func _continue_children() -> void:
 
 	var kids: Array = nodes[current_id]["children"]
 	var n := kids.size()
+	if n == 0:
+		is_moving = false
+		queue_redraw()
+		return
 	var tw := create_tween().set_parallel(true)
 	for i in range(n):
 		var angle := -PI / 2.0 + i * TAU / n

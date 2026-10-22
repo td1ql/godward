@@ -21,6 +21,7 @@ var eliminated: Array[String] = []
 var allies: Array[String] = []
 var pending_enemy: Dictionary = {}
 var pending_contestant: String = ""
+var pending_cleanup := false
 
 func _ready() -> void:
 	reset_deck()
@@ -57,6 +58,7 @@ func _apply_traits() -> void:
 	contestants = ContestantDB.pick_roster(5)
 	met_contestants.clear()
 	eliminated.clear()
+	pending_cleanup = false
 	pending_node = -1
 	pending_snapshot = {}
 	allies.clear()
@@ -69,6 +71,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"pending_cleanup": pending_cleanup,
 		"vocation": vocation,
 		"pending_snapshot": pending_snapshot,
 		"pending_contestant": pending_contestant,
@@ -134,6 +137,7 @@ func load_game(slot: int = -1) -> bool:
 	pending_node = int(data.get("pending_node", -1))
 	pending_snapshot = data.get("pending_snapshot", {})
 	pending_contestant = str(data.get("pending_contestant", ""))
+	pending_cleanup = bool(data.get("pending_cleanup", false))
 	vocation = str(data.get("vocation", ""))
 	current_slot = s
 	return true

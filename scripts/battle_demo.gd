@@ -331,10 +331,7 @@ func _check_game_over() -> void:
 		last_gold_gain = _gold_for_node()
 		GameState.gold += last_gold_gain
 		if node_type == "boss":
-			if GameState.transmigration >= 10:
-				_show_pope_final()
-			else:
-				_show_pope()
+			_after_boss()
 		else:
 			_show_reward()
 	elif player_hp <= 0:
@@ -349,6 +346,142 @@ func _gold_for_node() -> int:
 	elif node_type == "elite":
 		return RunConfig.GOLD_ELITE
 	return RunConfig.GOLD_BATTLE
+
+func _surviving_contestants() -> Array[String]:
+	var result: Array[String] = []
+	for id in GameState.contestants:
+		if GameState.eliminated.has(id):
+			continue
+		if GameState.allies.has(id):
+			continue
+		result.append(id)
+	return result
+
+func _after_boss() -> void:
+	if not _surviving_contestants().is_empty():
+		_show_cleanup_prompt()
+		return
+	GameState.pending_cleanup = false
+	if GameState.transmigration >= 10:
+		_show_pope_final()
+	else:
+		_show_pope()
+
+func _show_cleanup_prompt() -> void:
+	hand_view.hide_cards()
+	var n := _surviving_contestants().size()
+
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.93)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "神堂之门紧闭"
+	title.position = Vector2(0, 180)
+	title.size = Vector2(1280, 70)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 44)
+	overlay.add_child(title)
+
+	var body := Label.new()
+	body.text = "还有 %d 名参赛者活着。\n神堂不为活人开门——他们的血是钥匙。" % n
+	body.position = Vector2(0, 290)
+	body.size = Vector2(1280, 100)
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 22)
+	overlay.add_child(body)
+
+	var btn := Button.new()
+	btn.text = "开始清算"
+	btn.size = Vector2(240, 64)
+	btn.position = Vector2(520, 440)
+	btn.add_theme_font_size_override("font_size", 24)
+	btn.pressed.connect(_begin_cleanup)
+	overlay.add_child(btn)
+
+func _begin_cleanup() -> void:
+	GameState.pending_cleanup = true
+	GameState.save_game()
+	_start_next_cleanup()
+
+func _show_cleanup_result(text: String, summary: String) -> void:
+	var overlay := Control.new()
+	overlay.size = Vector2(1280, 720)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 100
+	add_child(overlay)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.93)
+	dim.size = Vector2(1280, 720)
+	overlay.add_child(dim)
+
+	var title := Label.new()
+	title.text = "清 算"
+	title.position = Vector2(0, 150)
+	title.size = Vector2(1280, 70)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 44)
+	overlay.add_child(title)
+
+	var body := Label.new()
+	body.text = text
+	body.position = Vector2(0, 260)
+	body.size = Vector2(1280, 60)
+	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	body.add_theme_font_size_override("font_size", 22)
+	overlay.add_child(body)
+
+	var reward_label := Label.new()
+	reward_label.text = summary if summary != "" else "什么也没留下。"
+	reward_label.position = Vector2(0, 340)
+	reward_label.size = Vector2(1280, 80)
+	reward_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	reward_label.add_theme_font_size_override("font_size", 20)
+	reward_label.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
+	overlay.add_child(reward_label)
+
+	var left := _surviving_contestants().size()
+	var btn := Button.new()
+	btn.text = "继续清算（剩 %d 人）" % left if left > 0 else "前往神堂"
+	btn.size = Vector2(280, 64)
+	btn.position = Vector2(500, 470)
+	btn.add_theme_font_size_override("font_size", 22)
+	btn.pressed.connect(_start_next_cleanup)
+	overlay.add_child(btn)
+
+func _start_next_cleanup() -> void:
+	var targets := _surviving_contestants()
+	if targets.is_empty():
+		GameState.pending_cleanup = false
+		GameState.save_game()
+		if GameState.transmigration >= 10:
+			_show_pope_final()
+		else:
+			_show_pope()
+		return
+
+	var id: String = targets[0]
+	var c: Dictionary = ContestantDB.get_contestant(id)
+	var enemy_data := {
+		"name": c["name"],
+		"hp": int(c["hp"]),
+		"attack": int(c["attack"]),
+		"pattern": c.get("pattern", [1]),
+		"on_hit": c.get("on_hit", {}),
+	}
+	GameState.pending_enemy = enemy_data
+	GameState.pending_contestant = id
+	GameState.pending_snapshot = {"kind": "contestant_fight", "id": id, "enemy": enemy_data}
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 func _update_ui() -> void:
 	info_label.text = "能量: %d/%d    抽牌堆: %d    手牌: %d    弃牌堆: %d    金币: %d" % [
@@ -468,7 +601,7 @@ func _show_game_over() -> void:
 
 func _restart_run() -> void:
 	GameState.restart_run()
-	get_tree().change_scene_to_file("res://scenes/map.tscn")
+	get_tree().change_scene_to_file("res://scenes/run_intro.tscn")
 
 func _show_victory() -> void:
 	hand_view.hide_cards()
@@ -598,26 +731,37 @@ func _show_contestant_aftermath() -> void:
 	overlay.add_child(title)
 
 	var body := Label.new()
-	body.text = "他还有呼吸。神域的风从你们之间穿过。"
+	if GameState.pending_cleanup:
+		body.text = "神堂的门只为死人打开。\n他必须留在这里。"
+	else:
+		body.text = "他还有呼吸。神域的风从你们之间穿过。"
 	body.position = Vector2(0, 320)
-	body.size = Vector2(1280, 50)
+	body.size = Vector2(1280, 60)
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	body.add_theme_font_size_override("font_size", 22)
 	overlay.add_child(body)
 
-	var kill_btn := Button.new()
-	kill_btn.text = "杀死他"
-	kill_btn.size = Vector2(200, 60)
-	kill_btn.position = Vector2(390, 430)
-	kill_btn.pressed.connect(_choose_aftermath.bind(id, true))
-	overlay.add_child(kill_btn)
+	if GameState.pending_cleanup:
+		var kill_only := Button.new()
+		kill_only.text = "杀死他"
+		kill_only.size = Vector2(240, 60)
+		kill_only.position = Vector2(520, 430)
+		kill_only.pressed.connect(_choose_aftermath.bind(id, true))
+		overlay.add_child(kill_only)
+	else:
+		var kill_btn := Button.new()
+		kill_btn.text = "杀死他"
+		kill_btn.size = Vector2(200, 60)
+		kill_btn.position = Vector2(390, 430)
+		kill_btn.pressed.connect(_choose_aftermath.bind(id, true))
+		overlay.add_child(kill_btn)
 
-	var spare_btn := Button.new()
-	spare_btn.text = "饶恕他"
-	spare_btn.size = Vector2(200, 60)
-	spare_btn.position = Vector2(690, 430)
-	spare_btn.pressed.connect(_choose_aftermath.bind(id, false))
-	overlay.add_child(spare_btn)
+		var spare_btn := Button.new()
+		spare_btn.text = "饶恕他"
+		spare_btn.size = Vector2(200, 60)
+		spare_btn.position = Vector2(690, 430)
+		spare_btn.pressed.connect(_choose_aftermath.bind(id, false))
+		overlay.add_child(spare_btn)
 
 func _choose_aftermath(id: String, kill: bool) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)
@@ -655,10 +799,16 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 		summary += g
 
 	GameState.pending_contestant = ""
-	GameState.pending_node = -1
 	GameState.pending_snapshot = {}
-	GameState.save_game()
 	Toast.show_text("%s\n%s" % [str(reward.get("text", "")), summary], 3.5)
+
+	if GameState.pending_cleanup:
+		GameState.save_game()
+		_show_cleanup_result(str(reward.get("text", "")), summary)
+		return
+
+	GameState.pending_node = -1
+	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _show_pope_final() -> void:
