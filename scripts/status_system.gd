@@ -13,6 +13,14 @@ static func tick_damage(st: Dictionary) -> int:
 			total += int(st[key])
 	return total
 
+static func tick_heal(st: Dictionary) -> int:
+	var total := 0
+	for key in st.keys():
+		var rule: Dictionary = StatusDB.STATUS.get(key, {})
+		if rule.get("tick_heal", false):
+			total += int(st[key])
+	return total
+
 static func decay(st: Dictionary) -> void:
 	var to_erase: Array = []
 	for key in st.keys():

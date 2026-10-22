@@ -161,6 +161,9 @@ func _apply_card_effects(c: String) -> void:
 		var per := DamageCalc.compute(d["damage"], player_status, enemy.status)
 		enemy.hp = max(0, enemy.hp - per * hits)
 		AudioManager.play("hit")
+		var thorns: int = int(enemy.status.get("荆棘", 0))
+		if thorns > 0:
+			player_hp = max(0, player_hp - thorns)
 	player_block += d["block"]
 	if d.has("status"):
 		StatusSystem.apply(enemy.status, d["status"])
@@ -294,8 +297,15 @@ func _resolve_enemy_turn() -> void:
 	if ep > 0:
 		enemy.hp = max(0, enemy.hp - ep)
 
+	var eh := StatusSystem.tick_heal(enemy.status)
+	if eh > 0:
+		enemy.hp = min(enemy.max_hp, enemy.hp + eh)
+
 	StatusSystem.decay(player_status)
 	StatusSystem.decay(enemy.status)
+
+	if not enemy.on_turn.is_empty():
+		StatusSystem.apply(enemy.status, enemy.on_turn)
 
 	if not enemy.on_hit.is_empty():
 		StatusSystem.apply(player_status, enemy.on_hit)
@@ -362,10 +372,7 @@ func _after_boss() -> void:
 		_show_cleanup_prompt()
 		return
 	GameState.pending_cleanup = false
-	if GameState.transmigration >= 10:
-		_show_pope_final()
-	else:
-		_show_pope()
+	_show_church()
 
 func _show_cleanup_prompt() -> void:
 	hand_view.hide_cards()
@@ -462,10 +469,7 @@ func _start_next_cleanup() -> void:
 	if targets.is_empty():
 		GameState.pending_cleanup = false
 		GameState.save_game()
-		if GameState.transmigration >= 10:
-			_show_pope_final()
-		else:
-			_show_pope()
+		_show_church()
 		return
 
 	var id: String = targets[0]
@@ -565,6 +569,20 @@ func _choose_reward(card_name: String) -> void:
 func _finish_reward() -> void:
 	GameState.pending_node = -1
 	GameState.pending_snapshot = {}
+	GameState.save_game()
+	if node_type == "elite" or node_type == "divine_elite":
+		_offer_discard()
+		return
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+func _offer_discard() -> void:
+	DeckViewer.open_choose("精英战利品：弃掉一张牌", GameState.deck, _discard_card)
+
+func _discard_card(index: int) -> void:
+	if index >= 0 and index < GameState.deck.size():
+		var removed: String = GameState.deck[index]
+		GameState.deck.remove_at(index)
+		Toast.show_text("弃掉了「%s」" % removed, 2.5)
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
@@ -669,7 +687,7 @@ func _show_pope() -> void:
 	overlay.add_child(dim)
 
 	var title := Label.new()
-	title.text = "你见到了教皇"
+	title.text = " 教 皇 "
 	title.position = Vector2(0, 140)
 	title.size = Vector2(1280, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -677,10 +695,7 @@ func _show_pope() -> void:
 	overlay.add_child(title)
 
 	var body := Label.new()
-	if old_trans >= 10:
-		body.text = "你的意志已足够强大。\n教皇第一次正视了你。"
-	else:
-		body.text = "他看你的眼神，像在看一件工具。\n你被留下了——但你的思绪，会在下一具身体里醒来。"
+	body.text = "你走进教堂。教皇甚至没有抬头。\n一只手落在你的额头上——\n然后，一切暗了下去。"
 	body.position = Vector2(0, 240)
 	body.size = Vector2(1280, 100)
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -708,7 +723,7 @@ func _transmigrate() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 func _show_contestant_aftermath() -> void:
 	var id: String = GameState.pending_contestant
-	var c: Dictionary = ContestantDB.get_contestant(id)
+	var c: Dictionary = ContestantDB.scaled(id)
 	hand_view.hide_cards()
 
 	var overlay := Control.new()
@@ -811,7 +826,7 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
-func _show_pope_final() -> void:
+func _show_church() -> void:
 	hand_view.hide_cards()
 	var overlay := Control.new()
 	overlay.size = Vector2(1280, 720)
@@ -833,27 +848,28 @@ func _show_pope_final() -> void:
 	overlay.add_child(title)
 
 	var body := Label.new()
-	body.text = "守门人倒下后，门后的那个人站了起来。\n「你走到了这里。」教皇说，\n「那就让我看看，神的碎片能烧到什么程度。」"
+	body.text = "清算结束了。\n教堂的门，为你打开了。"
 	body.position = Vector2(0, 270)
-	body.size = Vector2(1280, 160)
+	body.size = Vector2(1280, 100)
 	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	body.add_theme_font_size_override("font_size", 24)
 	overlay.add_child(body)
 
 	var btn := Button.new()
-	btn.text = "与教皇决战"
+	btn.text = "进入教堂"
 	btn.size = Vector2(260, 64)
 	btn.position = Vector2(510, 480)
 	btn.add_theme_font_size_override("font_size", 24)
-	btn.pressed.connect(_enter_divine_realm)
+	btn.pressed.connect(_enter_church)
 	overlay.add_child(btn)
 
-func _start_pope_fight() -> void:
-	GameState.pending_snapshot = {"kind": "pope", "enemy": EnemyDB.POPE["教皇"]}
-	GameState.pending_node = -1
-	GameState.pending_contestant = ""
+func _enter_church() -> void:
+	GameState.player_hp = GameState.player_max_hp
 	GameState.save_game()
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
+	if GameState.transmigration >= 10:
+		_enter_divine_realm()
+		return
+	_show_pope()
 
 func _show_true_ending() -> void:
 	hand_view.hide_cards()

@@ -2,51 +2,72 @@ extends Node
 
 const NORMAL := {
 	"史莱姆": {"name": "史莱姆", "hp": 30, "attack": 5, "pattern": [1, 1]},
-	"哥布林": {"name": "哥布林", "hp": 35, "attack": 6, "pattern": [1, 1, 1.5]},
-	"骷髅兵": {"name": "骷髅兵", "hp": 40, "attack": 4, "pattern": [1.5, 2]},
-	"毒蜘蛛": {"name": "毒蜘蛛", "hp": 28, "attack": 4, "pattern": [1, 1], "on_hit": {"中毒": 1}},
+	"哥布林": {"name": "哥布林", "hp": 35, "attack": 6, "pattern": [1, 1, 2]},
+	"骷髅兵": {"name": "骷髅兵", "hp": 40, "attack": 7, "pattern": [1, 2]},
+	"毒蜘蛛": {"name": "毒蜘蛛", "hp": 28, "attack": 4, "pattern": [1, 1], "on_hit": {"中毒": 2}},
+	"腐化史莱姆": {"name": "腐化史莱姆", "hp": 32, "attack": 4, "pattern": [1, 1], "on_turn": {"再生": 2}},
+	"狂徒": {"name": "狂徒", "hp": 38, "attack": 5, "pattern": [1, 1, 1], "on_turn": {"力量": 1}},
+	"咒术师": {"name": "咒术师", "hp": 34, "attack": 5, "pattern": [1, 2], "on_hit": {"虚弱": 1}},
+	"荆棘兽": {"name": "荆棘兽", "hp": 45, "attack": 6, "pattern": [1, 1], "on_turn": {"荆棘": 2}},
+	"蝙蝠群": {"name": "蝙蝠群", "hp": 26, "attack": 4, "pattern": [1, 1, 1]},
+	"石像鬼": {"name": "石像鬼", "hp": 48, "attack": 6, "pattern": [1, 2], "on_turn": {"荆棘": 1}},
+	"腐尸": {"name": "腐尸", "hp": 42, "attack": 5, "pattern": [1, 1], "on_hit": {"中毒": 1}},
+	"火元素": {"name": "火元素", "hp": 36, "attack": 7, "pattern": [2, 1], "on_turn": {"力量": 1}},
+	"冰霜精": {"name": "冰霜精", "hp": 30, "attack": 5, "pattern": [1, 2], "on_hit": {"虚弱": 1}},
+	"食人魔": {"name": "食人魔", "hp": 55, "attack": 8, "pattern": [1, 2, 2]},
 }
 
 const ELITE := {
-	"精英守卫": {"name": "精英守卫", "hp": 60, "attack": 8, "pattern": [1, 1, 1]},
-	"精英法师": {"name": "精英法师", "hp": 55, "attack": 10, "pattern": [0.5, 1, 1, 1.5], "on_hit": {"虚弱": 1}},
+	"双子刺客": {"name": "双子刺客", "hp": 60, "attack": 10, "pattern": [2, 1, 1], "on_hit": {"流血": 2}},
+	"亡灵骑士": {"name": "亡灵骑士", "hp": 85, "attack": 9, "pattern": [1, 1, 2], "on_turn": {"再生": 2}},
+	"熔岩巨像": {"name": "熔岩巨像", "hp": 95, "attack": 8, "pattern": [1, 2], "on_turn": {"荆棘": 4}},
+	"精英守卫": {"name": "精英守卫", "hp": 65, "attack": 8, "pattern": [1, 1, 1], "on_turn": {"荆棘": 3}},
+	"精英法师": {"name": "精英法师", "hp": 55, "attack": 9, "pattern": [1, 2], "on_hit": {"虚弱": 2}, "on_turn": {"力量": 1}},
+	"血祭司": {"name": "血祭司", "hp": 70, "attack": 7, "pattern": [1, 1, 2], "on_hit": {"流血": 3}, "on_turn": {"再生": 3}},
 }
 
 const BOSS := {
-	"守门人": {"name": "守门人", "hp": 10, "attack": 12, "pattern": [1, 1, 1, 1.5], "on_hit": {"易伤": 1}},
-}
-
-const POPE := {
-	"教皇": {"name": "教皇", "hp": 240, "attack": 16, "pattern": [1, 1.5, 1, 2], "on_hit": {"易伤": 1}},
+	"守门人": {"name": "守门人", "hp": 110, "attack": 12, "pattern": [1, 1, 1, 2], "on_hit": {"易伤": 1}, "on_turn": {"力量": 1}},
 }
 
 const DIVINE := {
-	"祈祷者": {"name": "祈祷者", "hp": 55, "attack": 9, "pattern": [1, 1, 2]},
-	"圣像": {"name": "圣像", "hp": 70, "attack": 7, "pattern": [1, 2], "on_hit": {"虚弱": 1}},
-	"唱诗班": {"name": "唱诗班", "hp": 50, "attack": 11, "pattern": [2, 1]},
+	"悔罪者": {"name": "悔罪者", "hp": 58, "attack": 8, "pattern": [1, 1], "on_hit": {"虚弱": 1}},
+	"盲眼先知": {"name": "盲眼先知", "hp": 62, "attack": 10, "pattern": [1, 2], "on_turn": {"再生": 2}},
+	"祈祷者": {"name": "祈祷者", "hp": 55, "attack": 9, "pattern": [1, 1, 2], "on_turn": {"再生": 2}},
+	"圣像": {"name": "圣像", "hp": 75, "attack": 7, "pattern": [1, 2], "on_hit": {"虚弱": 2}},
+	"唱诗班": {"name": "唱诗班", "hp": 50, "attack": 11, "pattern": [2, 1], "on_hit": {"流血": 2}},
+	"苦行僧": {"name": "苦行僧", "hp": 60, "attack": 8, "pattern": [1, 2], "on_turn": {"力量": 2}},
+	"荆棘像": {"name": "荆棘像", "hp": 65, "attack": 6, "pattern": [1, 1], "on_turn": {"荆棘": 4}},
 }
 
 const DIVINE_ELITE := {
-	"审判者": {"name": "审判者", "hp": 90, "attack": 13, "pattern": [1, 2, 2]},
-	"神国骑士": {"name": "神国骑士", "hp": 100, "attack": 12, "pattern": [1, 1, 3]},
+	"圣骸": {"name": "圣骸", "hp": 105, "attack": 11, "pattern": [1, 1, 2], "on_turn": {"荆棘": 3}},
+	"逐神者": {"name": "逐神者", "hp": 120, "attack": 14, "pattern": [1, 2, 2], "on_turn": {"力量": 2}, "on_hit": {"易伤": 1}},
+	"审判者": {"name": "审判者", "hp": 95, "attack": 13, "pattern": [1, 2, 2], "on_hit": {"易伤": 2}},
+	"神国骑士": {"name": "神国骑士", "hp": 110, "attack": 12, "pattern": [1, 1, 3], "on_turn": {"力量": 2}},
+	"执灯者": {"name": "执灯者", "hp": 100, "attack": 10, "pattern": [1, 2], "on_turn": {"再生": 4}, "on_hit": {"虚弱": 1}},
+}
+
+const POPE := {
+	"教皇": {"name": "教皇", "hp": 260, "attack": 16, "pattern": [1, 2, 1, 2], "on_hit": {"易伤": 1}, "on_turn": {"力量": 1}},
 }
 
 func _pool_for(node_type: String) -> Dictionary:
 	match node_type:
-		"divine":
-			return DIVINE
-		"divine_elite":
-			return DIVINE_ELITE
 		"elite":
 			return ELITE
 		"boss":
 			return BOSS
+		"divine":
+			return DIVINE
+		"divine_elite":
+			return DIVINE_ELITE
 		"pope":
 			return POPE
 		"contestant":
 			var result := {}
 			for id in ContestantDB.CONTESTANTS.keys():
-				var c: Dictionary = ContestantDB.CONTESTANTS[id]
+				var c: Dictionary = ContestantDB.scaled(id)
 				result[id] = {
 					"name": c["name"],
 					"hp": int(c["hp"]),
@@ -59,7 +80,7 @@ func _pool_for(node_type: String) -> Dictionary:
 			return NORMAL
 
 func get_enemy(id: String) -> Dictionary:
-	for pool in [NORMAL, ELITE, BOSS]:
+	for pool in [NORMAL, ELITE, BOSS, DIVINE, DIVINE_ELITE, POPE]:
 		if pool.has(id):
 			return pool[id]
 	return NORMAL.values()[0]

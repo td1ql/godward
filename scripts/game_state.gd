@@ -23,6 +23,8 @@ var pending_enemy: Dictionary = {}
 var pending_contestant: String = ""
 var pending_cleanup := false
 var act := 1
+var milestone_card := false
+var milestone_discard := false
 
 func _ready() -> void:
 	reset_deck()
@@ -48,8 +50,12 @@ func restart_run() -> void:
 
 func _apply_traits() -> void:
 	player_max_hp = max(10, RunConfig.START_HP + TraitDB.total_hp(traits))
+	if transmigration >= 10:
+		player_max_hp += 20
 	player_hp = player_max_hp
 	gold = max(0, RunConfig.START_GOLD + TraitDB.total_gold(traits))
+	if transmigration >= 9:
+		gold += 50
 	current_node_id = 0
 	map_generated = false
 	map_nodes.clear()
@@ -63,6 +69,8 @@ func _apply_traits() -> void:
 	pending_cleanup = false
 	pending_node = -1
 	pending_snapshot = {}
+	milestone_card = false
+	milestone_discard = false
 	allies.clear()
 
 func initial_hand_size() -> int:
@@ -73,6 +81,8 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"milestone_card": milestone_card,
+		"milestone_discard": milestone_discard,
 		"pending_cleanup": pending_cleanup,
 		"vocation": vocation,
 		"pending_snapshot": pending_snapshot,
@@ -137,6 +147,8 @@ func load_game(slot: int = -1) -> bool:
 	for c in data.get("allies", []):
 		allies.append(str(c))
 	act = int(data.get("act", 1))
+	milestone_card = bool(data.get("milestone_card", false))
+	milestone_discard = bool(data.get("milestone_discard", false))
 	pending_node = int(data.get("pending_node", -1))
 	pending_snapshot = data.get("pending_snapshot", {})
 	pending_contestant = str(data.get("pending_contestant", ""))

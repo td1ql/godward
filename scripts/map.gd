@@ -69,11 +69,11 @@ func _ready() -> void:
 
 func _reopen_pending() -> void:
 	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
-	if kind == "battle" or kind == "contestant_fight":
+	if kind == "battle" or kind == "contestant_fight" or kind == "pope":
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
 	var t: String = nodes[current_id]["type"]
-	if t == "shop" or t == "rest" or t == "event" or t == "contestant":
+	if t == "shop" or t == "rest" or t == "event" or t == "contestant" or t == "remnant":
 		_show_encounter(t)
 		return
 	GameState.pending_node = -1
@@ -335,14 +335,41 @@ func _show_encounter(t: String) -> void:
 			_encounter_contestant(title, body, vbox)
 
 func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	var heal := int(GameState.player_max_hp * RunConfig.REST_HEAL_RATIO)
-	GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + heal)
 	title.text = "休息"
-	body.text = "你在篝火旁坐下，恢复了 %d 点生命。\n当前 HP: %d / %d" % [heal, GameState.player_hp, GameState.player_max_hp]
-	var b := Button.new()
-	b.text = "继续前进"
-	b.pressed.connect(_close_encounter)
-	vbox.add_child(b)
+	var heal := int(GameState.player_max_hp * RunConfig.REST_HEAL_RATIO)
+	body.text = "你可以在篝火旁休息，或者整理一下牌组。\n当前 HP: %d / %d" % [GameState.player_hp, GameState.player_max_hp]
+
+	var rest := Button.new()
+	rest.text = "休息（回复 %d HP）" % heal
+	rest.pressed.connect(_rest_heal.bind(heal, body))
+	vbox.add_child(rest)
+
+	var discard := Button.new()
+	discard.text = "弃掉一张牌（不休息）"
+	discard.pressed.connect(_rest_discard)
+	vbox.add_child(discard)
+
+	var leave := Button.new()
+	leave.text = "离开"
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
+
+func _rest_heal(heal: int, body: Label) -> void:
+	GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + heal)
+	body.text = "你在篝火旁睡了一会儿，恢复了 %d 点生命。\n当前 HP: %d / %d" % [heal, GameState.player_hp, GameState.player_max_hp]
+	_update_hud()
+	_close_encounter()
+
+func _rest_discard() -> void:
+	_close_encounter()
+	DeckViewer.open_choose("弃掉一张牌", GameState.deck, _discard_from_rest)
+
+func _discard_from_rest(index: int) -> void:
+	if index >= 0 and index < GameState.deck.size():
+		var removed: String = GameState.deck[index]
+		GameState.deck.remove_at(index)
+		Toast.show_text("弃掉了「%s」" % removed, 2.5)
+	GameState.save_game()
 
 func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var ev: Dictionary
@@ -430,7 +457,7 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 		id = available[randi() % available.size()]
 		GameState.pending_snapshot = {"kind": "contestant", "id": id}
 		GameState.save_game()
-	var c: Dictionary = ContestantDB.get_contestant(id)
+	var c: Dictionary = ContestantDB.scaled(id)
 	title.text = "%s　·　%s" % [c["name"], c["trait"]]
 	body.text = c["desc"] + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
 

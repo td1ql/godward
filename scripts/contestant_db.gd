@@ -127,6 +127,165 @@ const CONTESTANTS := {
 		"spare": {"text": "「……谢谢。」你第一次听清他的声音。", "hp": 15, "gold": 15},
 		"ally_effect": {"type": "buff", "hp": 10, "gold": 10},
 	},
+	"断剑客": {
+		"name": "断剑客",
+		"trait": "好战",
+		"desc": "他的剑断了半截，眼神却还完整。",
+		"hostile": true,
+		"hp": 46, "attack": 8, "pattern": [1, 1, 2],
+		"choices": [
+			{"label": "把捡到的剑递给他", "result": "talk", "text": "「……算我欠你一次。」", "cards": ["打击"], "ally": true},
+			{"label": "嘲笑他的断剑", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "你从他身边走过。"},
+		],
+		"kill": {"text": "断剑落在地上，声音很轻。", "gold": 50},
+		"spare": {"text": "他把断剑插回鞘里，站到了你身后。", "ally": true},
+		"ally_effect": {"type": "fighter", "damage": 5},
+	},
+	"灰袍女": {
+		"name": "灰袍女",
+		"trait": "沉默",
+		"desc": "她坐在废墟里，灰袍下什么也看不清。",
+		"hostile": false,
+		"hp": 38, "attack": 6, "pattern": [1, 1],
+		"choices": [
+			{"label": "在她旁边坐下", "result": "talk", "text": "她递给你一小瓶药。", "hp": 15},
+			{"label": "掀开她的兜帽", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "她连头都没抬。"},
+		],
+		"kill": {"text": "灰袍散开，里面空无一物。", "gold": 30},
+		"spare": {"text": "她把药瓶塞进你手里。", "hp": 15},
+		"ally_effect": {"type": "buff", "hp": 8},
+	},
+	"双生子": {
+		"name": "双生子",
+		"trait": "狡诈",
+		"desc": "两个人长得一模一样，连笑都一样。",
+		"hostile": true,
+		"hp": 40, "attack": 9, "pattern": [2, 1],
+		"choices": [
+			{"label": "猜哪个是哥哥", "result": "talk", "random": [
+				{"text": "「猜对了。」他们抛来金币。", "gold": 35},
+				{"text": "「猜错了。」两把刀同时出鞘，你受了伤。", "hp": -12},
+			]},
+			{"label": "两个都打", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "他们笑着看你走远。"},
+		],
+		"kill": {"text": "倒下的是同一个影子。", "gold": 55},
+		"spare": {"text": "「下次见面，我们就不客气了。」", "random_cards": 1},
+		"ally_effect": {"type": "buff", "cards": ["快速思考"]},
+	},
+	"拾荒者": {
+		"name": "拾荒者",
+		"trait": "贪婪",
+		"desc": "他背着一堆从尸体上捡来的东西。",
+		"hostile": false,
+		"hp": 44, "attack": 5, "pattern": [1],
+		"choices": [
+			{"label": "买一件（-40 金币）", "result": "talk", "text": "「识货。」他把东西递给你。", "gold": -40, "random_cards": 1},
+			{"label": "抢他的包袱", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "他护着包袱退开了。"},
+		],
+		"kill": {"text": "包袱散开，都是些破烂。", "gold": 40},
+		"spare": {"text": "他丢给你几个铜板，求你放他走。", "gold": 30},
+		"ally_effect": {"type": "buff", "cards": ["防御"]},
+	},
+	"盲眼琴师": {
+		"name": "盲眼琴师",
+		"trait": "神秘",
+		"desc": "他的眼睛蒙着布，琴声却从不走调。",
+		"hostile": false,
+		"hp": 36, "attack": 7, "pattern": [1, 2],
+		"choices": [
+			{"label": "听完这首曲子", "result": "talk", "text": "琴声落下时，你的伤口不再疼了。", "hp": 14},
+			{"label": "打断他的琴弦", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "琴声一直跟着你。"},
+		],
+		"kill": {"text": "琴断了，世界安静了一瞬。", "gold": 35},
+		"spare": {"text": "他为你弹了一段送别的曲子。", "hp": 10, "gold": 10},
+		"ally_effect": {"type": "buff", "hp": 10},
+	},
+	"铁面人": {
+		"name": "铁面人",
+		"trait": "冷静",
+		"desc": "面具下的呼吸很稳，像是从没慌过。",
+		"hostile": true,
+		"hp": 52, "attack": 8, "pattern": [1, 1, 1],
+		"choices": [
+			{"label": "问他为什么参赛", "result": "talk", "text": "「为了一个答案。」他丢给你些钱。", "gold": 30},
+			{"label": "敲他的面具", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "他目送你离开。"},
+		],
+		"kill": {"text": "面具掉了下来，下面什么都没有。", "gold": 60},
+		"spare": {"text": "「你比我想的沉得住气。」", "ally": true},
+		"ally_effect": {"type": "fighter", "damage": 4},
+	},
+	"焚书人": {
+		"name": "焚书人",
+		"trait": "疯狂",
+		"desc": "他抱着一摞书，火折子已经点着了。",
+		"hostile": true,
+		"hp": 34, "attack": 10, "pattern": [2, 2],
+		"choices": [
+			{"label": "抢下一本书", "result": "talk", "random": [
+				{"text": "书页里夹着一张卡。", "cards": ["火球"]},
+				{"text": "火焰烧到了你的手。", "hp": -12},
+			]},
+			{"label": "踩灭他的火", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "火光在你背后亮起来。"},
+		],
+		"kill": {"text": "书烧完了，他也安静了。", "gold": 45},
+		"spare": {"text": "他把最后一本书塞给你，笑着走了。", "random_cards": 1},
+		"ally_effect": {"type": "buff", "cards": ["火球"]},
+	},
+	"溺水的旅人": {
+		"name": "溺水的旅人",
+		"trait": "虚弱",
+		"desc": "他瘫在浅水里，连抬手的力气都没有。",
+		"hostile": false,
+		"hp": 30, "attack": 4, "pattern": [1],
+		"choices": [
+			{"label": "把他拉起来（-5 HP）", "result": "talk", "text": "他把随身的钱袋塞给你。", "hp": -5, "gold": 40},
+			{"label": "搜他的身", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "你没有回头。"},
+		],
+		"kill": {"text": "水面很快恢复了平静。", "gold": 25},
+		"spare": {"text": "他朝你点了点头，慢慢走远了。", "hp": 10},
+		"ally_effect": {"type": "buff", "hp": 6},
+	},
+	"沉默的钟表匠": {
+		"name": "沉默的钟表匠",
+		"trait": "神秘",
+		"desc": "他在修一只永远走不准的表。",
+		"hostile": false,
+		"hp": 42, "attack": 6, "pattern": [1, 1],
+		"choices": [
+			{"label": "帮他扶着齿轮", "result": "talk", "text": "表终于走了一格。他把表塞给你。", "cards": ["快速思考"]},
+			{"label": "把表抢走", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "滴答声跟着你走了很远。"},
+		],
+		"kill": {"text": "表停了。", "gold": 40},
+		"spare": {"text": "他把修好的表送给了你。", "cards": ["神谕"]},
+		"ally_effect": {"type": "buff", "cards": ["快速思考"]},
+	},
+	"第十位": {
+		"name": "第十位",
+		"trait": "未知",
+		"desc": "名册上写着十个人，可你只见过九个。",
+		"hostile": true,
+		"hp": 60, "attack": 11, "pattern": [1, 2, 2],
+		"choices": [
+			{"label": "「你是谁？」", "result": "talk", "random": [
+				{"text": "「我是你忘掉的那个。」他给了你一张牌。", "cards": ["审判"]},
+				{"text": "「你不需要知道。」你的头开始疼。", "hp": -15},
+			]},
+			{"label": "直接动手", "result": "fight"},
+			{"label": "离开", "result": "leave", "text": "你数了三遍，还是只有九个人。"},
+		],
+		"kill": {"text": "名册上少了一个名字，你却记不清是谁。", "gold": 70},
+		"spare": {"text": "「下次别再忘了。」", "ally": true},
+		"ally_effect": {"type": "fighter", "damage": 6},
+	},
 }
 
 func get_contestant(id: String) -> Dictionary:
@@ -153,4 +312,11 @@ func pick_roster(count: int) -> Array[String]:
 	var result: Array[String] = []
 	for i in range(min(count, pool.size())):
 		result.append(pool[i])
+	return result
+func scaled(id: String) -> Dictionary:
+	var c: Dictionary = CONTESTANTS[id].duplicate()
+	var mult: float = 1.0 + 0.15 * float(GameState.transmigration - 1)
+	var result := c.duplicate()
+	result["hp"] = int(float(c["hp"]) * mult)
+	result["attack"] = int(float(c["attack"]) * mult)
 	return result
