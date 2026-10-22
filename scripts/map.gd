@@ -349,7 +349,7 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	if GameState.pending_snapshot.get("kind", "") == "event":
 		ev = GameState.pending_snapshot["event"]
 	else:
-		ev = EventDB.pick()
+		ev = EventDB.pick(GameState.act)
 		GameState.pending_snapshot = {"kind": "event", "event": ev}
 		GameState.save_game()
 	title.text = "事件"
