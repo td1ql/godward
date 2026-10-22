@@ -2,6 +2,8 @@ class_name CardUI
 extends RefCounted
 
 static func color_of(d: Dictionary) -> Color:
+	if d.get("divine", false):
+		return Color(0.55, 0.5, 0.3)
 	if d.has("self_status"):
 		return Color(0.55, 0.45, 0.2)
 	if d.has("status"):

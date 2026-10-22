@@ -1,11 +1,9 @@
 extends Node
 
-# 不出现在奖励里的牌（基础牌）
 const EXCLUDE := ["打击", "防御"]
 
-# 普通战斗只给行动牌；精英/首领才给效果牌
-func pool_for(node_type: String) -> Array:
-	var include_effect: bool = (node_type == "elite" or node_type == "boss")
+func pool_for(node_type: String, act: int = 1) -> Array:
+	var include_effect: bool = node_type == "elite" or node_type == "boss" or node_type == "divine_elite" or node_type == "pope"
 	var result := []
 	for id in CardDB.CARDS.keys():
 		if EXCLUDE.has(id):
@@ -13,13 +11,18 @@ func pool_for(node_type: String) -> Array:
 		var kind: String = CardDB.kind_of(id)
 		if kind == "encounter":
 			continue
+		var divine: bool = bool(CardDB.CARDS[id].get("divine", false))
+		if act == 2 and not divine:
+			continue
+		if act != 2 and divine:
+			continue
 		if kind == "effect" and not include_effect:
 			continue
 		result.append(id)
 	return result
 
-func pick_cards(node_type: String, count: int) -> Array:
-	var pool := pool_for(node_type)
+func pick_cards(node_type: String, count: int, act: int = 1) -> Array:
+	var pool := pool_for(node_type, act)
 	pool.shuffle()
 	var result := []
 	var n: int = min(count, pool.size())

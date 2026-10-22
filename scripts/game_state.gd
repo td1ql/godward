@@ -22,6 +22,7 @@ var allies: Array[String] = []
 var pending_enemy: Dictionary = {}
 var pending_contestant: String = ""
 var pending_cleanup := false
+var act := 1
 
 func _ready() -> void:
 	reset_deck()
@@ -58,6 +59,7 @@ func _apply_traits() -> void:
 	contestants = ContestantDB.pick_roster(5)
 	met_contestants.clear()
 	eliminated.clear()
+	act = 1
 	pending_cleanup = false
 	pending_node = -1
 	pending_snapshot = {}
@@ -134,6 +136,7 @@ func load_game(slot: int = -1) -> bool:
 	allies.clear()
 	for c in data.get("allies", []):
 		allies.append(str(c))
+	act = int(data.get("act", 1))
 	pending_node = int(data.get("pending_node", -1))
 	pending_snapshot = data.get("pending_snapshot", {})
 	pending_contestant = str(data.get("pending_contestant", ""))

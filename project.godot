@@ -31,6 +31,7 @@ RewardDB="*res://scripts/reward_db.gd"
 Toast="*res://scripts/toast.gd"
 DeckViewer="*res://scripts/deck_viewer.gd"
 TraitDB="*res://scripts/trait_db.gd"
+RemnantDB="*res://scripts/remnant_db.gd"
 
 [display]
 

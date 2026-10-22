@@ -49,6 +49,14 @@ const CARDS := {
 	"大盾": {"kind": "effect", "cost": 1, "consume": 2, "damage": 0, "block": 18, "price": 80},
 	"掘墓者": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "gain_energy": 1, "retrieve_top": true, "price": 70},
 	
+		# ===== 神国卡（只在妄想神国出现）=====
+	"圣言": {"kind": "action", "cost": 1, "damage": 9, "block": 0, "divine": true, "price": 55},
+	"神谕": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 2, "divine": true, "price": 60},
+	"圣痕": {"kind": "action", "cost": 2, "damage": 16, "block": 0, "divine": true, "price": 80},
+	"审判": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 0, "status": {"易伤": 2}, "divine": true, "price": 65},
+	"献祭": {"kind": "effect", "cost": 0, "consume": 2, "damage": 0, "block": 18, "divine": true, "price": 70},
+	"苦修": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "self_damage": 5, "self_status": {"力量": 3}, "divine": true, "price": 60},
+	
 	# ===== 遭遇牌：抽到立即生效 =====
 	"陷阱": {"kind": "encounter", "cost": 0, "damage": 0, "block": 0, "self_damage": 5, "price": 0},
 	"圣光": {"kind": "encounter", "cost": -1, "damage": 0, "block": 8, "price": 0},

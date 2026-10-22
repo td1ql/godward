@@ -88,13 +88,17 @@ func _generate_map() -> void:
 	nodes.clear()
 	nodes[0] = {"type": "start", "children": [], "depth": 0}
 	next_id = 1
+	if GameState.act == 2:
+		nodes[0]["type"] = "start"
+	_ensure_children(0)
+	next_id = 1
 	_ensure_children(0)
 	GameState.map_nodes = nodes
 	GameState.map_generated = true
 	GameState.current_node_id = 0
 
 func _gen_children(parent_id: int, depth: int, count: int) -> void:
-	if depth > MapDB.MAX_DEPTH:
+	if depth > MapDB.max_depth_of(GameState.act):
 		return
 	for i in range(count):
 		var id := next_id
@@ -110,7 +114,7 @@ func _ensure_children(id: int) -> void:
 	if not nodes.has(id):
 		return
 	var d: int = int(nodes[id]["depth"])
-	if d >= MapDB.MAX_DEPTH:
+	if d >= MapDB.max_depth_of(GameState.act):
 		return
 	if not nodes[id]["children"].is_empty():
 		return
@@ -126,7 +130,7 @@ func _prune(id: int) -> void:
 	nodes = keep
 
 func _pick_type(depth: int) -> String:
-	return MapDB.pick_type(depth)
+	return MapDB.pick_type(depth, GameState.act)
 
 func _rebuild_view() -> void:
 	map_offset = Vector2.ZERO
@@ -226,14 +230,14 @@ func _after_fade_out(id: int) -> void:
 	GameState.save_game()
 
 	var t: String = nodes[id]["type"]
-	if t == "battle" or t == "elite" or t == "boss":
+	if t == "battle" or t == "elite" or t == "boss" or t == "divine" or t == "divine_elite" or t == "pope":
 		if GameState.pending_snapshot.is_empty():
 			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t)}
 			GameState.save_game()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
 
-	if t == "shop" or t == "rest" or t == "event" or t == "contestant":
+	if t == "shop" or t == "rest" or t == "event" or t == "contestant" or t == "remnant":
 		_show_encounter(t)
 		return
 
@@ -319,6 +323,8 @@ func _show_encounter(t: String) -> void:
 	vbox.add_child(body)
 
 	match t:
+		"remnant":
+			_encounter_remnant(title, body, vbox)
 		"rest":
 			_encounter_rest(title, body, vbox)
 		"event":
@@ -357,6 +363,49 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 			b.text += "（金币不足）"
 		b.pressed.connect(_apply_event_choice.bind(c))
 		vbox.add_child(b)
+
+func _encounter_remnant(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var r: Dictionary
+	if GameState.pending_snapshot.get("kind", "") == "remnant":
+		r = GameState.pending_snapshot["remnant"]
+	else:
+		r = RemnantDB.pick()
+		GameState.pending_snapshot = {"kind": "remnant", "remnant": r}
+		GameState.save_game()
+
+	title.text = "遗骸　·　" + str(r["name"])
+	body.text = str(r["text"])
+
+	var take := Button.new()
+	take.text = "收下遗物"
+	take.pressed.connect(_take_remnant.bind(r))
+	vbox.add_child(take)
+
+	var leave := Button.new()
+	leave.text = "离开"
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
+
+func _take_remnant(r: Dictionary) -> void:
+	var gains: Array[String] = []
+	for card in r.get("cards", []):
+		GameState.deck.append(str(card))
+		gains.append("获得「%s」" % str(card))
+	if r.has("hp"):
+		GameState.player_hp = clamp(GameState.player_hp + int(r["hp"]), 1, GameState.player_max_hp)
+		gains.append("生命 +%d" % int(r["hp"]))
+	if r.has("gold"):
+		GameState.gold = max(0, GameState.gold + int(r["gold"]))
+		gains.append("金币 +%d" % int(r["gold"]))
+
+	var s := ""
+	for x in gains:
+		if s != "":
+			s += "　"
+		s += x
+
+	Toast.show_text("%s\n%s" % [str(r["name"]), s], 3.0)
+	_close_encounter()
 
 func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var available: Array = []
@@ -482,7 +531,7 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	if GameState.pending_snapshot.get("kind", "") == "shop":
 		cards = GameState.pending_snapshot["cards"]
 	else:
-		cards = ShopDB.pick_cards()
+		cards = ShopDB.pick_cards(GameState.act)
 		GameState.pending_snapshot = {"kind": "shop", "cards": cards}
 		GameState.save_game()
 	title.text = "商店"

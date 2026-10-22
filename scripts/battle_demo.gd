@@ -517,7 +517,7 @@ func _update_ui() -> void:
 func _show_reward() -> void:
 	hand_view.hide_cards()
 
-	var pool: Array = RewardDB.pick_cards(node_type, RunConfig.REWARD_COUNT)
+	var pool: Array = RewardDB.pick_cards(node_type, RunConfig.REWARD_COUNT, GameState.act)
 
 	var overlay := Control.new()
 	overlay.size = Vector2(1280, 720)
@@ -845,7 +845,7 @@ func _show_pope_final() -> void:
 	btn.size = Vector2(260, 64)
 	btn.position = Vector2(510, 480)
 	btn.add_theme_font_size_override("font_size", 24)
-	btn.pressed.connect(_start_pope_fight)
+	btn.pressed.connect(_enter_divine_realm)
 	overlay.add_child(btn)
 
 func _start_pope_fight() -> void:
@@ -904,3 +904,14 @@ func _show_true_ending() -> void:
 func _end_true_run() -> void:
 	GameState.delete_save()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+func _enter_divine_realm() -> void:
+	GameState.act = 2
+	GameState.map_generated = false
+	GameState.map_nodes = {}
+	GameState.current_node_id = 0
+	GameState.pending_snapshot = {}
+	GameState.pending_node = -1
+	GameState.pending_cleanup = false
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/map.tscn")

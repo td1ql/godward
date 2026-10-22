@@ -26,7 +26,19 @@ const LAYER_POOLS := {
 # 最后一层固定类型
 const FINAL_TYPE := "boss"
 
-# ===== 节点类型 → 显示名 / 颜色 =====
+# ===== 第二幕：教皇的妄想神国 =====
+const ACT2_DEPTH := 6
+
+const ACT2_POOLS := {
+	1: ["divine", "divine"],
+	2: ["divine", "divine", "event", "remnant"],
+	3: ["divine_elite", "shop", "rest", "event"],
+	4: ["divine", "divine", "event", "remnant"],
+	5: ["divine_elite", "divine", "rest", "shop"],
+}
+
+const ACT2_FINAL := "pope"
+
 const TYPE_INFO := {
 	"start": {"label": "起点", "color": Color(0.85, 0.85, 0.85)},
 	"battle": {"label": "战斗", "color": Color(0.95, 0.45, 0.45)},
@@ -34,11 +46,26 @@ const TYPE_INFO := {
 	"shop": {"label": "商店", "color": Color(0.95, 0.85, 0.35)},
 	"event": {"label": "事件", "color": Color(0.45, 0.75, 0.95)},
 	"rest": {"label": "休息", "color": Color(0.45, 0.9, 0.55)},
-	"boss": {"label": "首领", "color": Color(1.0, 0.25, 0.25)},
+	"boss": {"label": "守门人", "color": Color(1.0, 0.25, 0.25)},
 	"contestant": {"label": "参赛者", "color": Color(0.95, 0.6, 0.3)},
+	"divine": {"label": "造物", "color": Color(0.75, 0.8, 1.0)},
+	"divine_elite": {"label": "守卫", "color": Color(0.85, 0.65, 1.0)},
+	"remnant": {"label": "过去的遗骸", "color": Color(0.55, 0.95, 0.9)},
+	"pope": {"label": "教皇", "color": Color(1.0, 0.85, 0.3)},
 }
 
-func pick_type(depth: int) -> String:
+func max_depth_of(act: int) -> int:
+	return ACT2_DEPTH if act == 2 else MAX_DEPTH
+
+func final_type_of(act: int) -> String:
+	return ACT2_FINAL if act == 2 else FINAL_TYPE
+
+func pick_type(depth: int, act: int = 1) -> String:
+	if act == 2:
+		if depth >= ACT2_DEPTH:
+			return ACT2_FINAL
+		var pool2: Array = ACT2_POOLS.get(depth, ["divine"])
+		return pool2[randi() % pool2.size()]
 	if depth >= MAX_DEPTH:
 		return FINAL_TYPE
 	var pool: Array = LAYER_POOLS.get(depth, ["battle"])
