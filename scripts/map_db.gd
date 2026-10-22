@@ -27,14 +27,17 @@ const LAYER_POOLS := {
 const FINAL_TYPE := "boss"
 
 # ===== 第二幕：教皇的妄想神国 =====
-const ACT2_DEPTH := 6
+const ACT2_DEPTH := 9
 
 const ACT2_POOLS := {
 	1: ["divine", "divine"],
 	2: ["divine", "divine", "event", "remnant"],
 	3: ["divine_elite", "shop", "rest", "event"],
-	4: ["divine", "divine", "event", "remnant"],
-	5: ["divine_elite", "divine", "rest", "shop"],
+	4: ["divine", "divine", "event", "remnant", "shop"],
+	5: ["divine_elite", "divine", "rest", "event"],
+	6: ["divine", "divine", "event", "remnant"],
+	7: ["divine_elite", "shop", "rest", "event"],
+	8: ["divine", "divine_elite", "remnant", "event"],
 }
 
 const ACT2_FINAL := "pope"

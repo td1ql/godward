@@ -289,6 +289,9 @@ func _draw() -> void:
 		draw_line(from_pos, to_pos, Color(0.45, 0.55, 0.75, b.modulate.a), 3.0)
 # ========== 遭遇界面：商店 / 休息 / 事件 ==========
 func _show_encounter(t: String) -> void:
+	if overlay:
+		overlay.queue_free()
+		overlay = null
 	overlay = Control.new()
 	overlay.size = Vector2(1280, 720)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -375,19 +378,54 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 		ev = GameState.pending_snapshot["event"]
 	else:
 		ev = EventDB.pick(GameState.act)
-		GameState.pending_snapshot = {"kind": "event", "event": ev}
+		GameState.pending_snapshot = {"kind": "event", "event": ev, "path": []}
 		GameState.save_game()
+
+	var node: Dictionary = _event_node(ev)
 	title.text = "事件"
-	body.text = ev["text"] + "\n\n（当前金币: %d）" % GameState.gold
-	for c in ev["choices"]:
+	body.text = str(node.get("text", "")) + "\n\n（当前金币: %d）" % GameState.gold
+
+	var choices: Array = node.get("choices", [])
+	for i in range(choices.size()):
+		var c: Dictionary = choices[i]
 		var b := Button.new()
-		b.text = c["label"]
+		b.text = str(c.get("label", "..."))
 		var cost: int = int(c.get("gold", 0))
 		if cost < 0 and GameState.gold + cost < 0:
 			b.disabled = true
 			b.text += "（金币不足）"
-		b.pressed.connect(_apply_event_choice.bind(c))
+		b.pressed.connect(_pick_event_choice.bind(i, c))
 		vbox.add_child(b)
+
+func _event_node(ev: Dictionary) -> Dictionary:
+	var node := ev
+	for i in GameState.pending_snapshot.get("path", []):
+		var choices: Array = node.get("choices", [])
+		var idx: int = int(i)
+		if idx < 0 or idx >= choices.size():
+			break
+		var nxt: Dictionary = choices[idx].get("next", {})
+		if nxt.is_empty():
+			break
+		node = nxt
+	return node
+
+func _pick_event_choice(index: int, c: Dictionary) -> void:
+	if not Reward.can_apply(c):
+		Toast.show_text("金币不足。")
+		return
+	Reward.apply(c)
+
+	var nxt: Dictionary = c.get("next", {})
+	if nxt.is_empty():
+		_close_encounter()
+		return
+
+	var path: Array = GameState.pending_snapshot.get("path", [])
+	path.append(index)
+	GameState.pending_snapshot["path"] = path
+	GameState.save_game()
+	_show_encounter("event")
 
 func _encounter_remnant(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var r: Dictionary
@@ -495,13 +533,6 @@ func _maybe_eliminate() -> void:
 		var id: String = pool[randi() % pool.size()]
 		GameState.eliminated.append(id)
 		Toast.show_text("%s 被淘汰了。" % ContestantDB.name_of(id))
-
-func _apply_event_choice(c: Dictionary) -> void:
-	if not Reward.can_apply(c):
-		Toast.show_text("金币不足。")
-		return
-	Reward.apply(c)
-	_close_encounter()
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var cards: Array

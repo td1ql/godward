@@ -306,9 +306,18 @@ func _resolve_enemy_turn() -> void:
 
 	if not enemy.on_turn.is_empty():
 		StatusSystem.apply(enemy.status, enemy.on_turn)
-
 	if not enemy.on_hit.is_empty():
 		StatusSystem.apply(player_status, enemy.on_hit)
+
+	for s in enemy.due_skills():
+		if s.has("heal"):
+			enemy.hp = min(enemy.max_hp, enemy.hp + int(s["heal"]))
+		if s.has("status"):
+			var st: Dictionary = s["status"]
+			if str(s.get("to", "player")) == "self":
+				StatusSystem.apply(enemy.status, st)
+			else:
+				StatusSystem.apply(player_status, st)
 
 func _start_new_turn() -> void:
 	for f in ally_fighters:

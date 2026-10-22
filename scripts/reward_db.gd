@@ -12,6 +12,10 @@ func pool_for(node_type: String, act: int = 1) -> Array:
 		if kind == "encounter":
 			continue
 		var divine: bool = bool(CardDB.CARDS[id].get("divine", false))
+		if bool(CardDB.CARDS[id].get("remnant", false)):
+			continue
+		if bool(CardDB.CARDS[id].get("event", false)):
+			continue
 		if act == 2 and not divine:
 			continue
 		if act != 2 and divine:

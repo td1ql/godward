@@ -1,5 +1,6 @@
 extends Node
 
+# 兜底遗骸（第一次转生之前没有职业史时使用）
 const REMNANTS := [
 	{"name": "第 2 次转生的你", "text": "她背对着你，还在等一个不会回来的人。", "cards": ["急救"], "hp": 10},
 	{"name": "第 3 次转生的你", "text": "他握着断掉的剑，眼睛却还亮着。", "cards": ["火球"]},
@@ -10,4 +11,17 @@ const REMNANTS := [
 ]
 
 func pick() -> Dictionary:
+	# 有职业史时：从过去几世的职业里随机抽一个，生成对应遗骸
+	if not GameState.vocation_history.is_empty():
+		var idx: int = randi() % GameState.vocation_history.size()
+		var v: String = GameState.vocation_history[idx]
+		var info: Dictionary = TraitDB.VOCATIONS.get(v, {})
+		var card: String = str(info.get("card", "守夜"))
+		var line: String = str(info.get("remnant", "她什么也没说。"))
+		return {
+			"name": "第 %d 次转生的你" % (idx + 1),
+			"text": "%s\n——%s\n遗物：「%s」" % [line, v, card],
+			"cards": [card],
+		}
+	# 没有职业史：用兜底列表
 	return REMNANTS[randi() % REMNANTS.size()]

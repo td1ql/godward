@@ -15,6 +15,7 @@ var pending_snapshot: Dictionary = {}
 var transmigration := 1
 var traits: Array[String] = []
 var vocation := ""
+var vocation_history: Array[String] = []
 var contestants: Array[String] = []
 var met_contestants: Array[String] = []
 var eliminated: Array[String] = []
@@ -34,10 +35,13 @@ func reset_deck() -> void:
 
 func reset_run() -> void:
 	transmigration = 1
+	vocation_history.clear()
 	_roll_vocation()
 
 func advance_transmigration() -> void:
 	transmigration += 1
+	if vocation != "":
+		vocation_history.append(vocation)
 	_roll_vocation()
 
 func _roll_vocation() -> void:
@@ -81,6 +85,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"vocation_history": vocation_history,
 		"milestone_card": milestone_card,
 		"milestone_discard": milestone_discard,
 		"pending_cleanup": pending_cleanup,
@@ -122,6 +127,9 @@ func load_game(slot: int = -1) -> bool:
 	var data = str_to_var(text)
 	if typeof(data) != TYPE_DICTIONARY:
 		return false
+	vocation_history.clear()
+	for v in data.get("vocation_history", []):
+		vocation_history.append(str(v))
 	player_hp = int(data.get("player_hp", player_max_hp))
 	gold = int(data.get("gold", 100))
 	current_node_id = int(data.get("current_node_id", 0))
