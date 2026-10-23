@@ -24,6 +24,7 @@ var pending_enemy: Dictionary = {}
 var pending_contestant: String = ""
 var pending_cleanup := false
 var act := 1
+var prologue_seen := false
 var milestone_card := false
 var milestone_discard := false
 
@@ -34,6 +35,7 @@ func reset_deck() -> void:
 	deck = CardDB.starter_deck(RunConfig.DECK_SIZE)
 
 func reset_run() -> void:
+	prologue_seen = false
 	transmigration = 1
 	vocation_history.clear()
 	_roll_vocation()
@@ -55,7 +57,7 @@ func restart_run() -> void:
 func _apply_traits() -> void:
 	player_max_hp = recompute_max_hp()
 	player_hp = player_max_hp
-	gold = max(0, RunConfig.START_GOLD + TraitDB.total_gold(traits))
+	gold = max(0, RunConfig.START_GOLD + TraitDB.total_gold(traits) + (transmigration - 1) * RunConfig.META_GOLD_PER_RUN)
 	if transmigration >= 9:
 		gold += 50
 	current_node_id = 0
@@ -94,6 +96,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"prologue_seen": prologue_seen,
 		"player_max_hp": player_max_hp,
 		"vocation_history": vocation_history,
 		"milestone_card": milestone_card,
@@ -164,6 +167,7 @@ func load_game(slot: int = -1) -> bool:
 	allies.clear()
 	for c in data.get("allies", []):
 		allies.append(str(c))
+	prologue_seen = bool(data.get("prologue_seen", false))
 	act = int(data.get("act", 1))
 	milestone_card = bool(data.get("milestone_card", false))
 	milestone_discard = bool(data.get("milestone_discard", false))

@@ -19,3 +19,7 @@ const ALLOW_SKIP := true
 
 # ===== 休息 =====
 const REST_HEAL_RATIO := 0.5
+
+# ===== 局外成长 =====
+const META_HP_PER_RUN := 5
+const META_GOLD_PER_RUN := 3

@@ -2,7 +2,7 @@ extends Node
 
 const STATUS := {
 	"中毒": {"name": "中毒", "tick_damage": true, "decay": 1},
-	"流血": {"name": "流血", "tick_damage": true, "decay": 1},
+	"流血": {"name": "流血", "tick_damage": false, "decay": 1},
 	"虚弱": {"name": "虚弱", "tick_damage": false, "decay": 1},
 	"易伤": {"name": "易伤", "tick_damage": false, "decay": 1},
 	"力量": {"name": "力量", "tick_damage": false, "decay": 1},

@@ -145,4 +145,12 @@ func _discard_pick(index: int) -> void:
 	GameState.save_game()
 
 func _enter() -> void:
+	if not GameState.prologue_seen:
+		GameState.prologue_seen = true
+		GameState.save_game()
+		Dialogue.play(self, DialogueDB.get_lines("prologue"), _goto_map)
+		return
+	_goto_map()
+
+func _goto_map() -> void:
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
