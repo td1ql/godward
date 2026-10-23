@@ -18,22 +18,24 @@ var hint_label: Label
 var lines: Array = []
 var index := 0
 var on_finish: Callable
+var on_skip: Callable
 
-static func play(parent: Node, lines: Array, on_finish: Callable = Callable()) -> void:
+static func play(parent: Node, lines: Array, on_finish: Callable = Callable(), on_skip: Callable = Callable()) -> void:
 	if lines.is_empty():
 		if on_finish.is_valid():
 			on_finish.call()
 		return
 	var d := Dialogue.new()
-	parent.add_child(d)          # 挂进场景树，保证对象存活
-	d._start(parent, lines, on_finish)
+	parent.add_child(d)
+	d._start(parent, lines, on_finish, on_skip)
 
-func _start(parent: Node, source: Array, finish: Callable) -> void:
+func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = Callable()) -> void:
 	lines = source
 	on_finish = finish
+	on_skip = skip_cb
 	index = 0
 
-	overlay = Modal.open(parent, 0.88)
+	overlay = Modal.open(parent, 0.96)
 
 	var catcher := Button.new()
 	catcher.flat = true
@@ -75,7 +77,7 @@ func _start(parent: Node, source: Array, finish: Callable) -> void:
 	skip.size = Vector2(120, 44)
 	skip.position = Vector2(1130, 650)
 	skip.add_theme_font_size_override("font_size", 16)
-	skip.pressed.connect(_finish)
+	skip.pressed.connect(_finish.bind(true))
 	overlay.add_child(skip)
 
 	_render()
@@ -109,12 +111,13 @@ func _advance() -> void:
 		return
 	_render()
 
-func _finish() -> void:
+func _finish(skipped: bool = false) -> void:
 	if overlay:
 		overlay.queue_free()
 		overlay = null
-	var cb := on_finish
+	var cb: Callable = on_skip if skipped and on_skip.is_valid() else on_finish
 	on_finish = Callable()
+	on_skip = Callable()
 	queue_free()
 	if cb.is_valid():
 		cb.call()

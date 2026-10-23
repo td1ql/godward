@@ -47,6 +47,7 @@ func _ready() -> void:
 	quit.add_theme_font_size_override("font_size", 22)
 	quit.pressed.connect(_on_quit)
 	add_child(quit)
+	_check_prologue()
 
 func _update_mute_btn() -> void:
 	_mute_btn.text = "音效：" + ("开" if not AudioManager.muted else "关")
@@ -60,3 +61,36 @@ func _on_start() -> void:
 
 func _on_quit() -> void:
 	get_tree().quit()
+
+func _check_prologue() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	var part1 := bool(cfg.get_value("story", "prologue_part1", false))
+	var part2 := bool(cfg.get_value("story", "prologue_part2", false))
+	if part2:
+		return
+	if part1:
+		Dialogue.play(self, DialogueDB.get_lines("prologue_after"), _finish_prologue)
+		return
+	Dialogue.play(self, DialogueDB.get_lines("prologue"), _start_tutorial, _skip_prologue)
+
+func _start_tutorial() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	cfg.set_value("story", "prologue_part1", true)
+	cfg.save("user://settings.cfg")
+	GameState.pending_snapshot = {"kind": "tutorial"}
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
+func _finish_prologue() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	cfg.set_value("story", "prologue_part2", true)
+	cfg.save("user://settings.cfg")
+
+func _skip_prologue() -> void:
+	var cfg := ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	cfg.set_value("story", "prologue_part1", true)
+	cfg.set_value("story", "prologue_part2", true)
+	cfg.save("user://settings.cfg")

@@ -28,21 +28,33 @@ var battle_uses := {}
 @onready var end_turn_button: Button = $EndTurnButton
 
 func _ready() -> void:
-	player_hp = GameState.player_hp
-	max_energy = GameState.initial_energy()
-	player_energy = max_energy
-	var bonus_strength: int = TraitDB.total_strength(GameState.traits)
-	if bonus_strength != 0:
-		player_status["力量"] = bonus_strength
-
 	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
+	var tutorial := kind == "tutorial"
+
+	if tutorial:
+		player_hp = 30
+		max_energy = 3
+		player_energy = 3
+	else:
+		player_hp = GameState.player_hp
+		max_energy = GameState.initial_energy()
+		player_energy = max_energy
+		var bonus_strength: int = TraitDB.total_strength(GameState.traits)
+		if bonus_strength != 0:
+			player_status["力量"] = bonus_strength
+
 	node_type = "battle"
-	if GameState.map_nodes.has(GameState.current_node_id):
+	if tutorial:
+		node_type = "tutorial"
+	elif GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
 	if kind == "pope":
 		node_type = "pope"
+
 	var enemy_data: Dictionary
-	if kind == "battle" or kind == "contestant_fight" or kind == "pope":
+	if tutorial:
+		enemy_data = {"name": "傀儡", "hp": 24, "attack": 4, "pattern": [1, 1]}
+	elif kind == "battle" or kind == "contestant_fight" or kind == "pope":
 		enemy_data = GameState.pending_snapshot["enemy"]
 	elif not GameState.pending_enemy.is_empty():
 		enemy_data = GameState.pending_enemy
@@ -51,7 +63,10 @@ func _ready() -> void:
 		enemy_data = EnemyDB.pick_for_node(node_type)
 	enemy.setup(enemy_data)
 
-	deck.setup(GameState.deck)
+	if tutorial:
+		deck.setup(["打击", "打击", "防御", "防御", "重击", "打击", "防御", "重击"])
+	else:
+		deck.setup(GameState.deck)
 
 	hand_view = HandView.new()
 	add_child(hand_view)
@@ -79,12 +94,13 @@ func _ready() -> void:
 	pile_btn.size = Vector2(110, 40)
 	pile_btn.pressed.connect(_open_piles)
 	add_child(pile_btn)
-	var menu_btn := Button.new()
-	menu_btn.text = StoryDB.t("battle_menu")
-	menu_btn.position = Vector2(1080, 660)
-	menu_btn.size = Vector2(120, 40)
-	menu_btn.pressed.connect(_back_to_menu_from_battle)
-	add_child(menu_btn)
+	if not tutorial:
+		var menu_btn := Button.new()
+		menu_btn.text = StoryDB.t("battle_menu")
+		menu_btn.position = Vector2(1080, 660)
+		menu_btn.size = Vector2(120, 40)
+		menu_btn.pressed.connect(_back_to_menu_from_battle)
+		add_child(menu_btn)
 	_draw_cards(GameState.initial_hand_size())
 	if node_type == "boss":
 		_setup_allies()
@@ -94,6 +110,10 @@ func _ready() -> void:
 func _back_to_menu_from_battle() -> void:
 	GameState.player_hp = max(1, player_hp)
 	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+func _finish_tutorial() -> void:
+	GameState.pending_snapshot = {}
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _setup_allies() -> void:
@@ -363,12 +383,15 @@ func _check_game_over() -> void:
 	if enemy.hp <= 0:
 		game_over = true
 		AudioManager.play("victory")
+		if node_type == "tutorial":
+			_finish_tutorial()
+			return
 		GameState.player_hp = max(1, player_hp)
 		if GameState.pending_contestant != "":
 			_show_contestant_aftermath()
 			return
 		if node_type == "pope":
-			_show_true_ending()
+			Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_true_ending)
 			return
 		last_gold_gain = NodeRuleDB.gold_of(node_type)
 		GameState.gold += last_gold_gain
@@ -379,6 +402,10 @@ func _check_game_over() -> void:
 	elif player_hp <= 0:
 		game_over = true
 		AudioManager.play("defeat")
+		if node_type == "tutorial":
+			await get_tree().create_timer(0.8).timeout
+			get_tree().reload_current_scene()
+			return
 		await get_tree().create_timer(1.0).timeout
 		_show_game_over()
 
@@ -668,4 +695,7 @@ func _enter_divine_realm() -> void:
 	GameState.pending_node = -1
 	GameState.pending_cleanup = false
 	GameState.save_game()
+	Dialogue.play(self, DialogueDB.get_lines("first_divine"), _goto_divine_map)
+
+func _goto_divine_map() -> void:
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
