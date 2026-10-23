@@ -22,6 +22,12 @@ var pending_selected: Array = []
 var _draw_depth := 0
 var max_energy: int = RunConfig.MAX_ENERGY
 var battle_uses := {}
+var creed := {}
+var first_attack_used := false
+var attacked_last_turn := false
+var attacked_this_turn := false
+var first_hurt_used := false
+var damage_taken := 0
 
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
@@ -39,6 +45,7 @@ func _ready() -> void:
 		player_hp = GameState.player_hp
 		max_energy = GameState.initial_energy()
 		player_energy = max_energy
+		creed = TraitDB.creed_of(GameState.vocation)
 		var bonus_strength: int = TraitDB.total_strength(GameState.traits)
 		if bonus_strength != 0:
 			player_status["力量"] = bonus_strength
@@ -101,7 +108,11 @@ func _ready() -> void:
 		menu_btn.size = Vector2(120, 40)
 		menu_btn.pressed.connect(_back_to_menu_from_battle)
 		add_child(menu_btn)
-	_draw_cards(GameState.initial_hand_size())
+	var extra_draw := 0
+	if str(creed.get("key", "")) == "start_draw":
+		extra_draw = int(creed.get("value", 0))
+	_draw_cards(GameState.initial_hand_size() + extra_draw)
+	_apply_turn_creed()
 	if node_type == "boss":
 		_setup_allies()
 	_render_hand()
@@ -197,7 +208,20 @@ func _apply_card_effects(c: String) -> void:
 	var d: Dictionary = CardDB.get_card(c)
 	var hits: int = d.get("hits", 1)
 	if d["damage"] > 0:
-		var per := DamageCalc.compute(d["damage"], player_status, enemy.status)
+		var base_damage: int = int(d["damage"])
+		var ck := str(creed.get("key", ""))
+		if ck == "first_attack_double" and not first_attack_used:
+			base_damage *= 2
+			first_attack_used = true
+		elif ck == "first_attack_bonus" and not first_attack_used:
+			base_damage += int(creed.get("value", 0))
+			first_attack_used = true
+		if ck == "no_attack_bonus" and not attacked_last_turn:
+			base_damage = int(base_damage * int(creed.get("value", 150)) / 100.0)
+		if ck == "low_hp_bonus" and player_hp * 100 / max(1, GameState.player_max_hp) < 30:
+			base_damage = int(base_damage * int(creed.get("value", 150)) / 100.0)
+		attacked_this_turn = true
+		var per := DamageCalc.compute(base_damage, player_status, enemy.status)
 		enemy.hp = max(0, enemy.hp - per * hits)
 		AudioManager.play("hit")
 		var thorns: int = int(enemy.status.get("荆棘", 0))
@@ -218,6 +242,13 @@ func _apply_card_effects(c: String) -> void:
 	if d.get("retrieve_top", false):
 		if not deck.discard_pile.is_empty():
 			deck.hand.append(deck.discard_pile.pop_back())
+
+	if CardDB.kind_of(c) == "effect":
+		var ek := str(creed.get("key", ""))
+		if ek == "effect_damage":
+			enemy.hp = max(0, enemy.hp - int(creed.get("value", 0)))
+		elif ek == "effect_draw":
+			_draw_cards(int(creed.get("value", 0)))
 
 func _on_card_pressed(index: int) -> void:
 	if game_over:
@@ -332,8 +363,15 @@ func _end_player_turn() -> void:
 func _resolve_enemy_turn() -> void:
 	var dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 	dmg = max(0, dmg - player_block)
+	var hk := str(creed.get("key", ""))
+	if dmg > 0 and hk == "first_hurt_half" and not first_hurt_used:
+		first_hurt_used = true
+		dmg = int(dmg / 2.0)
+	damage_taken += dmg
 	player_hp = max(0, player_hp - dmg)
 	player_block = 0
+	if dmg > 0 and hk == "hurt_energy":
+		player_energy += int(creed.get("value", 0))
 	enemy.turn_index += 1
 
 	var ep := StatusSystem.tick_damage(enemy.status)
@@ -362,6 +400,12 @@ func _resolve_enemy_turn() -> void:
 			else:
 				StatusSystem.apply(player_status, st)
 
+func _apply_turn_creed() -> void:
+	first_attack_used = false
+	attacked_this_turn = false
+	if str(creed.get("key", "")) == "turn_block":
+		player_block += int(creed.get("value", 0))
+
 func _start_new_turn() -> void:
 	for f in ally_fighters:
 		enemy.hp = max(0, enemy.hp - int(f["damage"]))
@@ -374,6 +418,8 @@ func _start_new_turn() -> void:
 	if draw_count > 0:
 		_draw_cards(draw_count)
 	player_energy = max_energy
+	attacked_last_turn = attacked_this_turn
+	_apply_turn_creed()
 	_render_hand()
 	_update_ui()
 
@@ -386,6 +432,13 @@ func _check_game_over() -> void:
 		if node_type == "tutorial":
 			_finish_tutorial()
 			return
+		var wk := str(creed.get("key", ""))
+		if wk == "win_heal":
+			player_hp = min(GameState.player_max_hp, player_hp + int(creed.get("value", 0)))
+		elif wk == "hurt_gold":
+			GameState.gold += damage_taken
+		elif wk == "hurt_energy":
+			pass
 		GameState.player_hp = max(1, player_hp)
 		if GameState.pending_contestant != "":
 			_show_contestant_aftermath()
@@ -639,8 +692,10 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 
 	if kill:
 		GameState.eliminated.append(id)
+		Morality.add(-5, 10)
 	else:
 		GameState.met_contestants.append(id)
+		Morality.add(8, 0)
 
 	var summary := Reward.apply(reward, id)
 
@@ -677,8 +732,13 @@ func _show_true_ending() -> void:
 	var overlay := Modal.open(self, 0.97)
 	var title := Modal.title(overlay, StoryDB.t("ending_title"), 130, 52)
 	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
-	Modal.text(overlay, StoryDB.t("ending_body"), 260, 24, 200)
-	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d" % [GameState.transmigration, player_hp, GameState.player_max_hp], 470, 20, 80)
+	var body_key := "ending_body"
+	if Morality.is_saint():
+		body_key = "ending_body_good"
+	elif Morality.is_sinner():
+		body_key = "ending_body_dark"
+	Modal.text(overlay, StoryDB.t(body_key), 260, 24, 200)
+	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary()], 470, 20, 100)
 	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
 	Modal.button(overlay, StoryDB.t("ending_button"), 520, 580, 240, 60, _end_true_run)
 

@@ -29,6 +29,11 @@ static func apply(data: Dictionary, contestant_id: String = "") -> String:
 		GameState.player_hp = clamp(GameState.player_hp + h, 1, GameState.player_max_hp)
 		parts.append("生命 %s%d" % ["+" if h >= 0 else "", h])
 
+	if data.has("moral") or data.has("sin"):
+		var t := Morality.add(int(data.get("moral", 0)), int(data.get("sin", 0)))
+		if t != "":
+			parts.append(t)
+
 	if data.has("cards"):
 		for c in data["cards"]:
 			GameState.deck.append(str(c))

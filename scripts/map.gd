@@ -17,6 +17,7 @@ var pan_target := Vector2.ZERO
 var overlay: Control
 var gold_label: Label
 var hp_label: Label
+var moral_label: Label
 
 func _ready() -> void:
 	var hint := Label.new()
@@ -40,6 +41,11 @@ func _ready() -> void:
 	hp_label.add_theme_font_size_override("font_size", 18)
 	hp_label.text = "HP: %d / %d" % [GameState.player_hp, GameState.player_max_hp]
 	add_child(hp_label)
+	moral_label = Label.new()
+	moral_label.position = Vector2(20, 110)
+	moral_label.add_theme_font_size_override("font_size", 18)
+	moral_label.text = Morality.summary()
+	add_child(moral_label)
 	var deck_btn := Button.new()
 	deck_btn.text = "牌库"
 	deck_btn.position = Vector2(20, 120)
@@ -396,6 +402,9 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 			b.disabled = true
 			b.text += "（金币不足）"
 		b.pressed.connect(_pick_event_choice.bind(i, c))
+		if not Morality.meets(c):
+			b.disabled = true
+			b.text += "（%s）" % Morality.req_text(c)
 		vbox.add_child(b)
 
 func _event_node(ev: Dictionary) -> Dictionary:
@@ -470,6 +479,10 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 		vbox.add_child(leave)
 		return
 
+		if not Morality.meets(c):
+			b.disabled = true
+			b.text += "（%s）" % Morality.req_text(c)
+
 	var id: String = ""
 	if GameState.pending_snapshot.get("kind", "") == "contestant":
 		id = str(GameState.pending_snapshot["id"])
@@ -481,6 +494,7 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 	var c: Dictionary = ContestantDB.scaled(id)
 	title.text = "%s　·　%s" % [c["name"], c["trait"]]
 	body.text = c["desc"] + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
+	body.text += "\n\n" + Morality.attitude()
 
 	for choice in c["choices"]:
 		var b := Button.new()
@@ -603,3 +617,5 @@ func _update_hud() -> void:
 		gold_label.text = "金币: %d" % GameState.gold
 	if hp_label:
 		hp_label.text = "HP: %d / %d" % [GameState.player_hp, GameState.player_max_hp]
+	if moral_label:
+		moral_label.text = Morality.summary()

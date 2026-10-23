@@ -24,7 +24,7 @@ func _ready() -> void:
 	add_child(info)
 
 	var traits := Label.new()
-	traits.text = "词条：%s\n初始生命 %d　初始金币 %d" % [TraitDB.text_of(GameState.traits), GameState.player_hp, GameState.gold]
+	traits.text = "词条：%s\n守则：%s\n初始生命 %d　初始金币 %d" % [TraitDB.text_of(GameState.traits), TraitDB.creed_text(GameState.vocation), GameState.player_hp, GameState.gold]
 	traits.position = Vector2(0, 180)
 	traits.size = Vector2(1280, 60)
 	traits.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
