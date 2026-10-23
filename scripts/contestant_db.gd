@@ -286,6 +286,117 @@ const CONTESTANTS := {
 		"spare": {"text": "「下次别再忘了。」", "ally": true},
 		"ally_effect": {"type": "fighter", "damage": 6},
 	},
+
+}
+const GOOD_CHOICES := [
+	{"label": "分他一点补给（-10 金币）", "gold": -10, "moral": 3, "result": "talk", "favor": 10, "text": "「记下了。」他说。"},
+	{"label": "一起走", "result": "talk", "ally": true, "favor": 15, "text": "他站到了你身后。"},
+	{"label": "道别", "result": "leave", "favor": 0, "text": "他目送你走远。"},
+]
+
+const NEUTRAL_CHOICES := [
+	{"label": "点个头", "result": "talk", "favor": 5, "text": "他也点了点头。"},
+	{"label": "绕开", "result": "leave", "favor": 0},
+	{"label": "抢先下手", "result": "fight", "favor": -15},
+]
+
+const BAD_CHOICES := [
+	{"label": "先动手", "result": "fight", "favor": -10},
+	{"label": "退开", "result": "leave", "favor": 2, "text": "他盯着你，没有追。"},
+]
+
+# 每位参赛者的三种反应（按印象分切换）
+const MEET_LINES := {
+	"血手": {
+		"good": "「你上次没跑。」他说。\n「这次也别跑。」",
+		"neutral": "他抹了抹手上的血。\n「又来一个。」",
+		"bad": "他把刀横在身前。\n「上次是你。」",
+	},
+	"静默者": {
+		"good": "他点了点头。\n往旁边让了让。",
+		"neutral": "他看了你一眼。\n什么也没说。",
+		"bad": "他站住不动。\n手放在兜里。",
+	},
+	"赌徒": {
+		"good": "「你还欠我一局。」\n他笑了。",
+		"neutral": "「再来一把？」\n他把骰子抛起来。",
+		"bad": "「这次赌命。」他说。",
+	},
+	"苦修者": {
+		"good": "「你身上有光。」他低声说。",
+		"neutral": "他跪着。\n没有抬头。",
+		"bad": "他画了个记号。\n往后退。",
+	},
+	"疯女": {
+		"good": "她冲你笑。\n牙是黑的。",
+		"neutral": "她哼着不成调的歌。\n看了你一眼。",
+		"bad": "她突然不唱了。\n看着你。",
+	},
+	"收藏家": {
+		"good": "「你身上有我要的东西。」他说。\n「但我可以等。」",
+		"neutral": "他上下打量你。\n像在估价。",
+		"bad": "「这次我不出价了。」他说。",
+	},
+	"猎手": {
+		"good": "他朝你抬了抬下巴。\n算是招呼。",
+		"neutral": "他站在远处。\n弓没有放下。",
+		"bad": "他已经把箭搭上了。",
+	},
+	"无名者": {
+		"good": "他朝你伸出手。\n手心朝上。",
+		"neutral": "他站在那里。\n你记不住他的脸。",
+		"bad": "他往后退了一步。\n消失了半秒。",
+	},
+	"断剑客": {
+		"good": "「这次不打了。」\n他把断剑收起来。",
+		"neutral": "他握着断剑。\n看着你。",
+		"bad": "「上次那一下，我还记着。」",
+	},
+	"灰袍女": {
+		"good": "她从灰袍里伸出手。\n递给你一点东西。",
+		"neutral": "她坐在原地。\n灰袍下什么也看不清。",
+		"bad": "她站了起来。\n灰袍下面有东西在动。",
+	},
+	"双生子": {
+		"good": "「这回我们站你这边。」\n两个人一起说。",
+		"neutral": "两个人一左一右。\n笑着看你。",
+		"bad": "「上次你骗了我们。」\n他们说。",
+	},
+	"拾荒者": {
+		"good": "「有好处记得叫我。」\n他咧开嘴笑。",
+		"neutral": "他护着包袱。\n往边上挪了挪。",
+		"bad": "「这次该你掏钱了。」",
+	},
+	"盲眼琴师": {
+		"good": "他弹了一个音。\n「你听，」他说，「这是给你的。」",
+		"neutral": "琴声停了。\n他朝你的方向偏了偏头。",
+		"bad": "他的手按在弦上。\n「这曲子，我改过了。」",
+	},
+	"铁面人": {
+		"good": "他朝你点头。\n动作很轻。",
+		"neutral": "面具下的呼吸很稳。",
+		"bad": "「你越界了。」他说。",
+	},
+	"焚书人": {
+		"good": "「这次我不烧你的。」\n他笑着说。",
+		"neutral": "他抱着一摞书。\n火折子还亮着。",
+		"bad": "「你的东西，我烧过了。」",
+	},
+	"溺水的旅人": {
+		"good": "他朝你笑。\n脸上还有水。",
+		"neutral": "他靠在墙边。\n喘着气。",
+		"bad": "他往后缩了缩。\n手挡在身前。",
+	},
+	"沉默的钟表匠": {
+		"good": "他把修好的表递给你看。\n指针终于走了。",
+		"neutral": "他低头修表。\n滴答声很响。",
+		"bad": "他停了手。\n「时间不对。」他说。",
+	},
+	"第十位": {
+		"good": "「你还记得我。」他说。",
+		"neutral": "名册上写着十个人。\n你只数出九个。",
+		"bad": "「这次，别忘了我。」",
+	},
 }
 
 func get_contestant(id: String) -> Dictionary:
@@ -320,3 +431,58 @@ func scaled(id: String) -> Dictionary:
 	result["hp"] = int(float(c["hp"]) * mult)
 	result["attack"] = int(float(c["attack"]) * mult)
 	return result
+# 立场：evil / good / neutral（也可以在某位参赛者里写 "tendency" 覆盖）
+func tendency_of(id: String) -> String:
+	var c: Dictionary = CONTESTANTS.get(id, {})
+	if c.has("tendency"):
+		return str(c["tendency"])
+	var t := str(c.get("trait", ""))
+	if t in ["好战", "狡诈", "贪婪", "疯狂"]:
+		return "evil"
+	if t in ["虔诚", "虚弱"]:
+		return "good"
+	return "neutral"
+
+# 本次选择对印象的影响
+func impression_delta(id: String, choice: Dictionary) -> int:
+	var d: int = int(choice.get("favor", 0))
+	if str(choice.get("result", "talk")) == "fight":
+		d -= 20
+	if choice.get("ally", false):
+		d += 15
+	var tendency := tendency_of(id)
+	var moral_part: int = int((GameState.morality - 50) / 10.0)
+	var sin_part: int = int(GameState.sin / 10.0)
+	if tendency == "good":
+		d += moral_part - sin_part
+	elif tendency == "evil":
+		d += sin_part - moral_part
+	return d
+
+# 第 meet 次遇见的场景（0 = 初次）
+func scene_for(id: String, meet: int) -> Dictionary:
+	var c: Dictionary = CONTESTANTS[id]
+	if meet <= 0:
+		return {"text": str(c["desc"]), "choices": c["choices"]}
+
+	var imp: int = int(GameState.impressions.get(id, 0))
+	var tier := "neutral"
+	if imp >= 40:
+		tier = "good"
+	elif imp <= -40:
+		tier = "bad"
+
+	var lines: Dictionary = MEET_LINES.get(id, {})
+	var text: String = str(lines.get(tier, ""))
+
+	if tier == "good":
+		if text == "":
+			text = "又见面了。\n%s朝你点了点头。" % str(c["name"])
+		return {"text": text, "choices": GOOD_CHOICES}
+	if tier == "bad":
+		if text == "":
+			text = "%s看见你，手按在刀上。" % str(c["name"])
+		return {"text": text, "choices": BAD_CHOICES}
+	if text == "":
+		text = "你们又碰上了。\n%s看着你。" % str(c["name"])
+	return {"text": text, "choices": NEUTRAL_CHOICES}

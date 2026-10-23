@@ -126,6 +126,7 @@ const CARDS := {
 	"拾遗": {"kind": "action", "cost": 0, "damage": 0, "block": 3, "draw": 2, "event": true, "price": 0},
 	"哑歌": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "heal": 8, "draw": 1, "event": true, "price": 0},
 	"断刃": {"kind": "effect", "cost": 1, "consume": 1, "damage": 18, "block": 0, "event": true, "price": 0},
+	"传说": {"kind": "effect", "cost": 1, "consume": 1, "damage": 8, "block": 5, "status": {"再生": 2}, "self_status": {"力量": 2}, "event": true, "price": 0},
 }
 
 const STARTER := ["打击", "防御", "重击", "铁壁", "疾风斩"]

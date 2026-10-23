@@ -48,7 +48,7 @@ func _ready() -> void:
 	add_child(moral_label)
 	var deck_btn := Button.new()
 	deck_btn.text = "牌库"
-	deck_btn.position = Vector2(20, 120)
+	deck_btn.position = Vector2(20, 150)
 	deck_btn.size = Vector2(110, 40)
 	deck_btn.pressed.connect(DeckViewer.toggle)
 	add_child(deck_btn)
@@ -456,6 +456,11 @@ func _pick_event_choice(index: int, c: Dictionary) -> void:
 			GameState.allies.append(picked)
 			Toast.show_text("「%s」成为了你的盟友" % ContestantDB.name_of(picked), 2.5)
 
+	if int(c.get("discard", 0)) > 0 and not GameState.deck.is_empty():
+		_close_encounter()
+		DeckViewer.open_choose("弃掉一张牌", GameState.deck, _discard_from_rest)
+		return
+
 	var nxt: Dictionary = c.get("next", {})
 	if nxt.is_empty():
 		_close_encounter()
@@ -496,10 +501,10 @@ func _take_remnant(r: Dictionary) -> void:
 
 func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var available: Array = []
-	for id in GameState.contestants:
-		if GameState.met_contestants.has(id) or GameState.eliminated.has(id):
+	for cid in GameState.contestants:
+		if GameState.eliminated.has(cid):
 			continue
-		available.append(id)
+		available.append(cid)
 	if available.is_empty():
 		title.text = "参赛者"
 		body.text = "这里空无一人，只剩风穿过神域的裂隙。"
@@ -512,19 +517,27 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 	var id: String = ""
 	if GameState.pending_snapshot.get("kind", "") == "contestant":
 		id = str(GameState.pending_snapshot["id"])
-	var valid := GameState.contestants.has(id) and not GameState.met_contestants.has(id) and not GameState.eliminated.has(id)
+	var valid := GameState.contestants.has(id) and not GameState.eliminated.has(id)
 	if id == "" or not valid:
 		id = available[randi() % available.size()]
-		GameState.pending_snapshot = {"kind": "contestant", "id": id}
+		var meet: int = int(GameState.meet_count.get(id, 0))
+		GameState.pending_snapshot = {"kind": "contestant", "id": id, "meet": meet}
+		GameState.meet_count[id] = meet + 1
 		GameState.save_game()
+
+	var meet_now: int = int(GameState.pending_snapshot.get("meet", 0))
 	var c: Dictionary = ContestantDB.scaled(id)
+	var scene: Dictionary = ContestantDB.scene_for(id, meet_now)
+
 	title.text = "%s　·　%s" % [c["name"], c["trait"]]
-	body.text = c["desc"] + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
+	body.text = str(scene["text"]) + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
 	body.text += "\n\n" + Morality.attitude()
 
-	for choice in c["choices"]:
+	var choices: Array = scene["choices"]
+	for i in range(choices.size()):
+		var choice: Dictionary = choices[i]
 		var b := Button.new()
-		b.text = choice["label"]
+		b.text = str(choice.get("label", "..."))
 		if not Morality.meets(choice):
 			b.disabled = true
 			b.text += "（%s）" % Morality.req_text(choice)
@@ -561,6 +574,8 @@ func _contestant_choice(id: String, choice: Dictionary) -> void:
 		return
 
 	GameState.met_contestants.append(id)
+	var d := ContestantDB.impression_delta(id, result)
+	GameState.impressions[id] = clampi(int(GameState.impressions.get(id, 0)) + d, -100, 100)
 	var summary := Reward.apply(result, id)
 	Toast.show_text("%s\n%s" % [str(result.get("text", "")), summary], 3.2)
 	_close_encounter()

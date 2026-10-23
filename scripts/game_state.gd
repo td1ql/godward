@@ -29,6 +29,8 @@ var milestone_card := false
 var milestone_discard := false
 var morality := 50
 var sin := 0
+var impressions := {}
+var meet_count := {}
 
 func _ready() -> void:
 	reset_deck()
@@ -41,6 +43,8 @@ func reset_run() -> void:
 	prologue_seen = false
 	transmigration = 1
 	vocation_history.clear()
+	impressions.clear()
+	meet_count.clear()
 	_roll_vocation()
 
 func advance_transmigration() -> void:
@@ -99,6 +103,8 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"impressions": impressions,
+		"meet_count": meet_count,
 		"morality": morality,
 		"sin": sin,
 		"prologue_seen": prologue_seen,
@@ -174,6 +180,8 @@ func load_game(slot: int = -1) -> bool:
 		allies.append(str(c))
 	morality = int(data.get("morality", Morality.START_MORAL))
 	sin = int(data.get("sin", Morality.START_SIN))
+	impressions = data.get("impressions", {})
+	meet_count = data.get("meet_count", {})
 	prologue_seen = bool(data.get("prologue_seen", false))
 	act = int(data.get("act", 1))
 	milestone_card = bool(data.get("milestone_card", false))
