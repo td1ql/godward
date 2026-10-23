@@ -21,6 +21,7 @@ var pending_need := 0
 var pending_selected: Array = []
 var _draw_depth := 0
 var max_energy: int = RunConfig.MAX_ENERGY
+var battle_uses := {}
 
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
@@ -126,6 +127,16 @@ func _open_piles() -> void:
 func _render_hand() -> void:
 	hand_view.render(deck.hand, player_energy, pending_effect, pending_selected)
 
+# 返回本场战斗还能用几次；-1 表示不限制
+func _uses_left(card: String) -> int:
+	var limit: int = int(CardDB.get_card(card).get("max_uses", 0))
+	if limit <= 0:
+		return -1
+	return max(0, limit - int(battle_uses.get(card, 0)))
+
+func _mark_used(card: String) -> void:
+	battle_uses[card] = int(battle_uses.get(card, 0)) + 1
+
 func _draw_cards(n: int) -> void:
 	if _draw_depth >= 3:
 		return
@@ -135,6 +146,9 @@ func _draw_cards(n: int) -> void:
 	var extra_draw := 0
 	for card in deck.draw_raw(n):
 		if CardDB.kind_of(card) == "encounter":
+			if _uses_left(card) == 0:
+				continue
+			_mark_used(card)
 			_apply_card_effects(card)
 			deck.discard_pile.append(card)
 			encounters.append(CardDB.card_text(card).replace("\n", " "))
@@ -194,6 +208,9 @@ func _on_card_pressed(index: int) -> void:
 	if index < 0 or index >= deck.hand.size():
 		return
 	var c: String = deck.hand[index]
+	if _uses_left(c) == 0:
+		Toast.show_text("「%s」本场战斗已用完" % c, 2.0)
+		return
 	var d: Dictionary = CardDB.get_card(c)
 	if player_energy < d["cost"]:
 		return
@@ -211,6 +228,7 @@ func _on_card_pressed(index: int) -> void:
 	_apply_card_effects(c)
 	deck.hand.remove_at(index)
 	deck.discard_pile.append(c)
+	_mark_used(c)
 	_check_game_over()
 	_render_hand()
 	_update_ui()

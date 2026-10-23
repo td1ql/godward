@@ -88,12 +88,12 @@ const CARDS := {
 	"信仰": {"kind": "action", "cost": 1, "damage": 0, "block": 10, "heal": 5, "divine": true, "price": 65},
 	
 	# ===== 遭遇牌：抽到立即生效 =====
-	"陷阱": {"kind": "encounter", "cost": 0, "damage": 0, "block": 0, "self_damage": 5, "price": 0},
-	"灵感": {"kind": "encounter", "cost": 0, "damage": 0, "block": 0, "draw": 2, "self_damage": 3, "price": 0},
-	"霉运": {"kind": "encounter", "cost": 0, "damage": 0, "block": 0, "self_damage": 4, "price": 0},
-	"启示": {"kind": "encounter", "gain_energy": 1, "cost": 0, "damage": 0, "block": 0, "draw": 1, "self_damage": 2, "price": 0},
-	"惊梦": {"kind": "encounter", "cost": 0, "damage": 0, "draw": 1, "block": 0, "self_damage": 6, "price": 0},
-	"圣光": {"kind": "encounter", "gain_energy": 1, "damage": 0, "block": 8, "price": 0},
+	"陷阱": {"kind": "encounter", "max_uses": 1, "cost": 0, "damage": 0, "block": 0, "self_damage": 5, "price": 0},
+	"灵感": {"kind": "encounter", "max_uses": 2, "cost": 0, "damage": 0, "block": 0, "draw": 2, "self_damage": 3, "price": 0},
+	"霉运": {"kind": "encounter", "max_uses": 5, "cost": 0, "damage": 0, "block": 0, "self_damage": 4, "price": 0},
+	"启示": {"kind": "encounter", "max_uses": 2, "gain_energy": 1, "cost": 0, "damage": 0, "block": 0, "draw": 1, "self_damage": 2, "price": 0},
+	"惊梦": {"kind": "encounter", "max_uses": 2, "cost": 0, "damage": 0, "draw": 1, "block": 0, "self_damage": 6, "price": 0},
+	"圣光": {"kind": "encounter", "max_uses": 3,"gain_energy": 1, "damage": 0, "block": 8, "price": 0},
 
 	# ===== 遗骸专属卡（只在遗骸事件里出现）=====
 	"守夜": {"kind": "action", "cost": 1, "damage": 0, "block": 16, "remnant": true, "price": 0},

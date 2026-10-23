@@ -53,9 +53,7 @@ func restart_run() -> void:
 	_apply_traits()
 
 func _apply_traits() -> void:
-	player_max_hp = max(10, RunConfig.START_HP + TraitDB.total_hp(traits))
-	if transmigration >= 10:
-		player_max_hp += 20
+	player_max_hp = recompute_max_hp()
 	player_hp = player_max_hp
 	gold = max(0, RunConfig.START_GOLD + TraitDB.total_gold(traits))
 	if transmigration >= 9:
@@ -73,6 +71,8 @@ func _apply_traits() -> void:
 	pending_cleanup = false
 	pending_node = -1
 	pending_snapshot = {}
+	pending_contestant = ""
+	pending_enemy = {}
 	milestone_card = false
 	milestone_discard = false
 	allies.clear()
@@ -83,11 +83,18 @@ func initial_hand_size() -> int:
 func initial_energy() -> int:
 	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits))
 
+func recompute_max_hp() -> int:
+	var hp: int = max(10, RunConfig.START_HP + TraitDB.total_hp(traits) + (transmigration - 1) * RunConfig.META_HP_PER_RUN)
+	if transmigration >= 10:
+		hp += 20
+	return hp
+
 func _slot_path(slot: int) -> String:
 	return "user://save_%d.txt" % slot
 
 func save_game() -> void:
 	var data := {
+		"player_max_hp": player_max_hp,
 		"vocation_history": vocation_history,
 		"milestone_card": milestone_card,
 		"milestone_discard": milestone_discard,
@@ -165,6 +172,10 @@ func load_game(slot: int = -1) -> bool:
 	pending_contestant = str(data.get("pending_contestant", ""))
 	pending_cleanup = bool(data.get("pending_cleanup", false))
 	vocation = str(data.get("vocation", ""))
+	if data.has("player_max_hp"):
+		player_max_hp = int(data["player_max_hp"])
+	else:
+		player_max_hp = recompute_max_hp()
 	current_slot = s
 	return true
 

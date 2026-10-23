@@ -81,6 +81,7 @@ func _reopen_pending() -> void:
 	GameState.save_game()
 
 func _process(_delta: float) -> void:
+	_update_hud()
 	if is_moving:
 		queue_redraw()
 
