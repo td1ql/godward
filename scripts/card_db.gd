@@ -93,7 +93,8 @@ const CARDS := {
 	"霉运": {"kind": "encounter", "max_uses": 5, "cost": 0, "damage": 0, "block": 0, "self_damage": 4, "price": 0},
 	"启示": {"kind": "encounter", "max_uses": 2, "gain_energy": 1, "cost": 0, "damage": 0, "block": 0, "draw": 1, "self_damage": 2, "price": 0},
 	"惊梦": {"kind": "encounter", "max_uses": 2, "cost": 0, "damage": 0, "draw": 1, "block": 0, "self_damage": 6, "price": 0},
-	"圣光": {"kind": "encounter", "max_uses": 3,"gain_energy": 1, "damage": 0, "block": 8, "price": 0},
+	"圣光": {"kind": "encounter", "max_uses": 3, "gain_energy": 1, "damage": 0, "block": 8, "price": 0},
+	"纠缠": {"kind": "encounter", "max_uses": 0, "cost": 1, "gain_energy":0,"damage": 0, "self_damage": 6, "block": 0, "price": 0},
 
 	# ===== 遗骸专属卡（只在遗骸事件里出现）=====
 	"守夜": {"kind": "action", "cost": 1, "damage": 0, "block": 33, "remnant": true, "price": 0},
@@ -120,6 +121,11 @@ const CARDS := {
 	"忏悔": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "heal": 12, "draw": 1, "event": true, "price": 0},
 	"妄念": {"kind": "action", "cost": 1, "damage": 14, "block": 0, "self_damage": 4, "event": true, "price": 0},
 	"神国余晖": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 15, "draw": 1, "event": true, "price": 0},
+	"血约": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "self_status": {"力量": 3}, "self_damage": 4, "event": true, "price": 0},
+	"余火": {"kind": "action", "cost": 1, "damage": 7, "block": 0, "status": {"中毒": 3}, "event": true, "price": 0},
+	"拾遗": {"kind": "action", "cost": 0, "damage": 0, "block": 3, "draw": 2, "event": true, "price": 0},
+	"哑歌": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "heal": 8, "draw": 1, "event": true, "price": 0},
+	"断刃": {"kind": "effect", "cost": 1, "consume": 1, "damage": 18, "block": 0, "event": true, "price": 0},
 }
 
 const STARTER := ["打击", "防御", "重击", "铁壁", "疾风斩"]

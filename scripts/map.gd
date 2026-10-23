@@ -237,7 +237,7 @@ func _after_fade_out(id: int) -> void:
 	var t: String = nodes[id]["type"]
 	if t == "battle" or t == "elite" or t == "boss" or t == "divine" or t == "divine_elite" or t == "pope":
 		if GameState.pending_snapshot.is_empty():
-			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t)}
+			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t, int(nodes[id]["depth"]))}
 			GameState.save_game()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
@@ -389,14 +389,30 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 		GameState.save_game()
 
 	var node: Dictionary = _event_node(ev)
+	if ev.get("pick_contestant", false) and not GameState.pending_snapshot.has("picked"):
+		var pool: Array = []
+		for cid in GameState.contestants:
+			if not GameState.eliminated.has(cid) and not GameState.met_contestants.has(cid):
+				pool.append(cid)
+		if pool.is_empty():
+			for cid in GameState.contestants:
+				if not GameState.eliminated.has(cid):
+					pool.append(cid)
+		if not pool.is_empty():
+			GameState.pending_snapshot["picked"] = str(pool[randi() % pool.size()])
+			GameState.save_game()
+
+	var picked_name := ""
+	if GameState.pending_snapshot.has("picked"):
+		picked_name = ContestantDB.name_of(str(GameState.pending_snapshot["picked"]))
 	title.text = "事件"
-	body.text = str(node.get("text", "")) + "\n\n（当前金币: %d）" % GameState.gold
+	body.text = str(node.get("text", "")).replace("{name}", picked_name) + "\n\n（当前金币: %d）" % GameState.gold
 
 	var choices: Array = node.get("choices", [])
 	for i in range(choices.size()):
 		var c: Dictionary = choices[i]
 		var b := Button.new()
-		b.text = str(c.get("label", "..."))
+		b.text = str(c.get("label", "...")).replace("{name}", picked_name)
 		var cost: int = int(c.get("gold", 0))
 		if cost < 0 and GameState.gold + cost < 0:
 			b.disabled = true
@@ -421,10 +437,24 @@ func _event_node(ev: Dictionary) -> Dictionary:
 	return node
 
 func _pick_event_choice(index: int, c: Dictionary) -> void:
+	if not Morality.meets(c):
+		Toast.show_text("条件不足。")
+		return
 	if not Reward.can_apply(c):
 		Toast.show_text("金币不足。")
 		return
 	Reward.apply(c)
+
+	var picked: String = str(GameState.pending_snapshot.get("picked", ""))
+	if picked != "":
+		if c.get("kill_picked", false) and not GameState.eliminated.has(picked):
+			GameState.eliminated.append(picked)
+			Morality.add(-5, 10)
+		if c.get("meet_picked", false) and not GameState.met_contestants.has(picked):
+			GameState.met_contestants.append(picked)
+		if c.get("ally_picked", false) and not GameState.allies.has(picked):
+			GameState.allies.append(picked)
+			Toast.show_text("「%s」成为了你的盟友" % ContestantDB.name_of(picked), 2.5)
 
 	var nxt: Dictionary = c.get("next", {})
 	if nxt.is_empty():
@@ -479,10 +509,6 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 		vbox.add_child(leave)
 		return
 
-		if not Morality.meets(c):
-			b.disabled = true
-			b.text += "（%s）" % Morality.req_text(c)
-
 	var id: String = ""
 	if GameState.pending_snapshot.get("kind", "") == "contestant":
 		id = str(GameState.pending_snapshot["id"])
@@ -499,6 +525,9 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 	for choice in c["choices"]:
 		var b := Button.new()
 		b.text = choice["label"]
+		if not Morality.meets(choice):
+			b.disabled = true
+			b.text += "（%s）" % Morality.req_text(choice)
 		b.pressed.connect(_contestant_choice.bind(id, choice))
 		vbox.add_child(b)
 

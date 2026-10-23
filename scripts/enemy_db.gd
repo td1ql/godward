@@ -85,7 +85,40 @@ func get_enemy(id: String) -> Dictionary:
 			return pool[id]
 	return NORMAL.values()[0]
 
-func pick_for_node(node_type: String) -> Dictionary:
+# 按基础生命把敌人分为 3 个梯度
+func _tier_of(data: Dictionary) -> int:
+	var hp: int = int(data.get("hp", 0))
+	if hp <= 34:
+		return 1
+	if hp <= 45:
+		return 2
+	return 3
+
+# 该层数允许出现的最高梯度
+func _max_tier(depth: int) -> int:
+	if depth <= 2:
+		return 1
+	if depth <= 5:
+		return 2
+	return 3
+
+func pick_for_node(node_type: String, depth: int = 0) -> Dictionary:
 	var pool := _pool_for(node_type)
 	var ids := pool.keys()
-	return pool[ids[randi() % ids.size()]]
+	var filtered := []
+	var capped := _max_tier(depth)
+	for id in ids:
+		if _tier_of(pool[id]) <= capped:
+			filtered.append(id)
+	if filtered.is_empty():
+		filtered = ids
+
+	var chosen: String = str(filtered[randi() % filtered.size()])
+	var data: Dictionary = pool[chosen].duplicate(true)
+
+	# 深度缩放：越往下越强，上限 ×1.4；首领和教皇不缩放
+	if node_type != "boss" and node_type != "pope":
+		var mult: float = min(1.4, 1.0 + 0.05 * float(max(0, depth - 1)))
+		data["hp"] = int(int(data["hp"]) * mult)
+		data["attack"] = int(int(data["attack"]) * mult)
+	return data
