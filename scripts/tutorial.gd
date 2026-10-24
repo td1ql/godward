@@ -10,13 +10,13 @@
 
 extends Node
 
-const ENEMY := {"name": "神之影", "hp": 9999, "attack": 9999, "pattern": [1]}
+const ENEMY := {"name": "原罪*贪婪", "hp": 9999, "attack": 9999, "pattern": [1]}
 
 const TURNS := [
 	{"cards": ["晨光", "晨光", "圣辉"], "text": "点击手牌将它打出。【恒光】的加护将使你无惧伤痛"},
 	{"cards": ["光之隙", "晨光", "晨光"], "text": "效果牌需要消耗别的手牌，但往往具有更强的效果"},
 	{"cards": ["尘光", "晨光", "晨光"], "text": "遭遇牌抽到后会立即使用"},
-	{"cards": ["无上耀光"], "text": "「无上耀光」——结束这一切。"},
+	{"cards": ["无上耀光"], "text": "我赐予你————「无上耀光」"},
 ]
 
 var active := false
@@ -31,12 +31,17 @@ func _ready() -> void:
 	add_child(_layer)
 
 	_label = Label.new()
-	_label.position = Vector2(330, 10)
-	_label.size = Vector2(560, 36)
+	_label.position = Vector2(90, 300)
+	_label.size = Vector2(1100, 100)
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_label.add_theme_font_size_override("font_size", 18)
-	_label.add_theme_color_override("font_color", Color(0.95, 0.85, 0.55))
+	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_label.add_theme_font_size_override("font_size", 32)
+	_label.add_theme_color_override("font_color", Color(0.98, 0.92, 0.70))
+	_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.85))
+	_label.add_theme_constant_override("shadow_offset_x", 2)
+	_label.add_theme_constant_override("shadow_offset_y", 3)
+	StoryDB.apply_serif(_label)
 	_label.visible = false
 	_layer.add_child(_label)
 

@@ -122,3 +122,24 @@ func pick_for_node(node_type: String, depth: int = 0) -> Dictionary:
 		data["hp"] = int(int(data["hp"]) * mult)
 		data["attack"] = int(int(data["attack"]) * mult)
 	return data
+
+const SILHOUETTE := {
+	"史莱姆": "beast", "腐化史莱姆": "beast", "毒蜘蛛": "beast",
+	"蝙蝠群": "beast", "哥布林": "beast", "荆棘兽": "beast",
+	"骷髅兵": "soldier", "狂徒": "soldier", "双子刺客": "soldier",
+	"亡灵骑士": "soldier", "精英守卫": "soldier", "神国骑士": "soldier",
+	"逐神者": "soldier", "审判者": "soldier",
+	"咒术师": "caster", "精英法师": "caster", "血祭司": "caster",
+	"悔罪者": "caster", "祈祷者": "caster", "苦行僧": "caster",
+	"执灯者": "caster", "盲眼先知": "caster",
+	"食人魔": "giant", "熔岩巨像": "giant", "石像鬼": "giant",
+	"荆棘像": "giant", "圣骸": "giant",
+	"火元素": "shade", "冰霜精": "shade", "腐尸": "shade",
+	"圣像": "idol", "唱诗班": "idol",
+	"守门人": "warden",
+	"教皇": "pope",
+	"原罪*贪婪": "greed",
+}
+
+func silhouette_of(enemy_name: String) -> String:
+	return str(SILHOUETTE.get(enemy_name, "soldier"))

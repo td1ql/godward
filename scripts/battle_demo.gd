@@ -29,14 +29,20 @@ var attacked_this_turn := false
 var first_hurt_used := false
 var damage_taken := 0
 
+var _new_cards := 0
+
 @onready var info_label: Label = $InfoLabel
 @onready var combat_label: Label = $CombatLabel
 @onready var end_turn_button: Button = $EndTurnButton
 
 func _ready() -> void:
-	var pool := [1, 2, 3, 4, 5]
-	pool.shuffle()
-	var bg_path := "res://assets/art/bg/bg_battle_%d.png" % pool[0]
+	var act_pool: Array = [1, 2, 3] if GameState.act == 2 else [1, 2, 3, 4, 5]
+	act_pool.shuffle()
+	var bg_path := "res://assets/art/bg/bg_battle_%d_%d.png" % [GameState.act, act_pool[0]]
+	if str(GameState.pending_snapshot.get("kind", "")) == "tutorial":
+		bg_path = "res://assets/art/bg/bg_battle_tut.png"
+	if not ResourceLoader.exists(bg_path):
+		bg_path = "res://assets/art/bg/bg_battle_%d.png" % randi_range(1, 5)
 	if ResourceLoader.exists(bg_path):
 		var bgr := TextureRect.new()
 		bgr.texture = load(bg_path)
@@ -44,6 +50,7 @@ func _ready() -> void:
 		bgr.stretch_mode = TextureRect.STRETCH_SCALE
 		bgr.size = Vector2(1280, 720)
 		add_child(bgr)
+		move_child(bgr, 0)
 	else:
 		var fb := ColorRect.new()
 		fb.color = Color(0.05, 0.06, 0.09)
@@ -54,6 +61,7 @@ func _ready() -> void:
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
 	dim.size = Vector2(1280, 720)
 	add_child(dim)
+	move_child(dim, 1)
 
 	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
 	var tutorial := kind == "tutorial"
@@ -104,13 +112,44 @@ func _ready() -> void:
 
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
-	player_label.position = Vector2(20, 150)
-	combat_label.position = Vector2(900, 150)
+	player_label.position = Vector2(20, 96)
+	combat_label.position = Vector2(900, 60)
 	combat_label.add_theme_font_size_override("font_size", 20)
 	player_label.add_theme_font_size_override("font_size", 20)
 	add_child(player_label)
+	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
+	var sil_path := "res://assets/art/enemy/%s.png" % sil
+	if ResourceLoader.exists(sil_path):
+		var spr := TextureRect.new()
+		spr.texture = load(sil_path)
+		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		spr.position = Vector2(980, 130)
+		spr.size = Vector2(240, 360)
+		spr.modulate = Color(1, 1, 1, 0.92)
+		add_child(spr)
+		spr.pivot_offset = spr.size / 2.0
+		var tw := create_tween().set_loops()
+		tw.set_parallel(true)
+		tw.tween_property(spr, "scale", Vector2(1.02, 1.02), 2.6).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(spr, "position:y", spr.position.y - 4.0, 2.6).set_trans(Tween.TRANS_SINE)
+		tw.chain()
+		tw.set_parallel(true)
+		tw.tween_property(spr, "scale", Vector2(1.0, 1.0), 2.6).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(spr, "position:y", spr.position.y, 2.6).set_trans(Tween.TRANS_SINE)
+
+	var voc_path := "res://assets/art/vocation/%s.png" % GameState.vocation
+	if ResourceLoader.exists(voc_path):
+		var pc := TextureRect.new()
+		pc.texture = load(voc_path)
+		pc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pc.position = Vector2(175, 86)
+		pc.size = Vector2(150, 250)
+		add_child(pc)
+
 	ally_label = Label.new()
-	ally_label.position = Vector2(20, 320)
+	ally_label.position = Vector2(20, 350)
 	ally_label.add_theme_font_size_override("font_size", 18)
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
@@ -140,7 +179,7 @@ func _ready() -> void:
 
 	_ghost_button(deck_btn)
 	_ghost_button(pile_btn)
-	_ghost_button(end_turn_button, 22)
+	_ghost_button(end_turn_button, 26)
 	var resume: Dictionary = GameState.pending_snapshot.get("resume", {})
 	if not resume.is_empty():
 		_restore_battle(resume)
@@ -150,6 +189,7 @@ func _ready() -> void:
 		deck.discard_pile.clear()
 		for c in Tutorial.cards_for(0):
 			deck.hand.append(str(c))
+		_new_cards = deck.hand.size()
 		_apply_turn_creed()
 	else:
 		var extra_draw := 0
@@ -215,6 +255,7 @@ func _open_battle_menu() -> void:
 	resume_btn.focus_mode = Control.FOCUS_NONE
 	resume_btn.pressed.connect(_close_battle_menu)
 	_menu_popup.add_child(resume_btn)
+	_ghost_button(resume_btn, 18)
 
 	var help_btn := Button.new()
 	help_btn.text = "buff效果说明"
@@ -223,6 +264,7 @@ func _open_battle_menu() -> void:
 	help_btn.focus_mode = Control.FOCUS_NONE
 	help_btn.pressed.connect(_open_status_help)
 	_menu_popup.add_child(help_btn)
+	_ghost_button(help_btn, 18)
 
 	var quit_btn := Button.new()
 	quit_btn.text = "返回首页"
@@ -231,6 +273,7 @@ func _open_battle_menu() -> void:
 	quit_btn.focus_mode = Control.FOCUS_NONE
 	quit_btn.pressed.connect(_back_to_menu_from_battle)
 	_menu_popup.add_child(quit_btn)
+	_ghost_button(quit_btn, 18)
 
 func _close_battle_menu() -> void:
 	if _menu_popup != null and is_instance_valid(_menu_popup):
@@ -304,6 +347,7 @@ func _restore_battle(r: Dictionary) -> void:
 	deck.hand.clear()
 	for c in r.get("hand", []):
 		deck.hand.append(str(c))
+		_new_cards = deck.hand.size()
 	deck.discard_pile.clear()
 	for c in r.get("discard", []):
 		deck.discard_pile.append(str(c))
@@ -345,7 +389,8 @@ func _setup_allies() -> void:
 func _open_piles() -> void:
 	DeckViewer.open_piles(deck.draw_pile, deck.hand, deck.discard_pile)
 func _render_hand() -> void:
-	hand_view.render(deck.hand, player_energy, pending_effect, pending_selected)
+	hand_view.render(deck.hand, player_energy, pending_effect, pending_selected, _new_cards)
+	_new_cards = 0
 
 # 返回本场战斗还能用几次；-1 表示不限制
 func _uses_left(card: String) -> int:
@@ -380,6 +425,7 @@ func _draw_cards(n: int) -> void:
 				return
 		else:
 			deck.hand.append(card)
+			_new_cards += 1
 
 	if not encounters.is_empty():
 		var msg := ""
@@ -474,6 +520,7 @@ func _on_card_pressed(index: int) -> void:
 		_update_ui()
 		return
 	AudioManager.play("click")
+	var spent = hand_view.take_button(index)
 	player_energy -= d["cost"]
 	_apply_card_effects(c)
 	Tutorial.notify("card_played")
@@ -484,6 +531,7 @@ func _on_card_pressed(index: int) -> void:
 	_mark_used(c)
 	_check_game_over()
 	_render_hand()
+	CardAnim.play_to_center(self, spent)
 	_update_ui()
 	var draw_n: int = int(d.get("draw", 0))
 	if draw_n > 0:
@@ -526,7 +574,9 @@ func _resolve_effect() -> void:
 		remove_idx.append(i)
 	remove_idx.sort()
 	remove_idx.reverse()
+	var ghosts := {}
 	for i in remove_idx:
+		ghosts[i] = hand_view.take_button(i)
 		deck.hand.remove_at(i)
 
 	# 效果牌先进弃牌堆，消耗的牌盖在它上面
@@ -543,6 +593,10 @@ func _resolve_effect() -> void:
 	pending_selected.clear()
 	_check_game_over()
 	_render_hand()
+	CardAnim.play_to_center(self, ghosts.get(idx))
+	for i in remove_idx:
+		if i != idx:
+			CardAnim.discard_to(self, ghosts.get(i), Vector2(140, 655))
 	_update_ui()
 
 # ===== 回合流程（分阶段）=====
@@ -645,6 +699,7 @@ func _start_new_turn() -> void:
 				Toast.show_text("遭遇牌：" + CardDB.card_text(cn).replace("\n", " "))
 			else:
 				deck.hand.append(cn)
+				_new_cards += 1
 	else:
 		var draw_count: int = RunConfig.BASE_DRAW + player_energy
 		draw_count += int(player_status.get("洞察", 0))
@@ -756,6 +811,7 @@ func _show_cleanup_prompt() -> void:
 	btn.add_theme_font_size_override("font_size", 24)
 	btn.pressed.connect(_begin_cleanup)
 	overlay.add_child(btn)
+	_ghost_button(btn, 20)
 
 func _begin_cleanup() -> void:
 	GameState.pending_cleanup = true
@@ -843,12 +899,21 @@ func _show_reward() -> void:
 		var btn := CardUI.make_button(card_name, 18)
 		btn.size = Vector2(card_w, 240)
 		btn.position = Vector2(start_x + i * spacing, 200)
-		btn.text = CardDB.card_text(card_name) + "\n\n" + StoryDB.t("reward_pick")
 		btn.pressed.connect(_choose_reward.bind(card_name))
 		overlay.add_child(btn)
+	var hint := Label.new()
+	hint.text = "点击一张，加入牌组"
+	hint.position = Vector2(0, 458)
+	hint.size = Vector2(1280, 32)
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_font_size_override("font_size", 18)
+	hint.add_theme_color_override("font_color", Color(0.72, 0.68, 0.58))
+	StoryDB.apply_serif(hint)
+	overlay.add_child(hint)
 
 	if RunConfig.ALLOW_SKIP:
-		Modal.button(overlay, StoryDB.t("reward_skip"), 540, 520, 200, 50, _finish_reward)
+		var skip := Modal.button(overlay, StoryDB.t("reward_skip"), 540, 520, 200, 50, _finish_reward)
+		_ghost_button(skip)
 
 func _choose_reward(card_name: String) -> void:
 	GameState.deck.append(card_name)

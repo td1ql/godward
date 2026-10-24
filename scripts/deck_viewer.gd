@@ -55,7 +55,7 @@ func open() -> void:
 	close.position = Vector2(540, 645)
 	close.pressed.connect(_close)
 	_root.add_child(close)
-
+	Modal.apply_ink(close, 18)
 func open_piles(draw: Array, hand: Array, discard: Array) -> void:
 	_show_columns("牌堆", [
 		{"title": "抽牌堆（%d）　顶部在下" % draw.size(), "cards": draw},
@@ -115,7 +115,7 @@ func _show_columns(title_text: String, sections: Array) -> void:
 	close.position = Vector2(540, 645)
 	close.pressed.connect(_close)
 	_root.add_child(close)
-
+	Modal.apply_ink(close, 18)
 func open_choose(title_text: String, cards: Array, on_pick: Callable) -> void:
 	if _root:
 		return
@@ -162,6 +162,7 @@ func open_choose(title_text: String, cards: Array, on_pick: Callable) -> void:
 	skip.position = Vector2(540, 640)
 	skip.pressed.connect(_close)
 	_root.add_child(skip)
+	Modal.apply_ink(skip, 18)
 
 func _on_choose(index: int, on_pick: Callable) -> void:
 	on_pick.call(index)

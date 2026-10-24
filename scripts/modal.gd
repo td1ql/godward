@@ -53,6 +53,28 @@ static func text(overlay: Control, content: String, y: float, font_size: int = 2
 	StoryDB.apply_serif(lbl)
 	return lbl
 
+static func apply_ink(b: Button, font_size: int = 20) -> void:
+	b.add_theme_font_size_override("font_size", font_size)
+	b.add_theme_color_override("font_color", Color(0.93, 0.88, 0.74))
+	b.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.78))
+	StoryDB.apply_serif(b)
+
+	var nb := StyleBoxFlat.new()
+	nb.bg_color = Color(0.10, 0.11, 0.15, 0.90)
+	nb.border_width_left = 1
+	nb.border_width_right = 1
+	nb.border_width_top = 1
+	nb.border_width_bottom = 1
+	nb.border_color = Color(0.55, 0.44, 0.24, 0.45)
+	b.add_theme_stylebox_override("normal", nb)
+
+	var hb := nb.duplicate()
+	hb.bg_color = Color(0.55, 0.42, 0.16, 0.32)
+	hb.border_color = Color(0.85, 0.68, 0.34, 0.95)
+	b.add_theme_stylebox_override("hover", hb)
+	b.add_theme_stylebox_override("pressed", hb)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
 # 按钮
 static func button(overlay: Control, content: String, x: float, y: float, w: float = 240.0, h: float = 60.0, on_press: Callable = Callable()) -> Button:
 	var btn := Button.new()
@@ -63,4 +85,5 @@ static func button(overlay: Control, content: String, x: float, y: float, w: flo
 	if on_press.is_valid():
 		btn.pressed.connect(on_press)
 	overlay.add_child(btn)
+	apply_ink(btn, 22)
 	return btn

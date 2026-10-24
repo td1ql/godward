@@ -5,7 +5,7 @@ signal card_pressed(index: int)
 
 var _buttons: Array[Button] = []
 
-func render(cards: Array[String], energy: int, pending_effect: int, pending_selected: Array) -> void:
+func render(cards: Array[String], energy: int, pending_effect: int, pending_selected: Array, animate_last: int = 0) -> void:
 	for b in _buttons:
 		b.queue_free()
 	_buttons.clear()
@@ -22,7 +22,7 @@ func render(cards: Array[String], energy: int, pending_effect: int, pending_sele
 		var d: Dictionary = CardDB.get_card(c)
 		var btn := CardUI.make_button(c)
 		btn.size = Vector2(card_w, card_h)
-		btn.position = Vector2(start_x + i * spacing, 420)
+		btn.position = Vector2(start_x + i * spacing, 470)
 		if pending_effect >= 0:
 			if i == pending_effect:
 				btn.modulate = Color(1, 1, 0.55, 1)
@@ -35,6 +35,7 @@ func render(cards: Array[String], energy: int, pending_effect: int, pending_sele
 		btn.pressed.connect(_on_press.bind(i))
 		add_child(btn)
 		_buttons.append(btn)
+	CardAnim.play(self, _buttons, animate_last)
 
 func hide_cards() -> void:
 	visible = false
@@ -44,3 +45,10 @@ func show_cards() -> void:
 
 func _on_press(index: int) -> void:
 	card_pressed.emit(index)
+
+func take_button(index: int) -> Button:
+	if index < 0 or index >= _buttons.size():
+		return null
+	var b := _buttons[index]
+	_buttons.remove_at(index)
+	return b

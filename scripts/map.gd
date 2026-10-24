@@ -32,8 +32,11 @@ func _ready() -> void:
 	bg_rect = TextureRect.new()
 	bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	bg_rect.stretch_mode = TextureRect.STRETCH_SCALE
-	if ResourceLoader.exists("res://assets/art/bg/bg_map.png"):
-		bg_rect.texture = load("res://assets/art/bg/bg_map.png")
+	var map_bg := "res://assets/art/bg/bg_map_%d.png" % GameState.act
+	if not ResourceLoader.exists(map_bg):
+		map_bg = "res://assets/art/bg/bg_map.png"
+	if ResourceLoader.exists(map_bg):
+		bg_rect.texture = load(map_bg)
 	world.add_child(bg_rect)
 
 	edge_root = Node2D.new()
@@ -386,29 +389,42 @@ func _show_encounter(t: String) -> void:
 	ui_layer.add_child(overlay)
 
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.65)
+	dim.color = Color(0, 0, 0, 0.72)
 	dim.size = Vector2(1280, 720)
 	overlay.add_child(dim)
 
-	var panel := ColorRect.new()
-	panel.color = Color(0.13, 0.14, 0.19)
-	panel.position = Vector2(390, 90)
-	panel.size = Vector2(500, 620)
+	var panel := Panel.new()
+	panel.position = Vector2(250, 56)
+	panel.size = Vector2(780, 608)
+	var ps := StyleBoxFlat.new()
+	ps.bg_color = Color(0.09, 0.10, 0.13, 0.96)
+	ps.border_width_left = 2
+	ps.border_width_right = 2
+	ps.border_width_top = 2
+	ps.border_width_bottom = 2
+	ps.border_color = Color(0.55, 0.44, 0.24, 0.55)
+	ps.set_corner_radius_all(4)
+	panel.add_theme_stylebox_override("panel", ps)
 	overlay.add_child(panel)
 
 	var vbox := VBoxContainer.new()
-	vbox.position = Vector2(420, 120)
-	vbox.size = Vector2(440, 480)
+	vbox.position = Vector2(286, 86)
+	vbox.size = Vector2(708, 548)
+	vbox.add_theme_constant_override("separation", 10)
 	overlay.add_child(vbox)
 
 	var title := Label.new()
-	title.add_theme_font_size_override("font_size", 26)
+	title.add_theme_font_size_override("font_size", 28)
+	title.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	StoryDB.apply_serif(title)
 	vbox.add_child(title)
 
 	var body := Label.new()
 	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body.custom_minimum_size = Vector2(440, 100)
+	body.custom_minimum_size = Vector2(708, 70)
 	body.add_theme_font_size_override("font_size", 18)
+	body.add_theme_color_override("font_color", Color(0.80, 0.76, 0.66))
+	StoryDB.apply_serif(body)
 	vbox.add_child(body)
 
 	match t:
@@ -686,21 +702,70 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 		cards = ShopDB.pick_cards(GameState.act)
 		GameState.pending_snapshot = {"kind": "shop", "cards": cards}
 		GameState.save_game()
-	title.text = "商店"
-	body.text = "金币: %d\n挑一张卡牌加入你的牌组吧。" % GameState.gold
+	title.text = "商 店"
+	body.text = "金币：%d　　挑一张，加入你的牌组。" % GameState.gold
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 20)
+	row.alignment = BoxContainer.ALIGNMENT_CENTER
+	row.custom_minimum_size = Vector2(700, 300)
+	vbox.add_child(row)
+
 	for card_name in cards:
 		var price: int = CardDB.price_of(card_name)
-		var b := Button.new()
-		b.text = "%s\n%d 金币　点击购买" % [CardDB.card_text(card_name), price]
-		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.add_theme_font_size_override("font_size", 15)
-		b.disabled = GameState.gold < price
-		b.pressed.connect(_buy_card.bind(card_name, price, b))
-		vbox.add_child(b)
-	var leave := Button.new()
-	leave.text = "离开"
+		var col := VBoxContainer.new()
+		col.add_theme_constant_override("separation", 8)
+		row.add_child(col)
+
+		var card := CardUI.make_button(card_name, 16)
+		card.custom_minimum_size = Vector2(176, 258)
+		card.size = Vector2(176, 258)
+		card.disabled = GameState.gold < price
+		card.pressed.connect(_buy_card.bind(card_name, price, card, body))
+		col.add_child(card)
+
+		var tag := Label.new()
+		tag.text = "%d 金币" % price
+		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		tag.add_theme_font_size_override("font_size", 19)
+		tag.add_theme_color_override("font_color", Color(0.90, 0.79, 0.50))
+		StoryDB.apply_serif(tag)
+		col.add_child(tag)
+
+	var gap := Control.new()
+	gap.custom_minimum_size = Vector2(0, 18)
+	vbox.add_child(gap)
+
+	var leave := _ink_button("离 开")
 	leave.pressed.connect(_close_encounter)
 	vbox.add_child(leave)
+
+func _ink_button(content: String) -> Button:
+	var b := Button.new()
+	b.text = content
+	b.custom_minimum_size = Vector2(0, 48)
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_font_size_override("font_size", 20)
+	b.add_theme_color_override("font_color", Color(0.93, 0.88, 0.74))
+	b.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.78))
+	StoryDB.apply_serif(b)
+
+	var nb := StyleBoxFlat.new()
+	nb.bg_color = Color(0.13, 0.14, 0.18, 0.92)
+	nb.border_width_left = 1
+	nb.border_width_right = 1
+	nb.border_width_top = 1
+	nb.border_width_bottom = 1
+	nb.border_color = Color(0.55, 0.44, 0.24, 0.45)
+	b.add_theme_stylebox_override("normal", nb)
+
+	var hb := nb.duplicate()
+	hb.bg_color = Color(0.55, 0.42, 0.16, 0.32)
+	hb.border_color = Color(0.85, 0.68, 0.34, 0.95)
+	b.add_theme_stylebox_override("hover", hb)
+	b.add_theme_stylebox_override("pressed", hb)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	return b
 
 func _fight_contestant(id: String) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)
@@ -720,13 +785,15 @@ func _fight_contestant(id: String) -> void:
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
-func _buy_card(card_name: String, price: int, b: Button) -> void:
+func _buy_card(card_name: String, price: int, b: Button, body: Label) -> void:
 	if GameState.gold < price:
 		return
 	GameState.gold -= price
 	GameState.deck.append(card_name)
 	b.disabled = true
-	b.text = "已购买 %s（剩余 %d 金币）" % [card_name, GameState.gold]
+	b.modulate = Color(0.50, 0.50, 0.50, 0.85)
+	body.text = "金币：%d　　挑一张，加入你的牌组。" % GameState.gold
+	AudioManager.play("click")
 
 func _close_encounter() -> void:
 	if overlay:

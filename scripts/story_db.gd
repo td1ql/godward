@@ -2,8 +2,8 @@ extends Node
 
 const TEXTS := {
 	# 清算
-	"cleanup_title": "神堂之门紧闭",
-	"cleanup_body": "还有 %d 名参赛者活着。\n神堂不为活人开门——他们的血是钥匙。",
+	"cleanup_title": "教堂的大门紧闭",
+	"cleanup_body": "还有 %d 名参赛者活着。\n觐见神的资格只属于胜者",
 	"cleanup_button": "开始清算",
 	"cleanup_result_title": "清 算",
 	"cleanup_result_empty": "什么也没留下。",

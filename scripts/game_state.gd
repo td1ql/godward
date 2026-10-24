@@ -81,7 +81,14 @@ func advance_transmigration() -> void:
 	_roll_vocation()
 
 func _roll_vocation() -> void:
-	vocation = TraitDB.roll_vocation()
+	var pool: Array = TraitDB.VOCATIONS.keys()
+	var fresh: Array = []
+	for v in pool:
+		if not vocation_history.has(str(v)):
+			fresh.append(v)
+	if fresh.is_empty():
+		fresh = pool
+	vocation = str(fresh[randi() % fresh.size()])
 	traits = TraitDB.traits_of(vocation)
 	_apply_traits()
 

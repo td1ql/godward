@@ -4,6 +4,7 @@ var _card_btn: Button
 var _discard_btn: Button
 var _claiming := false
 var _claiming_discard := false
+var _page_nodes: Array = []
 
 func _ready() -> void:
 	var bg_path := "res://assets/art/bg/bg_intro.png"
@@ -33,7 +34,7 @@ func _ready() -> void:
 	title.add_theme_font_size_override("font_size", 48)
 	StoryDB.apply_serif(title)
 	add_child(title)
-	
+	_page_nodes.append(title)
 	var card_path := "res://assets/art/vocation/%s.png" % GameState.vocation
 	if ResourceLoader.exists(card_path):
 		var card := TextureRect.new()
@@ -43,12 +44,14 @@ func _ready() -> void:
 		card.position = Vector2(70, 140)
 		card.size = Vector2(330, 549)
 		add_child(card)
+		_page_nodes.append(card)
 	else:
 		var ph := ColorRect.new()
 		ph.color = Color(0.88, 0.84, 0.74, 0.8)
 		ph.position = Vector2(70, 140)
 		ph.size = Vector2(330, 549)
 		add_child(ph)
+		_page_nodes.append(ph)
 
 	var panel := Panel.new()
 	panel.position = Vector2(430, 150)
@@ -62,6 +65,7 @@ func _ready() -> void:
 	ps.border_color = Color(0.55, 0.44, 0.24, 0.45)
 	panel.add_theme_stylebox_override("panel", ps)
 	add_child(panel)
+	_page_nodes.append(panel)
 
 	var info := Label.new()
 	info.text = "%s\n\n词条：%s\n守则：%s\n流派：%s\n\n初始生命 %d　　初始金币 %d" % [
@@ -79,6 +83,7 @@ func _ready() -> void:
 	info.add_theme_color_override("font_color", Color(0.87, 0.83, 0.73))
 	StoryDB.apply_serif(info)
 	add_child(info)
+	_page_nodes.append(info)
 
 	var bx := 470
 	if GameState.transmigration >= 3 and not GameState.milestone_card:
@@ -89,6 +94,7 @@ func _ready() -> void:
 		_card_btn.add_theme_font_size_override("font_size", 18)
 		_card_btn.pressed.connect(_claim_card)
 		add_child(_card_btn)
+		_page_nodes.append(_card_btn)
 		bx += 350
 
 	if GameState.transmigration >= 6 and not GameState.milestone_discard:
@@ -99,6 +105,7 @@ func _ready() -> void:
 		_discard_btn.add_theme_font_size_override("font_size", 18)
 		_discard_btn.pressed.connect(_claim_discard)
 		add_child(_discard_btn)
+		_page_nodes.append(_discard_btn)
 
 	var enter := Button.new()
 	enter.text = "戏幕开场"
@@ -128,8 +135,17 @@ func _ready() -> void:
 	enter.add_theme_color_override("font_pressed_color", Color(1.0, 0.94, 0.76))
 	enter.pressed.connect(_enter)
 	add_child(enter)
+	_page_nodes.append(enter)
 
-	Dialogue.play(self, _intro_lines())
+	for n in _page_nodes:
+		if n != null:
+			n.visible = false
+	Dialogue.play(self, _intro_lines(), _show_page)
+
+func _show_page() -> void:
+	for n in _page_nodes:
+		if n != null and is_instance_valid(n):
+			n.visible = true
 
 func _intro_lines() -> Array:
 	var rows := ""

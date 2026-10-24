@@ -19,6 +19,9 @@ var lines: Array = []
 var index := 0
 var on_finish: Callable
 var on_skip: Callable
+var bg_rect: TextureRect
+var _cur_bg := ""
+
 
 static func play(parent: Node, lines: Array, on_finish: Callable = Callable(), on_skip: Callable = Callable()) -> void:
 	if lines.is_empty():
@@ -35,7 +38,15 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 	on_skip = skip_cb
 	index = 0
 
-	overlay = Modal.open(parent, 0.96)
+	overlay = Modal.open(parent, 0.58)
+
+	bg_rect = TextureRect.new()
+	bg_rect.size = Vector2(1280, 720)
+	bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bg_rect.stretch_mode = TextureRect.STRETCH_SCALE
+	bg_rect.modulate.a = 0.0
+	overlay.add_child(bg_rect)
+	overlay.move_child(bg_rect, 0)
 
 	var catcher := Button.new()
 	catcher.flat = true
@@ -81,7 +92,7 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 	skip.add_theme_font_size_override("font_size", 16)
 	skip.pressed.connect(_finish.bind(true))
 	overlay.add_child(skip)
-
+	Modal.apply_ink(skip, 18)
 	_render()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -101,6 +112,15 @@ func _render() -> void:
 		content = str(line.get("text", ""))
 	else:
 		content = str(line)
+
+	if typeof(line) == TYPE_DICTIONARY and line.has("bg"):
+		var bp := str(line["bg"])
+		if bp != _cur_bg and ResourceLoader.exists(bp):
+			_cur_bg = bp
+			bg_rect.texture = load(bp)
+			bg_rect.modulate.a = 0.0
+			var tw := create_tween()
+			tw.tween_property(bg_rect, "modulate:a", 1.0, 0.4)
 
 	speaker_label.text = speaker
 	text_label.text = content
