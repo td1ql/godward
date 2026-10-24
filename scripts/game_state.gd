@@ -1,5 +1,7 @@
 extends Node
 
+const SAVE_VERSION := 2
+
 const SLOT_COUNT := 3
 
 var player_hp: int = 50
@@ -103,6 +105,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"save_version": SAVE_VERSION,
 		"impressions": impressions,
 		"meet_count": meet_count,
 		"morality": morality,
@@ -191,12 +194,38 @@ func load_game(slot: int = -1) -> bool:
 	pending_contestant = str(data.get("pending_contestant", ""))
 	pending_cleanup = bool(data.get("pending_cleanup", false))
 	vocation = str(data.get("vocation", ""))
+	if vocation == "":
+		vocation = TraitDB.roll_vocation()
+		traits = TraitDB.traits_of(vocation)
 	if data.has("player_max_hp"):
 		player_max_hp = int(data["player_max_hp"])
 	else:
 		player_max_hp = recompute_max_hp()
+	var ver: int = int(data.get("save_version", 1))
+	if ver < SAVE_VERSION:
+		_migrate_v1(data)
 	current_slot = s
 	return true
+
+# 把 v1 存档升级到 v2
+func _migrate_v1(data: Dictionary) -> void:
+	# v1 没有职业和词条 → 补一个
+	if vocation == "":
+		vocation = TraitDB.roll_vocation()
+		traits = TraitDB.traits_of(vocation)
+
+	# v1 没有最大生命字段 → 按当前职业重算
+	if not data.has("player_max_hp"):
+		player_max_hp = recompute_max_hp()
+
+	# 夹一下当前血量，防止超过上限
+	player_hp = clamp(player_hp, 1, player_max_hp)
+
+	# v1 没有道德/罪恶 → 用默认值
+	if not data.has("morality"):
+		morality = 50
+	if not data.has("sin"):
+		sin = 0
 
 func delete_save(slot: int = -1) -> void:
 	var s: int = slot if slot >= 0 else current_slot

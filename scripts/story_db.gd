@@ -42,8 +42,8 @@ const TEXTS := {
 
 	# 参赛者结算
 	"aftermath_title": "%s 倒下了",
-	"aftermath_cleanup": "神堂的门只为死人打开。\n他必须留在这里。",
-	"aftermath_normal": "他还有呼吸。神域的风从你们之间穿过。",
+	"aftermath_cleanup": "觐见神明的门只为胜利者打开。\n他必须留在这里。",
+	"aftermath_normal": "他还有呼吸。于是你可以践行自己的道德了。",
 	"aftermath_kill": "杀死他",
 	"aftermath_spare": "饶恕他",
 
@@ -58,3 +58,15 @@ func t(key: String) -> String:
 
 func f(key: String, args: Array) -> String:
 	return str(TEXTS.get(key, key)) % args
+
+const SERIF_PATH := "res://assets/fonts/NotoSerifCJKsc-Regular.otf"
+
+func font() -> Font:
+	if not ResourceLoader.exists(SERIF_PATH):
+		return null
+	return load(SERIF_PATH) as Font
+
+func apply_serif(ctrl: Control) -> void:
+	var f := font()
+	if f != null:
+		ctrl.add_theme_font_override("font", f)

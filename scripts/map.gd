@@ -312,7 +312,7 @@ func _show_encounter(t: String) -> void:
 	var panel := ColorRect.new()
 	panel.color = Color(0.13, 0.14, 0.19)
 	panel.position = Vector2(390, 90)
-	panel.size = Vector2(500, 540)
+	panel.size = Vector2(500, 620)
 	overlay.add_child(panel)
 
 	var vbox := VBoxContainer.new()
@@ -606,7 +606,9 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	for card_name in cards:
 		var price: int = CardDB.price_of(card_name)
 		var b := Button.new()
-		b.text = "购买 %s（%d 金币）" % [card_name, price]
+		b.text = "%s\n%d 金币　点击购买" % [CardDB.card_text(card_name), price]
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.add_theme_font_size_override("font_size", 15)
 		b.disabled = GameState.gold < price
 		b.pressed.connect(_buy_card.bind(card_name, price, b))
 		vbox.add_child(b)

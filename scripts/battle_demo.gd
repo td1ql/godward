@@ -108,23 +108,65 @@ func _ready() -> void:
 		menu_btn.size = Vector2(120, 40)
 		menu_btn.pressed.connect(_back_to_menu_from_battle)
 		add_child(menu_btn)
-	var extra_draw := 0
-	if str(creed.get("key", "")) == "start_draw":
-		extra_draw = int(creed.get("value", 0))
-	_draw_cards(GameState.initial_hand_size() + extra_draw)
-	_apply_turn_creed()
+	var resume: Dictionary = GameState.pending_snapshot.get("resume", {})
+	if not resume.is_empty():
+		_restore_battle(resume)
+	else:
+		var extra_draw := 0
+		if str(creed.get("key", "")) == "start_draw":
+			extra_draw = int(creed.get("value", 0))
+		_draw_cards(GameState.initial_hand_size() + extra_draw)
+		_apply_turn_creed()
 	if node_type == "boss":
 		_setup_allies()
 	_render_hand()
 	_update_ui()
 
 func _back_to_menu_from_battle() -> void:
+	var snap: Dictionary = GameState.pending_snapshot.duplicate(true)
+	if snap.is_empty():
+		snap = {"kind": "battle", "enemy": {}}
+	snap["resume"] = {
+		"enemy_hp": enemy.hp,
+		"enemy_turn": enemy.turn_index,
+		"enemy_status": enemy.status.duplicate(true),
+		"player_hp": player_hp,
+		"player_block": player_block,
+		"player_status": player_status.duplicate(true),
+		"draw": deck.draw_pile.duplicate(),
+		"hand": deck.hand.duplicate(),
+		"discard": deck.discard_pile.duplicate(),
+	}
+	GameState.pending_snapshot = snap
+	GameState.pending_enemy = {}
 	GameState.player_hp = max(1, player_hp)
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
+func _restore_battle(r: Dictionary) -> void:
+	enemy.hp = int(r.get("enemy_hp", enemy.hp))
+	enemy.turn_index = int(r.get("enemy_turn", 0))
+	enemy.status = r.get("enemy_status", {})
+	player_hp = int(r.get("player_hp", player_hp))
+	player_block = int(r.get("player_block", 0))
+	player_status = r.get("player_status", {})
+
+	deck.draw_pile.clear()
+	for c in r.get("draw", []):
+		deck.draw_pile.append(str(c))
+	deck.hand.clear()
+	for c in r.get("hand", []):
+		deck.hand.append(str(c))
+	deck.discard_pile.clear()
+	for c in r.get("discard", []):
+		deck.discard_pile.append(str(c))
+
 func _finish_tutorial() -> void:
 	GameState.pending_snapshot = {}
+	var cfg := ConfigFile.new()
+	cfg.load("user://settings.cfg")
+	cfg.set_value("story", "prologue_stage", 2)
+	cfg.save("user://settings.cfg")
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _setup_allies() -> void:

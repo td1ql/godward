@@ -74,7 +74,9 @@ const EVENTS := [
 		"choices": [
 			{"label": "把手伸进去（习得「启示」）", "cards": ["启示"]},
 			{"label": "遮住眼睛（回复 6 生命）", "hp": 6, "moral": -2},
-			{
+		],
+	},
+	{
 		"text": "{name}拦住了你。\n「求你了，帮我一把，」他说，「我快撑不住了。」",
 		"pick_contestant": true,
 		"choices": [
@@ -183,8 +185,6 @@ const EVENTS := [
 			{"label": "拿走断刃（习得「断刃」）", "cards": ["断刃"], "sin": 3},
 			{"label": "把他放平", "moral": 5},
 			{"label": "（罪恶≥50）在他身上翻找（+40 金币）", "gold": 40, "sin": 5, "min_sin": 50},
-		],
-	},
 		],
 	},
 ]

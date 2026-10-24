@@ -1,5 +1,10 @@
 extends Node2D
 
+var _card_btn: Button
+var _discard_btn: Button
+var _claiming := false
+var _claiming_discard := false
+
 func _ready() -> void:
 	var bg := ColorRect.new()
 	bg.color = Color(0.06, 0.07, 0.1)
@@ -12,27 +17,28 @@ func _ready() -> void:
 	title.size = Vector2(1280, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 48)
+	StoryDB.apply_serif(title)
 	add_child(title)
 
 	var bx := 210
 	if GameState.transmigration >= 3 and not GameState.milestone_card:
-		var card_btn := Button.new()
-		card_btn.text = "轮回馈赠 · 三选一效果牌"
-		card_btn.size = Vector2(300, 50)
-		card_btn.position = Vector2(bx, 520)
-		card_btn.add_theme_font_size_override("font_size", 18)
-		card_btn.pressed.connect(_claim_card)
-		add_child(card_btn)
+		_card_btn = Button.new()
+		_card_btn.text = "轮回馈赠 · 三选一效果牌"
+		_card_btn.size = Vector2(300, 50)
+		_card_btn.position = Vector2(bx, 520)
+		_card_btn.add_theme_font_size_override("font_size", 18)
+		_card_btn.pressed.connect(_claim_card)
+		add_child(_card_btn)
 		bx += 320
 
 	if GameState.transmigration >= 6 and not GameState.milestone_discard:
-		var discard_btn := Button.new()
-		discard_btn.text = "轮回馈赠 · 弃一张牌"
-		discard_btn.size = Vector2(300, 50)
-		discard_btn.position = Vector2(bx, 520)
-		discard_btn.add_theme_font_size_override("font_size", 18)
-		discard_btn.pressed.connect(_claim_discard)
-		add_child(discard_btn)
+		_discard_btn = Button.new()
+		_discard_btn.text = "轮回馈赠 · 弃一张牌"
+		_discard_btn.size = Vector2(300, 50)
+		_discard_btn.position = Vector2(bx, 520)
+		_discard_btn.add_theme_font_size_override("font_size", 18)
+		_discard_btn.pressed.connect(_claim_discard)
+		add_child(_discard_btn)
 
 	var enter := Button.new()
 	enter.text = "进入神域"
@@ -66,20 +72,32 @@ func _intro_lines() -> Array:
 	]
 
 func _claim_card() -> void:
-	GameState.milestone_card = true
-	GameState.save_game()
+	if GameState.milestone_card or _claiming:
+		return
+	_claiming = true
+	if _card_btn:
+		_card_btn.queue_free()
+		_card_btn = null
 	_show_card_pick()
 
 func _claim_discard() -> void:
-	GameState.milestone_discard = true
-	GameState.save_game()
+	if GameState.milestone_discard or _claiming_discard:
+		return
+	_claiming_discard = true
+	if _discard_btn:
+		_discard_btn.queue_free()
+		_discard_btn = null
 	DeckViewer.open_choose("轮回馈赠：弃掉一张牌", GameState.deck, _discard_pick)
 
 func _show_card_pick() -> void:
 	var pool: Array = []
 	for id in CardDB.CARDS.keys():
-		if CardDB.kind_of(id) == "effect" and not bool(CardDB.CARDS[id].get("divine", false)):
-			pool.append(id)
+		var d: Dictionary = CardDB.CARDS[id]
+		if CardDB.kind_of(id) != "effect":
+			continue
+		if bool(d.get("divine", false)) or bool(d.get("remnant", false)) or bool(d.get("event", false)):
+			continue
+		pool.append(id)
 	pool.shuffle()
 
 	var options: Array = []
@@ -118,7 +136,11 @@ func _show_card_pick() -> void:
 		overlay.add_child(btn)
 
 func _pick_card(card_name: String, overlay: Control) -> void:
+	if overlay == null or not is_instance_valid(overlay):
+		return
+	overlay.visible = false
 	GameState.deck.append(card_name)
+	GameState.milestone_card = true
 	GameState.save_game()
 	overlay.queue_free()
 	Toast.show_text("获得了「%s」" % card_name, 3.0)
@@ -128,6 +150,7 @@ func _discard_pick(index: int) -> void:
 		var removed: String = GameState.deck[index]
 		GameState.deck.remove_at(index)
 		Toast.show_text("弃掉了「%s」" % removed, 2.5)
+	GameState.milestone_discard = true
 	GameState.save_game()
 
 func _enter() -> void:

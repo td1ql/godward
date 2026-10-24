@@ -71,6 +71,8 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 	hint_label.add_theme_font_size_override("font_size", 16)
 	hint_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
 	overlay.add_child(hint_label)
+	StoryDB.apply_serif(speaker_label)
+	StoryDB.apply_serif(text_label)
 
 	var skip := Button.new()
 	skip.text = "跳过"

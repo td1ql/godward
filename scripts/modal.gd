@@ -36,6 +36,7 @@ static func title(overlay: Control, content: String, y: float = 150.0, font_size
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	lbl.add_theme_font_size_override("font_size", font_size)
 	overlay.add_child(lbl)
+	StoryDB.apply_serif(lbl)
 	return lbl
 
 # 居中正文（自动换行，适合多行剧情）
@@ -49,6 +50,7 @@ static func text(overlay: Control, content: String, y: float, font_size: int = 2
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.add_theme_font_size_override("font_size", font_size)
 	overlay.add_child(lbl)
+	StoryDB.apply_serif(lbl)
 	return lbl
 
 # 按钮
