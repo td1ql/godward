@@ -5,8 +5,10 @@ var draw_pile: Array[String] = []
 var hand: Array[String] = []
 var discard_pile: Array[String] = []
 
-func setup(cards: Array[String]) -> void:
-	draw_pile = cards.duplicate()
+func setup(cards: Array) -> void:
+	draw_pile.clear()
+	for c in cards:
+		draw_pile.append(str(c))
 	draw_pile.shuffle()
 	hand.clear()
 	discard_pile.clear()

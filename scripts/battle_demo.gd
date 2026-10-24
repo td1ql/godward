@@ -60,7 +60,9 @@ func _ready() -> void:
 
 	var enemy_data: Dictionary
 	if tutorial:
-		enemy_data = {"name": "傀儡", "hp": 24, "attack": 4, "pattern": [1, 1]}
+		enemy_data = Tutorial.ENEMY.duplicate(true)
+		Tutorial.start()
+		player_status["恒光"] = 1
 	elif kind == "battle" or kind == "contestant_fight" or kind == "pope":
 		enemy_data = GameState.pending_snapshot["enemy"]
 	elif not GameState.pending_enemy.is_empty():
@@ -70,8 +72,8 @@ func _ready() -> void:
 		enemy_data = EnemyDB.pick_for_node(node_type)
 	enemy.setup(enemy_data)
 
-	if tutorial:
-		deck.setup(["打击", "打击", "防御", "防御", "重击", "打击", "防御", "重击"])
+	if not tutorial:
+		deck.setup(GameState.deck)
 	else:
 		deck.setup(GameState.deck)
 
@@ -82,6 +84,8 @@ func _ready() -> void:
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
 	player_label.position = Vector2(20, 150)
+	combat_label.position = Vector2(900, 150)
+	combat_label.add_theme_font_size_override("font_size", 20)
 	player_label.add_theme_font_size_override("font_size", 20)
 	add_child(player_label)
 	ally_label = Label.new()
@@ -103,14 +107,24 @@ func _ready() -> void:
 	add_child(pile_btn)
 	if not tutorial:
 		var menu_btn := Button.new()
-		menu_btn.text = StoryDB.t("battle_menu")
-		menu_btn.position = Vector2(1080, 660)
-		menu_btn.size = Vector2(120, 40)
-		menu_btn.pressed.connect(_back_to_menu_from_battle)
+		menu_btn.text = "≡"
+		menu_btn.position = Vector2(1228, 14)
+		menu_btn.size = Vector2(40, 40)
+		menu_btn.add_theme_font_size_override("font_size", 26)
+		menu_btn.focus_mode = Control.FOCUS_NONE
+		menu_btn.tooltip_text = "菜单"
+		menu_btn.pressed.connect(_open_battle_menu)
 		add_child(menu_btn)
 	var resume: Dictionary = GameState.pending_snapshot.get("resume", {})
 	if not resume.is_empty():
 		_restore_battle(resume)
+	elif tutorial:
+		deck.draw_pile.clear()
+		deck.hand.clear()
+		deck.discard_pile.clear()
+		for c in Tutorial.cards_for(0):
+			deck.hand.append(str(c))
+		_apply_turn_creed()
 	else:
 		var extra_draw := 0
 		if str(creed.get("key", "")) == "start_draw":
@@ -121,6 +135,90 @@ func _ready() -> void:
 		_setup_allies()
 	_render_hand()
 	_update_ui()
+
+var _menu_popup: Control
+
+func _open_battle_menu() -> void:
+	_close_battle_menu()
+
+	_menu_popup = Control.new()
+	_menu_popup.size = Vector2(1280, 720)
+	_menu_popup.z_index = 90
+	add_child(_menu_popup)
+
+	var dim := Button.new()
+	dim.flat = true
+	dim.size = Vector2(1280, 720)
+	dim.focus_mode = Control.FOCUS_NONE
+	dim.pressed.connect(_close_battle_menu)
+	_menu_popup.add_child(dim)
+
+	var panel := ColorRect.new()
+	panel.color = Color(0.08, 0.09, 0.12, 0.97)
+	panel.position = Vector2(970, 64)
+	panel.size = Vector2(290, 210)
+	_menu_popup.add_child(panel)
+
+	var resume_btn := Button.new()
+	resume_btn.text = "继续战斗"
+	resume_btn.position = Vector2(986, 80)
+	resume_btn.size = Vector2(258, 48)
+	resume_btn.focus_mode = Control.FOCUS_NONE
+	resume_btn.pressed.connect(_close_battle_menu)
+	_menu_popup.add_child(resume_btn)
+
+	var help_btn := Button.new()
+	help_btn.text = "buff效果说明"
+	help_btn.position = Vector2(986, 200)
+	help_btn.size = Vector2(258, 48)
+	help_btn.focus_mode = Control.FOCUS_NONE
+	help_btn.pressed.connect(_open_status_help)
+	_menu_popup.add_child(help_btn)
+
+	var quit_btn := Button.new()
+	quit_btn.text = "返回首页"
+	quit_btn.position = Vector2(986, 140)
+	quit_btn.size = Vector2(258, 48)
+	quit_btn.focus_mode = Control.FOCUS_NONE
+	quit_btn.pressed.connect(_back_to_menu_from_battle)
+	_menu_popup.add_child(quit_btn)
+
+func _close_battle_menu() -> void:
+	if _menu_popup != null and is_instance_valid(_menu_popup):
+		_menu_popup.queue_free()
+	_menu_popup = null
+
+func _open_status_help() -> void:
+	_close_battle_menu()
+	var overlay := Modal.open(self, 0.95)
+	Modal.title(overlay, "状态", 50, 34)
+
+	var bad := ""
+	var good := ""
+	for key in StatusDB.STATUS.keys():
+		var rule: Dictionary = StatusDB.STATUS[key]
+		var line := "%s　%s\n" % [str(rule["name"]), str(rule.get("desc", ""))]
+		if bool(rule.get("good", false)):
+			good += line
+		else:
+			bad += line
+
+	var body := ""
+	if bad != "":
+		body += "—— 减益 ——\n" + bad + "\n"
+	if good != "":
+		body += "—— 增益 ——\n" + good
+
+	var lbl := Label.new()
+	lbl.text = body
+	lbl.position = Vector2(150, 120)
+	lbl.size = Vector2(980, 470)
+	lbl.add_theme_font_size_override("font_size", 19)
+	lbl.add_theme_color_override("font_color", Color(0.85, 0.82, 0.74))
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	overlay.add_child(lbl)
+
+	Modal.button(overlay, "返回", 520, 620, 240, 56, overlay.queue_free)
 
 func _back_to_menu_from_battle() -> void:
 	var snap: Dictionary = GameState.pending_snapshot.duplicate(true)
@@ -225,6 +323,7 @@ func _draw_cards(n: int) -> void:
 			_apply_card_effects(card)
 			deck.discard_pile.append(card)
 			encounters.append(CardDB.card_text(card).replace("\n", " "))
+			Tutorial.notify("encounter_triggered")
 			extra_draw += int(CardDB.get_card(card).get("draw", 0))
 			if player_hp <= 0:
 				_check_game_over()
@@ -249,8 +348,10 @@ func _draw_cards(n: int) -> void:
 func _apply_card_effects(c: String) -> void:
 	var d: Dictionary = CardDB.get_card(c)
 	var hits: int = d.get("hits", 1)
-	if d["damage"] > 0:
+	if d["damage"] > 0 or d.get("damage_from_block", false):
 		var base_damage: int = int(d["damage"])
+		if d.get("damage_from_block", false):
+			base_damage = player_block
 		var ck := str(creed.get("key", ""))
 		if ck == "first_attack_double" and not first_attack_used:
 			base_damage *= 2
@@ -264,12 +365,19 @@ func _apply_card_effects(c: String) -> void:
 			base_damage = int(base_damage * int(creed.get("value", 150)) / 100.0)
 		attacked_this_turn = true
 		var per := DamageCalc.compute(base_damage, player_status, enemy.status)
+		var leech := int(player_status.get("嗜血", 0))
+		if leech > 0:
+			player_hp = min(GameState.player_max_hp, player_hp + leech)
 		enemy.hp = max(0, enemy.hp - per * hits)
 		AudioManager.play("hit")
+		if d.get("damage_from_block", false):
+			player_block = int(player_block / 2.0)
 		var thorns: int = int(enemy.status.get("荆棘", 0))
 		if thorns > 0:
 			player_hp = max(0, player_hp - thorns)
 	player_block += d["block"]
+	if d["block"] > 0:
+		Tutorial.notify("blocked")
 	if d.has("status"):
 		StatusSystem.apply(enemy.status, d["status"])
 	if d.has("self_status"):
@@ -277,7 +385,7 @@ func _apply_card_effects(c: String) -> void:
 	if d.get("heal", 0) > 0:
 		AudioManager.play("heal")
 		player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
-	if d.get("self_damage", 0) > 0:
+	if d.get("self_damage", 0) > 0 and not _player_immune():
 		player_hp = max(0, player_hp - d["self_damage"])
 	if d.get("gain_energy", 0) > 0:
 		player_energy += int(d["gain_energy"])
@@ -319,6 +427,9 @@ func _on_card_pressed(index: int) -> void:
 	AudioManager.play("click")
 	player_energy -= d["cost"]
 	_apply_card_effects(c)
+	Tutorial.notify("card_played")
+	if CardDB.kind_of(c) == "effect":
+		Tutorial.notify("effect_played")
 	deck.hand.remove_at(index)
 	deck.discard_pile.append(c)
 	_mark_used(c)
@@ -387,6 +498,7 @@ func _resolve_effect() -> void:
 
 # ===== 回合流程（分阶段）=====
 func _on_end_turn_pressed() -> void:
+	Tutorial.notify("turn_ended")
 	if game_over or pending_effect >= 0:
 		return
 	_end_player_turn()
@@ -401,17 +513,35 @@ func _end_player_turn() -> void:
 	var pp := StatusSystem.tick_damage(player_status)
 	if pp > 0:
 		player_hp = max(0, player_hp - pp)
+	var ph := StatusSystem.tick_heal(player_status)
+	if ph > 0:
+		player_hp = min(GameState.player_max_hp, player_hp + ph)
+
+func _player_immune() -> bool:
+	return player_status.has("恒光")
+
 
 func _resolve_enemy_turn() -> void:
 	var dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 	dmg = max(0, dmg - player_block)
+	if _player_immune():
+		dmg = 0
 	var hk := str(creed.get("key", ""))
 	if dmg > 0 and hk == "first_hurt_half" and not first_hurt_used:
 		first_hurt_used = true
 		dmg = int(dmg / 2.0)
 	damage_taken += dmg
 	player_hp = max(0, player_hp - dmg)
-	player_block = 0
+	if dmg > 0:
+		var reflect := int(player_status.get("反弹", 0))
+		if reflect > 0:
+			enemy.hp = max(0, enemy.hp - reflect)
+		var fury := int(player_status.get("狂怒", 0))
+		if fury > 0:
+			player_status["力量"] = int(player_status.get("力量", 0)) + fury
+		Tutorial.notify("hurt")
+	if not player_status.has("坚守"):
+		player_block = 0
 	if dmg > 0 and hk == "hurt_energy":
 		player_energy += int(creed.get("value", 0))
 	enemy.turn_index += 1
@@ -456,10 +586,26 @@ func _start_new_turn() -> void:
 	_check_game_over()
 	if game_over:
 		return
-	var draw_count: int = RunConfig.BASE_DRAW + player_energy
-	if draw_count > 0:
-		_draw_cards(draw_count)
+	if node_type == "tutorial":
+		Tutorial.advance()
+		for c in Tutorial.cards_for(Tutorial.turn):
+			var cn := str(c)
+			if CardDB.kind_of(cn) == "encounter":
+				_apply_card_effects(cn)
+				deck.discard_pile.append(cn)
+				Toast.show_text("遭遇牌：" + CardDB.card_text(cn).replace("\n", " "))
+			else:
+				deck.hand.append(cn)
+	else:
+		var draw_count: int = RunConfig.BASE_DRAW + player_energy
+		draw_count += int(player_status.get("洞察", 0))
+		if draw_count > 0:
+			_draw_cards(draw_count)
 	player_energy = max_energy
+	player_energy += int(player_status.get("迅捷", 0))
+	var burn := int(player_status.get("炽热", 0))
+	if burn > 0:
+		enemy.hp = max(0, enemy.hp - burn)
 	attacked_last_turn = attacked_this_turn
 	_apply_turn_creed()
 	_render_hand()
@@ -471,6 +617,8 @@ func _check_game_over() -> void:
 	if enemy.hp <= 0:
 		game_over = true
 		AudioManager.play("victory")
+		Tutorial.notify("win")
+		Tutorial.stop()
 		if node_type == "tutorial":
 			_finish_tutorial()
 			return

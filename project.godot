@@ -35,6 +35,7 @@ RemnantDB="*res://scripts/remnant_db.gd"
 StoryDB="*res://scripts/story_db.gd"
 NodeRuleDB="*res://scripts/node_rule_db.gd"
 DialogueDB="*res://scripts/dialogue_db.gd"
+Tutorial="*res://scripts/tutorial.gd"
 
 [display]
 

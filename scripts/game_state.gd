@@ -26,6 +26,7 @@ var pending_enemy: Dictionary = {}
 var pending_contestant: String = ""
 var pending_cleanup := false
 var act := 1
+var streams: Array[String] = []
 var prologue_seen := false
 var milestone_card := false
 var milestone_discard := false
@@ -38,7 +39,31 @@ func _ready() -> void:
 	reset_deck()
 
 func reset_deck() -> void:
-	deck = CardDB.starter_deck(RunConfig.DECK_SIZE)
+	deck.clear()
+	for i in range(4):
+		deck.append("打击")
+	for i in range(4):
+		deck.append("防御")
+	for c in TraitDB.deck_of(vocation):
+		deck.append(str(c))
+
+func _roll_streams() -> Array[String]:
+	var result: Array[String] = []
+	for c in TraitDB.deck_of(vocation):
+		for s in CardDB.streams_of(c):
+			if not result.has(s):
+				result.append(s)
+	result.shuffle()
+	while result.size() > 2:
+		result.pop_back()
+
+	var all: Array = CardDB.STREAMS.duplicate()
+	all.shuffle()
+	for s in all:
+		if not result.has(str(s)):
+			result.append(str(s))
+			break
+	return result
 
 func reset_run() -> void:
 	Morality.reset()
@@ -73,6 +98,7 @@ func _apply_traits() -> void:
 	map_generated = false
 	map_nodes.clear()
 	reset_deck()
+	streams = _roll_streams()
 	for c in TraitDB.bonus_cards(traits):
 		deck.append(c)
 	contestants = ContestantDB.pick_roster(5)
@@ -105,6 +131,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"streams": streams,
 		"save_version": SAVE_VERSION,
 		"impressions": impressions,
 		"meet_count": meet_count,
@@ -205,6 +232,11 @@ func load_game(slot: int = -1) -> bool:
 	if ver < SAVE_VERSION:
 		_migrate_v1(data)
 	current_slot = s
+	streams.clear()
+	for st in data.get("streams", []):
+		streams.append(str(st))
+	if streams.is_empty():
+		streams = _roll_streams()
 	return true
 
 # 把 v1 存档升级到 v2

@@ -1,71 +1,152 @@
 extends Node2D
 
 func _ready() -> void:
-	var bg := ColorRect.new()
-	bg.color = Color(0.07, 0.08, 0.11)
-	bg.size = Vector2(1280, 720)
-	add_child(bg)
+	var bg_path := "res://assets/art/bg/bg_menu.png"
+	if ResourceLoader.exists(bg_path):
+		var bg := TextureRect.new()
+		bg.texture = load(bg_path)
+		bg.size = Vector2(1280, 720)
+		bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		add_child(bg)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0.04, 0.05, 0.08, 0.74)
+	dim.size = Vector2(1280, 720)
+	add_child(dim)
 
 	var title := Label.new()
 	title.text = "存 档"
-	title.position = Vector2(0, 60)
-	title.size = Vector2(1280, 70)
+	title.position = Vector2(0, 48)
+	title.size = Vector2(1280, 80)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 44)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 52)
+	title.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	StoryDB.apply_serif(title)
 	add_child(title)
+
+	var sub := Label.new()
+	sub.text = "三卷名册，各记一世"
+	sub.position = Vector2(0, 126)
+	sub.size = Vector2(1280, 32)
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sub.add_theme_font_size_override("font_size", 18)
+	sub.add_theme_color_override("font_color", Color(0.62, 0.57, 0.47))
+	StoryDB.apply_serif(sub)
+	add_child(sub)
 
 	for i in range(GameState.SLOT_COUNT):
 		_build_slot(i)
 
-	var back := Button.new()
-	back.text = "返回"
-	back.size = Vector2(200, 56)
-	back.position = Vector2(540, 620)
-	back.add_theme_font_size_override("font_size", 22)
+	var back := _solid_button("返回", 540, 626, 200, 54)
 	back.pressed.connect(_on_back)
-	add_child(back)
 
 func _build_slot(i: int) -> void:
 	var has := GameState.has_save(i)
-	var y := 170 + i * 135
+	var y := 186 + i * 140
 
-	var panel := ColorRect.new()
-	panel.color = Color(0.13, 0.14, 0.19)
-	panel.position = Vector2(220, y)
-	panel.size = Vector2(840, 110)
+	var panel := Panel.new()
+	panel.position = Vector2(200, y)
+	panel.size = Vector2(880, 114)
+	panel.add_theme_stylebox_override("panel", _parchment(Color(0.91, 0.87, 0.77, 0.96), Color(0.50, 0.38, 0.18, 0.62)))
 	add_child(panel)
+
+	var tag := Label.new()
+	tag.text = "存档 · %s" % ["一", "二", "三"][i]
+	tag.position = Vector2(232, y + 20)
+	tag.size = Vector2(320, 28)
+	tag.add_theme_font_size_override("font_size", 16)
+	tag.add_theme_color_override("font_color", Color(0.46, 0.37, 0.23))
+	StoryDB.apply_serif(tag)
+	add_child(tag)
 
 	var info := Label.new()
 	if has:
-		info.text = "存档 %d　%s" % [i + 1, GameState.slot_summary(i)]
+		info.text = GameState.slot_summary(i)
+		info.add_theme_color_override("font_color", Color(0.16, 0.14, 0.10))
 	else:
-		info.text = "存档 %d　空" % (i + 1)
-	info.position = Vector2(250, y + 34)
-	info.size = Vector2(560, 50)
-	info.add_theme_font_size_override("font_size", 20)
+		info.text = "此处尚空"
+		info.add_theme_color_override("font_color", Color(0.48, 0.44, 0.37))
+	info.position = Vector2(232, y + 54)
+	info.size = Vector2(560, 40)
+	info.add_theme_font_size_override("font_size", 22)
+	StoryDB.apply_serif(info)
 	add_child(info)
 
 	if has:
-		var cont := Button.new()
-		cont.text = "继续"
-		cont.size = Vector2(110, 50)
-		cont.position = Vector2(780, y + 30)
+		var cont := _slot_button("继续", 800, y + 31, 120)
 		cont.pressed.connect(func(): _continue(i))
-		add_child(cont)
-
-		var del := Button.new()
-		del.text = "删除"
-		del.size = Vector2(110, 50)
-		del.position = Vector2(900, y + 30)
+		var del := _slot_button("删除", 940, y + 31, 120)
 		del.pressed.connect(func(): _delete(i))
-		add_child(del)
 	else:
-		var new_btn := Button.new()
-		new_btn.text = "新建"
-		new_btn.size = Vector2(110, 50)
-		new_btn.position = Vector2(900, y + 30)
+		var new_btn := _slot_button("新建", 880, y + 31, 160)
 		new_btn.pressed.connect(func(): _new_game(i))
-		add_child(new_btn)
+
+func _parchment(bg: Color, border: Color) -> StyleBoxFlat:
+	var s := StyleBoxFlat.new()
+	s.bg_color = bg
+	s.border_width_left = 2
+	s.border_width_right = 2
+	s.border_width_top = 2
+	s.border_width_bottom = 2
+	s.border_color = border
+	s.corner_radius_top_left = 3
+	s.corner_radius_top_right = 3
+	s.corner_radius_bottom_left = 3
+	s.corner_radius_bottom_right = 3
+	return s
+
+func _solid_button(content: String, x: float, y: float, w: float, h: float) -> Button:
+	var b := Button.new()
+	b.text = content
+	b.position = Vector2(x, y)
+	b.size = Vector2(w, h)
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_font_size_override("font_size", 22)
+	b.add_theme_color_override("font_color", Color(0.20, 0.17, 0.12))
+	b.add_theme_color_override("font_hover_color", Color(0.08, 0.06, 0.04))
+	StoryDB.apply_serif(b)
+	b.add_theme_stylebox_override("normal", _parchment(Color(0.91, 0.87, 0.77, 0.96), Color(0.50, 0.38, 0.18, 0.62)))
+	b.add_theme_stylebox_override("hover", _parchment(Color(0.95, 0.91, 0.81, 1.0), Color(0.62, 0.46, 0.18, 0.95)))
+	b.add_theme_stylebox_override("pressed", _parchment(Color(0.84, 0.80, 0.70, 1.0), Color(0.45, 0.33, 0.15, 1.0)))
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	add_child(b)
+	return b
+
+func _slot_button(content: String, x: float, y: float, w: float) -> Button:
+	var b := Button.new()
+	b.text = content
+	b.position = Vector2(x, y)
+	b.size = Vector2(w, 52)
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_font_size_override("font_size", 20)
+	b.add_theme_color_override("font_color", Color(0.20, 0.17, 0.12))
+	b.add_theme_color_override("font_hover_color", Color(0.62, 0.42, 0.14))
+	StoryDB.apply_serif(b)
+
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(0, 0, 0, 0)
+	normal.border_width_left = 1
+	normal.border_width_right = 1
+	normal.border_width_top = 1
+	normal.border_width_bottom = 1
+	normal.border_color = Color(0.42, 0.33, 0.20, 0.55)
+	b.add_theme_stylebox_override("normal", normal)
+
+	var hover := normal.duplicate()
+	hover.bg_color = Color(0.18, 0.14, 0.08, 0.10)
+	hover.border_color = Color(0.58, 0.42, 0.16, 0.95)
+	b.add_theme_stylebox_override("hover", hover)
+
+	var pressed := normal.duplicate()
+	pressed.bg_color = Color(0.18, 0.14, 0.08, 0.18)
+	pressed.border_color = Color(0.45, 0.33, 0.15, 1.0)
+	b.add_theme_stylebox_override("pressed", pressed)
+
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	add_child(b)
+	return b
 
 func _continue(slot: int) -> void:
 	if GameState.load_game(slot):

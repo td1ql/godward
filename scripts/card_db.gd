@@ -60,10 +60,17 @@ const CARDS := {
 	"撤退": {"kind": "action", "cost": 1, "damage": 0, "block": 10, "draw": 1, "price": 60},
 	"乱击": {"kind": "action", "cost": 1, "damage": 3, "block": 0, "hits": 3, "price": 55},
 	# ===== 效果牌：消耗能量 + 消耗 N 张其他手牌 =====
+	"坚守之志": {"kind": "effect", "cost": 3, "consume": 3, "damage": 0, "block": 15, "self_status": {"坚守": 1}, "price": 120},
+	"疾风": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 0, "self_status": {"迅捷": 2}, "price": 50},
+	"洞悉": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 0, "self_status": {"洞察": 2}, "draw": 1, "price": 55},
+	"渴血": {"kind": "effect", "cost": 1, "consume": 1, "damage": 6, "block": 0, "self_status": {"嗜血": 2}, "price": 55},
+	"薪火": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 0, "self_status": {"炽热": 3}, "self_damage": 3, "price": 55},
+	"回敬": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 6, "self_status": {"反伤": 2}, "price": 55},
+	"受激": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "self_status": {"狂怒": 2}, "self_damage": 4, "price": 50},
 	"快速思考": {"kind": "effect", "cost": 0, "damage": 0, "consume": 1, "block": 0, "draw": 2, "price": 50},
 	"削弱": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "status": {"虚弱": 2}, "price": 50},
 	"终结": {"kind": "effect", "cost": 1, "consume": 2, "damage": 18, "block": 0, "price": 80},
-	"大盾": {"kind": "effect", "cost": 1, "consume": 2, "damage": 0, "block": 18, "price": 80},
+	"坚守": {"kind": "effect", "cost": 1, "consume": 2, "damage": 0, "block": 18, "price": 80},
 	"终结技": {"kind": "effect", "cost": 2, "consume": 2, "damage": 24, "block": 0, "price": 90},
 	"献身": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 12, "heal": 6, "price": 70},
 	"吞噬": {"kind": "effect", "cost": 1, "consume": 2, "damage": 8, "block": 0, "heal": 8, "price": 75},
@@ -95,6 +102,79 @@ const CARDS := {
 	"惊梦": {"kind": "encounter", "max_uses": 2, "cost": 0, "damage": 0, "draw": 1, "block": 0, "self_damage": 6, "price": 0},
 	"圣光": {"kind": "encounter", "max_uses": 3, "gain_energy": 1, "damage": 0, "block": 8, "price": 0},
 	"纠缠": {"kind": "encounter", "max_uses": 0, "cost": 1, "gain_energy":0,"damage": 0, "self_damage": 6, "block": 0, "price": 0},
+
+	# ===== 教程专属卡（只出现在教学战）=====
+	"晨光": {"kind": "action", "cost": 1, "damage": 12, "block": 0, "tutorial": true, "price": 0},
+	"圣辉": {"kind": "action", "cost": 1, "damage": 0, "block": 8, "heal": 4, "tutorial": true, "price": 0},
+	"光之隙": {"kind": "effect", "cost": 1, "consume": 1, "damage": 40, "block": 0, "tutorial": true, "price": 0},
+	"尘光": {"kind": "encounter", "max_uses": 1, "cost": 0, "damage": 0, "block": 0, "draw": 2, "heal": 3, "tutorial": true, "price": 0},
+	"无上耀光": {"kind": "action", "cost": 0, "damage": 9999, "block": 0, "tutorial": true, "price": 0},
+
+	# ===== 职业专属卡（只出现在对应职业的开局牌组）=====
+	"守空房": {"kind": "action", "cost": 1, "damage": 0, "block": 12, "exclusive": true, "price": 0},
+	"望归": {"kind": "action", "cost": 1, "damage": 0, "block": 8, "draw": 1, "exclusive": true, "price": 0},
+	"来信": {"kind": "action", "cost": 1, "damage": 7, "block": 5, "exclusive": true, "price": 0},
+	"久候": {"kind": "action", "cost": 0, "damage": 0, "block": 6, "self_damage": 2, "exclusive": true, "price": 0},
+	"敲钟": {"kind": "action", "cost": 0, "damage": 0, "block": 6, "exclusive": true, "price": 0},
+	"回音": {"kind": "action", "cost": 1, "damage": 0, "block": 9, "draw": 1, "exclusive": true, "price": 0},
+	"钟摆": {"kind": "action", "cost": 1, "damage": 8, "block": 4, "exclusive": true, "price": 0},
+	"余响": {"kind": "action", "cost": 2, "damage": 0, "block": 18, "exclusive": true, "price": 0},
+	"啃食": {"kind": "action", "cost": 1, "damage": 7, "block": 0, "heal": 2, "exclusive": true, "price": 0},
+	"省粮": {"kind": "action", "cost": 1, "damage": 0, "block": 8, "heal": 2, "exclusive": true, "price": 0},
+	"远路": {"kind": "action", "cost": 0, "damage": 4, "block": 0, "self_damage": 1, "exclusive": true, "price": 0},
+	"空腹": {"kind": "action", "cost": 2, "damage": 15, "block": 0, "exclusive": true, "price": 0},
+	"剑息": {"kind": "action", "cost": 1, "damage": 9, "block": 0, "exclusive": true, "price": 0},
+	"蓄刃": {"kind": "action", "cost": 1, "damage": 0, "block": 10, "exclusive": true, "price": 0},
+	"吐锋": {"kind": "action", "cost": 2, "damage": 16, "block": 0, "exclusive": true, "price": 0},
+	"归鞘": {"kind": "action", "cost": 1, "damage": 0, "block": 8, "draw": 1, "exclusive": true, "price": 0},
+	"谵语": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "draw": 2, "exclusive": true, "price": 0},
+	"窥视": {"kind": "action", "cost": 1, "damage": 6, "block": 0, "draw": 1, "exclusive": true, "price": 0},
+	"妄言": {"kind": "effect", "cost": 1, "consume": 1, "damage": 12, "block": 0, "exclusive": true, "price": 0},
+	"预兆": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "status": {"虚弱": 2}, "exclusive": true, "price": 0},
+	"记债": {"kind": "action", "cost": 1, "damage": 8, "block": 0, "exclusive": true, "price": 0},
+	"赊账": {"kind": "action", "cost": 0, "damage": 0, "block": 8, "self_damage": 2, "exclusive": true, "price": 0},
+	"结账": {"kind": "action", "cost": 2, "damage": 13, "block": 0, "heal": 3, "exclusive": true, "price": 0},
+	"利滚利": {"kind": "action", "cost": 1, "damage": 6, "block": 0, "self_status": {"力量": 1}, "exclusive": true, "price": 0},
+	"擎旗": {"kind": "action", "cost": 0, "damage": 3, "block": 3, "exclusive": true, "price": 0},
+	"冲锋": {"kind": "action", "cost": 1, "damage": 10, "block": 0, "exclusive": true, "price": 0},
+	"旗不倒": {"kind": "action", "cost": 1, "damage": 0, "block": 12, "exclusive": true, "price": 0},
+	"断臂旗": {"kind": "action", "cost": 2, "damage": 12, "block": 6, "exclusive": true, "price": 0},
+	"启程": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 1, "exclusive": true, "price": 0},
+	"行囊": {"kind": "action", "cost": 1, "damage": 0, "block": 7, "draw": 1, "exclusive": true, "price": 0},
+	"夜路": {"kind": "action", "cost": 1, "damage": 6, "block": 3, "exclusive": true, "price": 0},
+	"归途": {"kind": "action", "cost": 2, "damage": 9, "block": 0, "heal": 4, "exclusive": true, "price": 0},
+	"呛水": {"kind": "action", "cost": 1, "damage": 8, "block": 0, "self_damage": 2, "exclusive": true, "price": 0},
+	"浮木": {"kind": "action", "cost": 0, "damage": 0, "block": 5, "exclusive": true, "price": 0},
+	"打捞": {"kind": "action", "cost": 1, "damage": 0, "block": 4, "heal": 6, "exclusive": true, "price": 0},
+	"深潜": {"kind": "action", "cost": 2, "damage": 13, "block": 0, "self_damage": 3, "exclusive": true, "price": 0},
+	"火折": {"kind": "effect", "cost": 0, "consume": 1, "damage": 6, "block": 0, "exclusive": true, "price": 0},
+	"翻页": {"kind": "action", "cost": 1, "damage": 8, "block": 0, "exclusive": true, "price": 0},
+	"焚页": {"kind": "effect", "cost": 1, "consume": 1, "damage": 14, "block": 0, "exclusive": true, "price": 0},
+	"余温": {"kind": "action", "cost": 1, "damage": 0, "block": 8, "heal": 2, "exclusive": true, "price": 0},
+	"放哨": {"kind": "action", "cost": 1, "damage": 0, "block": 10, "exclusive": true, "price": 0},
+	"示警": {"kind": "action", "cost": 0, "damage": 0, "block": 6, "self_damage": 1, "exclusive": true, "price": 0},
+	"夜巡": {"kind": "action", "cost": 1, "damage": 7, "block": 4, "exclusive": true, "price": 0},
+	"轮值": {"kind": "action", "cost": 1, "damage": 0, "block": 9, "draw": 1, "exclusive": true, "price": 0},
+	"数星": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 1, "exclusive": true, "price": 0},
+	"星位": {"kind": "action", "cost": 1, "damage": 7, "block": 0, "draw": 1, "exclusive": true, "price": 0},
+	"流星": {"kind": "action", "cost": 2, "damage": 15, "block": 0, "exclusive": true, "price": 0},
+	"星辉": {"kind": "action", "cost": 1, "damage": 0, "block": 7, "heal": 2, "exclusive": true, "price": 0},
+	"磨刃": {"kind": "action", "cost": 1, "damage": 10, "block": 0, "exclusive": true, "price": 0},
+	"试刀": {"kind": "action", "cost": 0, "damage": 5, "block": 0, "exclusive": true, "price": 0},
+	"开刃": {"kind": "action", "cost": 1, "damage": 6, "block": 0, "status": {"流血": 2}, "exclusive": true, "price": 0},
+	"哑声": {"kind": "action", "cost": 1, "damage": 0, "block": 9, "exclusive": true, "price": 0},
+	"合眼": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "heal": 5, "exclusive": true, "price": 0},
+	"入殓": {"kind": "action", "cost": 1, "damage": 0, "block": 9, "heal": 2, "exclusive": true, "price": 0},
+	"白布": {"kind": "action", "cost": 0, "damage": 0, "block": 6, "exclusive": true, "price": 0},
+	"送行": {"kind": "action", "cost": 2, "damage": 12, "block": 0, "heal": 4, "exclusive": true, "price": 0},
+	"落子": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "draw": 2, "exclusive": true, "price": 0},
+	"布局": {"kind": "action", "cost": 1, "damage": 0, "block": 8, "draw": 1, "exclusive": true, "price": 0},
+	"将军": {"kind": "action", "cost": 2, "damage": 15, "block": 0, "exclusive": true, "price": 0},
+	"残局": {"kind": "effect", "cost": 1, "consume": 1, "damage": 12, "block": 0, "draw": 1, "exclusive": true, "price": 0},
+	"咳嗽": {"kind": "action", "cost": 0, "damage": 7, "block": 0, "self_damage": 2, "exclusive": true, "price": 0},
+	"药渣": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "heal": 6, "exclusive": true, "price": 0},
+	"回光": {"kind": "action", "cost": 1, "damage": 12, "block": 0, "self_damage": 3, "exclusive": true, "price": 0},
+	"最后一眼": {"kind": "action", "cost": 2, "damage": 14, "block": 5, "exclusive": true, "price": 0},
 
 	# ===== 遗骸专属卡（只在遗骸事件里出现）=====
 	"守夜": {"kind": "action", "cost": 1, "damage": 0, "block": 33, "remnant": true, "price": 0},
@@ -158,6 +238,8 @@ func card_text(id: String) -> String:
 	var kind: String = d.get("kind", "action")
 	var effects: Array[String] = []
 	var hits: int = d.get("hits", 1)
+	if d.get("damage_from_block", false):
+		effects.append("伤害 = 当前格挡")
 	if d["damage"] > 0:
 		if hits > 1:
 			effects.append("%d 伤害×%d" % [d["damage"], hits])
@@ -202,3 +284,55 @@ func starter_deck(size: int = 20) -> Array[String]:
 	for i in range(size):
 		result.append(STARTER[i % STARTER.size()])
 	return result
+
+const STREAMS := ["毒", "力", "守", "抽", "斩", "血", "技", "愈"]
+
+# 按卡牌的实际字段推断它属于哪些流派
+func streams_of(id: String) -> Array[String]:
+	var d: Dictionary = CARDS[id]
+	var hits: int = int(d.get("hits", 1))
+	var total_dmg: int = int(d.get("damage", 0)) * hits
+	var s: Array[String] = []
+
+	if d.has("status"):
+		for k in d["status"]:
+			if k in ["中毒", "流血"]:
+				if not s.has("毒"):
+					s.append("毒")
+			elif k in ["虚弱", "易伤"]:
+				if not s.has("技"):
+					s.append("技")
+
+	if d.has("self_status"):
+		for k in d["self_status"]:
+			if k in ["力量", "狂怒"]:
+				if not s.has("力"):
+					s.append("力")
+
+	if int(d.get("block", 0)) > 0 and total_dmg == 0:
+		if not s.has("守"):
+			s.append("守")
+
+	if int(d.get("draw", 0)) > 0:
+		if not s.has("抽"):
+			s.append("抽")
+
+	if int(d.get("heal", 0)) > 0:
+		if not s.has("愈"):
+			s.append("愈")
+
+	if d.get("damage_from_block", false):
+		if not s.has("守"):
+			s.append("守")
+
+	if int(d.get("self_damage", 0)) > 0:
+		if not s.has("血"):
+			s.append("血")
+
+	if total_dmg >= 10:
+		if not s.has("斩"):
+			s.append("斩")
+
+	if s.is_empty():
+		s.append("斩")
+	return s

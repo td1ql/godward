@@ -1,59 +1,125 @@
 extends Node2D
 
-const CENTER := Vector2(640, 360)
-const RADIUS := 230.0
-const NODE_SIZE := Vector2(140, 64)
-const PAN_TIME := 0.45
+# ---------- 世界布局 ----------
+const NODE_SIZE := Vector2(66, 66)
+const RADIUS := 210.0
+const ZOOM := 1.45
+const WALK_TIME := 0.55
 const FADE_TIME := 0.22
 
 var nodes := {}
 var node_buttons := {}
-var button_base := {}
+var world_pos := {}
 var current_id := 0
 var next_id := 0
 var is_moving := false
-var map_offset := Vector2.ZERO
-var pan_target := Vector2.ZERO
 var overlay: Control
 var gold_label: Label
 var hp_label: Label
 var moral_label: Label
 
+var ui_layer: CanvasLayer
+var world: Node2D
+var camera: Camera2D
+var player_marker: Panel
+var bg_rect: TextureRect
+var edge_root: Node2D
+
 func _ready() -> void:
+	world = Node2D.new()
+	add_child(world)
+
+	bg_rect = TextureRect.new()
+	bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	bg_rect.stretch_mode = TextureRect.STRETCH_SCALE
+	if ResourceLoader.exists("res://assets/art/bg/bg_map.png"):
+		bg_rect.texture = load("res://assets/art/bg/bg_map.png")
+	world.add_child(bg_rect)
+
+	edge_root = Node2D.new()
+	edge_root.z_index = 0
+	world.add_child(edge_root)
+
+	player_marker = Panel.new()
+	player_marker.size = Vector2(56, 56)
+	player_marker.z_index = 5
+	var mk := StyleBoxFlat.new()
+	mk.bg_color = Color(0.11, 0.09, 0.07, 0.96)
+	mk.border_width_left = 2
+	mk.border_width_right = 2
+	mk.border_width_top = 2
+	mk.border_width_bottom = 2
+	mk.border_color = Color(0.82, 0.70, 0.44)
+	mk.corner_radius_top_left = 28
+	mk.corner_radius_top_right = 28
+	mk.corner_radius_bottom_left = 28
+	mk.corner_radius_bottom_right = 28
+	mk.shadow_color = Color(0.08, 0.06, 0.03, 0.55)
+	mk.shadow_size = 9
+	player_marker.add_theme_stylebox_override("panel", mk)
+	world.add_child(player_marker)
+
+	var pl := Label.new()
+	pl.text = "你"
+	pl.size = Vector2(56, 56)
+	pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pl.add_theme_font_size_override("font_size", 22)
+	pl.add_theme_color_override("font_color", Color(0.96, 0.92, 0.82))
+	StoryDB.apply_serif(pl)
+	player_marker.add_child(pl)
+
+	camera = Camera2D.new()
+	camera.zoom = Vector2(ZOOM, ZOOM)
+	add_child(camera)
+	camera.make_current()
+
+	var hud := CanvasLayer.new()
+	hud.layer = 10
+	add_child(hud)
+	ui_layer = CanvasLayer.new()
+	ui_layer.layer = 20
+	add_child(ui_layer)
+
 	var hint := Label.new()
+	hint.text = "选择要前往的节点"
+	hint.position = Vector2(20, 20)
+	hint.add_theme_font_size_override("font_size", 20)
+	hud.add_child(hint)
+
+	gold_label = Label.new()
+	gold_label.position = Vector2(20, 52)
+	gold_label.text = "金币：%d" % GameState.gold
+	hud.add_child(gold_label)
+
+	hp_label = Label.new()
+	hp_label.position = Vector2(20, 84)
+	hp_label.text = "HP：%d / %d" % [GameState.player_hp, GameState.player_max_hp]
+	hud.add_child(hp_label)
+
+	moral_label = Label.new()
+	moral_label.position = Vector2(20, 116)
+	moral_label.text = Morality.summary()
+	hud.add_child(moral_label)
+
+	var deck_btn := Button.new()
+	deck_btn.text = "牌库"
+	deck_btn.position = Vector2(20, 152)
+	deck_btn.size = Vector2(120, 44)
+	deck_btn.pressed.connect(DeckViewer.toggle)
+	hud.add_child(deck_btn)
+
 	var back := Button.new()
 	back.text = "返回主菜单"
 	back.position = Vector2(1080, 20)
-	back.size = Vector2(170, 40)
+	back.size = Vector2(190, 44)
 	back.pressed.connect(_on_back_to_menu)
-	add_child(back)
-	hint.position = Vector2(20, 20)
-	hint.add_theme_font_size_override("font_size", 18)
-	hint.text = "选择要前往的节点"
-	add_child(hint)
-	gold_label = Label.new()
-	gold_label.position = Vector2(20, 50)
-	gold_label.add_theme_font_size_override("font_size", 18)
-	gold_label.text = "金币: %d" % GameState.gold
-	add_child(gold_label)
-	hp_label = Label.new()
-	hp_label.position = Vector2(20, 80)
-	hp_label.add_theme_font_size_override("font_size", 18)
-	hp_label.text = "HP: %d / %d" % [GameState.player_hp, GameState.player_max_hp]
-	add_child(hp_label)
-	moral_label = Label.new()
-	moral_label.position = Vector2(20, 110)
-	moral_label.add_theme_font_size_override("font_size", 18)
-	moral_label.text = Morality.summary()
-	add_child(moral_label)
-	var deck_btn := Button.new()
-	deck_btn.text = "牌库"
-	deck_btn.position = Vector2(20, 150)
-	deck_btn.size = Vector2(110, 40)
-	deck_btn.pressed.connect(DeckViewer.toggle)
-	add_child(deck_btn)
+	hud.add_child(back)
 
-
+	for lb in [hint, gold_label, hp_label, moral_label]:
+		lb.add_theme_color_override("font_color", Color(0.17, 0.13, 0.08))
+		lb.add_theme_font_size_override("font_size", 23)
+		StoryDB.apply_serif(lb)
 
 	if not GameState.map_generated:
 		_generate_map()
@@ -68,29 +134,197 @@ func _ready() -> void:
 
 	current_id = GameState.current_node_id
 	_ensure_children(current_id)
+	_ensure_positions()
 	_rebuild_view()
+	_snap_camera()
 	GameState.save_game()
 	if GameState.pending_node == current_id:
 		_reopen_pending()
 
-func _reopen_pending() -> void:
-	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
-	if kind == "battle" or kind == "contestant_fight" or kind == "pope":
+# ---------- 世界坐标 ----------
+func _ensure_positions() -> void:
+	if not world_pos.has(0):
+		world_pos[0] = Vector2.ZERO
+	var changed := true
+	var guard := 0
+	while changed and guard < 60:
+		changed = false
+		guard += 1
+		for id in nodes.keys():
+			if world_pos.has(id):
+				continue
+			var pid := _parent_of(id)
+			if pid < 0 or not world_pos.has(pid):
+				continue
+			var sibs: Array = nodes[pid]["children"]
+			var idx := sibs.find(id)
+			var n := sibs.size()
+			var angle := -PI / 2.0 + float(idx) * TAU / float(n)
+			world_pos[id] = world_pos[pid] + Vector2(cos(angle), sin(angle)) * RADIUS
+			changed = true
+
+func _parent_of(id: int) -> int:
+	for pid in nodes.keys():
+		if (nodes[pid]["children"] as Array).has(id):
+			return pid
+	return -1
+
+func _update_bg() -> void:
+	if world_pos.is_empty():
+		return
+	var mn := Vector2(99999, 99999)
+	var mx := Vector2(-99999, -99999)
+	for p in world_pos.values():
+		mn.x = min(mn.x, p.x)
+		mn.y = min(mn.y, p.y)
+		mx.x = max(mx.x, p.x)
+		mx.y = max(mx.y, p.y)
+	mn -= Vector2(560, 560)
+	mx += Vector2(560, 560)
+	bg_rect.position = mn
+	bg_rect.size = mx - mn
+
+func _snap_camera() -> void:
+	if world_pos.has(current_id):
+		player_marker.position = world_pos[current_id] - player_marker.size / 2.0
+		camera.position = world_pos[current_id]
+
+func _rebuild_view() -> void:
+	for b in node_buttons.values():
+		if is_instance_valid(b):
+			b.queue_free()
+	node_buttons.clear()
+	for c in edge_root.get_children():
+		c.queue_free()
+
+	var path := _path_to_current()
+
+	var i := 0
+	while i < path.size() - 1:
+		_add_edge(path[i], path[i + 1])
+		i += 1
+	for cid in nodes[current_id]["children"]:
+		_add_edge(current_id, cid)
+
+	var visible_ids: Array = path.duplicate()
+	for cid in nodes[current_id]["children"]:
+		if not visible_ids.has(cid):
+			visible_ids.append(cid)
+
+	for id in visible_ids:
+		if nodes.has(id) and world_pos.has(id):
+			_make_node_button(id, world_pos[id])
+
+	_update_bg()
+
+func _path_to_current() -> Array:
+	var out: Array = []
+	var id := current_id
+	var guard := 0
+	while id >= 0 and guard < 60:
+		out.append(id)
+		guard += 1
+		if id == 0:
+			break
+		id = _parent_of(id)
+	return out
+
+func _add_edge(a: int, b: int) -> void:
+	if not world_pos.has(a) or not world_pos.has(b):
+		return
+	var ln := Line2D.new()
+	ln.points = PackedVector2Array([world_pos[a], world_pos[b]])
+	ln.width = 3.0
+	ln.default_color = Color(0.24, 0.16, 0.09, 0.55)
+	edge_root.add_child(ln)
+
+func _make_node_button(id: int, pos: Vector2) -> Button:
+	var t := str(nodes[id]["type"])
+	var info: Dictionary = MapDB.info_of(t)
+	var b := Button.new()
+	b.size = NODE_SIZE
+	b.position = pos - NODE_SIZE / 2.0
+	b.focus_mode = Control.FOCUS_NONE
+
+	var icon_path := "res://assets/art/node/%s.png" % t
+	if ResourceLoader.exists(icon_path):
+		b.icon = load(icon_path)
+		b.expand_icon = true
+	else:
+		b.text = str(info["label"])
+		b.add_theme_font_size_override("font_size", 16)
+		b.add_theme_color_override("font_color", Color(0.98, 0.95, 0.86))
+
+	var normal := StyleBoxFlat.new()
+	normal.bg_color = Color(0, 0, 0, 0)
+	b.add_theme_stylebox_override("normal", normal)
+	b.add_theme_stylebox_override("hover", normal)
+	b.add_theme_stylebox_override("pressed", normal)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	StoryDB.apply_serif(b)
+
+	var clickable: bool = (nodes[current_id]["children"] as Array).has(id)
+	if clickable:
+		b.pressed.connect(_on_node_pressed.bind(id))
+		b.mouse_entered.connect(func() -> void: b.modulate = Color(1.28, 1.2, 1.06, 1.0))
+		b.mouse_exited.connect(func() -> void: b.modulate = Color(1, 1, 1, 1))
+	elif id != current_id:
+		b.modulate = Color(1, 1, 1, 0.45)
+
+	world.add_child(b)
+	node_buttons[id] = b
+	return b
+
+# ---------- 移动 ----------
+func _on_node_pressed(id: int) -> void:
+	if is_moving or id == current_id:
+		return
+	if not (nodes[current_id]["children"] as Array).has(id):
+		return
+	is_moving = true
+	AudioManager.play("click")
+	var from: Vector2 = world_pos[current_id]
+	var to: Vector2 = world_pos[id]
+	var tw := create_tween()
+	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_method(_walk.bind(from, to), 0.0, 1.0, WALK_TIME)
+	tw.finished.connect(_after_walk.bind(id))
+
+func _walk(t: float, from: Vector2, to: Vector2) -> void:
+	var p := from.lerp(to, t)
+	player_marker.position = p - player_marker.size / 2.0
+	camera.position = p
+
+func _after_walk(id: int) -> void:
+	current_id = id
+	GameState.current_node_id = id
+	GameState.pending_node = id
+	_ensure_children(id)
+	_ensure_positions()
+	GameState.map_nodes = nodes
+	GameState.save_game()
+	_rebuild_view()
+	is_moving = false
+	_trigger_node(id)
+
+func _trigger_node(id: int) -> void:
+	var t: String = str(nodes[id]["type"])
+	if t == "battle" or t == "elite" or t == "boss" or t == "divine" or t == "divine_elite" or t == "pope":
+		if GameState.pending_snapshot.is_empty():
+			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t, int(nodes[id]["depth"]))}
+			GameState.save_game()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
-	var t: String = nodes[current_id]["type"]
 	if t == "shop" or t == "rest" or t == "event" or t == "contestant" or t == "remnant":
 		_show_encounter(t)
 		return
 	GameState.pending_node = -1
-	GameState.pending_snapshot = {}
 	GameState.save_game()
 
 func _process(_delta: float) -> void:
 	_update_hud()
-	if is_moving:
-		queue_redraw()
 
+# ---------- 生成 ----------
 func _generate_map() -> void:
 	nodes.clear()
 	nodes[0] = {"type": "start", "children": [], "depth": 0}
@@ -126,174 +360,21 @@ func _ensure_children(id: int) -> void:
 	var count: int = MapDB.ROOT_BRANCHES if d == 0 else randi_range(MapDB.MIN_BRANCHES, MapDB.MAX_BRANCHES)
 	_gen_children(id, d + 1, count)
 
-func _prune(id: int) -> void:
-	var keep := {}
-	keep[id] = nodes[id]
-	for child in nodes[id]["children"]:
-		if nodes.has(child):
-			keep[child] = nodes[child]
-	nodes = keep
-
 func _pick_type(depth: int) -> String:
 	return MapDB.pick_type(depth, GameState.act)
 
-func _rebuild_view() -> void:
-	map_offset = Vector2.ZERO
-	pan_target = Vector2.ZERO
-	button_base.clear()
-	for b in node_buttons.values():
-		b.visible = false
-		b.queue_free()
-	node_buttons.clear()
-
-	_make_node_button(current_id, CENTER)
-
-	var kids: Array = nodes[current_id]["children"]
-	var n := kids.size()
-	for i in range(n):
-		var angle := -PI / 2.0 + i * TAU / n
-		var pos := CENTER + Vector2(cos(angle), sin(angle)) * RADIUS
-		_make_node_button(kids[i], pos)
-
-	queue_redraw()
-
-func _make_node_button(id: int, pos: Vector2) -> Button:
-	var info: Dictionary = MapDB.info_of(nodes[id]["type"])
-	var b := Button.new()
-	b.text = info["label"]
-	b.size = NODE_SIZE
-	button_base[id] = pos - NODE_SIZE / 2.0
-	b.position = button_base[id] + map_offset
-	b.modulate.a = 1.0
-	b.add_theme_color_override("font_color", info["color"])
-	b.add_theme_font_size_override("font_size", 20)
-	if id != current_id:
-		b.pressed.connect(_on_node_pressed.bind(id))
-	add_child(b)
-	node_buttons[id] = b
-	return b
-
-func _set_pan(p: float) -> void:
-	map_offset = pan_target * p
-	for id in node_buttons:
-		node_buttons[id].position = button_base[id] + map_offset
-	queue_redraw()
-
-func _on_node_pressed(id: int) -> void:
-	if is_moving or id == current_id:
-		return
-	if not nodes.has(id) or not nodes.has(current_id):
-		is_moving = false
-		return
-	is_moving = true
-	AudioManager.play("click")
-	var kids: Array = nodes[current_id]["children"]
-	var index := kids.find(id)
-	var n := kids.size()
-	var angle := -PI / 2.0 + index * TAU / n
-	var dest_local := CENTER + Vector2(cos(angle), sin(angle)) * RADIUS
-	pan_target = CENTER - dest_local
-
-	var tw := create_tween()
-	tw.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
-	tw.tween_method(_set_pan, 0.0, 1.0, PAN_TIME)
-	tw.finished.connect(_after_pan.bind(id))
-
-func _after_pan(id: int) -> void:
-	var tw := create_tween().set_parallel(true)
-	for other_id in node_buttons.keys():
-		if other_id == id:
-			continue
-		tw.tween_property(node_buttons[other_id], "modulate:a", 0.0, FADE_TIME)
-	tw.finished.connect(_after_fade_out.bind(id))
-
-func _after_fade_out(id: int) -> void:
-	for other_id in node_buttons.keys():
-		if other_id == id:
-			continue
-		var b: Button = node_buttons[other_id]
-		b.visible = false
-		b.queue_free()
-
-	var center_btn: Button = node_buttons[id]
-	current_id = id
-	GameState.current_node_id = id
-	GameState.pending_node = id
-	center_btn.position = CENTER - NODE_SIZE / 2.0
-	center_btn.modulate.a = 1.0
-
-	node_buttons.clear()
-	button_base.clear()
-	node_buttons[id] = center_btn
-	button_base[id] = CENTER - NODE_SIZE / 2.0
-	map_offset = Vector2.ZERO
-	pan_target = Vector2.ZERO
-
-	_prune(id)
-	_ensure_children(id)
-	GameState.map_nodes = nodes
-	GameState.save_game()
-
-	var t: String = nodes[id]["type"]
-	if t == "battle" or t == "elite" or t == "boss" or t == "divine" or t == "divine_elite" or t == "pope":
-		if GameState.pending_snapshot.is_empty():
-			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t, int(nodes[id]["depth"]))}
-			GameState.save_game()
+func _reopen_pending() -> void:
+	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
+	if kind == "battle" or kind == "contestant_fight" or kind == "pope":
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
-
+	var t: String = nodes[current_id]["type"]
 	if t == "shop" or t == "rest" or t == "event" or t == "contestant" or t == "remnant":
 		_show_encounter(t)
 		return
-
 	GameState.pending_node = -1
+	GameState.pending_snapshot = {}
 	GameState.save_game()
-	_continue_children()
-
-func _continue_children() -> void:
-	var stale: Array = []
-	for id in node_buttons.keys():
-		if id != current_id:
-			stale.append(id)
-	for id in stale:
-		var old_btn: Button = node_buttons[id]
-		old_btn.queue_free()
-		node_buttons.erase(id)
-		button_base.erase(id)
-
-	var kids: Array = nodes[current_id]["children"]
-	var n := kids.size()
-	if n == 0:
-		is_moving = false
-		queue_redraw()
-		return
-	var tw := create_tween().set_parallel(true)
-	for i in range(n):
-		var angle := -PI / 2.0 + i * TAU / n
-		var pos := CENTER + Vector2(cos(angle), sin(angle)) * RADIUS
-		var child_btn := _make_node_button(kids[i], pos)
-		child_btn.modulate.a = 0.0
-		tw.tween_property(child_btn, "modulate:a", 1.0, FADE_TIME)
-	tw.finished.connect(_after_fade_in)
-	queue_redraw()
-
-func _after_fade_in() -> void:
-	is_moving = false
-
-func _draw() -> void:
-	if not nodes.has(current_id):
-		return
-	draw_circle(CENTER, 92, Color(0.35, 0.55, 0.95, 0.10))
-	var from_pos: Vector2 = CENTER + map_offset
-	var kids: Array = nodes[current_id]["children"]
-	for kid_id in kids:
-		if not node_buttons.has(kid_id):
-			continue
-		var b: Button = node_buttons[kid_id]
-		if not b.visible:
-			continue
-		var to_pos: Vector2 = b.position + NODE_SIZE / 2.0
-		draw_line(from_pos, to_pos, Color(0.45, 0.55, 0.75, b.modulate.a), 3.0)
 # ========== 遭遇界面：商店 / 休息 / 事件 ==========
 func _show_encounter(t: String) -> void:
 	if overlay:
@@ -302,7 +383,7 @@ func _show_encounter(t: String) -> void:
 	overlay = Control.new()
 	overlay.size = Vector2(1280, 720)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	add_child(overlay)
+	ui_layer.add_child(overlay)
 
 	var dim := ColorRect.new()
 	dim.color = Color(0, 0, 0, 0.65)
@@ -528,6 +609,10 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 	var meet_now: int = int(GameState.pending_snapshot.get("meet", 0))
 	var c: Dictionary = ContestantDB.scaled(id)
 	var scene: Dictionary = ContestantDB.scene_for(id, meet_now)
+	if scene.get("auto_fight", false):
+		Toast.show_text("「%s」先动手了。" % str(c["name"]), 2.0)
+		_fight_contestant(id)
+		return
 
 	title.text = "%s　·　%s" % [c["name"], c["trait"]]
 	body.text = str(scene["text"]) + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
@@ -652,7 +737,8 @@ func _close_encounter() -> void:
 	GameState.save_game()
 	_update_hud()
 	_maybe_eliminate()
-	_continue_children()
+	_rebuild_view()
+	is_moving = false
 
 func _on_back_to_menu() -> void:
 	GameState.save_game()

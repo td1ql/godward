@@ -16,6 +16,18 @@ func pool_for(node_type: String, act: int = 1) -> Array:
 			continue
 		if bool(CardDB.CARDS[id].get("event", false)):
 			continue
+		if bool(CardDB.CARDS[id].get("tutorial", false)):
+			continue
+		if bool(CardDB.CARDS[id].get("exclusive", false)):
+			continue
+		if not GameState.streams.is_empty():
+			var hit := false
+			for st in CardDB.streams_of(id):
+				if GameState.streams.has(st):
+					hit = true
+					break
+			if not hit:
+				continue
 		if act == 2 and not divine:
 			continue
 		if act != 2 and divine:

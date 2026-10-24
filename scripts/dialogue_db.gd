@@ -29,6 +29,7 @@ const LINES := {
 		{"speaker": "无上神音", "text": "黑暗在侵蚀祂的神志\n贪婪与罪恶遮蔽了光芒"},
 		{"speaker": "无上神音", "text": "「但是神明说」"},
 		{"speaker": "无上神音", "text": "「要有光」"},
+		{"speaker": "无上神音", "text": "「驱散它们」"},
 	],
 	"prologue_after": [
 		{"speaker": "无上神音", "text": "「于是星火也足以燎尽荒原」"},
