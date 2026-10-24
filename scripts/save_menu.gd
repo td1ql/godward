@@ -1,7 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
-	var bg_path := "res://assets/art/bg/bg_menu.png"
+	var bg_path := "res://assets/art/bg/bg_menu.webp"
 	if ResourceLoader.exists(bg_path):
 		var bg := TextureRect.new()
 		bg.texture = load(bg_path)

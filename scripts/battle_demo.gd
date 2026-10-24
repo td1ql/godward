@@ -38,11 +38,11 @@ var _new_cards := 0
 func _ready() -> void:
 	var act_pool: Array = [1, 2, 3] if GameState.act == 2 else [1, 2, 3, 4, 5]
 	act_pool.shuffle()
-	var bg_path := "res://assets/art/bg/bg_battle_%d_%d.png" % [GameState.act, act_pool[0]]
+	var bg_path := "res://assets/art/bg/bg_battle_%d_%d.webp" % [GameState.act, act_pool[0]]
 	if str(GameState.pending_snapshot.get("kind", "")) == "tutorial":
-		bg_path = "res://assets/art/bg/bg_battle_tut.png"
+		bg_path = "res://assets/art/bg/bg_battle_tut.webp"
 	if not ResourceLoader.exists(bg_path):
-		bg_path = "res://assets/art/bg/bg_battle_%d.png" % randi_range(1, 5)
+		bg_path = "res://assets/art/bg/bg_battle_%d.webp" % randi_range(1, 5)
 	if ResourceLoader.exists(bg_path):
 		var bgr := TextureRect.new()
 		bgr.texture = load(bg_path)
@@ -118,7 +118,7 @@ func _ready() -> void:
 	player_label.add_theme_font_size_override("font_size", 20)
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
-	var sil_path := "res://assets/art/enemy/%s.png" % sil
+	var sil_path := "res://assets/art/enemy/%s.webp" % sil
 	if ResourceLoader.exists(sil_path):
 		var spr := TextureRect.new()
 		spr.texture = load(sil_path)
@@ -138,7 +138,7 @@ func _ready() -> void:
 		tw.tween_property(spr, "scale", Vector2(1.0, 1.0), 2.6).set_trans(Tween.TRANS_SINE)
 		tw.tween_property(spr, "position:y", spr.position.y, 2.6).set_trans(Tween.TRANS_SINE)
 
-	var voc_path := "res://assets/art/vocation/%s.png" % GameState.vocation
+	var voc_path := "res://assets/art/vocation/%s.webp" % GameState.vocation
 	if ResourceLoader.exists(voc_path):
 		var pc := TextureRect.new()
 		pc.texture = load(voc_path)

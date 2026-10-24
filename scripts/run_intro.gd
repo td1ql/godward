@@ -7,7 +7,7 @@ var _claiming_discard := false
 var _page_nodes: Array = []
 
 func _ready() -> void:
-	var bg_path := "res://assets/art/bg/bg_intro.png"
+	var bg_path := "res://assets/art/bg/bg_intro.webp"
 	if ResourceLoader.exists(bg_path):
 		var bg := TextureRect.new()
 		bg.texture = load(bg_path)
@@ -35,7 +35,7 @@ func _ready() -> void:
 	StoryDB.apply_serif(title)
 	add_child(title)
 	_page_nodes.append(title)
-	var card_path := "res://assets/art/vocation/%s.png" % GameState.vocation
+	var card_path := "res://assets/art/vocation/%s.webp" % GameState.vocation
 	if ResourceLoader.exists(card_path):
 		var card := TextureRect.new()
 		card.texture = load(card_path)

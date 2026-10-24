@@ -32,9 +32,9 @@ func _ready() -> void:
 	bg_rect = TextureRect.new()
 	bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	bg_rect.stretch_mode = TextureRect.STRETCH_SCALE
-	var map_bg := "res://assets/art/bg/bg_map_%d.png" % GameState.act
+	var map_bg := "res://assets/art/bg/bg_map_%d.webp" % GameState.act
 	if not ResourceLoader.exists(map_bg):
-		map_bg = "res://assets/art/bg/bg_map.png"
+		map_bg = "res://assets/art/bg/bg_map.webp"
 	if ResourceLoader.exists(map_bg):
 		bg_rect.texture = load(map_bg)
 	world.add_child(bg_rect)
@@ -249,7 +249,7 @@ func _make_node_button(id: int, pos: Vector2) -> Button:
 	b.position = pos - NODE_SIZE / 2.0
 	b.focus_mode = Control.FOCUS_NONE
 
-	var icon_path := "res://assets/art/node/%s.png" % t
+	var icon_path := "res://assets/art/node/%s.webp" % t
 	if ResourceLoader.exists(icon_path):
 		b.icon = load(icon_path)
 		b.expand_icon = true
