@@ -34,6 +34,27 @@ var damage_taken := 0
 @onready var end_turn_button: Button = $EndTurnButton
 
 func _ready() -> void:
+	var pool := [1, 2, 3, 4, 5]
+	pool.shuffle()
+	var bg_path := "res://assets/art/bg/bg_battle_%d.png" % pool[0]
+	if ResourceLoader.exists(bg_path):
+		var bgr := TextureRect.new()
+		bgr.texture = load(bg_path)
+		bgr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bgr.stretch_mode = TextureRect.STRETCH_SCALE
+		bgr.size = Vector2(1280, 720)
+		add_child(bgr)
+	else:
+		var fb := ColorRect.new()
+		fb.color = Color(0.05, 0.06, 0.09)
+		fb.size = Vector2(1280, 720)
+		add_child(fb)
+
+	var dim := ColorRect.new()
+	dim.color = Color(0.03, 0.04, 0.07, 0.38)
+	dim.size = Vector2(1280, 720)
+	add_child(dim)
+
 	var kind: String = str(GameState.pending_snapshot.get("kind", ""))
 	var tutorial := kind == "tutorial"
 
@@ -115,6 +136,11 @@ func _ready() -> void:
 		menu_btn.tooltip_text = "菜单"
 		menu_btn.pressed.connect(_open_battle_menu)
 		add_child(menu_btn)
+		_ghost_button(menu_btn, 26)
+
+	_ghost_button(deck_btn)
+	_ghost_button(pile_btn)
+	_ghost_button(end_turn_button, 22)
 	var resume: Dictionary = GameState.pending_snapshot.get("resume", {})
 	if not resume.is_empty():
 		_restore_battle(resume)
@@ -137,6 +163,29 @@ func _ready() -> void:
 	_update_ui()
 
 var _menu_popup: Control
+
+func _ghost_button(b: Button, size_px: int = 20) -> void:
+	b.focus_mode = Control.FOCUS_NONE
+	b.add_theme_font_size_override("font_size", size_px)
+	b.add_theme_color_override("font_color", Color(0.93, 0.88, 0.74))
+	b.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.78))
+	StoryDB.apply_serif(b)
+
+	var nb := StyleBoxFlat.new()
+	nb.bg_color = Color(0.05, 0.06, 0.09, 0.72)
+	nb.border_width_left = 1
+	nb.border_width_right = 1
+	nb.border_width_top = 1
+	nb.border_width_bottom = 1
+	nb.border_color = Color(0.55, 0.44, 0.24, 0.45)
+	b.add_theme_stylebox_override("normal", nb)
+
+	var hb := nb.duplicate()
+	hb.bg_color = Color(0.55, 0.42, 0.16, 0.35)
+	hb.border_color = Color(0.85, 0.68, 0.34, 0.95)
+	b.add_theme_stylebox_override("hover", hb)
+	b.add_theme_stylebox_override("pressed", hb)
+	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 func _open_battle_menu() -> void:
 	_close_battle_menu()
