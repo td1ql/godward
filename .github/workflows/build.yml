@@ -41,8 +41,8 @@ jobs:
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --version || true
 
       - name: 安装 Android 构建工具
-        continue-on-error: true
         run: |
+          set -e
           SDKM="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKM" --licenses > /dev/null 2>&1 || true
           "$SDKM" "platform-tools" "platforms;android-34" "build-tools;34.0.0" || true
@@ -116,6 +116,32 @@ jobs:
           set -e
           mkdir -p build
           godot --headless --path . --export-release "Android" build/Godward.apk
+          ls -lh build
+
+      - name: 给 APK 对齐并签名
+        run: |
+          set -e
+          BT="$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)"
+          echo "build-tools: $BT"
+          KS="$HOME/.android/debug.keystore"
+          if [ ! -f "$KS" ]; then
+            mkdir -p "$HOME/.android"
+            keytool -keyalg RSA -genkeypair -alias androiddebugkey               -keypass android -keystore "$KS"               -storepass android -dname "CN=Android Debug,O=Android,C=US"               -validity 9999 -storetype pkcs12
+          fi
+          if [ ! -f build/Godward.apk ]; then
+            echo "::error::导出没有产出 APK"
+            exit 1
+          fi
+          # 先对齐（v2 签名要求）
+          "$BT/zipalign" -f -p 4 build/Godward.apk build/Godward-aligned.apk
+          # 再签名（v1 + v2 + v3）
+          "$BT/apksigner" sign             --ks "$KS" --ks-pass pass:android --key-pass pass:android             --ks-key-alias androiddebugkey             --v1-signing-enabled true --v2-signing-enabled true --v3-signing-enabled true             --out build/Godward-signed.apk build/Godward-aligned.apk
+          mv build/Godward-signed.apk build/Godward.apk
+          rm -f build/Godward-aligned.apk
+          # 验证
+          "$BT/apksigner" verify --verbose build/Godward.apk
+          echo "--- META-INF ---"
+          unzip -l build/Godward.apk | grep -i "META-INF" || echo "（没有 META-INF！）"
           ls -lh build
 
       - name: 上传构建产物
