@@ -84,12 +84,28 @@ const TREE := {
 			{"every": 3, "to": "player", "status": {"虚弱": 2}, "name": "落叶"}]},
 }
 
+
+# ===== 第三幕终局：耶梦加得 =====
+const SERPENT := {
+	"耶梦加得": {"name": "耶梦加得", "hp": 420, "attack": 14, "pattern": [1, 1.5, 1, 2],
+		"on_hit": {"中毒": 2},
+		"domain": {"type": "energy_drain", "value": 1},
+		"skills": [
+			{"every": 2, "to": "self", "status": {"力量": 2}, "name": "缠紧"},
+			{"every": 3, "to": "player", "status": {"中毒": 4}, "name": "毒牙"},
+			{"every": 4, "to": "player", "status": {"易伤": 2}, "name": "吞"},
+			{"every": 5, "to": "self", "heal": 30, "name": "蜕皮"},
+		]},
+}
+
 func _pool_for(node_type: String) -> Dictionary:
 	match node_type:
 		"god":
 			return GODS
 		"tree":
 			return TREE
+		"serpent":
+			return SERPENT
 		"elite":
 			return ELITE
 		"boss":
@@ -176,6 +192,7 @@ const SILHOUETTE := {
 	"缢死者": "shade", "无面乐师": "shade",
 	"圣骸行者": "giant", "灰烬修女": "caster",
 	"奥丁": "idol", "赫尔墨斯": "shade", "阿斯克勒庇俄斯": "giant", "赫菲斯托斯": "caster",
+	"耶梦加得": "beast",
 	"世界树": "giant",
 	"守门人": "warden",
 	"教皇": "pope",

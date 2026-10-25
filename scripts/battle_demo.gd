@@ -825,6 +825,9 @@ func _check_game_over() -> void:
 		if node_type == "tree":
 			_enter_act3()
 			return
+		if node_type == "serpent":
+			_on_serpent_defeated()
+			return
 		last_gold_gain = NodeRuleDB.gold_of(node_type)
 		GameState.gold += last_gold_gain
 		if node_type == "boss":
@@ -1151,11 +1154,13 @@ func _show_true_ending() -> void:
 
 func _on_pope_defeated() -> void:
 	if Morality.is_saint() or Morality.is_sinner():
-		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_tree_title)
+		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), func() -> void:
+			_show_title("伪·世界树", _start_tree_fight)
+		)
 	else:
 		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_true_ending)
 
-func _show_tree_title() -> void:
+func _show_title(text: String, next: Callable) -> void:
 	hand_view.hide_cards()
 	var layer := ColorRect.new()
 	layer.color = Color(0.02, 0.02, 0.03, 0.0)
@@ -1164,7 +1169,7 @@ func _show_tree_title() -> void:
 	add_child(layer)
 
 	var lbl := Label.new()
-	lbl.text = "伪·世界树"
+	lbl.text = text
 	lbl.position = Vector2(0, 300)
 	lbl.size = Vector2(1280, 120)
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -1183,7 +1188,8 @@ func _show_tree_title() -> void:
 	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.5)
 	tw.tween_callback(func() -> void:
 		layer.queue_free()
-		_start_tree_fight()
+		if next.is_valid():
+			next.call()
 	)
 
 func _start_tree_fight() -> void:
@@ -1218,6 +1224,25 @@ func _enter_act3() -> void:
 
 func _goto_act3_map() -> void:
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+
+func _on_serpent_defeated() -> void:
+	GameState.divinity = clampi(GameState.divinity, 0, 100)
+	if GameState.divinity >= 71:
+		Dialogue.play(self, DialogueDB.get_lines("ending_god"), _show_serpent_ending)
+	elif GameState.divinity >= 31:
+		Dialogue.play(self, DialogueDB.get_lines("ending_loop"), _show_serpent_ending)
+	else:
+		Dialogue.play(self, DialogueDB.get_lines("ending_human"), _show_serpent_ending)
+
+func _show_serpent_ending() -> void:
+	hand_view.hide_cards()
+	var overlay := Modal.open(self, 0.97)
+	var title := StoryDB.t("ending_god_title") if GameState.divinity >= 71 else (StoryDB.t("ending_loop_title") if GameState.divinity >= 31 else StoryDB.t("ending_human_title"))
+	Modal.title(overlay, title, 150, 46)
+	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s\n神性: %d" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary(), GameState.divinity], 300, 20, 140)
+	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
+	Modal.button(overlay, "回到开始", 530, 520, 220, 58, _end_true_run)
 
 func _end_true_run() -> void:
 	GameState.delete_save()

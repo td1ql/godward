@@ -50,6 +50,21 @@ const LINES := {
 		{"speaker": "无上神音", "text": "祂们下来了。"},
 		{"speaker": "沉沦神音", "text": "「……你往哪跑？」"},
 	],
+	"ending_god": [
+		{"speaker": "无上神音", "text": "蛇的骨头散了。\n天没有合上。"},
+		{"speaker": "无上神音", "text": "有个声音在你身体里醒了。"},
+		{"speaker": "上帝", "text": "「……回来了。」"},
+	],
+	"ending_loop": [
+		{"speaker": "无上神音", "text": "蛇死了。\n人间还在烧。"},
+		{"speaker": "无上神音", "text": "你往前走了半步，又停住。"},
+		{"speaker": "你", "text": "「前面没有路。」\n「但火还在。」"},
+	],
+	"ending_human": [
+		{"speaker": "无上神音", "text": "蛇死了。\n你回头看。"},
+		{"speaker": "无上神音", "text": "人间正在沉下去。很慢，但没有停。"},
+		{"speaker": "你", "text": "（你没有伸手。）"},
+	],
 	"first_divine": [
 		{"speaker": "无上神音", "text": "门开了"},
 		{"speaker": "无上神音", "text": "入目是一片惨烈的苍白 \n接着是无尽的空旷"},
