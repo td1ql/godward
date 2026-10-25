@@ -70,11 +70,9 @@ jobs:
           set -e
           CFG="$HOME/.config/godot"
           mkdir -p "$CFG"
-          if [ -f "$CFG/editor_settings-4.7.tres" ]; then
-            SETTINGS="$CFG/editor_settings-4.7.tres"
-          else
-            SETTINGS="$CFG/editor_settings-4.7.tres"
-          fi
+          # Godot 4.x 的编辑器设置文件可能叫 editor_settings-4.tres，也可能是带小版本号的
+          SETTINGS="$CFG/editor_settings-4.tres"
+          touch "$SETTINGS"
           # 生成一个调试密钥库
           if [ ! -f "$HOME/.android/debug.keystore" ]; then
             mkdir -p "$HOME/.android"
@@ -94,6 +92,7 @@ jobs:
           export/android/java_sdk_path = "$JAVA_HOME"
           export/android/force_system_user = false
           EOF
+          cp "$SETTINGS" "$CFG/editor_settings-4.7.tres" || true
           echo "--- settings ---"
           cat "$SETTINGS"
 
