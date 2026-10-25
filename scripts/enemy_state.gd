@@ -21,6 +21,7 @@ var skills: Array = []
 var pattern: Array = [1]
 var label_name := "敌人"
 var turn_index := 0
+var domain: Dictionary = {}
 
 func setup(data: Dictionary) -> void:
 	hp = int(data["hp"])
@@ -31,6 +32,7 @@ func setup(data: Dictionary) -> void:
 	on_hit = data.get("on_hit", {})
 	on_turn = data.get("on_turn", {})
 	skills = data.get("skills", [])
+	domain = data.get("domain", {})
 	status = {}
 	turn_index = 0
 

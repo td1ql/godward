@@ -32,7 +32,7 @@ var damage_taken := 0
 var bonus_energy := 0
 var last_card_played := ""
 var _kill_pick_pending := false
-
+var skip_enemy := 0
 var _new_cards := 0
 
 @onready var info_label: Label = $InfoLabel
@@ -500,6 +500,8 @@ func _apply_card_effects(c: String) -> void:
 		StatusSystem.apply(enemy.status, d["status"])
 	if d.has("self_status"):
 		StatusSystem.apply(player_status, d["self_status"])
+	if d.get("skip_enemy_turn", 0) > 0:
+		skip_enemy += int(d["skip_enemy_turn"])
 	if d.get("next_energy", 0) != 0:
 		bonus_energy += int(d["next_energy"])
 	if d.get("heal", 0) > 0:
@@ -536,6 +538,11 @@ func _on_card_pressed(index: int) -> void:
 		return
 	var d: Dictionary = CardDB.get_card(c)
 	if player_energy < d["cost"]:
+		var req: Dictionary = d.get("min_self_status", {})
+		for k in req:
+			if int(player_status.get(k, 0)) < int(req[k]):
+				Toast.show_text("力量不足", 1.5)
+				return
 		return
 	if CardDB.kind_of(c) == "effect" and CardDB.consume_count(c) > 0:
 		if deck.hand.size() - 1 < CardDB.consume_count(c):
@@ -555,6 +562,9 @@ func _on_card_pressed(index: int) -> void:
 	if CardDB.kind_of(c) == "effect":
 		Tutorial.notify("effect_played")
 	deck.hand.remove_at(index)
+	if d.get("once_per_run", false):
+		GameState.deck.erase(c)
+		GameState.save_game()
 	deck.discard_pile.append(c)
 	_mark_used(c)
 	_check_game_over()
@@ -633,7 +643,12 @@ func _on_end_turn_pressed() -> void:
 	if game_over or pending_effect >= 0:
 		return
 	_end_player_turn()
-	_resolve_enemy_turn()
+	if skip_enemy > 0:
+		skip_enemy -= 1
+		Toast.show_text("你的威严使他退却", 2.0)
+		_start_new_turn()
+	else:
+		_resolve_enemy_turn()
 	_check_game_over()
 	_update_ui()
 	if game_over:
@@ -760,6 +775,8 @@ func _start_new_turn() -> void:
 	bonus_energy = 0
 	player_energy += int(player_status.get("迅捷", 0))
 	player_energy = max(0, player_energy - int(player_status.get("重力", 0)))
+	if player_status.has("狂化"):
+		player_status["力量"] = int(player_status.get("力量", 0)) + 2
 	var guard := int(player_status.get("守护", 0))
 	if guard > 0:
 		player_block += guard
