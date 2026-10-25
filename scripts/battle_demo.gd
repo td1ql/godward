@@ -978,6 +978,9 @@ func _show_reward() -> void:
 	StoryDB.apply_serif(hint)
 	overlay.add_child(hint)
 
+	var help := Modal.button(overlay, "状态说明", 40, 610, 170, 44, func() -> void: StatusHelp.open(self))
+	_ghost_button(help, 18)
+
 	if RunConfig.ALLOW_SKIP:
 		var skip := Modal.button(overlay, StoryDB.t("reward_skip"), 540, 520, 200, 50, _finish_reward)
 		_ghost_button(skip)

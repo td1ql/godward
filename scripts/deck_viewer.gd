@@ -50,6 +50,7 @@ func open() -> void:
 		_root.add_child(btn)
 
 	var close := Button.new()
+	UiKit.ghost_button(close, 18)
 	close.text = "关闭"
 	close.size = Vector2(200, 54)
 	close.position = Vector2(540, 645)
@@ -110,6 +111,7 @@ func _show_columns(title_text: String, sections: Array) -> void:
 		_root.add_child(body)
 
 	var close := Button.new()
+	UiKit.ghost_button(close, 18)
 	close.text = "关闭"
 	close.size = Vector2(200, 54)
 	close.position = Vector2(540, 645)
@@ -157,6 +159,7 @@ func open_choose(title_text: String, cards: Array, on_pick: Callable) -> void:
 		_root.add_child(btn)
 
 	var skip := Button.new()
+	UiKit.ghost_button(skip, 18)
 	skip.text = "跳过"
 	skip.size = Vector2(200, 54)
 	skip.position = Vector2(540, 640)

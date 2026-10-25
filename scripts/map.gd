@@ -125,14 +125,14 @@ func _ready() -> void:
 	deck_btn.position = Vector2(20, 152)
 	deck_btn.size = Vector2(120, 44)
 	deck_btn.pressed.connect(DeckViewer.toggle)
+	UiKit.ghost_button(deck_btn, 18)
 	hud.add_child(deck_btn)
 
-	var back := Button.new()
-	back.text = "返回主菜单"
-	back.position = Vector2(1080, 20)
-	back.size = Vector2(190, 44)
-	back.pressed.connect(_on_back_to_menu)
-	hud.add_child(back)
+	NavMenu.attach(hud, [
+		{"text": "牌库", "action": func() -> void: DeckViewer.toggle()},
+		{"text": "地图说明", "action": func() -> void: _show_map_hint()},
+		{"text": "返回主菜单", "action": Callable(self, "_on_back_to_menu")},
+	])
 
 	for lb in [hint, gold_label, hp_label, moral_label]:
 		lb.add_theme_color_override("font_color", Color(0.17, 0.13, 0.08))
@@ -805,6 +805,9 @@ func _close_encounter() -> void:
 	_maybe_eliminate()
 	_rebuild_view()
 	is_moving = false
+
+func _show_map_hint() -> void:
+	MapHelp.open(ui_layer)
 
 func _on_back_to_menu() -> void:
 	GameState.save_game()

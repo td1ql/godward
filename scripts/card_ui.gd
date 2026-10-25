@@ -107,7 +107,18 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 		StoryDB.apply_serif(clbl)
 		cbadge.add_child(clbl)
 
-		btn.tooltip_text = "需要消耗 %d 张手牌" % need
+
+	var tips: Array[String] = []
+	for key in d.get("status", {}):
+		var sd: Dictionary = StatusDB.STATUS.get(key, {})
+		tips.append("【%s】%s" % [key, str(sd.get("desc", ""))])
+	for key in d.get("self_status", {}):
+		var sd2: Dictionary = StatusDB.STATUS.get(key, {})
+		tips.append("【%s】%s" % [key, str(sd2.get("desc", ""))])
+	if int(d.get("consume", 0)) > 0:
+		tips.append("需要消耗 %d 张手牌" % int(d["consume"]))
+	if not tips.is_empty():
+		btn.tooltip_text = "\n".join(tips)
 
 	var tag_lbl := Label.new()
 	tag_lbl.text = ctag

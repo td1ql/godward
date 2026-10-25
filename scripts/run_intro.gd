@@ -7,6 +7,10 @@ var _claiming_discard := false
 var _page_nodes: Array = []
 
 func _ready() -> void:
+	NavMenu.attach(self, [
+		{"text": "牌库", "action": func() -> void: DeckViewer.toggle()},
+		{"text": "返回主菜单", "action": func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn")},
+	])
 	var bg_path := "res://assets/art/bg/bg_intro.webp"
 	if ResourceLoader.exists(bg_path):
 		var bg := TextureRect.new()

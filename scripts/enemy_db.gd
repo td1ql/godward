@@ -19,11 +19,17 @@ const NORMAL := {
 
 const ELITE := {
 	"双子刺客": {"name": "双子刺客", "hp": 60, "attack": 10, "pattern": [2, 0.5, 0.5, 1], "on_hit": {"流血": 2}},
-	"亡灵骑士": {"name": "亡灵骑士", "hp": 85, "attack": 6, "pattern": [1, 1, 2], "on_turn": {"再生": 2}},
+	"亡灵骑士": {"name": "亡灵骑士", "hp": 85, "attack": 6, "pattern": [1, 1, 2], "skills": [{"every": 2, "to": "self", "status": {"再生": 2}, "name": "再生"}]},
 	"熔岩巨像": {"name": "熔岩巨像", "hp": 95, "attack": 8, "pattern": [1, 2], "skills": [{"every": 3, "to": "self", "status": {"荆棘": 4}, "name": "荆棘"}]},
 	"精英守卫": {"name": "精英守卫", "hp": 65, "attack": 8, "pattern": [1, 1, 1], "skills": [{"every": 2, "to": "self", "status": {"荆棘": 2}, "name": "荆棘"}]},
 	"精英法师": {"name": "精英法师", "hp": 55, "attack": 8, "pattern": [1, 1.5], "on_hit": {"虚弱": 2}, "on_turn": {"力量": 1}},
 	"血祭司": {"name": "血祭司", "hp": 60, "attack": 6, "pattern": [1, 1.5, 2], "skills": [{"every": 2, "to": "player", "status": {"流血": 3}, "name": "流血"}, {"every": 3, "to": "self", "status": {"再生": 8}, "name": "再生"}]},
+	"断头骑士": {"name": "断头骑士", "hp": 72, "attack": 9, "pattern": [1, 1.5], "on_turn": {"力量": 1}},
+	"缢死者": {"name": "缢死者", "hp": 58, "attack": 5, "pattern": [1, 2], "on_hit": {"中毒": 2}, "skills": [{"every": 3, "to": "player", "status": {"虚弱": 2}, "name": "垂颈"}]},
+	"圣骸行者": {"name": "圣骸行者", "hp": 90, "attack": 7, "pattern": [1, 1, 2], "skills": [{"every": 2, "to": "self", "status": {"荆棘": 2}, "name": "碎骨"}]},
+	"书记官": {"name": "书记官", "hp": 62, "attack": 8, "pattern": [1, 1.5], "skills": [{"every": 2, "to": "player", "status": {"易伤": 2}, "name": "宣判"}]},
+	"灰烬修女": {"name": "灰烬修女", "hp": 74, "attack": 6, "pattern": [1, 1.5, 2], "skills": [{"every": 3, "to": "player", "status": {"流血": 3}, "name": "祝祷"}]},
+	"无面乐师": {"name": "无面乐师", "hp": 60, "attack": 9, "pattern": [2, 1, 1], "skills": [{"every": 2, "to": "player", "status": {"虚弱": 1}, "name": "哀歌"}]},
 }
 
 const BOSS := {
@@ -136,6 +142,9 @@ const SILHOUETTE := {
 	"荆棘像": "giant", "圣骸": "giant",
 	"火元素": "shade", "冰霜精": "shade", "腐尸": "shade",
 	"圣像": "idol", "唱诗班": "idol",
+	"断头骑士": "soldier", "书记官": "soldier",
+	"缢死者": "shade", "无面乐师": "shade",
+	"圣骸行者": "giant", "灰烬修女": "caster",
 	"守门人": "warden",
 	"教皇": "pope",
 	"原罪*贪婪": "greed",
