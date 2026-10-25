@@ -6,7 +6,7 @@ const BGM_DB := -14.0
 # 每个音效的音量（0 = 原始，越负越小）
 const SFX_DB := {
 	"draw": -16.0,
-	"play": -11.0,
+	"play": -20.0,
 	"click": -8.0,
 	"hit": -5.0,
 	"attack": -5.0,

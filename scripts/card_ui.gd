@@ -20,6 +20,26 @@ static func style(bg: Color, border: Color, width: int = 2) -> StyleBoxFlat:
 	sb.set_corner_radius_all(8)
 	return sb
 
+
+# 一张牌属于哪个流派（拿第一个；通用的牌返回空）
+# 流派 -> 底图文件名（中文流派名不直接做文件名，避免路径问题）
+const STREAM_ART := {
+	"毒": "poison",
+	"力": "strength",
+	"守": "guard",
+	"抽": "draw",
+	"斩": "slash",
+	"血": "blood",
+	"技": "skill",
+	"愈": "heal",
+}
+
+static func stream_of(id: String) -> String:
+	var ss: Array = CardDB.streams_of(id)
+	if ss.is_empty():
+		return ""
+	return str(STREAM_ART.get(str(ss[0]), ""))
+
 static func make_button(id: String, font_size: int = 15) -> Button:
 	var d: Dictionary = CardDB.get_card(id)
 	var parts := CardDB.card_text(id).split("\n")
@@ -39,6 +59,33 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	btn.add_theme_stylebox_override("pressed", style(paper.darkened(0.08), Color(0.85, 0.66, 0.25), 3))
 	btn.add_theme_stylebox_override("disabled", style(Color(0.60, 0.57, 0.50), Color(0.32, 0.30, 0.26), 2))
 	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+
+	# 流派底图（垫在最下面）
+	var art_path := "res://assets/art/card/%s.webp" % stream_of(id)
+	if ResourceLoader.exists(art_path):
+		var art := TextureRect.new()
+		art.texture = load(art_path)
+		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+		art.set_anchors_preset(Control.PRESET_FULL_RECT)
+		art.offset_left = 2
+		art.offset_top = 2
+		art.offset_right = -2
+		art.offset_bottom = -2
+		art.modulate = Color(1, 1, 1, 1)
+		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(art)
+
+		# 纸色蒙版：让底图变成隐约的花纹，文字才读得清
+		var veil := ColorRect.new()
+		veil.color = Color(0.94, 0.90, 0.80, 0.80)
+		veil.set_anchors_preset(Control.PRESET_FULL_RECT)
+		veil.offset_left = 2
+		veil.offset_top = 2
+		veil.offset_right = -2
+		veil.offset_bottom = -2
+		veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(veil)
 
 	var bs: int = font_size + 11
 	var badge := Panel.new()

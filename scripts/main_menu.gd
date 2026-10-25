@@ -27,7 +27,7 @@ func _ready() -> void:
 
 	var title := Label.new()
 	title.text = "逐 神"
-	title.position = Vector2(640, 250)
+	title.position = Vector2(700, 175)
 	title.size = Vector2(600, 110)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -38,7 +38,7 @@ func _ready() -> void:
 
 	var sub := Label.new()
 	sub.text = "Godward"
-	sub.position = Vector2(640, 365)
+	sub.position = Vector2(700, 290)
 	sub.size = Vector2(600, 40)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.add_theme_font_size_override("font_size", 24)

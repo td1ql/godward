@@ -1,4 +1,4 @@
-.godot/
+﻿.godot/
 .import/
 export.cfg
 *.translation
@@ -8,3 +8,7 @@ mono_crash.*.json
 
 # 导出产物
 build/
+
+# 原始字体（31MB，只用于重新子集化，不进仓库）
+assets/fonts/source/
+

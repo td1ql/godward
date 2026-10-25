@@ -257,6 +257,17 @@ func _add_edge(a: int, b: int) -> void:
 	ln.default_color = Color(0.24, 0.16, 0.09, 0.55)
 	edge_root.add_child(ln)
 
+
+# 没有专属图标的节点，借用最接近的一张
+func _icon_alias(t: String) -> String:
+	match t:
+		"serpent":
+			return "boss"
+		"tree":
+			return "boss"
+		_:
+			return t
+
 func _make_node_button(id: int, pos: Vector2) -> Button:
 	var t := str(nodes[id]["type"])
 	var info: Dictionary = MapDB.info_of(t)
@@ -265,7 +276,7 @@ func _make_node_button(id: int, pos: Vector2) -> Button:
 	b.position = pos - NODE_SIZE / 2.0
 	b.focus_mode = Control.FOCUS_NONE
 
-	var icon_path := "res://assets/art/node/%s.webp" % t
+	var icon_path := "res://assets/art/node/%s.webp" % _icon_alias(t)
 	if ResourceLoader.exists(icon_path):
 		b.icon = load(icon_path)
 		b.expand_icon = true

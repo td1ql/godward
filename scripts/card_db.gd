@@ -363,10 +363,10 @@ func streams_of(id: String) -> Array[String]:
 
 	if d.has("status"):
 		for k in d["status"]:
-			if k in ["中毒", "流血"]:
+			if k in ["中毒", "流血", "毒性增长"]:
 				if not s.has("毒"):
 					s.append("毒")
-			elif k in ["虚弱", "易伤"]:
+			elif k in ["虚弱", "易伤", "重力"]:
 				if not s.has("技"):
 					s.append("技")
 

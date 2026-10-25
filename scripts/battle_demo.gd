@@ -735,6 +735,7 @@ func _resolve_enemy_turn() -> void:
 	var absorbed: int = min(player_block, raw_dmg)
 	player_block = max(0, player_block - absorbed)
 	var dmg: int = max(0, raw_dmg - absorbed)
+	_update_ui()   # 格挡变化后立刻刷新
 	if dmg > 0 and int(player_status.get("护佑", 0)) > 0:
 		player_status["护佑"] = int(player_status["护佑"]) - 1
 		if int(player_status["护佑"]) <= 0:
@@ -761,6 +762,7 @@ func _resolve_enemy_turn() -> void:
 		Tutorial.notify("hurt")
 	if not player_status.has("坚守"):
 		player_block = 0
+		_update_ui()   # 清空后也刷一次
 	if dmg > 0:
 		_on_player_hurt()
 	enemy.turn_index += 1
@@ -868,7 +870,6 @@ func _start_new_turn() -> void:
 	if burn > 0:
 		enemy.hp = max(0, enemy.hp - burn)
 	attacked_last_turn = attacked_this_turn
-	_apply_turn_creed()
 	_render_hand()
 	_update_ui()
 
