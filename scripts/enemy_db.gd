@@ -75,10 +75,21 @@ const GODS := {
 			{"every": 4, "to": "self", "status": {"力量": 4}, "name": "成型"}]},
 }
 
+
+# ===== 第二幕终局：假的世界树 =====
+const TREE := {
+	"世界树": {"name": "世界树", "hp": 220, "attack": 8, "pattern": [1, 1, 2],
+		"skills": [{"every": 2, "to": "player", "status": {"中毒": 3}, "name": "渗出"},
+			{"every": 2, "to": "self", "heal": 12, "name": "生长"},
+			{"every": 3, "to": "player", "status": {"虚弱": 2}, "name": "落叶"}]},
+}
+
 func _pool_for(node_type: String) -> Dictionary:
 	match node_type:
 		"god":
 			return GODS
+		"tree":
+			return TREE
 		"elite":
 			return ELITE
 		"boss":
@@ -165,6 +176,7 @@ const SILHOUETTE := {
 	"缢死者": "shade", "无面乐师": "shade",
 	"圣骸行者": "giant", "灰烬修女": "caster",
 	"奥丁": "idol", "赫尔墨斯": "shade", "阿斯克勒庇俄斯": "giant", "赫菲斯托斯": "caster",
+	"世界树": "giant",
 	"守门人": "warden",
 	"教皇": "pope",
 	"原罪*贪婪": "greed",

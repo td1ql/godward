@@ -45,6 +45,11 @@ const LINES := {
 		{"speaker": "无上神音", "text": "「...去成为太阳」\n「...众生..明天！@##@！」"},
 		{"speaker": "沉沦神音", "text": "「！@###￥%……##￥」"},
 	],
+	"first_act3": [
+		{"speaker": "无上神音", "text": "天裂开了。"},
+		{"speaker": "无上神音", "text": "祂们下来了。"},
+		{"speaker": "沉沦神音", "text": "「……你往哪跑？」"},
+	],
 	"first_divine": [
 		{"speaker": "无上神音", "text": "门开了"},
 		{"speaker": "无上神音", "text": "入目是一片惨烈的苍白 \n接着是无尽的空旷"},

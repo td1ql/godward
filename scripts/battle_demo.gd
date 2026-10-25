@@ -820,7 +820,10 @@ func _check_game_over() -> void:
 			_show_contestant_aftermath()
 			return
 		if node_type == "pope":
-			Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_true_ending)
+			_on_pope_defeated()
+			return
+		if node_type == "tree":
+			_enter_act3()
 			return
 		last_gold_gain = NodeRuleDB.gold_of(node_type)
 		GameState.gold += last_gold_gain
@@ -1144,6 +1147,77 @@ func _show_true_ending() -> void:
 	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary()], 470, 20, 100)
 	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
 	Modal.button(overlay, StoryDB.t("ending_button"), 520, 580, 240, 60, _end_true_run)
+
+
+func _on_pope_defeated() -> void:
+	if Morality.is_saint() or Morality.is_sinner():
+		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_tree_title)
+	else:
+		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_true_ending)
+
+func _show_tree_title() -> void:
+	hand_view.hide_cards()
+	var layer := ColorRect.new()
+	layer.color = Color(0.02, 0.02, 0.03, 0.0)
+	layer.size = Vector2(1280, 720)
+	layer.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(layer)
+
+	var lbl := Label.new()
+	lbl.text = "伪·世界树"
+	lbl.position = Vector2(0, 300)
+	lbl.size = Vector2(1280, 120)
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 64)
+	lbl.add_theme_color_override("font_color", Color(0.92, 0.86, 0.72))
+	lbl.modulate.a = 0.0
+	StoryDB.apply_serif(lbl)
+	layer.add_child(lbl)
+
+	var tw := create_tween()
+	tw.tween_property(layer, "color", Color(0.02, 0.02, 0.03, 0.94), 0.5)
+	tw.parallel().tween_property(lbl, "modulate:a", 1.0, 0.9)
+	tw.tween_interval(1.2)
+	tw.tween_property(layer, "color", Color(0.02, 0.02, 0.03, 0.0), 0.5)
+	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.5)
+	tw.tween_callback(func() -> void:
+		layer.queue_free()
+		_start_tree_fight()
+	)
+
+func _start_tree_fight() -> void:
+	node_type = "tree"
+	enemy_organ = ""
+	var data: Dictionary = EnemyDB.pick_for_node("tree", 0)
+	enemy.setup(data)
+	deck.hand.clear()
+	deck.discard_pile.clear()
+	deck.draw_pile.clear()
+	for card in GameState.deck:
+		deck.draw_pile.append(str(card))
+	deck.draw_pile.shuffle()
+	player_hp = GameState.player_max_hp
+	player_block = 0
+	player_status = {}
+	player_energy = GameState.initial_energy()
+	_start_new_turn()
+	Toast.show_text("树还在。\n它没有倒。", 3.5)
+
+func _enter_act3() -> void:
+	GameState.act = 3
+	GameState.allies.clear()
+	GameState.map_generated = false
+	GameState.map_nodes = {}
+	GameState.current_node_id = 0
+	GameState.pending_snapshot = {}
+	GameState.pending_node = -1
+	GameState.pending_cleanup = false
+	GameState.save_game()
+	Dialogue.play(self, DialogueDB.get_lines("first_act3"), _goto_act3_map)
+
+func _goto_act3_map() -> void:
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _end_true_run() -> void:
 	GameState.delete_save()

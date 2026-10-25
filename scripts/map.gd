@@ -455,6 +455,8 @@ func _show_encounter(t: String) -> void:
 			_encounter_wealth(title, body, vbox)
 		"god":
 			_encounter_god(title, body, vbox)
+		"shell":
+			_encounter_shell(title, body, vbox)
 		"contestant":
 			_encounter_contestant(title, body, vbox)
 
@@ -883,6 +885,77 @@ func _ally_contestant(id: String) -> void:
 	GameState.divinity = clampi(GameState.divinity - 5, 0, 100)
 	GameState.save_game()
 	Toast.show_text("「%s」站到了你身后。" % ContestantDB.name_of(id), 3.0)
+	_close_encounter()
+
+
+# ===== 第三幕：空壳（没有器官的尸骸）=====
+const SHELLS := [
+	{
+		"text": "一具跪着的尸体。\n手心朝上，像在等什么东西。",
+		"choices": [
+			{"label": "拿走它的手指", "max_hp": -8, "str": 2, "text": "你把指节拧了下来。\n它们在你手里还是弯的。"},
+			{"label": "让它继续等", "hp": 15, "moral": 5, "text": "你在它对面坐了一会。\n走的时候，伤口没那么疼了。"},
+			{"label": "把它推倒", "gold": 40, "moral": -6, "text": "它倒了。\n身下的土里埋着钱。"},
+		],
+	},
+	{
+		"text": "一具站着的尸体。\n脸朝天，嘴张着。",
+		"choices": [
+			{"label": "抬头看", "divinity": 10, "text": "天上什么也没有。\n但你看了很久。"},
+			{"label": "挖出它的眼睛", "gold": 25, "moral": -4, "text": "眼睛还是湿的。\n有人会要。"},
+			{"label": "把它的嘴合上", "hp": 10, "moral": 6, "text": "合不严。\n你试了三次。"},
+		],
+	},
+	{
+		"text": "一具蜷缩的尸体。\n怀里抱着什么东西。",
+		"choices": [
+			{"label": "掰开它的手", "random_cards": 1, "moral": -3, "text": "是一张牌。\n上面有它的体温。"},
+			{"label": "连它带东西一起埋了", "gold": 20, "moral": 8, "text": "你挖了一个浅坑。\n够用了。"},
+		],
+	},
+	{
+		"text": "一具没有头的尸体。\n还握着剑，握得很紧。",
+		"choices": [
+			{"label": "拿走那把剑", "str": 1, "max_hp": -5, "text": "剑很重。\n拿起来之后，你的手一直在抖。"},
+			{"label": "把剑留在原地", "hp": 12, "text": "你松开了它的手指。\n一根，一根。"},
+		],
+	},
+]
+
+func _encounter_shell(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var s: Dictionary = SHELLS[randi() % SHELLS.size()]
+	title.text = "空壳"
+	body.text = str(s["text"])
+	for c in s["choices"]:
+		var b := _ink_button(str(c["label"]))
+		b.pressed.connect(_take_shell.bind(c, body))
+		vbox.add_child(b)
+	var leave := _ink_button("绕过去")
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
+
+func _take_shell(c: Dictionary, body: Label) -> void:
+	if c.has("max_hp"):
+		GameState.wealth_hp += int(c["max_hp"])
+		GameState.recompute_max_hp()
+		GameState.player_hp = min(GameState.player_hp, GameState.player_max_hp)
+	if c.has("hp"):
+		GameState.player_hp = clampi(GameState.player_hp + int(c["hp"]), 1, GameState.player_max_hp)
+	if c.has("gold"):
+		GameState.gold = max(0, GameState.gold + int(c["gold"]))
+	if c.has("str"):
+		GameState.wealth_str += int(c["str"])
+	if c.has("moral"):
+		Morality.add(int(c["moral"]), 0)
+	if c.has("divinity"):
+		GameState.divinity = clampi(GameState.divinity + int(c["divinity"]), 0, 100)
+	if c.has("random_cards"):
+		for i in range(int(c["random_cards"])):
+			var pool: Array = CardDB.reward_pool()
+			if not pool.is_empty():
+				GameState.deck.append(str(pool[randi() % pool.size()]))
+	GameState.save_game()
+	Toast.show_text(str(c.get("text", "")), 3.5)
 	_close_encounter()
 
 func _fight_contestant(id: String) -> void:
