@@ -255,6 +255,11 @@ func _ready() -> void:
 		_setup_allies()
 	_render_hand()
 	_update_ui()
+	var boss_nodes := ["boss", "pope", "tree", "serpent", "god", "divine_elite"]
+	if node_type in boss_nodes:
+		AudioManager.play_bgm("boss")
+	else:
+		AudioManager.play_bgm("battle")
 	if node_type == "serpent":
 		_show_title("耶梦加得", Callable())
 
@@ -411,6 +416,7 @@ func _mark_used(card: String) -> void:
 	battle_uses[card] = int(battle_uses.get(card, 0)) + 1
 
 func _draw_cards(n: int) -> void:
+	AudioManager.play("draw")
 	if _draw_depth >= 3:
 		return
 	_draw_depth += 1
@@ -485,7 +491,7 @@ func _apply_card_effects(c: String) -> void:
 		var clear_key := str(d.get("clear_enemy_status", ""))
 		if clear_key != "":
 			enemy.status.erase(clear_key)
-		AudioManager.play("hit")
+		AudioManager.play("attack")
 		if d.get("zero_block_after", false):
 			player_block = 0
 		elif d.get("damage_from_block", false):
@@ -577,6 +583,7 @@ func _on_card_pressed(index: int) -> void:
 	player_energy -= d["cost"]
 	last_card_played = c
 	first_card_used = true
+	AudioManager.play("play")
 	_apply_card_effects(c)
 	Tutorial.notify("card_played")
 	if CardDB.kind_of(c) == "effect":
@@ -585,7 +592,9 @@ func _on_card_pressed(index: int) -> void:
 	if d.get("once_per_run", false):
 		GameState.deck.erase(c)
 		GameState.save_game()
-	deck.discard_pile.append(c)
+	# exhaust：本场战斗用掉就消失（不进弃牌堆）
+	if not bool(d.get("exhaust", false)):
+		deck.discard_pile.append(c)
 	_mark_used(c)
 	_check_game_over()
 	_render_hand()
@@ -688,6 +697,7 @@ func _player_immune() -> bool:
 	return player_status.has("恒光")
 
 func _on_player_hurt(now: bool = false) -> void:
+	AudioManager.play("hurt")
 	if str(creed.get("key", "")) != "hurt_energy":
 		return
 	var v := int(creed.get("value", 0))
@@ -735,6 +745,12 @@ func _resolve_enemy_turn() -> void:
 	var ep := StatusSystem.tick_damage(enemy.status)
 	if ep > 0:
 		enemy.hp = max(0, enemy.hp - ep)
+
+	# 毒性增长（挂在敌人身上）：毒伤结算之后，每 4 层额外 +1
+	if enemy.status.has("毒性增长"):
+		var pz := int(enemy.status.get("中毒", 0))
+		if pz >= 4:
+			enemy.status["中毒"] = pz + int(float(pz) / 4.0)
 
 	var eh := StatusSystem.tick_heal(enemy.status)
 	if eh > 0:

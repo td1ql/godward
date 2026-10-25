@@ -1,6 +1,7 @@
 extends Node2D
 
 func _ready() -> void:
+	AudioManager.play_bgm("menu")
 	NavMenu.attach(self, [
 		{"text": "返回主菜单", "action": func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn")},
 	])

@@ -20,6 +20,7 @@ func _add_meta_button() -> void:
 	add_child(cfg)
 
 func _ready() -> void:
+	AudioManager.play_bgm("menu")
 	var bg_path := "res://assets/art/bg/bg_intro.webp"
 	if ResourceLoader.exists(bg_path):
 		var bg := TextureRect.new()

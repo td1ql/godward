@@ -208,7 +208,7 @@ const CARDS := {
 	"劈砍": {"kind": "action", "cost": 1, "damage": 9, "block": 0, "price": 50},
 	"双重打击": {"kind": "action", "cost": 1, "damage": 4, "hits": 2, "block": 0, "price": 50},
 	"打击": {"kind": "action", "cost": 1, "damage": 5, "block": 0, "price": 30},
-	"毒源": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "self_status": {"毒性增长": 1}, "price": 110},
+	"毒源": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "status": {"毒性增长": 1}, "exhaust": true, "price": 110},
 	"渴血": {"kind": "effect", "cost": 1, "consume": 1, "damage": 6, "block": 0, "self_status": {"嗜血": 2}, "price": 55},
 	"疾风": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 0, "self_status": {"迅捷": 2}, "price": 50},
 	"痛觉": {"kind": "action", "cost": 1, "damage": 10, "block": 0, "self_damage": 3, "price": 55},
@@ -323,6 +323,8 @@ func card_text(id: String) -> String:
 		effects.append("下回合能量 %+d" % d["next_energy"])
 	if d.get("once_per_run", false):
 		effects.append("本局一次")
+	if d.get("exhaust", false):
+		effects.append("本场消失")
 	if d.get("skip_enemy_turn", 0) > 0:
 		effects.append("跳过敌方回合")
 	if d.get("min_self_status", {}):

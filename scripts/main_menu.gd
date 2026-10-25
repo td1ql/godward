@@ -4,6 +4,7 @@ var _mute_btn: Button
 
 
 func _ready() -> void:
+	AudioManager.play_bgm("menu")
 	var bg_path := "res://assets/art/bg/bg_menu.webp"
 	if ResourceLoader.exists(bg_path):
 		var bg := TextureRect.new()
@@ -52,7 +53,7 @@ func _ready() -> void:
 	_check_prologue()
 
 func _update_mute_btn() -> void:
-	_mute_btn.text = "音效：" + ("开" if not AudioManager.muted else "关")
+	_mute_btn.text = "声音：" + ("开" if not AudioManager.muted else "关")
 
 func _make_menu_button(content: String, y: float) -> Button:
 	var b := Button.new()

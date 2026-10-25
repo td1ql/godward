@@ -26,6 +26,7 @@ var bg_rect: TextureRect
 var edge_root: Node2D
 
 func _ready() -> void:
+	AudioManager.play_bgm("map_%d" % GameState.act)
 	world = Node2D.new()
 	add_child(world)
 
@@ -593,7 +594,9 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	for i in range(choices.size()):
 		var c: Dictionary = choices[i]
 		var b := Button.new()
-		b.text = str(c.get("label", "...")).replace("{name}", picked_name)
+		b.text = _choice_label(c).replace("{name}", picked_name)
+		if b.text.contains("\n"):
+			b.custom_minimum_size = Vector2(0, 74)
 		var cost: int = int(c.get("gold", 0))
 		if cost < 0 and GameState.gold + cost < 0:
 			b.disabled = true
@@ -603,6 +606,30 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 			b.disabled = true
 			b.text += "（%s）" % Morality.req_text(c)
 		vbox.add_child(b)
+
+
+# 选项里直接给牌的，把卡面效果标出来
+func _choice_label(c: Dictionary) -> String:
+	var t := str(c.get("label", "..."))
+	var names: Array = []
+	if c.has("cards"):
+		for n in c["cards"]:
+			names.append(str(n))
+	var parts: Array[String] = []
+	for n in names:
+		if not CardDB.CARDS.has(n):
+			continue
+		var txt := CardDB.card_text(n).split("\n")
+		var tag := ""
+		if txt.size() > 1:
+			tag = str(txt[1]).replace("[", "").replace("]", "")
+		var eff := ""
+		if txt.size() > 2:
+			eff = str(txt[2]).replace("/", " · ")
+		parts.append("%s：%s %s" % [n, tag, eff])
+	if parts.is_empty():
+		return t
+	return t + "\n" + "；".join(parts)
 
 func _event_node(ev: Dictionary) -> Dictionary:
 	var node := ev

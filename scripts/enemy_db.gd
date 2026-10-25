@@ -87,7 +87,7 @@ const TREE := {
 
 # ===== 第三幕终局：耶梦加得 =====
 const SERPENT := {
-	"耶梦加得": {"name": "耶梦加得", "hp": 1, "attack": 14, "pattern": [1, 1.5, 1, 2],
+	"耶梦加得": {"name": "耶梦加得", "hp": 420, "attack": 14, "pattern": [1, 1.5, 1, 2],
 		"on_hit": {"中毒": 2},
 		"domain": {"type": "energy_drain", "value": 1},
 		"skills": [

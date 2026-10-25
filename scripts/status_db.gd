@@ -21,7 +21,7 @@ const STATUS := {
 	"护佑": {"name": "护佑", "desc": "抵挡接下来的 1 次伤害", "good": true, "tick_damage": false, "decay": 0},
 	"守护": {"name": "守护", "desc": "每回合开始获得等同层数的格挡", "good": true, "tick_damage": false, "decay": 1},
 	"锋锐": {"name": "锋锐", "desc": "攻击伤害 ×1.25", "good": true, "tick_damage": false, "decay": 1},
-	"毒性增长": {"name": "毒性增长", "desc": "敌人每有 3 层中毒，回合结束额外 +1 层", "good": true, "tick_damage": false, "decay": 0},
+	"毒性增长": {"name": "毒性增长", "desc": "中毒结算后，每 4 层额外 +1 层（永久）", "good": false, "tick_damage": false, "decay": 0},
 	"狂化": {"name": "狂化", "desc": "每回合开始 +2 力量", "good": true, "tick_damage": false, "decay": 0},
 
 
