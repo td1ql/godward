@@ -643,8 +643,10 @@ func _on_player_hurt(now: bool = false) -> void:
 		bonus_energy += v
 
 func _resolve_enemy_turn() -> void:
-	var dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
-	dmg = max(0, dmg - player_block)
+	var raw_dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
+	var absorbed: int = min(player_block, raw_dmg)
+	player_block = max(0, player_block - absorbed)
+	var dmg: int = max(0, raw_dmg - absorbed)
 	if dmg > 0 and int(player_status.get("护佑", 0)) > 0:
 		player_status["护佑"] = int(player_status["护佑"]) - 1
 		if int(player_status["护佑"]) <= 0:
