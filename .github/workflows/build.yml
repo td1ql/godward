@@ -28,14 +28,23 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: 安装 Android SDK
-        uses: android-actions/setup-android@v3
+      - name: 使用预装的 Android SDK
+        run: |
+          if [ -z "$ANDROID_HOME" ] && [ -d /usr/local/lib/android/sdk ]; then
+            echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"
+            echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> "$GITHUB_ENV"
+          fi
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          ls "$ANDROID_HOME" || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --version || true
 
       - name: 安装 Android 构建工具
+        continue-on-error: true
         run: |
-          set -e
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
-          echo "ANDROID_HOME=$ANDROID_HOME"
+          SDKM="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+          "$SDKM" "platform-tools" "platforms;android-34" "build-tools;34.0.0" || true
+          ls "$ANDROID_HOME/build-tools" || true
 
       - name: 下载 Godot
         run: |
