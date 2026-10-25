@@ -1,5 +1,7 @@
 extends Node2D
 
+const BLOCK_DAMAGE_CAP := 60
+
 var deck := Deck.new()
 var hand_view: HandView
 var player_label: Label
@@ -122,10 +124,12 @@ func _ready() -> void:
 	end_turn_button.position = Vector2(1080, 652)
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
-	player_label.position = Vector2(20, 96)
+	player_label.position = Vector2(14, 92)
+	player_label.size = Vector2(150, 250)
+	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	combat_label.position = Vector2(900, 60)
 	combat_label.add_theme_font_size_override("font_size", 20)
-	player_label.add_theme_font_size_override("font_size", 20)
+	player_label.add_theme_font_size_override("font_size", 17)
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var sil_path := "res://assets/art/enemy/%s.webp" % sil
@@ -159,8 +163,10 @@ func _ready() -> void:
 		add_child(pc)
 
 	ally_label = Label.new()
-	ally_label.position = Vector2(20, 350)
-	ally_label.add_theme_font_size_override("font_size", 18)
+	ally_label.position = Vector2(14, 352)
+	ally_label.size = Vector2(340, 96)
+	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	ally_label.add_theme_font_size_override("font_size", 16)
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
 	var deck_btn := Button.new()
@@ -215,27 +221,7 @@ func _ready() -> void:
 var _menu_popup: Control
 
 func _ghost_button(b: Button, size_px: int = 20) -> void:
-	b.focus_mode = Control.FOCUS_NONE
-	b.add_theme_font_size_override("font_size", size_px)
-	b.add_theme_color_override("font_color", Color(0.93, 0.88, 0.74))
-	b.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.78))
-	StoryDB.apply_serif(b)
-
-	var nb := StyleBoxFlat.new()
-	nb.bg_color = Color(0.05, 0.06, 0.09, 0.72)
-	nb.border_width_left = 1
-	nb.border_width_right = 1
-	nb.border_width_top = 1
-	nb.border_width_bottom = 1
-	nb.border_color = Color(0.55, 0.44, 0.24, 0.45)
-	b.add_theme_stylebox_override("normal", nb)
-
-	var hb := nb.duplicate()
-	hb.bg_color = Color(0.55, 0.42, 0.16, 0.35)
-	hb.border_color = Color(0.85, 0.68, 0.34, 0.95)
-	b.add_theme_stylebox_override("hover", hb)
-	b.add_theme_stylebox_override("pressed", hb)
-	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	UiKit.ghost_button(b, size_px)
 
 func _open_battle_menu() -> void:
 	_close_battle_menu()
@@ -292,35 +278,7 @@ func _close_battle_menu() -> void:
 
 func _open_status_help() -> void:
 	_close_battle_menu()
-	var overlay := Modal.open(self, 0.95)
-	Modal.title(overlay, "状态", 50, 34)
-
-	var bad := ""
-	var good := ""
-	for key in StatusDB.STATUS.keys():
-		var rule: Dictionary = StatusDB.STATUS[key]
-		var line := "%s　%s\n" % [str(rule["name"]), str(rule.get("desc", ""))]
-		if bool(rule.get("good", false)):
-			good += line
-		else:
-			bad += line
-
-	var body := ""
-	if bad != "":
-		body += "—— 减益 ——\n" + bad + "\n"
-	if good != "":
-		body += "—— 增益 ——\n" + good
-
-	var lbl := Label.new()
-	lbl.text = body
-	lbl.position = Vector2(150, 120)
-	lbl.size = Vector2(980, 470)
-	lbl.add_theme_font_size_override("font_size", 19)
-	lbl.add_theme_color_override("font_color", Color(0.85, 0.82, 0.74))
-	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	overlay.add_child(lbl)
-
-	Modal.button(overlay, "返回", 520, 620, 240, 56, overlay.queue_free)
+	StatusHelp.open(self)
 
 func _back_to_menu_from_battle() -> void:
 	var snap: Dictionary = GameState.pending_snapshot.duplicate(true)
@@ -459,7 +417,7 @@ func _apply_card_effects(c: String) -> void:
 	if d["damage"] > 0 or d.get("damage_from_block", false):
 		var base_damage: int = int(d["damage"])
 		if d.get("damage_from_block", false):
-			base_damage = player_block
+			base_damage = min(player_block * int(d.get("block_damage_mult", 1)), BLOCK_DAMAGE_CAP)
 		if d.get("damage_from_gold", false):
 			base_damage = GameState.gold
 		var ck := str(creed.get("key", ""))
@@ -491,7 +449,13 @@ func _apply_card_effects(c: String) -> void:
 		if thorns > 0:
 			player_hp = max(0, player_hp - thorns)
 			_on_player_hurt(true)
-	player_block += d["block"]
+		if str(enemy.domain.get("type", "")) == "attack_recoil":
+			player_hp = max(0, player_hp - int(enemy.domain.get("value", 0)))
+			_on_player_hurt()
+	var gained_block: int = int(d["block"])
+	if str(enemy.domain.get("type", "")) == "half_block":
+		gained_block = int(gained_block / 2.0)
+	player_block += gained_block
 	if d.get("poison_double", false):
 		enemy.status["中毒"] = int(enemy.status.get("中毒", 0)) * 2
 	if d["block"] > 0:
@@ -537,7 +501,8 @@ func _on_card_pressed(index: int) -> void:
 		Toast.show_text("「%s」本场战斗已用完" % c, 2.0)
 		return
 	var d: Dictionary = CardDB.get_card(c)
-	if player_energy < d["cost"]:
+	var extra_cost := int(enemy.domain.get("value", 0)) if str(enemy.domain.get("type", "")) == "cost_up" else 0
+	if player_energy < int(d["cost"]) + extra_cost:
 		var req: Dictionary = d.get("min_self_status", {})
 		for k in req:
 			if int(player_status.get(k, 0)) < int(req[k]):
@@ -744,7 +709,25 @@ func _apply_turn_creed() -> void:
 	if str(creed.get("key", "")) == "turn_block":
 		player_block += int(creed.get("value", 0))
 
+func _domain_tick() -> void:
+	var t := str(enemy.domain.get("type", ""))
+	var v := int(enemy.domain.get("value", 0))
+	match t:
+		"damage_aura":
+			player_hp = max(0, player_hp - v)
+		"weak_aura":
+			player_status["虚弱"] = int(player_status.get("虚弱", 0)) + v
+		"bleed_aura":
+			player_status["流血"] = int(player_status.get("流血", 0)) + v
+		"block_decay":
+			player_block = max(0, player_block - v)
+		"poison_aura":
+			player_status["中毒"] = int(player_status.get("中毒", 0)) + v
+
 func _start_new_turn() -> void:
+	_domain_tick()
+	if game_over:
+		return
 	for f in ally_fighters:
 		enemy.hp = max(0, enemy.hp - int(f["damage"]))
 	if not ally_fighters.is_empty():
@@ -767,7 +750,8 @@ func _start_new_turn() -> void:
 		var draw_count: int = RunConfig.BASE_DRAW + player_energy
 		draw_count += int(player_status.get("洞察", 0))
 		draw_count = max(0, draw_count - int(player_status.get("迟钝", 0)))
-		if str(enemy.domain.get("type", "")) == "draw_penalty":
+		var dt := str(enemy.domain.get("type", ""))
+		if dt == "draw_penalty" or dt == "less_draw":
 			draw_count = max(0, draw_count - int(enemy.domain.get("value", 0)))
 		if draw_count > 0:
 			_draw_cards(draw_count)
@@ -777,6 +761,8 @@ func _start_new_turn() -> void:
 	player_energy = max(0, player_energy - int(player_status.get("重力", 0)))
 	if player_status.has("狂化"):
 		player_status["力量"] = int(player_status.get("力量", 0)) + 2
+	if str(enemy.domain.get("type", "")) == "energy_drain":
+		player_energy = max(0, player_energy - int(enemy.domain.get("value", 0)))
 	var guard := int(player_status.get("守护", 0))
 	if guard > 0:
 		player_block += guard

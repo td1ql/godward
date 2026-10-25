@@ -184,6 +184,8 @@ const CARDS := {
 	"再生术": {"kind": "action", "cost": 2, "damage": 0, "block": 3, "heal": 10, "price": 70},
 	"守护": {"kind": "action", "cost": 2, "damage": 0, "block": 14, "price": 55},
 	"坚守之志": {"kind": "effect", "cost": 3, "consume": 3, "damage": 0, "block": 15, "self_status": {"坚守": 1}, "price": 120},
+	"盾击": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "damage_from_block": true, "zero_block_after": true, "price": 100},
+	"铁壁冲撞": {"kind": "action", "cost": 2, "damage": 0, "block": 0, "damage_from_block": true, "zero_block_after": true, "block_damage_mult": 2, "price": 115},
 	"疾书": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 2, "self_damage": 3, "price": 50},
 	"静养": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "heal": 5, "draw": 1, "price": 45},
 	"鲜血之赐": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 3, "self_damage": 6, "price": 55},

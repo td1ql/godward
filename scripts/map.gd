@@ -693,7 +693,14 @@ func _contestant_choice(id: String, choice: Dictionary) -> void:
 	var d := ContestantDB.impression_delta(id, result)
 	GameState.impressions[id] = clampi(int(GameState.impressions.get(id, 0)) + d, -100, 100)
 	var summary := Reward.apply(result, id)
-	Toast.show_text("%s\n%s" % [str(result.get("text", "")), summary], 3.2)
+	var hint := ""
+	if d >= 30:
+		hint = "\n他记住了你。"
+	elif d >= 12:
+		hint = "\n他看了你一眼。"
+	elif d <= -12:
+		hint = "\n他往后退了半步。"
+	Toast.show_text("%s\n%s%s" % [str(result.get("text", "")), summary, hint], 3.2)
 	_close_encounter()
 
 func _maybe_eliminate() -> void:
@@ -756,31 +763,7 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	vbox.add_child(leave)
 
 func _ink_button(content: String) -> Button:
-	var b := Button.new()
-	b.text = content
-	b.custom_minimum_size = Vector2(0, 48)
-	b.focus_mode = Control.FOCUS_NONE
-	b.add_theme_font_size_override("font_size", 20)
-	b.add_theme_color_override("font_color", Color(0.93, 0.88, 0.74))
-	b.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.78))
-	StoryDB.apply_serif(b)
-
-	var nb := StyleBoxFlat.new()
-	nb.bg_color = Color(0.13, 0.14, 0.18, 0.92)
-	nb.border_width_left = 1
-	nb.border_width_right = 1
-	nb.border_width_top = 1
-	nb.border_width_bottom = 1
-	nb.border_color = Color(0.55, 0.44, 0.24, 0.45)
-	b.add_theme_stylebox_override("normal", nb)
-
-	var hb := nb.duplicate()
-	hb.bg_color = Color(0.55, 0.42, 0.16, 0.32)
-	hb.border_color = Color(0.85, 0.68, 0.34, 0.95)
-	b.add_theme_stylebox_override("hover", hb)
-	b.add_theme_stylebox_override("pressed", hb)
-	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	return b
+	return UiKit.ink_button(content)
 
 func _fight_contestant(id: String) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)

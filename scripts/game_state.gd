@@ -31,6 +31,7 @@ var prologue_seen := false
 var milestone_card := false
 var milestone_discard := false
 var morality := 50
+@warning_ignore("shadowed_global_identifier")
 var sin := 0
 var impressions := {}
 var meet_count := {}
