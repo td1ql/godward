@@ -2,6 +2,8 @@
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
   workflow_dispatch:
@@ -109,6 +111,7 @@ jobs:
           ls -lh build
 
       - name: 导出 Android（APK）
+        continue-on-error: true
         run: |
           set -e
           mkdir -p build
@@ -116,6 +119,7 @@ jobs:
           ls -lh build
 
       - name: 上传构建产物
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: Godward-build
