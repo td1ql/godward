@@ -451,8 +451,75 @@ func _show_encounter(t: String) -> void:
 			_encounter_event(title, body, vbox)
 		"shop":
 			_encounter_shop(title, body, vbox)
+		"wealth":
+			_encounter_wealth(title, body, vbox)
+		"god":
+			_encounter_god(title, body, vbox)
 		"contestant":
 			_encounter_contestant(title, body, vbox)
+
+
+const WEALTH_GOODS := [
+	{"key": "hp",     "name": "寿命", "price": 90,  "desc": "最大生命 +10"},
+	{"key": "str",    "name": "力气", "price": 110, "desc": "每场战斗开局 +1 力量"},
+	{"key": "draw",   "name": "眼力", "price": 90,  "desc": "每回合多抽 1 张"},
+	{"key": "forget", "name": "遗忘", "price": 80,  "desc": "删掉一张牌"},
+]
+
+func _encounter_wealth(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	title.text = "财富之神"
+	body.text = "「你带来什么？」\n他的手心朝上，一直没合上。"
+	for g in WEALTH_GOODS:
+		var key: String = str(g["key"])
+		var b := _ink_button("%s　%d 金　—— %s" % [str(g["name"]), int(g["price"]), str(g["desc"])])
+		b.pressed.connect(_buy_wealth.bind(g))
+		vbox.add_child(b)
+	var leave := _ink_button("离开")
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
+
+func _buy_wealth(g: Dictionary) -> void:
+	var price: int = int(g["price"])
+	if GameState.gold < price:
+		Toast.show_text("金币不足。")
+		return
+	GameState.gold -= price
+	match str(g["key"]):
+		"hp":
+			GameState.wealth_hp += 10
+			GameState.recompute_max_hp()
+			GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + 10)
+		"str":
+			GameState.wealth_str += 1
+		"draw":
+			GameState.wealth_draw += 1
+		"forget":
+			GameState.save_game()
+			DeckViewer.open_choose("忘掉一张牌", GameState.deck, _forget_one)
+			return
+	GameState.save_game()
+	Toast.show_text("%s\n已生效。" % str(g["desc"]), 3.0)
+	_close_encounter()
+
+func _forget_one(index: int) -> void:
+	if index >= 0 and index < GameState.deck.size():
+		var c: String = GameState.deck[index]
+		GameState.deck.remove_at(index)
+		Toast.show_text("你忘了「%s」。" % c, 3.0)
+	GameState.save_game()
+	_close_encounter()
+
+func _encounter_god(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var g: Dictionary = EnemyDB.pick_for_node("god", 0)
+	title.text = str(g.get("name", "疯狂的神"))
+	var organ := str(g.get("organ", ""))
+	body.text = "它还在呼吸。\n它身上少了点什么。\n\n（击败它可以取走「%s」）" % organ
+	var fight := _ink_button("和它动手")
+	fight.pressed.connect(func() -> void: _start_battle_with(g))
+	vbox.add_child(fight)
+	var leave := _ink_button("绕开")
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
 
 func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	title.text = "休息"
@@ -764,6 +831,13 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 
 func _ink_button(content: String) -> Button:
 	return UiKit.ink_button(content)
+
+
+func _start_battle_with(data: Dictionary) -> void:
+	GameState.pending_enemy = data
+	GameState.pending_snapshot = {"kind": "battle", "enemy": data}
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 func _fight_contestant(id: String) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)

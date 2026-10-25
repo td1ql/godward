@@ -19,6 +19,10 @@ const RULES := {
 	"divine_elite": {"gold": 60,  "cards": 3, "discard": true},
 	"pope":         {"gold": 0,   "cards": 0, "discard": false},
 	"contestant":   {"gold": 0,   "cards": 3, "discard": false},
+	"god":          {"gold": 60,  "cards": 0, "discard": false},
+	"shell":        {"gold": 20,  "cards": 3, "discard": false},
+	"wealth":       {"gold": 0,   "cards": 0, "discard": false},
+	"serpent":      {"gold": 0,   "cards": 0, "discard": false},
 }
 
 func gold_of(node_type: String) -> int:

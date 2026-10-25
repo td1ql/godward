@@ -48,6 +48,34 @@ const ACT2_POOLS := {
 
 const ACT2_FINAL := "pope"
 
+
+# ===== 第三幕：神明降临人间 =====
+const ACT3_DEPTH := 20
+
+const ACT3_POOLS := {
+	1: ["battle", "battle"],
+	2: ["battle", "shell", "event"],
+	3: ["god", "battle"],
+	4: ["contestant", "battle", "shell"],
+	5: ["battle", "wealth", "battle"],
+	6: ["shell", "contestant", "battle"],
+	7: ["battle", "battle", "event"],
+	8: ["god", "contestant", "battle"],
+	9: ["battle", "wealth", "shell"],
+	10: ["contestant", "battle", "battle"],
+	11: ["shell", "battle", "event"],
+	12: ["battle", "wealth", "contestant"],
+	13: ["god", "battle", "shell"],
+	14: ["contestant", "battle", "battle"],
+	15: ["battle", "battle", "shell"],
+	16: ["wealth", "contestant", "battle"],
+	17: ["shell", "battle", "battle"],
+	18: ["god", "contestant", "battle"],
+	19: ["battle", "wealth", "shell"],
+}
+
+const ACT3_FINAL := "serpent"
+
 const TYPE_INFO := {
 	"start": {"label": "起点", "color": Color(0.85, 0.85, 0.85)},
 	"battle": {"label": "战斗", "color": Color(0.95, 0.45, 0.45)},
@@ -61,15 +89,28 @@ const TYPE_INFO := {
 	"divine_elite": {"label": "守卫", "color": Color(0.85, 0.65, 1.0)},
 	"remnant": {"label": "过去的遗骸", "color": Color(0.55, 0.95, 0.9)},
 	"pope": {"label": "教皇", "color": Color(1.0, 0.85, 0.3)},
+	"god": {"label": "疯狂的神", "color": Color(0.95, 0.45, 0.75)},
+	"shell": {"label": "空壳", "color": Color(0.75, 0.62, 0.52)},
+	"wealth": {"label": "财富之神", "color": Color(1.0, 0.85, 0.35)},
+	"serpent": {"label": "耶梦加得", "color": Color(0.45, 0.95, 0.55)},
 }
 
 func max_depth_of(act: int) -> int:
+	if act == 3:
+		return ACT3_DEPTH
 	return ACT2_DEPTH if act == 2 else MAX_DEPTH
 
 func final_type_of(act: int) -> String:
+	if act == 3:
+		return ACT3_FINAL
 	return ACT2_FINAL if act == 2 else FINAL_TYPE
 
 func pick_type(depth: int, act: int = 1) -> String:
+	if act == 3:
+		if depth >= ACT3_DEPTH:
+			return ACT3_FINAL
+		var pool3: Array = ACT3_POOLS.get(depth, ["battle"])
+		return pool3[randi() % pool3.size()]
 	if act == 2:
 		if depth >= ACT2_DEPTH:
 			return ACT2_FINAL

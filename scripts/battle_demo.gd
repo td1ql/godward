@@ -27,12 +27,14 @@ var max_energy: int = RunConfig.MAX_ENERGY
 var battle_uses := {}
 var creed := {}
 var first_attack_used := false
+var first_card_used := false
 var attacked_last_turn := false
 var attacked_this_turn := false
 var first_hurt_used := false
 var damage_taken := 0
 var bonus_energy := 0
 var last_card_played := ""
+var enemy_organ := ""
 var _kill_pick_pending := false
 var skip_enemy := 0
 var _new_cards := 0
@@ -108,6 +110,7 @@ func _ready() -> void:
 	else:
 		enemy_data = EnemyDB.pick_for_node(node_type)
 	enemy.setup(enemy_data)
+	enemy_organ = str(enemy_data.get("organ", ""))
 	
 	if str(enemy.domain.get("type", "")) == "thorns_aura":
 		enemy.status["荆棘"] = int(enemy.status.get("荆棘", 0)) + int(enemy.domain.get("value", 0))
@@ -213,6 +216,9 @@ func _ready() -> void:
 			extra_draw = int(creed.get("value", 0))
 		_draw_cards(GameState.initial_hand_size() + extra_draw)
 		_apply_turn_creed()
+	var organ_heal := OrganDB.total("start_heal")
+	if organ_heal > 0:
+		player_hp = min(GameState.player_max_hp, player_hp + organ_heal)
 	if node_type == "boss":
 		_setup_allies()
 	_render_hand()
@@ -502,6 +508,8 @@ func _on_card_pressed(index: int) -> void:
 		return
 	var d: Dictionary = CardDB.get_card(c)
 	var extra_cost := int(enemy.domain.get("value", 0)) if str(enemy.domain.get("type", "")) == "cost_up" else 0
+	var discount := OrganDB.total("first_discount") if not first_card_used else 0
+	extra_cost = max(-int(d["cost"]), extra_cost - discount)
 	if player_energy < int(d["cost"]) + extra_cost:
 		var req: Dictionary = d.get("min_self_status", {})
 		for k in req:
@@ -522,6 +530,7 @@ func _on_card_pressed(index: int) -> void:
 	var spent = hand_view.take_button(index)
 	player_energy -= d["cost"]
 	last_card_played = c
+	first_card_used = true
 	_apply_card_effects(c)
 	Tutorial.notify("card_played")
 	if CardDB.kind_of(c) == "effect":
@@ -707,6 +716,7 @@ func _resolve_enemy_turn() -> void:
 
 func _apply_turn_creed() -> void:
 	first_attack_used = false
+	first_card_used = false
 	attacked_this_turn = false
 	if str(creed.get("key", "")) == "turn_block":
 		player_block += int(creed.get("value", 0))
@@ -749,7 +759,7 @@ func _start_new_turn() -> void:
 				deck.hand.append(cn)
 				_new_cards += 1
 	else:
-		var draw_count: int = RunConfig.BASE_DRAW + player_energy
+		var draw_count: int = RunConfig.BASE_DRAW + player_energy + OrganDB.total("draw") + GameState.wealth_draw
 		draw_count += int(player_status.get("洞察", 0))
 		draw_count = max(0, draw_count - int(player_status.get("迟钝", 0)))
 		var dt := str(enemy.domain.get("type", ""))
@@ -800,6 +810,11 @@ func _check_game_over() -> void:
 			pass
 		if wk == "kill_pick":
 			_kill_pick_pending = true
+		if node_type == "god":
+			var organ := str(enemy_organ)
+			if organ != "":
+				OrganDB.take(organ)
+				Toast.show_text("你取走了它的「%s」。\n神性 +15" % organ, 3.5)
 		GameState.player_hp = max(1, player_hp)
 		if GameState.pending_contestant != "":
 			_show_contestant_aftermath()
@@ -1134,6 +1149,7 @@ func _end_true_run() -> void:
 
 func _enter_divine_realm() -> void:
 	GameState.act = 2
+	GameState.allies.clear()
 	GameState.map_generated = false
 	GameState.map_nodes = {}
 	GameState.current_node_id = 0

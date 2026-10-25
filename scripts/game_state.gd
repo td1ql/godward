@@ -33,9 +33,20 @@ var milestone_discard := false
 var morality := 50
 @warning_ignore("shadowed_global_identifier")
 var sin := 0
+
+# 第三幕的神性：0~100，只影响结局好坏
+var divinity := 50
+
+# 第三幕拿到的器官 id
+var organs: Array[String] = []
 var impressions := {}
 var meet_count := {}
 var energy_bonus := 0
+
+# 财富之神那里买到的永久加成
+var wealth_hp := 0
+var wealth_str := 0
+var wealth_draw := 0
 
 func _ready() -> void:
 	reset_deck()
@@ -72,10 +83,15 @@ func reset_run() -> void:
 	prologue_seen = false
 	transmigration = 1
 	energy_bonus = 0
+	wealth_hp = 0
+	wealth_str = 0
+	wealth_draw = 0
 	vocation_history.clear()
 	impressions.clear()
 	meet_count.clear()
 	_roll_vocation()
+	divinity = 50
+	organs.clear()
 
 func advance_transmigration() -> void:
 	transmigration += 1
@@ -128,12 +144,13 @@ func initial_hand_size() -> int:
 	return max(1, RunConfig.HAND_SIZE + TraitDB.total_hand(traits))
 
 func initial_energy() -> int:
-	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits) + energy_bonus)
+	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits) + energy_bonus + OrganDB.total("energy"))
 
 func recompute_max_hp() -> int:
 	var hp: int = max(10, RunConfig.START_HP + TraitDB.total_hp(traits) + (transmigration - 1) * RunConfig.META_HP_PER_RUN)
 	if transmigration >= 10:
 		hp += 20
+	hp += OrganDB.total("hp") + wealth_hp
 	return hp
 
 func _slot_path(slot: int) -> String:
@@ -142,12 +159,17 @@ func _slot_path(slot: int) -> String:
 func save_game() -> void:
 	var data := {
 		"energy_bonus": energy_bonus,
+		"wealth_hp": wealth_hp,
+		"wealth_str": wealth_str,
+		"wealth_draw": wealth_draw,
 		"streams": streams,
 		"save_version": SAVE_VERSION,
 		"impressions": impressions,
 		"meet_count": meet_count,
 		"morality": morality,
 		"sin": sin,
+		"divinity": divinity,
+		"organs": organs,
 		"prologue_seen": prologue_seen,
 		"player_max_hp": player_max_hp,
 		"vocation_history": vocation_history,
@@ -221,7 +243,14 @@ func load_game(slot: int = -1) -> bool:
 		allies.append(str(c))
 	morality = int(data.get("morality", Morality.START_MORAL))
 	sin = int(data.get("sin", Morality.START_SIN))
+	divinity = clampi(int(data.get("divinity", 50)), 0, 100)
+	organs.clear()
+	for o in data.get("organs", []):
+		organs.append(str(o))
 	energy_bonus = int(data.get("energy_bonus", 0))
+	wealth_hp = int(data.get("wealth_hp", 0))
+	wealth_str = int(data.get("wealth_str", 0))
+	wealth_draw = int(data.get("wealth_draw", 0))
 	impressions = data.get("impressions", {})
 	meet_count = data.get("meet_count", {})
 	prologue_seen = bool(data.get("prologue_seen", false))

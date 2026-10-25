@@ -58,8 +58,27 @@ const POPE := {
 	"教皇": {"name": "教皇", "hp": 260, "attack": 16, "pattern": [0.5, 1, 1.5, 2, 2.5, 3, 0, 0], "skills": [{"every": 2, "to": "self", "status": {"力量": 2}, "name": "神威"}, {"every": 3, "to": "player", "status": {"易伤": 3}, "name": "注视"}, {"every": 5, "to": "self", "heal": 40, "name": "圣愈"}]},
 }
 
+
+# ===== 第三幕：疯狂的诸神（击败后掉落器官）=====
+const GODS := {
+	"奥丁": {"name": "奥丁", "hp": 120, "attack": 10, "pattern": [1, 1.5], "organ": "神之眼",
+		"skills": [{"every": 2, "to": "player", "status": {"虚弱": 2}, "name": "凝视"},
+			{"every": 4, "to": "self", "status": {"力量": 3}, "name": "睁开"}]},
+	"赫尔墨斯": {"name": "赫尔墨斯", "hp": 110, "attack": 11, "pattern": [1, 2], "organ": "神之舌",
+		"skills": [{"every": 2, "to": "player", "status": {"中毒": 3}, "name": "低语"},
+			{"every": 3, "to": "self", "heal": 12, "name": "吞咽"}]},
+	"阿斯克勒庇俄斯": {"name": "阿斯克勒庇俄斯", "hp": 150, "attack": 8, "pattern": [1, 1, 2], "organ": "神之心",
+		"skills": [{"every": 2, "to": "self", "heal": 15, "name": "愈合"},
+			{"every": 3, "to": "self", "status": {"荆棘": 4}, "name": "硬化"}]},
+	"赫菲斯托斯": {"name": "赫菲斯托斯", "hp": 130, "attack": 9, "pattern": [1, 1.5, 2], "organ": "神之手",
+		"skills": [{"every": 2, "to": "player", "status": {"易伤": 2}, "name": "捏塑"},
+			{"every": 4, "to": "self", "status": {"力量": 4}, "name": "成型"}]},
+}
+
 func _pool_for(node_type: String) -> Dictionary:
 	match node_type:
+		"god":
+			return GODS
 		"elite":
 			return ELITE
 		"boss":
@@ -145,6 +164,7 @@ const SILHOUETTE := {
 	"断头骑士": "soldier", "书记官": "soldier",
 	"缢死者": "shade", "无面乐师": "shade",
 	"圣骸行者": "giant", "灰烬修女": "caster",
+	"奥丁": "idol", "赫尔墨斯": "shade", "阿斯克勒庇俄斯": "giant", "赫菲斯托斯": "caster",
 	"守门人": "warden",
 	"教皇": "pope",
 	"原罪*贪婪": "greed",
