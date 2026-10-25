@@ -1,6 +1,11 @@
 extends Node2D
 
 var _mute_btn: Button
+var _bgm_btn: Button
+var _master_btn: Button
+var _quit_btn: Button
+var _silence_btn: Button
+var _sub_open := false
 
 
 func _ready() -> void:
@@ -41,19 +46,67 @@ func _ready() -> void:
 	StoryDB.apply_serif(sub)
 	add_child(sub)
 
-	var start := _make_menu_button("开始游戏", 438)
+	var start := _make_menu_button("开始游戏", 390)
 	start.pressed.connect(_on_start)
+
+	_master_btn = _make_menu_button("", 444)
+	_master_btn.pressed.connect(_on_master_pressed)
+	_update_master_btn()
 
 	_mute_btn = _make_menu_button("", 498)
 	_mute_btn.pressed.connect(_on_toggle_audio)
+	_mute_btn.visible = false
 	_update_mute_btn()
 
-	var quit := _make_menu_button("退出游戏", 558)
-	quit.pressed.connect(_on_quit)
+	_bgm_btn = _make_menu_button("", 552)
+	_bgm_btn.pressed.connect(_on_toggle_bgm)
+	_bgm_btn.visible = false
+	_update_bgm_btn()
+
+	_silence_btn = _make_menu_button("", 606)
+	_silence_btn.pressed.connect(_on_toggle_master)
+	_silence_btn.visible = false
+	_update_silence_btn()
+
+	_quit_btn = _make_menu_button("退出游戏", 498)
+	_quit_btn.pressed.connect(_on_quit)
 	_check_prologue()
 
 func _update_mute_btn() -> void:
-	_mute_btn.text = "声音：" + ("开" if not AudioManager.muted else "关")
+	_mute_btn.text = "音效：" + ("开" if not AudioManager.muted else "关")
+
+func _update_master_btn() -> void:
+	var arrow := "▼" if _sub_open else "▶"
+	_master_btn.text = "声音设置  " + arrow
+
+# 点「全部声音」：展开/收起子菜单
+func _on_master_pressed() -> void:
+	_sub_open = not _sub_open
+	_apply_sub_state()
+	_update_master_btn()
+
+func _update_silence_btn() -> void:
+	_silence_btn.text = "静音全部：" + ("开" if AudioManager.master_muted else "关")
+
+func _apply_sub_state() -> void:
+	_mute_btn.visible = _sub_open
+	_bgm_btn.visible = _sub_open
+	_silence_btn.visible = _sub_open
+	_quit_btn.position = Vector2(_quit_btn.position.x, 660 if _sub_open else 498)
+
+func _on_toggle_master() -> void:
+	AudioManager.set_master_muted(not AudioManager.master_muted)
+	_update_master_btn()
+	_update_mute_btn()
+	_update_bgm_btn()
+	_update_silence_btn()
+
+func _update_bgm_btn() -> void:
+	_bgm_btn.text = "音乐：" + ("开" if not AudioManager.bgm_muted else "关")
+
+func _on_toggle_bgm() -> void:
+	AudioManager.set_bgm_muted(not AudioManager.bgm_muted)
+	_update_bgm_btn()
 
 func _make_menu_button(content: String, y: float) -> Button:
 	var b := Button.new()

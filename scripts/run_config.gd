@@ -7,8 +7,9 @@ const DECK_SIZE := 20
 
 # ===== 战斗 =====
 const MAX_ENERGY := 3
-const HAND_SIZE := 5
-const BASE_DRAW := 2
+# 第 1 回合的起手手牌数（之后每回合 = BASE_DRAW + 上回合剩余能量）
+const FIRST_HAND := 5
+const BASE_DRAW := 4
 const GOLD_BATTLE := 15
 const GOLD_ELITE := 40
 const GOLD_BOSS := 100

@@ -337,6 +337,71 @@ const DIVINE_EVENTS := [
 	},
 ]
 
+
+# ===== 第三幕：燃烧的人间 =====
+const ACT3_EVENTS := [
+	{
+		"text": "一队人跪在路边。\n他们不看天。\n他们嘴里念着同一个词。",
+		"choices": [
+			{"label": "扶起一个", "hp": 8, "moral": 5},
+			{"label": "问他们跪什么", "divinity": 5},
+			{"label": "拿走他们的行李（+50 金币）", "gold": 50, "moral": -5, "sin": 3},
+		],
+	},
+	{
+		"text": "天上有个东西在看这一片。\n它很大。\n它没有眨过眼。",
+		"choices": [
+			{"label": "低头快走（-3 生命）", "hp": -3},
+			{"label": "抬头看回去（-5 生命）", "hp": -5, "divinity": 10},
+			{"label": "躲进废墟（回复 10 生命）", "hp": 10},
+		],
+	},
+	{
+		"text": "一个孩子站在烧掉的家门口。\n他没有哭。\n他在等门开。",
+		"choices": [
+			{"label": "带他走（-10 金币）", "gold": -10, "moral": 10},
+			{"label": "分他一点吃的（-5 生命）", "hp": -5, "moral": 6},
+			{"label": "走开", "moral": -4},
+		],
+	},
+	{
+		"text": "一具神的残躯横在路中央。\n它还有温度。\n它的手指动了一下。",
+		"choices": [
+			{"label": "靠上去取暖（回复 12 生命）", "hp": 12, "divinity": 5},
+			{"label": "割下一块带走（+40 金币）", "gold": 40, "moral": -6, "sin": 4},
+			{"label": "绕开"},
+		],
+	},
+	{
+		"text": "有人在你身后叫你的名字。\n那不是和你一起上路的人。\n这里没有别人。",
+		"choices": [
+			{"label": "回头（-8 生命）", "hp": -8, "divinity": 5},
+			{"label": "不回头，继续走", "moral": 3},
+			{"label": "跑", "hp": -2},
+		],
+	},
+	{
+		"text": "一口井。\n水是黑的。\n黑得像有东西沉在底下。",
+		"choices": [
+			{"label": "喝下去（-12 生命，习得「旧伤」）", "hp": -12, "cards": ["旧伤"]},
+			{"label": "洗伤口（回复 10 生命）", "hp": 10},
+			{"label": "把它填了", "moral": 5},
+		],
+	},
+	{
+		"text": "一尊神像倒在田里。\n它的脸被砸掉了。\n但它的手还举着。",
+		"choices": [
+			{"label": "把它的手按下去", "divinity": -5, "moral": 5},
+			{"label": "和它一起举手（-6 生命）", "hp": -6, "divinity": 10},
+			{"label": "不看它", "hp": 5},
+		],
+	},
+]
+
 func pick(act: int = 1) -> Dictionary:
-	var pool: Array = DIVINE_EVENTS if act == 2 else EVENTS
+	var pool: Array = EVENTS
+	if act == 2:
+		pool = DIVINE_EVENTS
+	elif act == 3:
+		pool = ACT3_EVENTS
 	return pool[randi() % pool.size()]

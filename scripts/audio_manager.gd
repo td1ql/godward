@@ -3,6 +3,18 @@ extends Node
 const SETTINGS_PATH := "user://settings.cfg"
 const BGM_DIR := "res://assets/audio/bgm/%s.ogg"
 const BGM_DB := -14.0
+# 每个音效的音量（0 = 原始，越负越小）
+const SFX_DB := {
+	"draw": -16.0,
+	"play": -11.0,
+	"click": -8.0,
+	"hit": -5.0,
+	"attack": -5.0,
+	"hurt": -6.0,
+	"heal": -6.0,
+	"victory": -2.0,
+	"defeat": -2.0,
+}
 const SILENT_DB := -45.0
 
 var streams := {}
@@ -10,6 +22,7 @@ var muted := false
 
 var bgm_player: AudioStreamPlayer
 var bgm_muted := false
+var master_muted := false
 var _bgm_id := ""
 var _fade: Tween
 
@@ -36,6 +49,7 @@ func _load_settings() -> void:
 	if cfg.load(SETTINGS_PATH) == OK:
 		muted = bool(cfg.get_value("audio", "muted", false))
 		bgm_muted = bool(cfg.get_value("audio", "bgm_muted", false))
+		master_muted = bool(cfg.get_value("audio", "master_muted", false))
 
 
 func _save_settings() -> void:
@@ -43,20 +57,21 @@ func _save_settings() -> void:
 	cfg.load(SETTINGS_PATH)
 	cfg.set_value("audio", "muted", muted)
 	cfg.set_value("audio", "bgm_muted", bgm_muted)
+	cfg.set_value("audio", "master_muted", master_muted)
 	cfg.save(SETTINGS_PATH)
 
 
-# 一个开关：音效 + 音乐一起关
+# 音效开关（只管音效）
+
+# 总开关：一次关掉音效和音乐
+func set_master_muted(v: bool) -> void:
+	master_muted = v
+	set_muted(v)
+	set_bgm_muted(v)
+
 func set_muted(v: bool) -> void:
 	muted = v
-	bgm_muted = v
 	_save_settings()
-	if v:
-		_stop_now()
-	elif _bgm_id != "":
-		var id := _bgm_id
-		_bgm_id = ""
-		play_bgm(id, 0.4)
 
 
 func set_bgm_muted(v: bool) -> void:
@@ -76,12 +91,13 @@ func _load(id: String, path: String) -> void:
 
 
 func play(id: String) -> void:
-	if muted:
+	if master_muted or muted:
 		return
 	if not streams.has(id):
 		return
 	var p := AudioStreamPlayer.new()
 	p.stream = streams[id]
+	p.volume_db = float(SFX_DB.get(id, 0.0))
 	add_child(p)
 	p.finished.connect(p.queue_free)
 	p.play()
@@ -90,6 +106,10 @@ func play(id: String) -> void:
 # ===== BGM =====
 
 func play_bgm(id: String, fade: float = 1.2) -> void:
+	if master_muted or bgm_muted:
+		_stop_now()
+		_bgm_id = id
+		return
 	if id == _bgm_id:
 		return
 	var path: String = BGM_DIR % id

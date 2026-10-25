@@ -165,7 +165,7 @@ func _apply_traits() -> void:
 	allies.clear()
 
 func initial_hand_size() -> int:
-	return max(1, RunConfig.HAND_SIZE + TraitDB.total_hand(traits))
+	return max(1, RunConfig.FIRST_HAND + TraitDB.total_hand(traits))
 
 func initial_energy() -> int:
 	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits) + energy_bonus + OrganDB.total("energy"))

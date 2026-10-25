@@ -896,7 +896,9 @@ func _encounter_contestant_act3(title: Label, body: Label, vbox: VBoxContainer) 
 	var id: String = str(pool[randi() % pool.size()])
 	var c: Dictionary = ContestantDB.get_contestant(id)
 	title.text = str(c["name"])
-	body.text = str(c["desc"]) + "\n\n诸神下来之后，没有人再守规矩。"
+	# 第三幕用专属于末日的三行
+	var txt3: String = str(c.get("desc3", c["desc"]))
+	body.text = txt3 + "\n\n诸神下来之后，没有人再守规矩。"
 
 	var kill := _ink_button("杀死他")
 	kill.pressed.connect(func() -> void: _fight_contestant(id))

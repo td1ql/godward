@@ -12,6 +12,10 @@
 extends Node
 
 const RULES := {
+	"event":        {"gold": 0,   "cards": 0, "discard": false},
+	"shop":         {"gold": 0,   "cards": 0, "discard": false},
+	"rest":         {"gold": 0,   "cards": 0, "discard": false},
+	"remnant":      {"gold": 0,   "cards": 0, "discard": false},
 	"battle":       {"gold": 15,  "cards": 3, "discard": false},
 	"elite":        {"gold": 40,  "cards": 3, "discard": true},
 	"boss":         {"gold": 100, "cards": 3, "discard": false},

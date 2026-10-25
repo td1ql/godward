@@ -16,6 +16,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "self", "status": {"力量": 3}, "name": "神勇"}],
 		"trait": "好战",
 		"desc": "他是这局里最强的一个。\n他把自己的口粮全分了出去。\n他说他不需要。",
+		"desc3": "他把剑放下了。\n剑上那个名字被血盖住了。\n他还在等一个人。",
+		"ally_line": "这次我不等了。",
 		"bond": {"label": "一起走到最后", "result": "talk", "text": "「走我后面。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -34,6 +36,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 4, "to": "player", "status": {"虚弱": 2}, "name": "守阵"}],
 		"trait": "冷静",
 		"desc": "他不肯离开路口。\n路口后面是水。\n他说总得有人站在这里。",
+		"desc3": "路口没有了。\n水也没有了。\n他还站在那里。",
+		"ally_line": "路口在这儿。",
 		"bond": {"label": "替他守一夜", "result": "talk", "text": "「天亮我就回来。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -52,6 +56,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 2, "to": "player", "status": {"易伤": 2}, "name": "算计"}],
 		"trait": "狡诈",
 		"desc": "他什么都换。\n换东西，换消息，换别人欠他的。\n他不换自己的。",
+		"desc3": "他不再换东西了。\n没有人还有东西。\n他第一次不知道自己该干什么。",
+		"ally_line": "我教你一招。",
 		"bond": {"label": "跟他做一笔交易", "result": "talk", "text": "「这笔我不赚。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -70,6 +76,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "self", "status": {"力量": 4}, "name": "蛮力"}],
 		"trait": "好战",
 		"desc": "营地里的活都是他干的。\n他做完过十二件事，从不说是什么。\n他从不问报酬。",
+		"desc3": "他还在搬东西。\n这次搬的是人。\n他一次搬两个。",
+		"ally_line": "我搬它。",
 		"bond": {"label": "请他背你一段", "result": "talk", "text": "「上来。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -88,6 +96,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "player", "status": {"流血": 3}, "name": "割伤"}],
 		"trait": "敏锐",
 		"desc": "他有一面铜盾，磨得很亮。\n他不看前面，只看身后。\n他说前面的东西不用看。",
+		"desc3": "铜盾碎了。\n他不再看身后。\n身后已经什么都没有了。",
+		"ally_line": "我看着。",
 		"bond": {"label": "请他替你照身后", "result": "talk", "text": "「我看着。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -106,6 +116,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 4, "to": "self", "status": {"再生": 4}, "name": "归返"}],
 		"trait": "冷静",
 		"desc": "他走到哪都在墙上刻一道。\n刻得很深。\n他说怕回不去。",
+		"desc3": "墙没了。\n记号也没了。\n他还在刻，刻在空气上。",
+		"ally_line": "跟着我。",
 		"bond": {"label": "跟着他的记号", "result": "talk", "text": "「别走丢。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -124,6 +136,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 2, "to": "self", "status": {"力量": 2}, "name": "野心"}],
 		"trait": "狡诈",
 		"desc": "他总在说以后。\n他说他有一条船，船会回来的。\n没人问他现在。",
+		"desc3": "船烧了。\n他还在说以后。\n「以后」这个词，现在没人听了。",
+		"ally_line": "船没了。还有我。",
 		"bond": {"label": "上他的船", "result": "talk", "text": "「船在等。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -142,6 +156,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 2, "to": "player", "status": {"虚弱": 1}, "name": "悲歌"}],
 		"trait": "神秘",
 		"desc": "他唱歌的时候，没人说话。\n他从不回头。\n身后有声音也不回头。",
+		"desc3": "他还在唱。\n没有人听。\n他唱给自己听。",
+		"ally_line": "我唱大声点。",
 		"bond": {"label": "听他唱完", "result": "talk", "text": "「别回头。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -160,6 +176,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "player", "status": {"中毒": 3}, "name": "预言"}],
 		"trait": "疯狂",
 		"desc": "她跟每一个人说同一个名字。\n那个名字不在这局里。\n她说了很多天。",
+		"desc3": "那个名字，所有人都在说了。\n她是第一个。\n没有人记得她是第一个。",
+		"ally_line": "这次有人听。",
 		"bond": {"label": "听完那个名字", "result": "talk", "text": "「你是第一个。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -181,6 +199,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 2, "to": "player", "status": {"中毒": 2}, "name": "毒术"}],
 		"trait": "疯狂",
 		"desc": "她给营地的人治病，不收钱。\n只收一句话：用完之后回来告诉她好不好。\n她有两个孩子，不在这局里。",
+		"desc3": "药瓶都空了。\n她还在熬。\n锅里是水。",
+		"ally_line": "这瓶是好的。",
 		"bond": {"label": "吃下她的药", "result": "talk", "text": "「这瓶是好的。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -202,6 +222,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "player", "status": {"流血": 2}, "name": "追猎"}],
 		"trait": "敏锐",
 		"desc": "探路的人是她。\n她跑起来没人追得上。\n只停过一次。",
+		"desc3": "她跑了很久。\n没地方跑了。\n她站住了，第一次回头看。",
+		"ally_line": "我先跑。",
 		"bond": {"label": "跑到他前面", "result": "talk", "text": "「追得上就跟着。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -220,6 +242,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 4, "to": "player", "status": {"易伤": 3}, "name": "火种"}],
 		"trait": "虔诚",
 		"desc": "他有一小堆火。\n谁冷都可以来烤。\n他不让人碰火种。",
+		"desc3": "火还在。\n他不给了。\n他把火种握在手心里。",
+		"ally_line": "拿去。",
 		"bond": {"label": "接过火种", "result": "talk", "text": "「别说是我给的。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -238,6 +262,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "self", "status": {"力量": 2}, "name": "推石"}],
 		"trait": "冷静",
 		"desc": "他在填一个塌方。\n填了三天。\n他说填完就走。",
+		"desc3": "山没了。\n石头还在。\n他站在原地，不知道往哪儿推。",
+		"ally_line": "推吧。",
 		"bond": {"label": "替他推一段", "result": "talk", "text": "「明天还得推。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -256,6 +282,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 2, "to": "self", "status": {"力量": 2}, "name": "龙血"}],
 		"trait": "好战",
 		"desc": "他一个人走。\n他走过的地方，草是枯的。\n他说这不是他做的。",
+		"desc3": "龙血干了。\n他走过的地方还是枯的。\n他开始怀疑是不是自己的血。",
+		"ally_line": "别碰我的血。",
 		"bond": {"label": "走在他后面", "result": "talk", "text": "「别碰我的血。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -274,6 +302,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "player", "status": {"易伤": 2}, "name": "女武神"}],
 		"trait": "沉默",
 		"desc": "她把死者的名字记在一张长纸条上。\n纸条已经很长了。\n她不记活人的。",
+		"desc3": "纸条写满了。\n她在背面继续写。\n背面也快满了。",
+		"ally_line": "我记着。",
 		"bond": {"label": "让他记上名字", "result": "talk", "text": "「写吧。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -292,6 +322,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 2, "to": "player", "status": {"虚弱": 2}, "name": "欺诈"}],
 		"trait": "狡诈",
 		"desc": "他不干活，只在各处坐着。\n他坐过的地方，第二天就有人吵架。\n他说他只是听。",
+		"desc3": "他不笑了。\n他在数天上的东西。\n数到第四个就不数了。",
+		"ally_line": "这次我不骗你。",
 		"bond": {"label": "坐下听他说", "result": "talk", "text": "「你想听哪句。」", "ally": true, "moral": 5},
 		"hostile": true,
 		"choices": [
@@ -313,6 +345,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 4, "to": "self", "status": {"再生": 6}, "name": "守望"}],
 		"trait": "沉默",
 		"desc": "他守夜，从不睡。\n守夜的人要交班，他不交。\n他说他睡不着。",
+		"desc3": "他还在看东边。\n东边塌了。\n他看着塌掉的地方。",
+		"ally_line": "东边我盯着。",
 		"bond": {"label": "替他守东边", "result": "talk", "text": "「看着东边。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [
@@ -331,6 +365,8 @@ const CONTESTANTS := {
 		"skills": [{"every": 3, "to": "self", "status": {"力量": 3}, "name": "誓约"}],
 		"trait": "虔诚",
 		"desc": "他答应过的事，都做到。\n他断了的那只手，是替别人答应的。\n他不说替谁。",
+		"desc3": "他只剩一只手。\n他还想答应什么。\n没有人求他了。",
+		"ally_line": "我答应过。",
 		"bond": {"label": "让他答应一件事", "result": "talk", "text": "「我记住了。」", "ally": true, "moral": 5},
 		"hostile": false,
 		"choices": [

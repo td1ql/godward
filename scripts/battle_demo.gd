@@ -28,6 +28,7 @@ var battle_uses := {}
 var creed := {}
 var first_attack_used := false
 var first_card_used := false
+var _ending_turn := false
 var attacked_last_turn := false
 var attacked_this_turn := false
 var first_hurt_used := false
@@ -246,12 +247,13 @@ func _ready() -> void:
 		var extra_draw := 0
 		if str(creed.get("key", "")) == "start_draw":
 			extra_draw = int(creed.get("value", 0))
+		# 第 1 回合：固定 5 张（+ 敏锐/起手加成），不走 BASE_DRAW + 剩余能量
 		_draw_cards(GameState.initial_hand_size() + extra_draw)
 		_apply_turn_creed()
 	var organ_heal := OrganDB.total("start_heal")
 	if organ_heal > 0:
 		player_hp = min(GameState.player_max_hp, player_hp + organ_heal)
-	if node_type == "boss":
+	if node_type in ["boss", "pope", "tree", "serpent"]:
 		_setup_allies()
 	_render_hand()
 	_update_ui()
@@ -380,17 +382,18 @@ func _setup_allies() -> void:
 		var c: Dictionary = ContestantDB.get_contestant(id)
 		var eff: Dictionary = c.get("ally_effect", {})
 		var t: String = str(eff.get("type", ""))
+		var quote := str(c.get("ally_line", ""))
 		if t == "fighter":
 			ally_fighters.append({"name": c["name"], "damage": int(eff.get("damage", 5))})
-			lines.append("%s（每回合 %d 伤害）" % [c["name"], int(eff.get("damage", 5))])
+			lines.append("%s：%s" % [c["name"], quote if quote != "" else "（每回合 %d 伤害）" % int(eff.get("damage", 5))])
 		else:
 			if eff.has("cards"):
 				for card in eff["cards"]:
 					deck.hand.append(str(card))
-				lines.append("%s（赠「%s」）" % [c["name"], str(eff["cards"][0])])
+				lines.append("%s：%s" % [c["name"], quote if quote != "" else "（赠「%s」）" % str(eff["cards"][0])])
 			if eff.has("hp"):
 				player_hp = min(GameState.player_max_hp, player_hp + int(eff["hp"]))
-				lines.append("%s（+%d HP）" % [c["name"], int(eff["hp"])])
+				lines.append("%s：%s" % [c["name"], quote if quote != "" else "（+%d HP）" % int(eff["hp"])])
 
 	var text := ""
 	for line in lines:
@@ -668,9 +671,15 @@ func _resolve_effect() -> void:
 
 # ===== 回合流程（分阶段）=====
 func _on_end_turn_pressed() -> void:
+	if _ending_turn:
+		return
 	Tutorial.notify("turn_ended")
 	if game_over or pending_effect >= 0:
 		return
+	# 防连点：这一帧内不再接受结束回合
+	_ending_turn = true
+	if end_turn_button != null:
+		end_turn_button.disabled = true
 	_end_player_turn()
 	if skip_enemy > 0:
 		skip_enemy -= 1
@@ -681,10 +690,24 @@ func _on_end_turn_pressed() -> void:
 	_check_game_over()
 	_update_ui()
 	if game_over:
+		_ending_turn = false
+		if end_turn_button != null:
+			end_turn_button.disabled = false
 		return
 	_start_new_turn()
+	# 下一帧才恢复（挡住同一帧内的连点）
+	get_tree().create_timer(0.25).timeout.connect(func() -> void:
+		_ending_turn = false
+		if end_turn_button != null and not game_over:
+			end_turn_button.disabled = false
+	)
 
 func _end_player_turn() -> void:
+	# 回合结束：手牌全部弃掉，下回合重新抽
+	for card in deck.hand:
+		deck.discard_pile.append(str(card))
+	deck.hand.clear()
+
 	var pp := StatusSystem.tick_damage(player_status)
 	if pp > 0:
 		player_hp = max(0, player_hp - pp)
