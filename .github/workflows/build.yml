@@ -1,0 +1,124 @@
+﻿name: 构建发布包
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  GODOT_VERSION: "4.7.2"
+  GODOT_RELEASE: "4.7.2-stable"
+
+jobs:
+  build:
+    name: 导出 Windows + Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      # ---------- 工具链 ----------
+      - name: 安装 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: 安装 Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 安装 Android 构建工具
+        run: |
+          set -e
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+
+      - name: 下载 Godot
+        run: |
+          set -e
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_RELEASE}_linux.x86_64.zip"
+          mv "Godot_v${GODOT_RELEASE}_linux.x86_64" /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --version
+
+      - name: 下载导出模板
+        run: |
+          set -e
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_export_templates.tpz"
+          unzip -q "Godot_v${GODOT_RELEASE}_export_templates.tpz" -d /tmp/tpl
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          mv /tmp/tpl/templates "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          ls "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable" | head -20
+
+      # ---------- Godot 编辑器设置（SDK 路径 / 调试密钥）----------
+      - name: 配置 Godot 的 Android 环境
+        run: |
+          set -e
+          CFG="$HOME/.config/godot"
+          mkdir -p "$CFG"
+          if [ -f "$CFG/editor_settings-4.7.tres" ]; then
+            SETTINGS="$CFG/editor_settings-4.7.tres"
+          else
+            SETTINGS="$CFG/editor_settings-4.7.tres"
+          fi
+          # 生成一个调试密钥库
+          if [ ! -f "$HOME/.android/debug.keystore" ]; then
+            mkdir -p "$HOME/.android"
+            keytool -keyalg RSA -genkeypair -alias androiddebugkey \
+              -keypass android -keystore "$HOME/.android/debug.keystore" \
+              -storepass android -dname "CN=Android Debug,O=Android,C=US" \
+              -validity 9999 -deststoretype pkcs12 -storetype pkcs12
+          fi
+          cat > "$SETTINGS" <<EOF
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/debug_keystore = "$HOME/.android/debug.keystore"
+          export/android/debug_keystore_user = "androiddebugkey"
+          export/android/debug_keystore_pass = "android"
+          export/android/java_sdk_path = "$JAVA_HOME"
+          export/android/force_system_user = false
+          EOF
+          echo "--- settings ---"
+          cat "$SETTINGS"
+
+      - name: 导入资源
+        run: |
+          godot --headless --path . --import || godot --headless --path . --quit
+
+      # ---------- 导出 ----------
+      - name: 导出 Windows（单文件 exe）
+        run: |
+          set -e
+          mkdir -p build
+          godot --headless --path . --export-release "Windows Desktop" build/Godward.exe
+          ls -lh build
+
+      - name: 导出 Android（APK）
+        run: |
+          set -e
+          mkdir -p build
+          godot --headless --path . --export-release "Android" build/Godward.apk
+          ls -lh build
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: Godward-build
+          path: build/
+          if-no-files-found: error
+
+      - name: 附加到 Release（打 tag 时）
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/Godward.exe
+            build/Godward.apk
+          generate_release_notes: true
