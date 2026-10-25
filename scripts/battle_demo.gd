@@ -1094,6 +1094,8 @@ func _choose_aftermath(id: String, kill: bool) -> void:
 	if kill:
 		GameState.eliminated.append(id)
 		Morality.add(-5, 10)
+		if GameState.act == 3:
+			GameState.divinity = clampi(GameState.divinity + 10, 0, 100)  # 第三幕杀英雄
 	else:
 		GameState.met_contestants.append(id)
 		Morality.add(8, 0)

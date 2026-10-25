@@ -679,6 +679,9 @@ func _take_remnant(r: Dictionary) -> void:
 	_close_encounter()
 
 func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	if GameState.act == 3:
+		_encounter_contestant_act3(title, body, vbox)
+		return
 	var available: Array = []
 	for cid in GameState.contestants:
 		if GameState.eliminated.has(cid):
@@ -838,6 +841,49 @@ func _start_battle_with(data: Dictionary) -> void:
 	GameState.pending_snapshot = {"kind": "battle", "enemy": data}
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
+
+# ===== 第三幕：只有两个选项 =====
+func _act3_pool() -> Array:
+	var out: Array = []
+	for id in ContestantDB.CONTESTANTS:
+		if GameState.eliminated.has(id):
+			continue
+		if GameState.allies.has(id):
+			continue
+		out.append(id)
+	return out
+
+func _encounter_contestant_act3(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var pool := _act3_pool()
+	if pool.is_empty():
+		title.text = "没有别人了"
+		body.text = "路上只有你。"
+		var go := _ink_button("继续")
+		go.pressed.connect(_close_encounter)
+		vbox.add_child(go)
+		return
+
+	var id: String = str(pool[randi() % pool.size()])
+	var c: Dictionary = ContestantDB.get_contestant(id)
+	title.text = str(c["name"])
+	body.text = str(c["desc"]) + "\n\n诸神下来之后，没有人再守规矩。"
+
+	var kill := _ink_button("杀死他")
+	kill.pressed.connect(func() -> void: _fight_contestant(id))
+	vbox.add_child(kill)
+
+	var ally := _ink_button("结盟")
+	ally.pressed.connect(func() -> void: _ally_contestant(id))
+	vbox.add_child(ally)
+
+func _ally_contestant(id: String) -> void:
+	if not GameState.allies.has(id):
+		GameState.allies.append(id)
+	GameState.divinity = clampi(GameState.divinity - 5, 0, 100)
+	GameState.save_game()
+	Toast.show_text("「%s」站到了你身后。" % ContestantDB.name_of(id), 3.0)
+	_close_encounter()
 
 func _fight_contestant(id: String) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)
