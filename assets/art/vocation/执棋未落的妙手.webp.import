@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ytax77y3e7h3"
-path="res://.godot/imported/未亡的棋手.webp-f7a83c58659641328af9c8a0265c4ac7.ctex"
+uid="uid://u773tgcxuv8s"
+path="res://.godot/imported/执棋未落的妙手.webp-33d5837f1c835f03b22e28705de4ac69.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/vocation/未亡的棋手.webp"
-dest_files=["res://.godot/imported/未亡的棋手.webp-f7a83c58659641328af9c8a0265c4ac7.ctex"]
+source_file="res://assets/art/vocation/执棋未落的妙手.webp"
+dest_files=["res://.godot/imported/执棋未落的妙手.webp-33d5837f1c835f03b22e28705de4ac69.ctex"]
 
 [params]
 

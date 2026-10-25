@@ -80,6 +80,21 @@ func _ready() -> void:
 	var hud := CanvasLayer.new()
 	hud.layer = 10
 	add_child(hud)
+	var plate := Panel.new()
+	plate.position = Vector2(8, 8)
+	plate.size = Vector2(310, 200)
+	var ps := StyleBoxFlat.new()
+	ps.bg_color = Color(0.94, 0.90, 0.80, 0.92)
+	ps.border_width_left = 1
+	ps.border_width_right = 1
+	ps.border_width_top = 1
+	ps.border_width_bottom = 1
+	ps.border_color = Color(0.48, 0.37, 0.18, 0.55)
+	ps.set_corner_radius_all(3)
+	ps.shadow_color = Color(0.10, 0.07, 0.03, 0.35)
+	ps.shadow_size = 6
+	plate.add_theme_stylebox_override("panel", ps)
+	hud.add_child(plate)
 	ui_layer = CanvasLayer.new()
 	ui_layer.layer = 20
 	add_child(ui_layer)
@@ -578,16 +593,16 @@ func _encounter_remnant(title: Label, body: Label, vbox: VBoxContainer) -> void:
 		GameState.pending_snapshot = {"kind": "remnant", "remnant": r}
 		GameState.save_game()
 
-	title.text = "遗骸　·　" + str(r["name"])
-	body.text = str(r["text"])
+	title.text = str(r["name"])
+	var open_line := str(r.get("open", ""))
+	var rest := str(r["text"])
+	body.text = open_line + "\n\n" + rest
 
-	var take := Button.new()
-	take.text = "收下遗物"
+	var take := _ink_button("带走它")
 	take.pressed.connect(_take_remnant.bind(r))
 	vbox.add_child(take)
 
-	var leave := Button.new()
-	leave.text = "离开"
+	var leave := _ink_button("留在这里")
 	leave.pressed.connect(_close_encounter)
 	vbox.add_child(leave)
 
@@ -775,6 +790,7 @@ func _fight_contestant(id: String) -> void:
 		"attack": int(c["attack"]),
 		"pattern": c.get("pattern", [1]),
 		"on_hit": c.get("on_hit", {}),
+		"domain": c.get("domain", {}),
 	}
 	GameState.pending_contestant = id
 	GameState.pending_snapshot = {

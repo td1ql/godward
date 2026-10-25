@@ -7,6 +7,7 @@ var ally_label: Label
 var ally_fighters: Array = []
 var enemy := EnemyState.new()
 
+
 var player_hp := 0
 var player_block := 0
 var player_energy := 0
@@ -28,6 +29,9 @@ var attacked_last_turn := false
 var attacked_this_turn := false
 var first_hurt_used := false
 var damage_taken := 0
+var bonus_energy := 0
+var last_card_played := ""
+var _kill_pick_pending := false
 
 var _new_cards := 0
 
@@ -78,6 +82,8 @@ func _ready() -> void:
 		var bonus_strength: int = TraitDB.total_strength(GameState.traits)
 		if bonus_strength != 0:
 			player_status["力量"] = bonus_strength
+	if str(creed.get("key", "")) == "keep_block":
+		player_status["坚守"] = 1
 
 	node_type = "battle"
 	if tutorial:
@@ -100,6 +106,9 @@ func _ready() -> void:
 	else:
 		enemy_data = EnemyDB.pick_for_node(node_type)
 	enemy.setup(enemy_data)
+	
+	if str(enemy.domain.get("type", "")) == "thorns_aura":
+		enemy.status["荆棘"] = int(enemy.status.get("荆棘", 0)) + int(enemy.domain.get("value", 0))
 
 	if not tutorial:
 		deck.setup(GameState.deck)
@@ -110,6 +119,7 @@ func _ready() -> void:
 	add_child(hand_view)
 	hand_view.card_pressed.connect(_on_card_pressed)
 
+	end_turn_button.position = Vector2(1080, 652)
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
 	player_label.position = Vector2(20, 96)
@@ -443,10 +453,15 @@ func _draw_cards(n: int) -> void:
 func _apply_card_effects(c: String) -> void:
 	var d: Dictionary = CardDB.get_card(c)
 	var hits: int = d.get("hits", 1)
+	var hits_key := str(d.get("hits_from_enemy_status", ""))
+	if hits_key != "":
+		hits = max(1, int(enemy.status.get(hits_key, 0)))
 	if d["damage"] > 0 or d.get("damage_from_block", false):
 		var base_damage: int = int(d["damage"])
 		if d.get("damage_from_block", false):
 			base_damage = player_block
+		if d.get("damage_from_gold", false):
+			base_damage = GameState.gold
 		var ck := str(creed.get("key", ""))
 		if ck == "first_attack_double" and not first_attack_used:
 			base_damage *= 2
@@ -464,24 +479,36 @@ func _apply_card_effects(c: String) -> void:
 		if leech > 0:
 			player_hp = min(GameState.player_max_hp, player_hp + leech)
 		enemy.hp = max(0, enemy.hp - per * hits)
+		var clear_key := str(d.get("clear_enemy_status", ""))
+		if clear_key != "":
+			enemy.status.erase(clear_key)
 		AudioManager.play("hit")
-		if d.get("damage_from_block", false):
+		if d.get("zero_block_after", false):
+			player_block = 0
+		elif d.get("damage_from_block", false):
 			player_block = int(player_block / 2.0)
 		var thorns: int = int(enemy.status.get("荆棘", 0))
 		if thorns > 0:
 			player_hp = max(0, player_hp - thorns)
+			_on_player_hurt(true)
 	player_block += d["block"]
+	if d.get("poison_double", false):
+		enemy.status["中毒"] = int(enemy.status.get("中毒", 0)) * 2
 	if d["block"] > 0:
 		Tutorial.notify("blocked")
 	if d.has("status"):
 		StatusSystem.apply(enemy.status, d["status"])
 	if d.has("self_status"):
 		StatusSystem.apply(player_status, d["self_status"])
+	if d.get("next_energy", 0) != 0:
+		bonus_energy += int(d["next_energy"])
 	if d.get("heal", 0) > 0:
-		AudioManager.play("heal")
-		player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
+		if str(enemy.domain.get("type", "")) != "no_heal":
+			AudioManager.play("heal")
+			player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
 	if d.get("self_damage", 0) > 0 and not _player_immune():
 		player_hp = max(0, player_hp - d["self_damage"])
+		_on_player_hurt(true)
 	if d.get("gain_energy", 0) > 0:
 		player_energy += int(d["gain_energy"])
 	if d.get("retrieve_top", false):
@@ -522,6 +549,7 @@ func _on_card_pressed(index: int) -> void:
 	AudioManager.play("click")
 	var spent = hand_view.take_button(index)
 	player_energy -= d["cost"]
+	last_card_played = c
 	_apply_card_effects(c)
 	Tutorial.notify("card_played")
 	if CardDB.kind_of(c) == "effect":
@@ -616,6 +644,7 @@ func _end_player_turn() -> void:
 	var pp := StatusSystem.tick_damage(player_status)
 	if pp > 0:
 		player_hp = max(0, player_hp - pp)
+		_on_player_hurt()
 	var ph := StatusSystem.tick_heal(player_status)
 	if ph > 0:
 		player_hp = min(GameState.player_max_hp, player_hp + ph)
@@ -623,16 +652,33 @@ func _end_player_turn() -> void:
 func _player_immune() -> bool:
 	return player_status.has("恒光")
 
+func _on_player_hurt(now: bool = false) -> void:
+	if str(creed.get("key", "")) != "hurt_energy":
+		return
+	var v := int(creed.get("value", 0))
+	if now:
+		player_energy += v
+		_update_ui()
+	else:
+		bonus_energy += v
 
 func _resolve_enemy_turn() -> void:
 	var dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 	dmg = max(0, dmg - player_block)
+	if dmg > 0 and int(player_status.get("护佑", 0)) > 0:
+		player_status["护佑"] = int(player_status["护佑"]) - 1
+		if int(player_status["护佑"]) <= 0:
+			player_status.erase("护佑")
+		dmg = 0
 	if _player_immune():
 		dmg = 0
 	var hk := str(creed.get("key", ""))
 	if dmg > 0 and hk == "first_hurt_half" and not first_hurt_used:
 		first_hurt_used = true
 		dmg = int(dmg / 2.0)
+	if dmg > 0 and hk == "first_hurt_zero" and not first_hurt_used:
+		first_hurt_used = true
+		dmg = 0
 	damage_taken += dmg
 	player_hp = max(0, player_hp - dmg)
 	if dmg > 0:
@@ -645,8 +691,8 @@ func _resolve_enemy_turn() -> void:
 		Tutorial.notify("hurt")
 	if not player_status.has("坚守"):
 		player_block = 0
-	if dmg > 0 and hk == "hurt_energy":
-		player_energy += int(creed.get("value", 0))
+	if dmg > 0:
+		_on_player_hurt()
 	enemy.turn_index += 1
 
 	var ep := StatusSystem.tick_damage(enemy.status)
@@ -674,6 +720,8 @@ func _resolve_enemy_turn() -> void:
 				StatusSystem.apply(enemy.status, st)
 			else:
 				StatusSystem.apply(player_status, st)
+	if str(enemy.domain.get("type", "")) == "enemy_regen":
+		enemy.hp = min(enemy.max_hp, enemy.hp + int(enemy.domain.get("value", 0)))
 
 func _apply_turn_creed() -> void:
 	first_attack_used = false
@@ -703,10 +751,19 @@ func _start_new_turn() -> void:
 	else:
 		var draw_count: int = RunConfig.BASE_DRAW + player_energy
 		draw_count += int(player_status.get("洞察", 0))
+		draw_count = max(0, draw_count - int(player_status.get("迟钝", 0)))
+		if str(enemy.domain.get("type", "")) == "draw_penalty":
+			draw_count = max(0, draw_count - int(enemy.domain.get("value", 0)))
 		if draw_count > 0:
 			_draw_cards(draw_count)
-	player_energy = max_energy
+	player_energy = max_energy + bonus_energy
+	bonus_energy = 0
 	player_energy += int(player_status.get("迅捷", 0))
+	player_energy = max(0, player_energy - int(player_status.get("重力", 0)))
+	var guard := int(player_status.get("守护", 0))
+	if guard > 0:
+		player_block += guard
+	_apply_turn_creed()
 	var burn := int(player_status.get("炽热", 0))
 	if burn > 0:
 		enemy.hp = max(0, enemy.hp - burn)
@@ -727,12 +784,17 @@ func _check_game_over() -> void:
 			_finish_tutorial()
 			return
 		var wk := str(creed.get("key", ""))
+		if node_type == "elite" and int(CardDB.get_card(last_card_played).get("elite_kill_energy", 0)) > 0:
+			GameState.energy_bonus += int(CardDB.get_card(last_card_played)["elite_kill_energy"])
+			Toast.show_text("能量上限 +1", 2.5)
 		if wk == "win_heal":
 			player_hp = min(GameState.player_max_hp, player_hp + int(creed.get("value", 0)))
 		elif wk == "hurt_gold":
 			GameState.gold += damage_taken
 		elif wk == "hurt_energy":
 			pass
+		if wk == "kill_pick":
+			_kill_pick_pending = true
 		GameState.player_hp = max(1, player_hp)
 		if GameState.pending_contestant != "":
 			_show_contestant_aftermath()
@@ -923,9 +985,21 @@ func _finish_reward() -> void:
 	GameState.pending_node = -1
 	GameState.pending_snapshot = {}
 	GameState.save_game()
+	if _kill_pick_pending:
+		_kill_pick_pending = false
+		DeckViewer.open_choose("收殓：从牌组中复制一张", GameState.deck, _do_kill_pick)
+		return
 	if NodeRuleDB.discard_of(node_type):
 		_offer_discard()
 		return
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+func _do_kill_pick(index: int) -> void:
+	if index >= 0 and index < GameState.deck.size():
+		var c: String = GameState.deck[index]
+		GameState.deck.append(c)
+		GameState.save_game()
+		Toast.show_text("「%s」又进了一份" % c, 2.5)
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _offer_discard() -> void:

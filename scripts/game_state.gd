@@ -34,6 +34,7 @@ var morality := 50
 var sin := 0
 var impressions := {}
 var meet_count := {}
+var energy_bonus := 0
 
 func _ready() -> void:
 	reset_deck()
@@ -69,6 +70,7 @@ func reset_run() -> void:
 	Morality.reset()
 	prologue_seen = false
 	transmigration = 1
+	energy_bonus = 0
 	vocation_history.clear()
 	impressions.clear()
 	meet_count.clear()
@@ -125,7 +127,7 @@ func initial_hand_size() -> int:
 	return max(1, RunConfig.HAND_SIZE + TraitDB.total_hand(traits))
 
 func initial_energy() -> int:
-	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits))
+	return max(1, RunConfig.MAX_ENERGY + TraitDB.total_energy(traits) + energy_bonus)
 
 func recompute_max_hp() -> int:
 	var hp: int = max(10, RunConfig.START_HP + TraitDB.total_hp(traits) + (transmigration - 1) * RunConfig.META_HP_PER_RUN)
@@ -138,6 +140,7 @@ func _slot_path(slot: int) -> String:
 
 func save_game() -> void:
 	var data := {
+		"energy_bonus": energy_bonus,
 		"streams": streams,
 		"save_version": SAVE_VERSION,
 		"impressions": impressions,
@@ -217,6 +220,7 @@ func load_game(slot: int = -1) -> bool:
 		allies.append(str(c))
 	morality = int(data.get("morality", Morality.START_MORAL))
 	sin = int(data.get("sin", Morality.START_SIN))
+	energy_bonus = int(data.get("energy_bonus", 0))
 	impressions = data.get("impressions", {})
 	meet_count = data.get("meet_count", {})
 	prologue_seen = bool(data.get("prologue_seen", false))

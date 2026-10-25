@@ -16,6 +16,12 @@ const STATUS := {
 	"反弹": {"name": "反弹", "desc": "每次受伤对敌人造成等同层数的伤害", "good": true, "tick_damage": false, "decay": 1},
 	"狂怒": {"name": "狂怒", "desc": "每次受伤获得等同层数的力量", "good": true, "tick_damage": false, "decay": 1},
 	"坚守": {"name": "坚守", "desc": "格挡不会在回合结束时清空", "good": true, "tick_damage": false, "decay": 0},
+	"重力": {"name": "重力", "desc": "每回合开始能量 -1", "good": false, "tick_damage": false, "decay": 1},
+	"迟钝": {"name": "迟钝", "desc": "每回合少抽 1 张", "good": false, "tick_damage": false, "decay": 1},
+	"护佑": {"name": "护佑", "desc": "抵挡接下来的 1 次伤害", "good": true, "tick_damage": false, "decay": 0},
+	"守护": {"name": "守护", "desc": "每回合开始获得等同层数的格挡", "good": true, "tick_damage": false, "decay": 1},
+	"锋锐": {"name": "锋锐", "desc": "攻击伤害 ×1.25", "good": true, "tick_damage": false, "decay": 1},
+	"毒性增长": {"name": "毒性增长", "desc": "敌人每有 3 层中毒，回合结束额外 +1 层", "good": true, "tick_damage": false, "decay": 0},
 }
 
 func name_of(id: String) -> String:

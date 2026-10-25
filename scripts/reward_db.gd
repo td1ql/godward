@@ -21,7 +21,7 @@ func pool_for(node_type: String, act: int = 1) -> Array:
 		if bool(CardDB.CARDS[id].get("exclusive", false)):
 			continue
 		if not GameState.streams.is_empty():
-			var hit := false
+			var hit: bool = bool(CardDB.CARDS[id].get("common", false))
 			for st in CardDB.streams_of(id):
 				if GameState.streams.has(st):
 					hit = true

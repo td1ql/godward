@@ -1,7 +1,7 @@
 extends Node
 
 # ===== 地图长度与分支 =====
-const MAX_DEPTH := 13          # 总层数（中心 → 4 步 → 首领）
+const MAX_DEPTH := 20        # 总层数 → 首领）
 const ROOT_BRANCHES := 5      # 起点连出的分支数
 const MIN_BRANCHES := 4       # 每层最少分支
 const MAX_BRANCHES := 6       # 每层最多分支
@@ -21,6 +21,12 @@ const LAYER_POOLS := {
 	11: ["shop", "contestant", "contestant"],
 	12: ["elite", "elite", "shop", "event", "contestant"],
 	13: ["shop", "event", "shop", "event", "contestant"],
+	14: ["battle", "battle", "shop", "event", "contestant"],
+	15: ["elite", "elite", "rest", "shop"],
+	16: ["battle", "battle", "shop", "event", "contestant"],
+	17: ["shop", "event", "shop", "event", "contestant"],
+	18: ["elite", "elite", "shop", "contestant"],
+	19: ["shop",  "rest"],
 }
 
 # 最后一层固定类型

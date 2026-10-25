@@ -1,6 +1,6 @@
 extends Node
 
-const IMPRESSION_SCALE := 2
+const IMPRESSION_SCALE := 3
 
 const CONTESTANTS := {
 	"阿喀琉斯": {
@@ -8,7 +8,7 @@ const CONTESTANTS := {
 		"trait": "好战",
 		"desc": "他是这局里最强的一个。\n他把自己的口粮全分了出去。\n他说他不需要。",
 		"hostile": true,
-		"hp": 55, "attack": 11, "pattern": [1, 1, 2],
+		"hp": 52, "attack": 7, "pattern": [1, 1, 2],
 		"choices": [
 			{"label": "问他为什么来", "result": "talk", "text": "「别人推我来的。」\n「我懒得拒绝。」", "gold": 25},
 			{"label": "和他动手", "result": "fight"},
@@ -23,7 +23,7 @@ const CONTESTANTS := {
 		"trait": "冷静",
 		"desc": "他不肯离开路口。\n路口后面是水。\n他说总得有人站在这里。",
 		"hostile": false,
-		"hp": 50, "attack": 9, "pattern": [1, 2],
+		"hp": 52, "attack": 8, "pattern": [1, 2],
 		"choices": [
 			{"label": "替他站一会儿", "result": "talk", "text": "他坐下，没有睡。\n「水是干净的。」他说。\n「别让人往里面放东西。」", "hp": -5, "moral": 8, "cards": ["铁壁"]},
 			{"label": "问他守到什么时候", "result": "talk", "text": "「守到没人来。」", "moral": 3},
@@ -38,7 +38,7 @@ const CONTESTANTS := {
 		"trait": "狡诈",
 		"desc": "他什么都换。\n换东西，换消息，换别人欠他的。\n他不换自己的。",
 		"hostile": true,
-		"hp": 45, "attack": 8, "pattern": [2, 1],
+		"hp": 46, "attack": 7, "pattern": [2, 1],
 		"choices": [
 			{"label": "用钱换一条消息（-20 金币）", "result": "talk", "text": "他收了钱，凑近。\n「往东走，别走桥。」\n他没说为什么。", "gold": -20, "cards": ["快速思考"]},
 			{"label": "问他欠谁的", "result": "fight"},
@@ -53,7 +53,8 @@ const CONTESTANTS := {
 		"trait": "好战",
 		"desc": "营地里的活都是他干的。\n他搬得动别人搬不动的东西。\n他从不问报酬。",
 		"hostile": true,
-		"hp": 70, "attack": 13, "pattern": [1, 1, 1],
+		"hp": 54, "attack": 9, "pattern": [1, 1, 1],
+ 		"domain": {"type": "enemy_regen", "value": 4},
 		"choices": [
 			{"label": "请他搬开塌方", "result": "talk", "text": "他搬开了。\n「以后还有这种事，叫我。」", "gold": 20, "moral": 3},
 			{"label": "问他图什么", "result": "talk", "text": "「不图什么。」\n「闲着也是闲着。」", "cards": ["重击"]},
@@ -68,7 +69,7 @@ const CONTESTANTS := {
 		"trait": "敏锐",
 		"desc": "他有一面铜盾，磨得很亮。\n他不看前面，只看身后。\n他说前面的东西不用看。",
 		"hostile": false,
-		"hp": 45, "attack": 9, "pattern": [1, 2],
+		"hp": 45, "attack": 8, "pattern": [1, 2, 1],
 		"choices": [
 			{"label": "借盾照身后", "result": "talk", "text": "你在盾里看见身后那条路。\n路上没有脚印。\n你刚才走过的。", "cards": ["圣光"], "hp": -4},
 			{"label": "问他后面有什么", "result": "talk", "text": "「有人。」\n「一直有。」", "gold": 20},
@@ -83,7 +84,7 @@ const CONTESTANTS := {
 		"trait": "冷静",
 		"desc": "他走到哪都在墙上刻一道。\n刻得很深。\n他说怕回不去。",
 		"hostile": false,
-		"hp": 50, "attack": 9, "pattern": [1, 1, 2],
+		"hp": 50, "attack": 8, "pattern": [1, 1, 2],
 		"choices": [
 			{"label": "跟着记号走", "result": "talk", "text": "记号一直通到出口。\n他在出口等你。\n「你比我慢。」", "hp": 15},
 			{"label": "问他从哪来", "result": "talk", "text": "「一个有很多墙的地方。」", "cards": ["快速思考"]},
@@ -98,7 +99,7 @@ const CONTESTANTS := {
 		"trait": "狡诈",
 		"desc": "他总在说以后。\n以后要去哪，以后要做什么。\n没人问他现在。",
 		"hostile": true,
-		"hp": 48, "attack": 10, "pattern": [2, 2],
+		"hp": 38, "attack": 8, "pattern": [1.5, 2],
 		"choices": [
 			{"label": "听他讲以后", "result": "talk", "text": "他讲了很久。\n「到时候我带你一起走。」\n他已经对很多人说过这句话。", "gold": -20},
 			{"label": "问他现在有什么", "result": "fight"},
@@ -128,7 +129,7 @@ const CONTESTANTS := {
 		"trait": "疯狂",
 		"desc": "她跟每一个人说同一个名字。\n那个名字不在这局里。\n她说了很多天。",
 		"hostile": false,
-		"hp": 42, "attack": 8, "pattern": [1, 2],
+		"hp": 42, "attack": 7, "pattern": [1, 2],
 		"choices": [
 			{"label": "问她那个名字是谁", "result": "talk", "text": "她愣住了。\n「你不认识他？」\n「他就在你身后。」", "random": [
 				{"text": "你回头。什么也没有。", "moral": 3},
@@ -146,7 +147,8 @@ const CONTESTANTS := {
 		"trait": "疯狂",
 		"desc": "她给营地的人治病，不收钱。\n只收一句话：用完之后回来告诉她好不好。\n回来的人很少。",
 		"hostile": true,
-		"hp": 44, "attack": 12, "pattern": [2, 1],
+		"hp": 34, "attack": 9, "pattern": [2, 1],
+		 "domain": {"type": "no_heal"},
 		"choices": [
 			{"label": "让她治", "result": "talk", "text": "她的手很稳。\n「好了。」\n「记得回来。」", "random": [
 				{"text": "伤口合上了。", "hp": 15},
@@ -164,7 +166,7 @@ const CONTESTANTS := {
 		"trait": "敏锐",
 		"desc": "探路的人是她。\n她回来得比别人快。\n回来的时候不说话。",
 		"hostile": false,
-		"hp": 46, "attack": 10, "pattern": [1, 1, 2],
+		"hp": 46, "attack": 8, "pattern": [1, 1, 2],
 		"choices": [
 			{"label": "问她看见了什么", "result": "talk", "text": "「前面有三条路。」\n「两条走不通。」\n「哪两条，我不说。」", "cards": ["疾风斩"]},
 			{"label": "跟她一起探路", "result": "talk", "text": "你跟不上。\n她回来找了你两次。", "hp": -6, "cards": ["疾风斩"]},
@@ -194,7 +196,8 @@ const CONTESTANTS := {
 		"trait": "冷静",
 		"desc": "他在填一个塌方。\n填了三天。\n他说填完就走。",
 		"hostile": false,
-		"hp": 60, "attack": 7, "pattern": [1, 1, 1],
+		"hp": 60, "attack": 5, "pattern": [1, 1, 1],
+		"domain": {"type": "energy_drain", "value": 1},
 		"choices": [
 			{"label": "帮他填", "result": "talk", "text": "石头又塌了。\n「谢谢。」他说。\n「明天还得填。」", "moral": 10, "hp": -4},
 			{"label": "问他填完去哪", "result": "talk", "text": "「没想过。」\n「填完再说。」", "cards": ["冥想"]},
@@ -209,7 +212,7 @@ const CONTESTANTS := {
 		"trait": "好战",
 		"desc": "他一个人走。\n他走过的地方，草是枯的。\n他说这不是他做的。",
 		"hostile": true,
-		"hp": 58, "attack": 12, "pattern": [1, 2, 2],
+		"hp": 28, "attack": 12, "pattern": [2, 2, 2],
 		"choices": [
 			{"label": "跟着他走", "result": "talk", "text": "他走得很稳。\n你踩过的草没有枯。\n只有他踩过的枯了。", "hp": -5, "gold": 25},
 			{"label": "问他要不要一起走", "result": "fight"},
@@ -224,7 +227,7 @@ const CONTESTANTS := {
 		"trait": "沉默",
 		"desc": "她把死者的名字记在一张长纸条上。\n纸条已经很长了。\n她不记活人的。",
 		"hostile": false,
-		"hp": 52, "attack": 10, "pattern": [1, 2],
+		"hp": 22, "attack": 10, "pattern": [1, 3],
 		"choices": [
 			{"label": "问她记这些做什么", "result": "talk", "text": "「总得有人记。」\n「不然他们就不算来过。」", "moral": 8, "cards": ["回望"]},
 			{"label": "让她把你也记上", "result": "talk", "text": "她抬头看了你一眼。\n「你还活着。」\n她没有写。", "moral": 3},
@@ -239,7 +242,8 @@ const CONTESTANTS := {
 		"trait": "狡诈",
 		"desc": "他不干活，只在各处坐着。\n他坐过的地方，第二天就有人吵架。\n他说他只是听。",
 		"hostile": true,
-		"hp": 40, "attack": 11, "pattern": [2, 2],
+		"hp": 40, "attack": 7, "pattern": [1, 2, 4],
+		"domain": {"type": "draw_penalty", "value": 1},
 		"choices": [
 			{"label": "在他旁边坐一会", "result": "talk", "text": "他跟你说了三件事。\n两件是真的。\n你分不出是哪两件。", "random": [
 				{"text": "你后来赚了一笔。", "gold": 20},
@@ -257,7 +261,8 @@ const CONTESTANTS := {
 		"trait": "沉默",
 		"desc": "他守夜，从不睡。\n守夜的人要交班，他不交。\n他说他睡不着。",
 		"hostile": false,
-		"hp": 65, "attack": 9, "pattern": [1, 1, 2],
+		"hp": 65, "attack": 4, "pattern": [1, 1, 2],
+		"domain": {"type": "thorns_aura", "value": 3},
 		"choices": [
 			{"label": "陪他守一夜", "result": "talk", "text": "他一整夜没有说话。\n天快亮时，他指了指东边。\n「那边有人。」", "hp": -6, "moral": 5, "cards": ["回望"]},
 			{"label": "强行换班", "result": "fight"},
@@ -272,7 +277,7 @@ const CONTESTANTS := {
 		"trait": "虔诚",
 		"desc": "他答应过的事，都做到。\n他断了的那只手，是替别人答应的。\n他不说替谁。",
 		"hostile": false,
-		"hp": 58, "attack": 10, "pattern": [1, 2],
+		"hp": 58, "attack": 9, "pattern": [0.5, 1, 1.5, 2],
 		"choices": [
 			{"label": "让他答应一件事", "result": "talk", "text": "「说吧。」\n你说完，他点头。\n「我记住了。」", "moral": 8, "cards": ["誓约"]},
 			{"label": "问他替谁", "result": "talk", "text": "他想了很久。\n「一个已经不用我答应的人。」", "moral": 5, "gold": 20},
@@ -432,7 +437,7 @@ func pick_roster(count: int) -> Array[String]:
 	return result
 func scaled(id: String) -> Dictionary:
 	var c: Dictionary = CONTESTANTS[id].duplicate()
-	var mult: float = 1.0 + 0.15 * float(GameState.transmigration - 1)
+	var mult: float = 1.0 + 0.08 * float(GameState.transmigration - 1)
 	var result := c.duplicate()
 	result["hp"] = int(float(c["hp"]) * mult)
 	result["attack"] = int(float(c["attack"]) * mult)
