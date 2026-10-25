@@ -35,6 +35,7 @@ var damage_taken := 0
 var bonus_energy := 0
 var last_card_played := ""
 var enemy_organ := ""
+var _first_clear := false
 var _kill_pick_pending := false
 var skip_enemy := 0
 var _new_cards := 0
@@ -43,12 +44,40 @@ var _new_cards := 0
 @onready var combat_label: Label = $CombatLabel
 @onready var end_turn_button: Button = $EndTurnButton
 
+
+const GOD_BG := {
+	"奥丁": "res://assets/art/bg/bg_battle_odin.webp",
+	"赫尔墨斯": "res://assets/art/bg/bg_battle_hermes.webp",
+	"阿斯克勒庇俄斯": "res://assets/art/bg/bg_battle_asclepius.webp",
+	"赫菲斯托斯": "res://assets/art/bg/bg_battle_hephaestus.webp",
+	"耶梦加得": "res://assets/art/bg/bg_battle_3_boss.webp",
+}
+
+func _is_shown_in_bg() -> bool:
+	return GOD_BG.has(str(enemy.label_name))
+
 func _ready() -> void:
-	var act_pool: Array = [1, 2, 3] if GameState.act == 2 else [1, 2, 3, 4, 5]
+	var act_pool: Array = [1, 2, 3] if GameState.act >= 2 else [1, 2, 3, 4, 5]
 	act_pool.shuffle()
 	var bg_path := "res://assets/art/bg/bg_battle_%d_%d.webp" % [GameState.act, act_pool[0]]
 	if str(GameState.pending_snapshot.get("kind", "")) == "tutorial":
 		bg_path = "res://assets/art/bg/bg_battle_tut.webp"
+	if str(GameState.pending_snapshot.get("kind", "")) == "battle":
+		var pn: String = str(GameState.pending_snapshot.get("node_type", ""))
+		if pn == "serpent":
+			bg_path = "res://assets/art/bg/bg_battle_3_boss.webp"
+		elif pn == "tree":
+			bg_path = "res://assets/art/bg/bg_battle_2_3.webp"
+		elif pn == "god":
+			bg_path = "res://assets/art/bg/bg_battle_3_boss.webp"
+	# 兜底：按敌人名字认特殊背景
+	var en: String = str(GameState.pending_enemy.get("name", ""))
+	if GOD_BG.has(en):
+		var gb: String = str(GOD_BG[en])
+		if ResourceLoader.exists(gb):
+			bg_path = gb
+	elif en == "世界树":
+		bg_path = "res://assets/art/bg/bg_battle_2_3.webp"
 	if not ResourceLoader.exists(bg_path):
 		bg_path = "res://assets/art/bg/bg_battle_%d.webp" % randi_range(1, 5)
 	if ResourceLoader.exists(bg_path):
@@ -90,7 +119,9 @@ func _ready() -> void:
 		player_status["坚守"] = 1
 
 	node_type = "battle"
-	if tutorial:
+	if GameState.pending_snapshot.has("node_type"):
+		node_type = str(GameState.pending_snapshot["node_type"])
+	elif tutorial:
 		node_type = "tutorial"
 	elif GameState.map_nodes.has(GameState.current_node_id):
 		node_type = GameState.map_nodes[GameState.current_node_id]["type"]
@@ -135,8 +166,9 @@ func _ready() -> void:
 	player_label.add_theme_font_size_override("font_size", 17)
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
+	var boss_bg := _is_shown_in_bg()
 	var sil_path := "res://assets/art/enemy/%s.webp" % sil
-	if ResourceLoader.exists(sil_path):
+	if not boss_bg and ResourceLoader.exists(sil_path):
 		var spr := TextureRect.new()
 		spr.texture = load(sil_path)
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -223,6 +255,8 @@ func _ready() -> void:
 		_setup_allies()
 	_render_hand()
 	_update_ui()
+	if node_type == "serpent":
+		_show_title("耶梦加得", Callable())
 
 var _menu_popup: Control
 
@@ -426,6 +460,11 @@ func _apply_card_effects(c: String) -> void:
 			base_damage = min(player_block * int(d.get("block_damage_mult", 1)), BLOCK_DAMAGE_CAP)
 		if d.get("damage_from_gold", false):
 			base_damage = GameState.gold
+		var per_st: Dictionary = d.get("damage_per_enemy_status", {})
+		for key in per_st:
+			base_damage += int(enemy.status.get(key, 0)) * int(per_st[key])
+		if int(d.get("damage_per_strength", 0)) > 0:
+			base_damage += int(player_status.get("力量", 0)) * int(d["damage_per_strength"])
 		var ck := str(creed.get("key", ""))
 		if ck == "first_attack_double" and not first_attack_used:
 			base_damage *= 2
@@ -474,6 +513,13 @@ func _apply_card_effects(c: String) -> void:
 		skip_enemy += int(d["skip_enemy_turn"])
 	if d.get("next_energy", 0) != 0:
 		bonus_energy += int(d["next_energy"])
+	if int(d.get("heal_percent_missing", 0)) > 0:
+		var missing := GameState.player_max_hp - player_hp
+		var amt := int(missing * int(d["heal_percent_missing"]) / 100.0)
+		if amt > 0:
+			AudioManager.play("heal")
+			player_hp = min(GameState.player_max_hp, player_hp + amt)
+			_on_player_hurt(false)
 	if d.get("heal", 0) > 0:
 		if str(enemy.domain.get("type", "")) != "no_heal":
 			AudioManager.play("heal")
@@ -1155,13 +1201,13 @@ func _show_true_ending() -> void:
 func _on_pope_defeated() -> void:
 	if Morality.is_saint() or Morality.is_sinner():
 		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), func() -> void:
+			hand_view.hide_cards()
 			_show_title("伪·世界树", _start_tree_fight)
 		)
 	else:
 		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_true_ending)
 
 func _show_title(text: String, next: Callable) -> void:
-	hand_view.hide_cards()
 	var layer := ColorRect.new()
 	layer.color = Color(0.02, 0.02, 0.03, 0.0)
 	layer.size = Vector2(1280, 720)
@@ -1228,6 +1274,9 @@ func _goto_act3_map() -> void:
 
 func _on_serpent_defeated() -> void:
 	GameState.divinity = clampi(GameState.divinity, 0, 100)
+	_first_clear = not GameState.act3_cleared
+	GameState.mark_act3_cleared()
+	GameState.save_game()
 	if GameState.divinity >= 71:
 		Dialogue.play(self, DialogueDB.get_lines("ending_god"), _show_serpent_ending)
 	elif GameState.divinity >= 31:
@@ -1242,10 +1291,25 @@ func _show_serpent_ending() -> void:
 	Modal.title(overlay, title, 150, 46)
 	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s\n神性: %d" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary(), GameState.divinity], 300, 20, 140)
 	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
+
+	if _first_clear:
+		var unlock := Modal.text(overlay, "★ 解锁「自由配置」：下次开局可以自选职业与流派", 452, 18, 40)
+		unlock.add_theme_color_override("font_color", Color(0.95, 0.82, 0.45))
 	Modal.button(overlay, "回到开始", 530, 520, 220, 58, _end_true_run)
 
 func _end_true_run() -> void:
-	GameState.delete_save()
+	# 通关不删档：把「已通关」写进这个存档，存档继续留着
+	GameState.mark_act3_cleared()
+	GameState.pending_snapshot = {}
+	GameState.pending_node = -1
+	GameState.pending_cleanup = false
+	GameState.pending_contestant = ""
+	GameState.act = 3
+	GameState.map_generated = false
+	GameState.map_nodes = {}
+	GameState.current_node_id = 0
+	GameState.player_hp = GameState.player_max_hp
+	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _enter_divine_realm() -> void:

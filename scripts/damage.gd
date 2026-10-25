@@ -10,4 +10,8 @@ static func compute(base: int, attacker: Dictionary, target: Dictionary) -> int:
 		dmg *= 1.5
 	# 流血：易伤结算之后，额外加上目标身上的流血层数
 	dmg += float(target.get("流血", 0))
-	return max(0, int(floor(dmg)))
+	var result: int = max(0, int(floor(dmg)))
+	# 基础伤害大于 0 时，再怎么削也至少打 1 点
+	if result == 0 and base > 0:
+		result = 1
+	return result

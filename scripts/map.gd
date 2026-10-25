@@ -327,13 +327,13 @@ func _after_walk(id: int) -> void:
 
 func _trigger_node(id: int) -> void:
 	var t: String = str(nodes[id]["type"])
-	if t == "battle" or t == "elite" or t == "boss" or t == "divine" or t == "divine_elite" or t == "pope":
+	if t == "battle" or t == "elite" or t == "boss" or t == "divine" or t == "divine_elite" or t == "pope" or t == "serpent":
 		if GameState.pending_snapshot.is_empty():
-			GameState.pending_snapshot = {"kind": "battle", "enemy": EnemyDB.pick_for_node(t, int(nodes[id]["depth"]))}
+			GameState.pending_snapshot = {"kind": "battle", "node_type": t, "enemy": EnemyDB.pick_for_node(t, int(nodes[id]["depth"]))}
 			GameState.save_game()
 		get_tree().change_scene_to_file("res://scenes/main.tscn")
 		return
-	if t == "shop" or t == "rest" or t == "event" or t == "contestant" or t == "remnant":
+	if t == "shop" or t == "rest" or t == "event" or t == "contestant" or t == "remnant" or t == "god" or t == "wealth" or t == "shell":
 		_show_encounter(t)
 		return
 	GameState.pending_node = -1
@@ -955,8 +955,23 @@ func _take_shell(c: Dictionary, body: Label) -> void:
 			if not pool.is_empty():
 				GameState.deck.append(str(pool[randi() % pool.size()]))
 	GameState.save_game()
-	Toast.show_text(str(c.get("text", "")), 3.5)
+	var lines: Array[String] = [str(c.get("text", ""))]
+	var gain := _shell_summary(c)
+	if gain != "":
+		lines.append(gain)
+	Toast.show_text("\n".join(lines), 3.5)
 	_close_encounter()
+
+func _shell_summary(c: Dictionary) -> String:
+	var parts: Array[String] = []
+	if c.has("hp"): parts.append("生命 %+d" % int(c["hp"]))
+	if c.has("max_hp"): parts.append("最大生命 %+d" % int(c["max_hp"]))
+	if c.has("gold"): parts.append("金币 %+d" % int(c["gold"]))
+	if c.has("str"): parts.append("力量 %+d" % int(c["str"]))
+	if c.has("moral"): parts.append("道德 %+d" % int(c["moral"]))
+	if c.has("divinity"): parts.append("神性 %+d" % int(c["divinity"]))
+	if c.has("random_cards"): parts.append("获得 %d 张牌" % int(c["random_cards"]))
+	return "　".join(parts)
 
 func _fight_contestant(id: String) -> void:
 	var c: Dictionary = ContestantDB.get_contestant(id)

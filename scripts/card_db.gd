@@ -302,6 +302,32 @@ func card_text(id: String) -> String:
 	if d.has("self_status"):
 		for key in d["self_status"]:
 			effects.append("我+%d%s" % [d["self_status"][key], key])
+	if d.get("damage_per_enemy_status", {}):
+		for key in d["damage_per_enemy_status"]:
+			effects.append("伤害 = 敌%s×%d" % [key, d["damage_per_enemy_status"][key]])
+	if d.get("clear_enemy_status", "") != "":
+		effects.append("清空敌%s" % d["clear_enemy_status"])
+	if d.get("hits_from_enemy_status", "") != "":
+		effects.append("攻击次数 = 敌%s层数" % d["hits_from_enemy_status"])
+	if d.get("damage_per_strength", 0) > 0:
+		effects.append("伤害 = 力量×%d" % d["damage_per_strength"])
+	if d.get("heal_percent_missing", 0) > 0:
+		effects.append("回复已损失生命的 %d%%" % d["heal_percent_missing"])
+	if d.get("poison_double", false):
+		effects.append("中毒层数翻倍")
+	if d.get("zero_block_after", false) and not d.get("damage_from_block", false):
+		effects.append("清空格挡")
+	if int(d.get("block_damage_mult", 1)) > 1:
+		effects.append("格挡伤害 ×%d" % d["block_damage_mult"])
+	if d.get("next_energy", 0) != 0:
+		effects.append("下回合能量 %+d" % d["next_energy"])
+	if d.get("once_per_run", false):
+		effects.append("本局一次")
+	if d.get("skip_enemy_turn", 0) > 0:
+		effects.append("跳过敌方回合")
+	if d.get("min_self_status", {}):
+		for key in d["min_self_status"]:
+			effects.append("需 %s≥%d" % [key, d["min_self_status"][key]])
 	var effect := ""
 	for p in effects:
 		if effect != "":

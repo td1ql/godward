@@ -39,6 +39,9 @@ var divinity := 50
 
 # 第三幕拿到的器官 id
 var organs: Array[String] = []
+
+# 通关过第三幕（解锁自由配置）
+var act3_cleared := false
 var impressions := {}
 var meet_count := {}
 var energy_bonus := 0
@@ -98,6 +101,27 @@ func advance_transmigration() -> void:
 	if vocation != "":
 		vocation_history.append(vocation)
 	_roll_vocation()
+
+
+# 自由配置：直接指定职业（会重算词条/血量/牌组）
+
+# 通关标记：只写进这个存档
+func mark_act3_cleared() -> void:
+	act3_cleared = true
+
+func set_vocation(id: String) -> void:
+	if not TraitDB.VOCATIONS.has(id):
+		return
+	vocation = id
+	traits = TraitDB.traits_of(id)
+	_apply_traits()
+
+# 自由配置：直接指定流派
+func set_streams(list: Array) -> void:
+	streams.clear()
+	for s in list:
+		if CardDB.STREAMS.has(str(s)) and not streams.has(str(s)):
+			streams.append(str(s))
 
 func _roll_vocation() -> void:
 	var pool: Array = TraitDB.VOCATIONS.keys()
@@ -170,6 +194,7 @@ func save_game() -> void:
 		"sin": sin,
 		"divinity": divinity,
 		"organs": organs,
+		"act3_cleared": act3_cleared,
 		"prologue_seen": prologue_seen,
 		"player_max_hp": player_max_hp,
 		"vocation_history": vocation_history,
@@ -247,6 +272,7 @@ func load_game(slot: int = -1) -> bool:
 	organs.clear()
 	for o in data.get("organs", []):
 		organs.append(str(o))
+	act3_cleared = bool(data.get("act3_cleared", false))
 	energy_bonus = int(data.get("energy_bonus", 0))
 	wealth_hp = int(data.get("wealth_hp", 0))
 	wealth_str = int(data.get("wealth_str", 0))

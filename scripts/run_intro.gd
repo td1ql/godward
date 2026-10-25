@@ -6,11 +6,20 @@ var _claiming := false
 var _claiming_discard := false
 var _page_nodes: Array = []
 
+
+func _add_meta_button() -> void:
+	if not GameState.act3_cleared:
+		return
+	var cfg := Button.new()
+	cfg.text = "自由配置"
+	cfg.position = Vector2(20, 20)
+	cfg.size = Vector2(170, 38)
+	cfg.focus_mode = Control.FOCUS_NONE
+	cfg.pressed.connect(func() -> void: MetaPick.open(self))
+	UiKit.ghost_button(cfg, 18)
+	add_child(cfg)
+
 func _ready() -> void:
-	NavMenu.attach(self, [
-		{"text": "牌库", "action": func() -> void: DeckViewer.toggle()},
-		{"text": "返回主菜单", "action": func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn")},
-	])
 	var bg_path := "res://assets/art/bg/bg_intro.webp"
 	if ResourceLoader.exists(bg_path):
 		var bg := TextureRect.new()
@@ -141,6 +150,11 @@ func _ready() -> void:
 	add_child(enter)
 	_page_nodes.append(enter)
 
+	NavMenu.attach(self, [
+		{"text": "牌库", "action": func() -> void: DeckViewer.toggle()},
+		{"text": "返回主菜单", "action": func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn")},
+	])
+	_add_meta_button()
 	for n in _page_nodes:
 		if n != null:
 			n.visible = false

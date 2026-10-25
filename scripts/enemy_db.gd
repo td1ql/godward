@@ -55,19 +55,19 @@ const DIVINE_ELITE := {
 }
 
 const POPE := {
-	"教皇": {"name": "教皇", "hp": 260, "attack": 16, "pattern": [0.5, 1, 1.5, 2, 2.5, 3, 0, 0], "skills": [{"every": 2, "to": "self", "status": {"力量": 2}, "name": "神威"}, {"every": 3, "to": "player", "status": {"易伤": 3}, "name": "注视"}, {"every": 5, "to": "self", "heal": 40, "name": "圣愈"}]},
+	"教皇": {"name": "教皇", "hp": 210, "attack": 13, "pattern": [0.5, 1, 1.5, 2, 2.5, 3, 0, 0], "skills": [{"every": 2, "to": "self", "status": {"力量": 2}, "name": "神威"}, {"every": 3, "to": "player", "status": {"易伤": 3}, "name": "注视"}, {"every": 5, "to": "self", "heal": 40, "name": "圣愈"}]},
 }
 
 
 # ===== 第三幕：疯狂的诸神（击败后掉落器官）=====
 const GODS := {
-	"奥丁": {"name": "奥丁", "hp": 120, "attack": 10, "pattern": [1, 1.5], "organ": "神之眼",
+	"奥丁": {"name": "奥丁", "hp": 170, "attack": 10, "pattern": [1, 1.5], "organ": "神之眼",
 		"skills": [{"every": 2, "to": "player", "status": {"虚弱": 2}, "name": "凝视"},
 			{"every": 4, "to": "self", "status": {"力量": 3}, "name": "睁开"}]},
-	"赫尔墨斯": {"name": "赫尔墨斯", "hp": 110, "attack": 11, "pattern": [1, 2], "organ": "神之舌",
+	"赫尔墨斯": {"name": "赫尔墨斯", "hp": 150, "attack": 11, "pattern": [1, 2], "organ": "神之舌",
 		"skills": [{"every": 2, "to": "player", "status": {"中毒": 3}, "name": "低语"},
 			{"every": 3, "to": "self", "heal": 12, "name": "吞咽"}]},
-	"阿斯克勒庇俄斯": {"name": "阿斯克勒庇俄斯", "hp": 150, "attack": 8, "pattern": [1, 1, 2], "organ": "神之心",
+	"阿斯克勒庇俄斯": {"name": "阿斯克勒庇俄斯", "hp": 160, "attack": 8, "pattern": [1, 1, 2], "organ": "神之心",
 		"skills": [{"every": 2, "to": "self", "heal": 15, "name": "愈合"},
 			{"every": 3, "to": "self", "status": {"荆棘": 4}, "name": "硬化"}]},
 	"赫菲斯托斯": {"name": "赫菲斯托斯", "hp": 130, "attack": 9, "pattern": [1, 1.5, 2], "organ": "神之手",
@@ -87,7 +87,7 @@ const TREE := {
 
 # ===== 第三幕终局：耶梦加得 =====
 const SERPENT := {
-	"耶梦加得": {"name": "耶梦加得", "hp": 420, "attack": 14, "pattern": [1, 1.5, 1, 2],
+	"耶梦加得": {"name": "耶梦加得", "hp": 1, "attack": 14, "pattern": [1, 1.5, 1, 2],
 		"on_hit": {"中毒": 2},
 		"domain": {"type": "energy_drain", "value": 1},
 		"skills": [

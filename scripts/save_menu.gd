@@ -44,6 +44,8 @@ func _ready() -> void:
 
 	var back := _solid_button("返回", 540, 626, 200, 54)
 	back.pressed.connect(_on_back)
+	_build_debug_buttons()
+
 
 func _build_slot(i: int) -> void:
 	var has := GameState.has_save(i)
@@ -165,8 +167,79 @@ func _new_game(slot: int) -> void:
 	get_tree().change_scene_to_file("res://scenes/run_intro.tscn")
 
 func _delete(slot: int) -> void:
-	GameState.delete_save(slot)
-	get_tree().reload_current_scene()
+	# 二级确认：删档不可撤销
+	var overlay := Modal.open(self, 0.88)
+	Modal.title(overlay, "删除存档", 140, 38)
+	Modal.text(overlay, "存档 · %s\n\n删掉之后，这一轮的职业、牌组、金币都会消失。\n不能撤回。" % _slot_name(slot), 260, 20, 140)
+
+	Modal.button(overlay, "确认删除", 360, 460, 240, 56, func() -> void:
+		overlay.queue_free()
+		GameState.delete_save(slot)
+		get_tree().reload_current_scene()
+	)
+	Modal.button(overlay, "算了", 680, 460, 240, 56, overlay.queue_free)
+
+func _slot_name(slot: int) -> String:
+	return ["一", "二", "三"][clampi(slot, 0, 2)]
 
 func _on_back() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+# ===== 调试入口（仅调试版可见，导出版没有）=====
+func _debug_starter_deck() -> Array[String]:
+	var out: Array[String] = []
+	for c in ["打击", "打击", "防御", "防御", "淬毒", "毒潮", "催化", "毒源", "引爆", "千刀万剐", "麻痹", "铁骨"]:
+		if CardDB.CARDS.has(c):
+			out.append(str(c))
+	return out
+
+func _debug_prepare(act: int) -> void:
+	GameState.act = act
+	GameState.player_max_hp = 150
+	GameState.player_hp = 150
+	GameState.gold = 300
+	GameState.divinity = 50
+	GameState.map_generated = false
+	GameState.map_nodes = {}
+	GameState.current_node_id = 0
+	GameState.pending_snapshot = {}
+	GameState.pending_node = -1
+	GameState.pending_cleanup = false
+	GameState.deck = _debug_starter_deck()
+	GameState.save_game()
+
+func _debug_act3() -> void:
+	_debug_prepare(3)
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+func _debug_serpent() -> void:
+	_debug_prepare(3)
+	GameState.pending_snapshot = {"kind": "battle", "node_type": "serpent", "enemy": EnemyDB.pick_for_node("serpent", 0)}
+	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
+func _debug_act2() -> void:
+	_debug_prepare(2)
+	get_tree().change_scene_to_file("res://scenes/map.tscn")
+
+func _build_debug_buttons() -> void:
+	if not OS.is_debug_build():
+		return
+	var items := [
+		{"text": "调试：第三幕", "action": _debug_act3},
+		{"text": "调试：第二幕", "action": _debug_act2},
+		{"text": "调试：耶梦加得", "action": _debug_serpent},
+	]
+	var y := 610.0
+	for it in items:
+		var b := Button.new()
+		b.text = str(it["text"])
+		b.position = Vector2(40, y)
+		b.size = Vector2(190, 32)
+		b.focus_mode = Control.FOCUS_NONE
+		b.add_theme_font_size_override("font_size", 14)
+		var act: Callable = it["action"]
+		b.pressed.connect(act)
+		UiKit.ghost_button(b, 14)
+		add_child(b)
+		y += 36.0

@@ -7,16 +7,15 @@ extends RefCounted
 # ============================================================
 
 const ICON_DIR := "res://assets/art/node/%s.webp"
-const COLS := 3
-const CELL_W := 380.0
+const COLS := 2
+const CELL_W := 560.0
 const CELL_H := 88.0
 
-const ORDER := [
-	"battle", "elite", "boss",
-	"event", "shop", "rest",
-	"contestant", "remnant", "divine",
-	"divine_elite", "pope", "start",
-]
+const BY_ACT := {
+	1: ["battle", "elite", "boss", "event", "shop", "rest", "contestant", "start"],
+	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start"],
+	3: ["battle", "god", "wealth", "shell", "contestant", "event", "serpent"],
+}
 
 const NOTE := {
 	"battle": "普通的敌人。",
@@ -31,6 +30,10 @@ const NOTE := {
 	"divine_elite": "神国的守卫。",
 	"pope": "他在教堂里等你。",
 	"start": "你从这里出发。",
+	"god": "疯了的神。打赢它，拿走它的一部分。",
+	"wealth": "用金币换属性。它只收金币。",
+	"shell": "没有器官的尸骸。拿走什么，就得放下什么。",
+	"serpent": "啃咬世界树的那条蛇。",
 }
 
 
@@ -50,8 +53,9 @@ static func open(parent: Node) -> void:
 
 	var grid_x := (1280.0 - COLS * CELL_W) / 2.0
 	var grid_y := 120.0
-	for i in range(ORDER.size()):
-		var t: String = ORDER[i]
+	var order: Array = BY_ACT.get(GameState.act, BY_ACT[1])
+	for i in range(order.size()):
+		var t: String = order[i]
 		if not MapDB.TYPE_INFO.has(t):
 			continue
 		var info: Dictionary = MapDB.TYPE_INFO[t]
