@@ -199,10 +199,10 @@ func _ready() -> void:
 		add_child(pc)
 
 	ally_label = Label.new()
-	ally_label.position = Vector2(14, 352)
-	ally_label.size = Vector2(340, 96)
+	ally_label.position = Vector2(14, 338)
+	ally_label.size = Vector2(370, 126)
 	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	ally_label.add_theme_font_size_override("font_size", 16)
+	ally_label.add_theme_font_size_override("font_size", 15)
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
 	var deck_btn := Button.new()
@@ -383,24 +383,24 @@ func _setup_allies() -> void:
 		var eff: Dictionary = c.get("ally_effect", {})
 		var t: String = str(eff.get("type", ""))
 		var quote := str(c.get("ally_line", ""))
+		var how := ""
 		if t == "fighter":
-			ally_fighters.append({"name": c["name"], "damage": int(eff.get("damage", 5))})
-			lines.append("%s：%s" % [c["name"], quote if quote != "" else "（每回合 %d 伤害）" % int(eff.get("damage", 5))])
+			var dmg: int = int(eff.get("damage", 5))
+			ally_fighters.append({"name": c["name"], "damage": dmg})
+			how = "每回合 %d 伤害" % dmg
 		else:
 			if eff.has("cards"):
 				for card in eff["cards"]:
 					deck.hand.append(str(card))
-				lines.append("%s：%s" % [c["name"], quote if quote != "" else "（赠「%s」）" % str(eff["cards"][0])])
+				how = "开局赠「%s」" % str(eff["cards"][0])
 			if eff.has("hp"):
 				player_hp = min(GameState.player_max_hp, player_hp + int(eff["hp"]))
-				lines.append("%s：%s" % [c["name"], quote if quote != "" else "（+%d HP）" % int(eff["hp"])])
+				var hp_txt := "开局 +%d HP" % int(eff["hp"])
+				how = hp_txt if how == "" else how + "、" + hp_txt
+		var head := "%s（%s）" % [c["name"], how] if how != "" else str(c["name"])
+		lines.append(head if quote == "" else "%s\n   「%s」" % [head, quote])
 
-	var text := ""
-	for line in lines:
-		if text != "":
-			text += "、"
-		text += line
-	ally_label.text = "盟友：" + text
+	ally_label.text = "盟友\n" + "\n".join(lines)
 
 func _open_piles() -> void:
 	DeckViewer.open_piles(deck.draw_pile, deck.hand, deck.discard_pile)
@@ -1018,6 +1018,8 @@ func _start_next_cleanup() -> void:
 		"attack": int(c["attack"]),
 		"pattern": c.get("pattern", [1]),
 		"on_hit": c.get("on_hit", {}),
+		"domain": c.get("domain", {}),
+		"skills": c.get("skills", []),
 	}
 	GameState.pending_enemy = enemy_data
 	GameState.pending_contestant = id

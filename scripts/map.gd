@@ -1022,6 +1022,7 @@ func _fight_contestant(id: String) -> void:
 		"pattern": c.get("pattern", [1]),
 		"on_hit": c.get("on_hit", {}),
 		"domain": c.get("domain", {}),
+		"skills": c.get("skills", []),
 	}
 	GameState.pending_contestant = id
 	GameState.pending_snapshot = {
