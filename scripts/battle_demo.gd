@@ -160,6 +160,8 @@ func _ready() -> void:
 	end_turn_button.position = Vector2(1080, 652)
 	end_turn_button.size = Vector2(180, 40)
 	end_turn_button.add_theme_font_size_override("font_size", 22)
+end_turn_button.add_theme_constant_override("outline_size", 2)
+	end_turn_button.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
 	# 能量：放在手牌左边
@@ -169,14 +171,20 @@ func _ready() -> void:
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	info_label.add_theme_font_size_override("font_size", 26)
 	info_label.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+info_label.add_theme_constant_override("outline_size", 2)
+	info_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 
 	# 牌堆计数：屏幕正下方
 	pile_label = Label.new()
-	pile_label.position = Vector2(0, 618)
-	pile_label.size = Vector2(1280, 28)
+	pile_label.position = Vector2(0, 652)
+	pile_label.size = Vector2(1280, 40)
 	pile_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	pile_label.add_theme_font_size_override("font_size", 18)
-	pile_label.add_theme_color_override("font_color", Color(0.80, 0.76, 0.66))
+	pile_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pile_label.add_theme_font_size_override("font_size", 20)
+	pile_label.add_theme_color_override("font_color", Color(0.86, 0.82, 0.72))
+	# 用描边假装加粗
+	pile_label.add_theme_constant_override("outline_size", 3)
+	pile_label.add_theme_color_override("font_outline_color", Color(0.10, 0.09, 0.08))
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
@@ -187,7 +195,11 @@ func _ready() -> void:
 	combat_label.size = Vector2(290, 300)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	combat_label.add_theme_font_size_override("font_size", 19)
+combat_label.add_theme_constant_override("outline_size", 2)
+	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	player_label.add_theme_font_size_override("font_size", 19)
+player_label.add_theme_constant_override("outline_size", 2)
+	player_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var boss_bg := _is_shown_in_bg()
@@ -226,6 +238,8 @@ func _ready() -> void:
 	ally_label.size = Vector2(520, 120)
 	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ally_label.add_theme_font_size_override("font_size", 16)
+ally_label.add_theme_constant_override("outline_size", 2)
+	ally_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
 	var deck_btn := Button.new()
@@ -233,12 +247,18 @@ func _ready() -> void:
 	deck_btn.position = Vector2(20, 652)
 	deck_btn.size = Vector2(110, 40)
 	deck_btn.pressed.connect(DeckViewer.toggle)
+	deck_btn.add_theme_font_size_override("font_size", 20)
+	deck_btn.add_theme_constant_override("outline_size", 2)
+	deck_btn.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	add_child(deck_btn)
 	var pile_btn := Button.new()
 	pile_btn.text = StoryDB.t("battle_piles")
 	pile_btn.position = Vector2(140, 652)
 	pile_btn.size = Vector2(110, 40)
 	pile_btn.pressed.connect(_open_piles)
+	pile_btn.add_theme_font_size_override("font_size", 20)
+	pile_btn.add_theme_constant_override("outline_size", 2)
+	pile_btn.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	add_child(pile_btn)
 	if not tutorial:
 		var menu_btn := Button.new()
