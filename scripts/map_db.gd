@@ -38,11 +38,11 @@ const ACT2_DEPTH := 9
 const ACT2_POOLS := {
 	1: ["divine", "divine"],
 	2: ["divine", "divine", "event", "remnant"],
-	3: ["divine_elite", "shop", "rest", "event"],
-	4: ["divine", "divine", "event", "remnant", "shop"],
+	3: ["divine_elite", "shop", "rest", "event", "contestant"],
+	4: ["divine", "divine", "event", "remnant", "shop", "contestant"],
 	5: ["divine_elite", "divine", "rest", "event"],
-	6: ["divine", "divine", "event", "remnant"],
-	7: ["divine_elite", "shop", "rest", "event"],
+	6: ["divine", "divine", "event", "remnant", "contestant"],
+	7: ["divine_elite", "shop", "rest", "event", "contestant"],
 	8: ["divine", "divine_elite", "remnant", "event"],
 }
 
