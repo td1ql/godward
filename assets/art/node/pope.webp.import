@@ -15,9 +15,9 @@ dest_files=["res://.godot/imported/pope.webp-22ed08b10a34484d9e8ff7361ec0abf4.ct
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.85
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
