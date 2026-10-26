@@ -1307,6 +1307,8 @@ func _start_tree_fight() -> void:
 func _enter_act3() -> void:
 	GameState.act = 3
 	GameState.allies.clear()
+	# 人间不属于逐神游戏：第一幕死掉的人在这里都会再出现
+	GameState.eliminated.clear()
 	GameState.map_generated = false
 	GameState.map_nodes = {}
 	GameState.current_node_id = 0
