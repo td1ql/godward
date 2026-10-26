@@ -11,10 +11,10 @@ config_version=5
 [application]
 
 config/name="逐神"
-config/icon="res://assets/icon.png"
 config/description="Slay the Tower - tower defense roguelike"
 run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://assets/icon.png"
 
 [autoload]
 
