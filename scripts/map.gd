@@ -833,7 +833,11 @@ func _maybe_eliminate() -> void:
 	if randf() < 0.15:
 		var id: String = pool[randi() % pool.size()]
 		GameState.eliminated.append(id)
-		Toast.show_text("%s 被淘汰了。" % ContestantDB.name_of(id))
+		# 第一/二幕是「逐神游戏」，用淘汰；第三幕是人间末日，用死亡
+		if GameState.act >= 3:
+			Toast.show_text("%s 死了。" % ContestantDB.name_of(id))
+		else:
+			Toast.show_text("%s 被淘汰了。" % ContestantDB.name_of(id))
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var cards: Array
