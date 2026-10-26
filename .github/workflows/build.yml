@@ -40,13 +40,14 @@ jobs:
           ls "$ANDROID_HOME" || true
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --version || true
 
-      - name: 安装 Android 构建工具
+      - name: 检查 Android 构建工具（不安装，用预装的）
         run: |
-          set -e
-          SDKM="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
-          yes | "$SDKM" --licenses > /dev/null 2>&1 || true
-          "$SDKM" "platform-tools" "platforms;android-34" "build-tools;34.0.0" || true
-          ls "$ANDROID_HOME/build-tools" || true
+          echo "预装的 build-tools："
+          ls -1 "$ANDROID_HOME/build-tools" || true
+          BT="$(ls -d "$ANDROID_HOME"/build-tools/* 2>/dev/null | sort -V | tail -1)"
+          echo "使用：$BT"
+          "$BT/apksigner" --version || true
+          "$BT/zipalign" 2>&1 | head -3 || true
 
       - name: 下载 Godot
         run: |
@@ -113,10 +114,21 @@ jobs:
       - name: 导出 Android（APK）
         continue-on-error: true
         run: |
-          set -e
           mkdir -p build
-          godot --headless --path . --export-release "Android" build/Godward.apk
+          set +e
+          godot --headless --path . --export-release "Android" build/Godward.apk 2>&1 | tee /tmp/android_export.log
+          CODE=${PIPESTATUS[0]}
+          echo "退出码: $CODE"
+          {
+            echo "## Android 导出结果"
+            echo "退出码: $CODE"
+            echo "### 日志尾部"
+            echo '```'
+            tail -40 /tmp/android_export.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
           ls -lh build
+          exit 0
 
       - name: 给 APK 对齐并签名
         run: |
