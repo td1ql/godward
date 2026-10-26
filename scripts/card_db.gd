@@ -38,7 +38,7 @@ const CARDS := {
 	"余烬": {"kind": "effect", "cost": 0, "consume": 1, "damage": 15, "block": 0, "self_damage": 3, "self_status": {"嗜血": 5}, "remnant": true, "price": 0},
 	"未竟": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 5, "remnant": true, "price": 0},
 	"遗忘": {"kind": "effect", "cost": 0, "consume": 2, "damage": 0, "block": 0, "draw": 4, "gain_energy": 3, "remnant": true, "price": 0},
-	"回望": {"kind": "action", "cost": 1, "damage": 0, "block": 27, "draw": 2, "remnant": true, "price": 0},
+	"回望": {"kind": "action", "cost": 1, "damage": 0, "block": 10, "draw": 2, "remnant": true, "price": 0},
 	"守夜": {"kind": "action", "cost": 1, "damage": 0, "block": 33, "remnant": true, "price": 0},
 	"执念": {"kind": "effect", "cost": 1, "consume": 2, "damage": 0, "block": 39, "remnant": true, "price": 0},
 	"断章": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "status": {"中毒": 9, "易伤": 6, "流血": 6}, "remnant": true, "price": 0},
@@ -359,45 +359,71 @@ const STREAMS := ["毒", "力", "守", "抽", "斩", "血", "技", "愈"]
 # 按卡牌的实际字段推断它属于哪些流派
 func streams_of(id: String) -> Array[String]:
 	var d: Dictionary = CARDS[id]
+	var s: Array[String] = []
 	var hits: int = int(d.get("hits", 1))
 	var total_dmg: int = int(d.get("damage", 0)) * hits
-	var s: Array[String] = []
 
-	if d.has("status"):
-		for k in d["status"]:
-			if k in ["中毒", "流血", "毒性增长"]:
-				if not s.has("毒"):
-					s.append("毒")
-			elif k in ["虚弱", "易伤", "重力"]:
-				if not s.has("技"):
-					s.append("技")
+	# 把各种字段里的状态名汇总起来
+	var st_keys: Array = []
+	for k in d.get("status", {}):
+		st_keys.append(str(k))
+	for k in d.get("self_status", {}):
+		st_keys.append(str(k))
+	for k in d.get("damage_per_enemy_status", {}):
+		st_keys.append(str(k))
+	for f in ["clear_enemy_status", "hits_from_enemy_status"]:
+		if str(d.get(f, "")) != "":
+			st_keys.append(str(d[f]))
 
-	if d.has("self_status"):
-		for k in d["self_status"]:
-			if k in ["力量", "狂怒"]:
-				if not s.has("力"):
-					s.append("力")
+	var poison_set := ["中毒", "流血", "毒性增长"]
+	var tech_set := ["虚弱", "易伤", "重力", "迟缓", "重压"]
 
+	for k in st_keys:
+		if k in poison_set:
+			if not s.has("毒"):
+				s.append("毒")
+		elif k in tech_set:
+			if not s.has("技"):
+				s.append("技")
+
+	# 催化一类：直接翻倍中毒
+	if d.has("poison_double"):
+		if not s.has("毒"):
+			s.append("毒")
+
+	# 力量相关
+	for k in d.get("self_status", {}):
+		if str(k) in ["力量", "狂怒"]:
+			if not s.has("力"):
+				s.append("力")
+	if int(d.get("damage_per_strength", 0)) > 0:
+		if not s.has("力"):
+			s.append("力")
+
+	# 护盾相关
 	if int(d.get("block", 0)) > 0 and total_dmg == 0:
 		if not s.has("守"):
 			s.append("守")
-
-	if int(d.get("draw", 0)) > 0:
-		if not s.has("抽"):
-			s.append("抽")
-
-	if int(d.get("heal", 0)) > 0:
-		if not s.has("愈"):
-			s.append("愈")
-
-	if d.get("damage_from_block", false):
+	if d.get("damage_from_block", false) or d.has("block_damage_mult"):
 		if not s.has("守"):
 			s.append("守")
 
+	# 抽牌 / 加能量
+	if int(d.get("draw", 0)) > 0 or d.has("next_energy"):
+		if not s.has("抽"):
+			s.append("抽")
+
+	# 治疗
+	if int(d.get("heal", 0)) > 0 or int(d.get("heal_percent_missing", 0)) > 0:
+		if not s.has("愈"):
+			s.append("愈")
+
+	# 自伤换收益
 	if int(d.get("self_damage", 0)) > 0:
 		if not s.has("血"):
 			s.append("血")
 
+	# 高伤害 = 斩
 	if total_dmg >= 10:
 		if not s.has("斩"):
 			s.append("斩")
