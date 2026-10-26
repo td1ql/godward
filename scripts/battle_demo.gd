@@ -6,6 +6,7 @@ var deck := Deck.new()
 var hand_view: HandView
 var player_label: Label
 var ally_label: Label
+var pile_label: Label
 var ally_fighters: Array = []
 var enemy := EnemyState.new()
 
@@ -158,21 +159,35 @@ func _ready() -> void:
 
 	end_turn_button.position = Vector2(1080, 652)
 	end_turn_button.size = Vector2(180, 40)
-	end_turn_button.add_theme_font_size_override("font_size", 18)
+	end_turn_button.add_theme_font_size_override("font_size", 22)
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
-	info_label.position = Vector2(14, 10)
-	info_label.size = Vector2(1200, 26)
-	info_label.add_theme_font_size_override("font_size", 18)
+	# 能量：放在手牌左边
+	info_label.position = Vector2(22, 436)
+	info_label.size = Vector2(150, 46)
+	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	info_label.add_theme_font_size_override("font_size", 26)
+	info_label.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
 
-	player_label.position = Vector2(14, 80)
-	player_label.size = Vector2(150, 256)
+	# 牌堆计数：屏幕正下方
+	pile_label = Label.new()
+	pile_label.position = Vector2(0, 618)
+	pile_label.size = Vector2(1280, 28)
+	pile_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pile_label.add_theme_font_size_override("font_size", 18)
+	pile_label.add_theme_color_override("font_color", Color(0.80, 0.76, 0.66))
+	StoryDB.apply_serif(pile_label)
+	add_child(pile_label)
+
+	player_label.position = Vector2(14, 26)
+	player_label.size = Vector2(200, 300)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	combat_label.position = Vector2(860, 44)
-	combat_label.size = Vector2(360, 210)
+	combat_label.position = Vector2(700, 26)
+	combat_label.size = Vector2(290, 300)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	combat_label.add_theme_font_size_override("font_size", 20)
-	player_label.add_theme_font_size_override("font_size", 17)
+	combat_label.add_theme_font_size_override("font_size", 19)
+	player_label.add_theme_font_size_override("font_size", 19)
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var boss_bg := _is_shown_in_bg()
@@ -182,8 +197,8 @@ func _ready() -> void:
 		spr.texture = load(sil_path)
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		spr.position = Vector2(980, 130)
-		spr.size = Vector2(240, 360)
+		spr.position = Vector2(1000, 26)
+		spr.size = Vector2(240, 340)
 		spr.modulate = Color(1, 1, 1, 0.92)
 		add_child(spr)
 		spr.pivot_offset = spr.size / 2.0
@@ -202,15 +217,15 @@ func _ready() -> void:
 		pc.texture = load(voc_path)
 		pc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		pc.position = Vector2(175, 86)
-		pc.size = Vector2(150, 250)
+		pc.position = Vector2(222, 26)
+		pc.size = Vector2(150, 256)
 		add_child(pc)
 
 	ally_label = Label.new()
-	ally_label.position = Vector2(14, 344)
-	ally_label.size = Vector2(372, 124)
+	ally_label.position = Vector2(14, 380)
+	ally_label.size = Vector2(520, 120)
 	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	ally_label.add_theme_font_size_override("font_size", 15)
+	ally_label.add_theme_font_size_override("font_size", 16)
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
 	var deck_btn := Button.new()
@@ -1038,10 +1053,9 @@ func _start_next_cleanup() -> void:
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 func _update_ui() -> void:
-	info_label.text = "能量: %d/%d    抽牌堆: %d    手牌: %d    弃牌堆: %d    金币: %d" % [
-		player_energy, max_energy,
-		deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(),
-		GameState.gold
+	info_label.text = "能量 %d/%d" % [player_energy, max_energy]
+	pile_label.text = "抽牌堆 %d　　手牌 %d　　弃牌堆 %d　　金币 %d" % [
+		deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(), GameState.gold
 	]
 
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]

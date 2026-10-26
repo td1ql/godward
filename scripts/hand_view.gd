@@ -22,7 +22,7 @@ func render(cards: Array[String], energy: int, pending_effect: int, pending_sele
 		var d: Dictionary = CardDB.get_card(c)
 		var btn := CardUI.make_button(c)
 		btn.size = Vector2(card_w, card_h)
-		btn.position = Vector2(start_x + i * spacing, 470)
+		btn.position = Vector2(start_x + i * spacing, 438)
 		if pending_effect >= 0:
 			if i == pending_effect:
 				btn.modulate = Color(1, 1, 0.55, 1)
