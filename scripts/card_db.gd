@@ -68,7 +68,7 @@ const CARDS := {
 	"谵语": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "draw": 2, "exclusive": true, "price": 0},
 	"赊账": {"kind": "action", "cost": 0, "damage": 0, "block": 8, "self_damage": 6, "gain_energy": 1, "exclusive": true, "price": 0},
 	"远路": {"kind": "action", "cost": 0, "damage": 7, "block": 0, "draw": 1, "self_damage": 2, "exclusive": true, "price": 0},
-	"钟摆": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "damage_from_block": true, "zero_block_after": true, "exclusive": true, "price": 0},
+	"钟摆": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "damage_from_block": true, "exclusive": true, "price": 0},
 	"预兆": {"kind": "effect", "cost": 0, "consume": 1, "damage": 0, "block": 0, "status": {"虚弱": 2}, "exclusive": true, "price": 0},
 	"余温": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 8, "heal": 3, "exclusive": true, "price": 0},
 	"入殓": {"kind": "action", "cost": 1, "damage": 0, "block": 7, "heal": 3, "exclusive": true, "price": 0},
@@ -184,8 +184,8 @@ const CARDS := {
 	"再生术": {"kind": "action", "cost": 2, "damage": 0, "block": 3, "heal": 10, "price": 70},
 	"守护": {"kind": "action", "cost": 2, "damage": 0, "block": 14, "price": 55},
 	"坚守之志": {"kind": "effect", "cost": 3, "consume": 3, "damage": 0, "block": 15, "self_status": {"坚守": 1}, "price": 120},
-	"盾击": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "damage_from_block": true, "zero_block_after": true, "price": 100},
-	"铁壁冲撞": {"kind": "action", "cost": 2, "damage": 0, "block": 0, "damage_from_block": true, "zero_block_after": true, "block_damage_mult": 2, "price": 115},
+	"盾击": {"kind": "action", "cost": 1, "damage": 0, "block": 0, "damage_from_block": true, "price": 100},
+	"铁壁冲撞": {"kind": "action", "cost": 2, "damage": 0, "block": 0, "damage_from_block": true, "block_damage_mult": 2, "price": 115},
 	"疾书": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 2, "self_damage": 3, "price": 50},
 	"静养": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "heal": 5, "draw": 1, "price": 45},
 	"鲜血之赐": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "draw": 3, "self_damage": 6, "price": 55},
@@ -279,6 +279,7 @@ func card_text(id: String) -> String:
 	var hits: int = d.get("hits", 1)
 	if d.get("damage_from_block", false):
 		effects.append("伤害 = 当前格挡")
+		effects.append("格挡值减半")
 	if d["damage"] > 0:
 		if hits > 1:
 			effects.append("%d 伤害×%d" % [d["damage"], hits])
