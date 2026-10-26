@@ -7,6 +7,7 @@ var hand_view: HandView
 var player_label: Label
 var ally_label: Label
 var pile_label: Label
+var status_label: Label
 var ally_fighters: Array = []
 var enemy := EnemyState.new()
 
@@ -165,7 +166,7 @@ func _ready() -> void:
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
 	# 能量：放在手牌左边
-	info_label.position = Vector2(22, 436)
+	info_label.position = Vector2(22, 400)
 	info_label.size = Vector2(150, 46)
 	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -231,10 +232,22 @@ func _ready() -> void:
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 256)
+	# 状态：显示在立绘正下方
+	status_label = Label.new()
+	status_label.position = Vector2(246, 292)
+	status_label.size = Vector2(174, 96)
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	status_label.add_theme_font_size_override("font_size", 15)
+	status_label.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	status_label.add_theme_constant_override("outline_size", 2)
+	status_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	StoryDB.apply_serif(status_label)
+	add_child(status_label)
 		add_child(pc)
 
 	ally_label = Label.new()
-	ally_label.position = Vector2(14, 380)
+	ally_label.position = Vector2(14, 400)
 	ally_label.size = Vector2(520, 120)
 	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ally_label.add_theme_font_size_override("font_size", 16)
@@ -1079,9 +1092,9 @@ func _update_ui() -> void:
 	]
 
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
-	var ps := StatusSystem.text(player_status)
-	if ps != "":
-		ptext += "\n状态: %s" % ps
+	var status_txt: String = StatusSystem.text(player_status)
+	status_label.text = status_txt
+	status_label.visible = status_txt != ""
 	if pending_effect >= 0:
 		ptext += "\n选择 %d 张手牌消耗（已选 %d）" % [pending_need, pending_selected.size()]
 	player_label.text = ptext
