@@ -188,11 +188,11 @@ info_label.add_theme_constant_override("outline_size", 2)
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
-	player_label.position = Vector2(14, 26)
-	player_label.size = Vector2(200, 300)
+	player_label.position = Vector2(24, 30)
+	player_label.size = Vector2(220, 300)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	combat_label.position = Vector2(700, 26)
-	combat_label.size = Vector2(290, 300)
+	combat_label.position = Vector2(860, 30)
+	combat_label.size = Vector2(240, 300)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	combat_label.add_theme_font_size_override("font_size", 19)
 combat_label.add_theme_constant_override("outline_size", 2)
@@ -209,8 +209,8 @@ player_label.add_theme_constant_override("outline_size", 2)
 		spr.texture = load(sil_path)
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		spr.position = Vector2(1000, 26)
-		spr.size = Vector2(240, 340)
+		spr.position = Vector2(1106, 30)
+		spr.size = Vector2(150, 256)
 		spr.modulate = Color(1, 1, 1, 0.92)
 		add_child(spr)
 		spr.pivot_offset = spr.size / 2.0
@@ -229,7 +229,7 @@ player_label.add_theme_constant_override("outline_size", 2)
 		pc.texture = load(voc_path)
 		pc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		pc.position = Vector2(222, 26)
+		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 256)
 		add_child(pc)
 
