@@ -8,7 +8,14 @@ var _silence_btn: Button
 var _sub_open := false
 
 
+const CardDump = preload("res://tools/dump_cards.gd")
+
 func _ready() -> void:
+	# 开发用：带 --dump-cards 参数启动时，只导出卡表然后退出
+	if "--dump-cards" in OS.get_cmdline_user_args():
+		CardDump.write()
+		get_tree().quit()
+		return
 	AudioManager.play_bgm("menu")
 	var bg_path := "res://assets/art/bg/bg_menu.webp"
 	if ResourceLoader.exists(bg_path):
