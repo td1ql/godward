@@ -1289,6 +1289,19 @@ func _enter_church() -> void:
 	_show_pope()
 
 # 教皇死亡假结局：善恶值不够的玩家停在这里，永远见不到第三幕
+# 善恶达标：教皇死后先看见那棵假树，才打它
+func _show_tree_reveal() -> void:
+	hand_view.hide_cards()
+	var overlay := Modal.open(self, 0.97)
+	var title := Modal.title(overlay, "伪·世界树", 120, 48)
+	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
+	var key := "ending_body_good" if Morality.is_saint() else "ending_body_dark"
+	Modal.text(overlay, StoryDB.t(key), 240, 22, 260)
+	Modal.button(overlay, "抬头", 520, 560, 240, 60, func() -> void:
+		overlay.queue_free()
+		_start_tree_fight()
+	)
+
 func _show_fake_ending() -> void:
 	hand_view.hide_cards()
 	var overlay := Modal.open(self, 0.97)
@@ -1304,10 +1317,7 @@ func _show_fake_ending() -> void:
 
 func _on_pope_defeated() -> void:
 	if Morality.is_saint() or Morality.is_sinner():
-		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), func() -> void:
-			hand_view.hide_cards()
-			_show_title("伪·世界树", _start_tree_fight)
-		)
+		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_tree_reveal)
 	else:
 		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_fake_ending)
 
