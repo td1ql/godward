@@ -1288,20 +1288,16 @@ func _enter_church() -> void:
 		return
 	_show_pope()
 
-func _show_true_ending() -> void:
+# 教皇死亡假结局：善恶值不够的玩家停在这里，永远见不到第三幕
+func _show_fake_ending() -> void:
 	hand_view.hide_cards()
 	var overlay := Modal.open(self, 0.97)
 	var title := Modal.title(overlay, StoryDB.t("ending_title"), 130, 52)
 	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
-	var body_key := "ending_body"
-	if Morality.is_saint():
-		body_key = "ending_body_good"
-	elif Morality.is_sinner():
-		body_key = "ending_body_dark"
-	Modal.text(overlay, StoryDB.t(body_key), 260, 24, 200)
+	Modal.text(overlay, StoryDB.t("ending_body"), 260, 24, 200)
 	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary()], 470, 20, 100)
 	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
-	Modal.button(overlay, StoryDB.t("ending_button"), 520, 580, 240, 60, _end_true_run)
+	Modal.button(overlay, StoryDB.t("ending_button"), 520, 580, 240, 60, _end_fake_run)
 
 
 func _on_pope_defeated() -> void:
@@ -1311,7 +1307,7 @@ func _on_pope_defeated() -> void:
 			_show_title("伪·世界树", _start_tree_fight)
 		)
 	else:
-		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_true_ending)
+		Dialogue.play(self, DialogueDB.get_lines("pope_defeat"), _show_fake_ending)
 
 func _show_title(text: String, next: Callable) -> void:
 	var layer := ColorRect.new()
@@ -1406,7 +1402,7 @@ func _show_serpent_ending() -> void:
 	Modal.button(overlay, "回到开始", 530, 520, 220, 58, _end_true_run)
 
 func _end_true_run() -> void:
-	# 通关不删档：把「已通关」写进这个存档，存档继续留着
+	# 真结局：通关不删档，把「已通关」写进这个存档，下次可以自由配置
 	GameState.mark_act3_cleared()
 	GameState.pending_snapshot = {}
 	GameState.pending_node = -1
@@ -1418,6 +1414,11 @@ func _end_true_run() -> void:
 	GameState.current_node_id = 0
 	GameState.player_hp = GameState.player_max_hp
 	GameState.save_game()
+	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+
+func _end_fake_run() -> void:
+	# 假结局：这一轮到此为止。假的收场不给任何奖励，也不解锁什么。
+	GameState.delete_save()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _enter_divine_realm() -> void:
