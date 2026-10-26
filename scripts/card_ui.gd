@@ -121,6 +121,8 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	name_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_lbl.add_theme_font_size_override("font_size", font_size)
 	name_lbl.add_theme_color_override("font_color", ink)
+	name_lbl.add_theme_constant_override("outline_size", 1)
+	name_lbl.add_theme_color_override("font_outline_color", ink)
 	name_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(name_lbl)
 	btn.add_child(name_lbl)
@@ -177,6 +179,8 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	tag_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	tag_lbl.add_theme_font_size_override("font_size", max(10, font_size - 4))
 	tag_lbl.add_theme_color_override("font_color", Color(0.42, 0.36, 0.27))
+	tag_lbl.add_theme_constant_override("outline_size", 1)
+	tag_lbl.add_theme_color_override("font_outline_color", Color(0.42, 0.36, 0.27))
 	tag_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(tag_lbl)
 	btn.add_child(tag_lbl)
@@ -194,6 +198,8 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	body_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body_lbl.add_theme_font_size_override("font_size", max(11, font_size - 2))
 	body_lbl.add_theme_color_override("font_color", ink)
+	body_lbl.add_theme_constant_override("outline_size", 1)
+	body_lbl.add_theme_color_override("font_outline_color", ink)
 	body_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(body_lbl)
 	btn.add_child(body_lbl)

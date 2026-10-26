@@ -188,8 +188,8 @@ func _ready() -> void:
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
-	player_label.position = Vector2(24, 30)
-	player_label.size = Vector2(220, 300)
+	player_label.position = Vector2(52, 30)
+	player_label.size = Vector2(196, 300)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	combat_label.position = Vector2(860, 30)
 	combat_label.size = Vector2(240, 300)
