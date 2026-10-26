@@ -13,39 +13,39 @@
 - **[prologue/0] 无上神音**：起初，光从众神的衣袍上落下。　`[换背景]`
 - **[prologue/1] 无上神音**：万物饱足而不朽。 ⏎ 没有生死，也没有昼夜。
 - **[prologue/2] 无上神音**：直到贪婪将一切吞没。 ⏎ 众神们陷入疯狂　`[换背景]`
-- **[prologue/3] 无上神音**：撑起世界的巨木枯萎了 ⏎ 幸福美满，尽皆坠落。
-- **[prologue/4] 无上神音**：在上帝将要沉睡的刹那。 ⏎ 他飘起了些许的思绪。　`[换背景]`
+- **[prologue/3] 无上神音**：撑起世界的巨木枯萎了 ⏎ 曾经的幸福美满尽皆坠落。
+- **[prologue/4] 无上神音**：在上帝将要沉睡的刹那。 ⏎ 祂飘起了些许思绪。　`[换背景]`
 - **[prologue/5] 无上神音**：「……那是什么」
 - **[prologue/6] 无上神音**：「一团微亮的星火」　`[换背景]`
-- **[prologue/7] 无上神音**：「一颗种子」
-- **[prologue/8] 无上神音**：「希望的信念在蔓延」
-- **[prologue/9] 无上神音**：「离开这里」
-- **[prologue/10] 无上神音**：「到人@！#」
+- **[prologue/7] 无上神音**：「或是一颗种子」
+- **[prologue/8] 无上神音**：「思绪翻飞流转」
+- **[prologue/9] 无上神音**：「离开这里吧」
+- **[prologue/10] 无上神音**：「到@！#去」
 - **[prologue/11] 无上神音**：黑暗在侵蚀祂的神志 ⏎ 贪婪与罪恶遮蔽了光芒
-- **[prologue/12] 无上神音**：「但是神明说」
-- **[prologue/13] 无上神音**：「要有光」　`[换背景]`
+- **[prologue/12] 无上神音**：「但是上帝于此断言」
+- **[prologue/13] 无上神音**：「——要有光——」　`[换背景]`
 - **[prologue/14] 无上神音**：「驱散它们」
 
 ### prologue_after
 
-- **[prologue_after/0] 无上神音**：「于是星火也足以燎尽荒原」　`[换背景]`
-- **[prologue_after/1] 无上神音**：「众神在疯狂与痛苦中挣扎」
+- **[prologue_after/0] 无上神音**：「于是些微星火也足以燎尽荒原」　`[换背景]`
+- **[prologue_after/1] 无上神音**：「众神在深黑的火焰中狂舞」
 - **[prologue_after/2] 火在燃烧**：「.」
 - **[prologue_after/3] 火在燃烧**：「..」
 - **[prologue_after/4] 火在燃烧**：「...」
-- **[prologue_after/5] 于是星火发问**：「我是谁」　`[换背景]`
-- **[prologue_after/6] 于是星火发问**：「我从哪来」
-- **[prologue_after/7] 于是星火发问**：「我改去往何处」
-- **[prologue_after/8] 无上神音**：「到人间去」
-- **[prologue_after/9] 无上神音**：「...去发光...」
-- **[prologue_after/10] 无上神音**：「...去成为太阳」 ⏎ 「...众生..明天！@##@！」
-- **[prologue_after/11] 沉沦神音**：「！@###￥%……##￥」
+- **[prologue_after/5] 于是星火发问**：「我是谁？」　`[换背景]`
+- **[prologue_after/6] 于是星火发问**：「我从哪而来？」
+- **[prologue_after/7] 于是星火发问**：「我该去往何处？」
+- **[prologue_after/8] 无上神音**：「落下去，落下去」
+- **[prologue_after/9] 无上神音**：「...去发出光...」
+- **[prologue_after/10] 无上神音**：「...就能成为太阳」 ⏎ 「...众生..明天！@##@！」
+- **[prologue_after/11] 沉%￥沦#@￥神#@音**：「！@###￥%……##￥」
 
 ### first_act3
 
-- **[first_act3/0] 无上神音**：天坠落下来了
-- **[first_act3/1] 无上神音**：祂们已莅临人间
-- **[first_act3/2] 沉沦神音**：「……你如今要去往何方？」
+- **[first_act3/0] 无上神音**：那虚假的天空终于破碎　`[换背景]`
+- **[first_act3/1] 无上神音**：疯狂的众神终于染指人间
+- **[first_act3/2] 沉沦神音**：「是#@你为这$#$@世界带来了%#终结」
 
 ### ending_god
 
@@ -78,7 +78,7 @@
 - **[pope_before/1] 教皇**：我的主啊，原来你竟被困于这人间
 - **[pope_before/2] 无上神音**：他的眼中流下泪水，传来微微的啜泣
 - **[pope_before/3] 教皇**：可惜已经太晚了，我的罪孽无以悔过
-- **[pope_before/4] 教皇**：我也绝不悔过
+- **[pope_before/4] 教皇**：也绝不悔过
 
 ### pope_defeat
 
@@ -92,7 +92,7 @@
 
 - **[world_tree/0] 无上神音**：你抬头看向天空
 - **[world_tree/1] 无上神音**：那里有着树叶的纹理 ⏎ 像是世界的伤疤，狰狞可怖
-- **[world_tree/2] 无上神音**：赤红的火光从天空的缝隙溢出 ⏎ 你却只感到无比的温暖
+- **[world_tree/2] 无上神音**：赤红的火光从天空的缝隙中溢出 ⏎ 你却只感到无比的温暖
 
 ---
 
@@ -101,39 +101,39 @@
 | key | 文本 |
 |-----|------|
 | `cleanup_title` | 教堂的大门紧闭 |
-| `cleanup_body` | 还有 %d 名参赛者活着。 ⏎ 觐见神的资格只属于胜者 |
+| `cleanup_body` | 还有 %d 名参赛者活着。 ⏎ 而觐见神的资格只属于胜者 |
 | `cleanup_button` | 开始清算 |
 | `cleanup_result_title` | 清 算 |
 | `cleanup_result_empty` | 什么也没留下。 |
 | `cleanup_continue` | 继续清算（剩 %d 人） |
-| `cleanup_go` | 前往神堂 |
+| `cleanup_go` | 前往教堂 |
 | `ending_god_title` | 神 座 |
 | `ending_loop_title` | 薪 火 |
 | `ending_human_title` | 沉 沦 |
-| `gameover_loop_title` | 教皇还在等你 |
-| `gameover_loop_body` | 你在神国里倒下。 ⏎ 教皇没有看你。 ⏎ ——第 10 次转生，重新开始。 |
+| `gameover_loop_title` | 教皇仍在等待 |
+| `gameover_loop_body` | 你在神国里倒下。 ⏎ 教皇没有看你。 ⏎ ——第 10 次转生，重新开始。 |
 | `reward_title` | 战斗胜利！金币 +%d　选择一张卡 |
 | `reward_title_gold` | 战斗胜利！金币 +%d |
 | `reward_pick` | 点击选择 |
 | `reward_skip` | 跳过奖励 |
 | `gameover_title` | 你被打倒了…… |
 | `gameover_body` | 这次冒险到此为止。 |
-| `gameover_restart` | 重新开始一局 |
+| `gameover_restart` | 重新开始 |
 | `gameover_menu` | 返回主菜单 |
 | `pope_title` | 教 皇 |
-| `pope_body` | 你走进教堂。教皇甚至没有抬头。 ⏎ 一只手落在你的额头上—— ⏎ 然后，一切暗了下去。 |
+| `pope_body` | 你走进教堂。教皇甚至没有抬头。 ⏎ 一只巨手落在你的额头上—— ⏎ 随后，一切都暗了下去。 |
 | `pope_button` | 转生 |
 | `church_title` | 教 堂 |
-| `church_body` | 清算结束了。 ⏎ 教堂的门，为你打开了。 |
+| `church_body` | 清算结束了。 ⏎ 教堂的门，获胜者而开。 |
 | `church_button` | 进入教堂 |
-| `ending_title` | 神 堂 |
-| `ending_body` | 教皇倒下时，穹顶裂开了。 ⏎ 里面没有神，只有一片安静的白。 ⏎  ⏎ 你终于想起自己是谁。 |
-| `ending_body_good` | 教皇倒下时，穹顶裂开了。 ⏎ 里面没有神，只有一片安静的白。 ⏎  ⏎ 你想起自己这一路没有杀过不该杀的人。 ⏎ 白里有一点光，像是回应了你。 |
-| `ending_body_dark` | 教皇倒下时，穹顶裂开了。 ⏎ 里面没有神，只有一片安静的白。 ⏎  ⏎ 你踩过太多人的手。 ⏎ 那些手都还留在下面。 ⏎ 你听见它们在叫你。 |
+| `ending_title` | 教 堂 |
+| `ending_body` | 教皇死去了 ⏎ ，但四周毫无变化。 ⏎  ⏎ 不过“逐神之戏”永远的结束了 |
+| `ending_body_good` | 教皇死去了 ⏎ 你隐约听见有人在求救 ⏎ 他在惨叫，他在挣扎 ⏎ 你圣洁的心好似被撕裂 ⏎ 睁开眼睛 ⏎ 你看到一棵树 ⏎ 千手万眼，通天彻地 |
+| `ending_body_dark` | 教皇死去了 ⏎ 你好像听见了恶魔的低语 ⏎ 他在蛊惑，他在狞笑 ⏎ 你污浊的心蠢蠢欲动 ⏎ 抬头看去 ⏎ 那是一棵树 ⏎ 百面千相，枝繁叶茂 |
 | `ending_button` | 回到主菜单 |
 | `aftermath_title` | %s 倒下了 |
-| `aftermath_cleanup` | 觐见神明的门只为胜利者打开。 ⏎ 他必须留在这里。 |
-| `aftermath_normal` | 他还有呼吸。于是你可以践行自己的道德了。 |
+| `aftermath_cleanup` | 觐见神明的门只为胜利者打开。 ⏎ 他必须留在这里。 |
+| `aftermath_normal` | 他的呼吸尚在。于是你可以直面自己的道德了。 |
 | `aftermath_kill` | 杀死他 |
 | `aftermath_spare` | 饶恕他 |
 | `battle_menu` | 菜单 |
