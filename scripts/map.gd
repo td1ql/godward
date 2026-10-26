@@ -638,6 +638,10 @@ func _choice_label(c: Dictionary) -> String:
 		if txt.size() > 2:
 			eff = str(txt[2]).replace("/", " · ")
 		parts.append("%s：%s %s" % [n, tag, eff])
+	if int(c.get("random_cards", 0)) > 0:
+		parts.append("随机卡 ×%d" % int(c["random_cards"]))
+	if int(c.get("retrieve_top", 0)) > 0:
+		parts.append("取回弃牌堆顶 ×%d" % int(c["retrieve_top"]))
 	if parts.is_empty():
 		return t
 	return t + "\n" + "；".join(parts)
@@ -763,7 +767,9 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 	for i in range(choices.size()):
 		var choice: Dictionary = choices[i]
 		var b := Button.new()
-		b.text = str(choice.get("label", "..."))
+		b.text = _choice_label(choice)
+		if b.text.contains("\n"):
+			b.custom_minimum_size = Vector2(0, 78)
 		if not Morality.meets(choice):
 			b.disabled = true
 			b.text += "（%s）" % Morality.req_text(choice)
@@ -967,7 +973,10 @@ func _encounter_shell(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	title.text = "空壳"
 	body.text = str(s["text"])
 	for c in s["choices"]:
-		var b := _ink_button(str(c["label"]))
+		var lbl := _choice_label(c)
+		var b := _ink_button(lbl)
+		if lbl.contains("\n"):
+			b.custom_minimum_size = Vector2(0, 78)
 		b.pressed.connect(_take_shell.bind(c, body))
 		vbox.add_child(b)
 	var leave := _ink_button("绕过去")
