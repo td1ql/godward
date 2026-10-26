@@ -106,7 +106,7 @@ const CARDS := {
 	"记债": {"kind": "action", "cost": 1, "damage": 0, "block": 5, "next_energy": 3, "exclusive": true, "price": 0},
 	"轮值": {"kind": "action", "cost": 1, "damage": 0, "block": 9, "draw": 1, "exclusive": true, "price": 0},
 	"余响": {"kind": "action", "cost": 2, "damage": 0, "block": 18, "exclusive": true, "price": 0},
-	"吐锋": {"kind": "action", "cost": 2, "damage": 16, "block": 0, "exclusive": true, "price": 0},
+	"吐锋": {"kind": "action", "cost": 2, "damage": 16, "block": 0, "elite_kill_energy": 1, "exclusive": true, "price": 0},
 	"将军": {"kind": "action", "cost": 2, "damage": 18, "block": 0, "exclusive": true, "price": 0},
 	"归途": {"kind": "action", "cost": 2, "damage": 9, "block": 0, "heal": 4, "exclusive": true, "price": 0},
 	"断臂旗": {"kind": "action", "cost": 2, "damage": 12, "block": 6, "exclusive": true, "price": 0},
@@ -325,6 +325,8 @@ func card_text(id: String) -> String:
 		effects.append("本局一次")
 	if d.get("exhaust", false):
 		effects.append("本场消失")
+	if int(d.get("elite_kill_energy", 0)) > 0:
+		effects.append("用这张牌杀死精英后，能量上限 +%d" % int(d["elite_kill_energy"]))
 	if d.get("skip_enemy_turn", 0) > 0:
 		effects.append("跳过敌方回合")
 	if d.get("min_self_status", {}):
