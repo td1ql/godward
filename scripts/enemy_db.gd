@@ -36,7 +36,7 @@ const BOSS := {
 	"守门人": {"name": "守门人", "hp": 100, "attack": 10, "pattern": [1, 1.5, 1, 2], "on_hit": {"易伤": 1}, "on_turn": {"力量": 1}, "skills":[{"every": 2, "to": "player", "status": {"流血": 2}, "name": "流血"}, {"every": 3, "to": "self", "status": {"再生": 3}, "name": "再生"}]},
 	"奥古斯丁": {"name": "奥古斯丁", "hp": 115, "attack": 9, "pattern": [1, 1, 2, 1.5], "domain": {"type": "no_heal", "value": 1}, "skills": [{"every": 2, "to": "player", "status": {"虚弱": 2}, "name": "忏悔"}, {"every": 4, "to": "self", "heal": 14, "name": "记述"}]},
 	"安布罗斯": {"name": "安布罗斯", "hp": 105, "attack": 8, "pattern": [1, 2, 1, 1], "skills": [{"every": 3, "to": "self", "status": {"力量": 3}, "name": "圣歌"}, {"every": 4, "to": "self", "status": {"再生": 5}, "name": "合唱"}]},
-	"耶柔米": {"name": "耶柔米", "hp": 108, "attack": 11, "pattern": [1.5, 1, 1, 2], "domain": {"type": "cost_up", "value": 1}, "skills": [{"every": 3, "to": "player", "status": {"易伤": 2}, "name": "译注"}]},
+	"耶柔米": {"name": "耶柔米", "hp": 70, "attack": 11, "pattern": [1.5, 1, 1, 2], "domain": {"type": "cost_up", "value": 1}, "skills": [{"every": 3, "to": "player", "status": {"易伤": 2}, "name": "译注"}]},
 	"格里高利": {"name": "格里高利", "hp": 120, "attack": 9, "pattern": [1, 1, 1, 2.5], "domain": {"type": "thorns_aura", "value": 3}, "skills": [{"every": 2, "to": "self", "status": {"荆棘": 3}, "name": "围墙"}]},
 	"金口约翰": {"name": "金口约翰", "hp": 98, "attack": 10, "pattern": [1, 2, 2, 1], "domain": {"type": "weak_aura", "value": 1}, "skills": [{"every": 2, "to": "player", "status": {"易伤": 2}, "name": "布道"}, {"every": 3, "to": "self", "status": {"力量": 2}, "name": "金口"}]},
 }

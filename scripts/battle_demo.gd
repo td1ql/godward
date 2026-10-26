@@ -463,7 +463,12 @@ func _apply_card_effects(c: String) -> void:
 	var hits_key := str(d.get("hits_from_enemy_status", ""))
 	if hits_key != "":
 		hits = max(1, int(enemy.status.get(hits_key, 0)))
-	if d["damage"] > 0 or d.get("damage_from_block", false):
+	var per_st_pre: Dictionary = d.get("damage_per_enemy_status", {})
+	var has_scale: bool = int(d.get("damage_per_strength", 0)) > 0
+	for key in per_st_pre:
+		if int(per_st_pre[key]) != 0:
+			has_scale = true
+	if d["damage"] > 0 or d.get("damage_from_block", false) or has_scale:
 		var base_damage: int = int(d["damage"])
 		if d.get("damage_from_block", false):
 			base_damage = min(player_block * int(d.get("block_damage_mult", 1)), BLOCK_DAMAGE_CAP)
