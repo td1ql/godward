@@ -221,7 +221,7 @@ const CARDS := {
 	"斩首": {"kind": "action", "cost": 2, "damage": 14, "block": 0, "price": 70},
 	"断掌": {"kind": "action", "cost": 2, "damage": 12, "block": 0, "status": {"易伤": 1}, "price": 70},
 	"无畏之心": {"kind": "action", "cost": 2, "damage": 24, "block": 0, "self_damage": 8, "price": 75},
-	"狂化": {"kind": "action", "cost": 2, "damage": 0, "block": 0, "self_status": {"狂化": 1}, "once_per_run": true, "price": 120},
+	"狂化": {"kind": "action", "cost": 2, "damage": 0, "block": 0, "self_status": {"狂化": 1}, "exhaust": true, "price": 120},
 	"破防斩": {"kind": "action", "cost": 2, "damage": 10, "block": 0, "status": {"易伤": 1}, "price": 65},
 	"终结技": {"kind": "effect", "cost": 2, "consume": 2, "damage": 24, "block": 0, "price": 90},
 	"重压": {"kind": "action", "cost": 2, "damage": 7, "hits": 3, "block": 0, "self_damage": 5, "price": 65},
@@ -321,8 +321,6 @@ func card_text(id: String) -> String:
 		effects.append("格挡伤害 ×%d" % d["block_damage_mult"])
 	if d.get("next_energy", 0) != 0:
 		effects.append("下回合能量 %+d" % d["next_energy"])
-	if d.get("once_per_run", false):
-		effects.append("本局一次")
 	if d.get("exhaust", false):
 		effects.append("本场消失")
 	if int(d.get("elite_kill_energy", 0)) > 0:

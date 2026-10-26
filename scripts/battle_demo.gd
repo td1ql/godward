@@ -592,9 +592,6 @@ func _on_card_pressed(index: int) -> void:
 	if CardDB.kind_of(c) == "effect":
 		Tutorial.notify("effect_played")
 	deck.hand.remove_at(index)
-	if d.get("once_per_run", false):
-		GameState.deck.erase(c)
-		GameState.save_game()
 	# exhaust：本场战斗用掉就消失（不进弃牌堆）
 	if not bool(d.get("exhaust", false)):
 		deck.discard_pile.append(c)
