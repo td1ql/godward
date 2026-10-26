@@ -1295,9 +1295,11 @@ func _show_fake_ending() -> void:
 	var title := Modal.title(overlay, StoryDB.t("ending_title"), 130, 52)
 	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
 	Modal.text(overlay, StoryDB.t("ending_body"), 260, 24, 200)
-	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary()], 470, 20, 100)
+	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary()], 460, 20, 100)
 	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
-	Modal.button(overlay, StoryDB.t("ending_button"), 520, 580, 240, 60, _end_fake_run)
+	var hint := Modal.text(overlay, "（一切似乎都结束了）", 545, 17, 30)
+	hint.add_theme_color_override("font_color", Color(0.55, 0.52, 0.48))
+	Modal.button(overlay, StoryDB.t("ending_button"), 520, 590, 240, 60, _end_fake_run)
 
 
 func _on_pope_defeated() -> void:
@@ -1417,8 +1419,7 @@ func _end_true_run() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _end_fake_run() -> void:
-	# 假结局：这一轮到此为止。假的收场不给任何奖励，也不解锁什么。
-	GameState.delete_save()
+	# 假结局：这一轮到此为止。存档保留（还停在打教皇之前），但什么都不解锁。
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
 func _enter_divine_realm() -> void:
