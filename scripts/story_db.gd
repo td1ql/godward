@@ -18,6 +18,7 @@ const TEXTS := {
 
 	# 战斗奖励
 	"reward_title": "战斗胜利！金币 +%d　选择一张卡",
+	"reward_title_gold": "战斗胜利！金币 +%d",
 	"reward_pick": "点击选择",
 	"reward_skip": "跳过奖励",
 

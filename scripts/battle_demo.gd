@@ -1068,7 +1068,8 @@ func _show_reward() -> void:
 
 	var pool: Array = RewardDB.pick_cards(node_type, NodeRuleDB.cards_of(node_type), GameState.act)
 	var overlay := Modal.open(self, 0.85)
-	Modal.title(overlay, StoryDB.f("reward_title", [last_gold_gain]), 110, 24)
+	var title_key := "reward_title" if pool.size() > 0 else "reward_title_gold"
+	Modal.title(overlay, StoryDB.f(title_key, [last_gold_gain]), 110, 24)
 
 	var n: int = pool.size()
 	var spacing := 250.0
