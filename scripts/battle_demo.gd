@@ -234,6 +234,8 @@ func _ready() -> void:
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 256)
+		add_child(pc)
+
 	# 状态：显示在立绘正下方
 	status_label = Label.new()
 	status_label.position = Vector2(246, 292)
@@ -246,7 +248,6 @@ func _ready() -> void:
 	status_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	StoryDB.apply_serif(status_label)
 	add_child(status_label)
-		add_child(pc)
 
 	ally_label = Label.new()
 	ally_label.position = Vector2(14, 400)
