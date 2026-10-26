@@ -192,9 +192,11 @@ func _ready() -> void:
 	player_label.position = Vector2(52, 30)
 	player_label.size = Vector2(196, 300)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	combat_label.position = Vector2(860, 30)
-	combat_label.size = Vector2(240, 300)
+	combat_label.position = Vector2(852, 30)
+	combat_label.size = Vector2(248, 300)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	combat_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	combat_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	combat_label.add_theme_font_size_override("font_size", 19)
 	combat_label.add_theme_constant_override("outline_size", 2)
 	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
