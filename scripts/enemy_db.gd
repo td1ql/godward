@@ -210,5 +210,35 @@ const SILHOUETTE := {
 	"原罪*贪婪": "greed",
 }
 
+
+# 领域类型 -> 中文说明（"%d" 会被替换成数值）
+const DOMAIN_TEXT := {
+	"attack_recoil": "你每攻击一次，受到 %d 伤害",
+	"cost_up": "你打出的牌费用 +%d",
+	"damage_aura": "每回合开始失去 %d 生命",
+	"weak_aura": "每回合开始获得 %d 层虚弱",
+	"bleed_aura": "每回合开始获得 %d 层流血",
+	"block_decay": "每回合开始失去 %d 格挡",
+	"poison_aura": "每回合开始获得 %d 层中毒",
+	"half_block": "你获得的格挡减半",
+	"less_draw": "你每回合少抽 %d 张牌",
+	"draw_penalty": "你每回合少抽 %d 张牌",
+	"energy_drain": "你每回合少 %d 点能量",
+	"enemy_regen": "它每回合回复 %d 生命",
+	"thorns_aura": "你攻击它时受到 %d 伤害",
+	"no_heal": "你无法回复生命",
+}
+
+# 把领域翻成一句话（没领域返回空字符串）
+func domain_text(d: Dictionary) -> String:
+	var t := str(d.get("type", ""))
+	if t == "" or not DOMAIN_TEXT.has(t):
+		return ""
+	var v := int(d.get("value", 0))
+	var s: String = str(DOMAIN_TEXT[t])
+	if s.contains("%d"):
+		return s % v
+	return s
+
 func silhouette_of(enemy_name: String) -> String:
 	return str(SILHOUETTE.get(enemy_name, "soldier"))

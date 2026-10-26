@@ -761,6 +761,9 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 
 	title.text = "%s　·　%s" % [c["name"], c["trait"]]
 	body.text = str(scene["text"]) + "\n\n（场上还有 %d 名参赛者）" % _alive_count()
+	var dom_txt: String = EnemyDB.domain_text(c.get("domain", {}))
+	if dom_txt != "":
+		body.text += "\n领域：%s" % dom_txt
 	body.text += "\n\n" + Morality.attitude()
 
 	var choices: Array = scene["choices"]

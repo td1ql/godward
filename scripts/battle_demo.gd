@@ -1043,6 +1043,9 @@ func _update_ui() -> void:
 	var es := StatusSystem.text(enemy.status)
 	if es != "":
 		etext += "\n状态: %s" % es
+	var dtxt: String = EnemyDB.domain_text(enemy.domain)
+	if dtxt != "":
+		etext += "\n领域: %s" % dtxt
 	if enemy.hp > 0 and player_hp > 0:
 		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 		var hit_extra := StatusSystem.text(enemy.on_hit)
