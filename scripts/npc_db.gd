@@ -21,6 +21,7 @@ const NPCS := {
 		"topics": [
 			{
 				"id": "t1",
+				"action": "他一只手按在刀柄上，另一只垂着。",
 				"label": "「你为什么一个人站在这里？」",
 				"text": "他看了你很久。\n「等人。」",
 				"vocation_lines": {
@@ -49,6 +50,7 @@ const NPCS := {
 			},
 			{
 				"id": "t2",
+				"action": "他低着头，像在回想什么。",
 				"label": "「那个人是什么样的人？」",
 				"text": "「他走路的时候，会先迈右脚。」\n「很奇怪吧。」\n「我记得这个。」",
 				"requires": {"topics": ["t1"]},
@@ -60,6 +62,7 @@ const NPCS := {
 			},
 			{
 				"id": "t3",
+				"action": "他朝来路看了一眼。",
 				"label": "「前面的路我看过了，没有别人。」",
 				"text": "「我知道。」\n「我往前走过。」\n「走了一段就回来了。」",
 				"requires": {"topics": ["t2"]},
@@ -71,6 +74,7 @@ const NPCS := {
 			},
 			{
 				"id": "t4",
+				"action": "他把刀从腰上解下来，抱在怀里。",
 				"label": "「你叫什么？」",
 				"text": "「阿喀琉斯。」\n「你呢？」\n你说完，他点了点头，像在把名字放进什么地方。",
 				"requires": {"favor": 20},
@@ -82,6 +86,7 @@ const NPCS := {
 			},
 			{
 				"id": "t5",
+				"action": "他的肩膀绷得很紧，像随时会动。",
 				"label": "「（告诉他：那个人已经死了）」",
 				"text": "他站着没动。\n很久之后才开口。\n「你怎么知道。」",
 				"requires": {"favor": 32},
@@ -95,8 +100,33 @@ const NPCS := {
 	},
 }
 
+
+# 按好感度显示的状态（阿喀琉斯一直站在那里，但姿态会变）
+const MOODS := [
+	{"min": 0,  "text": "他背对着你，手一直没有离开刀柄。"},
+	{"min": 16, "text": "他侧过身，能看见你在做什么了。"},
+	{"min": 31, "text": "他把刀放到了一边，虽然还在手边。"},
+	{"min": 45, "text": "他站到了你半步之后。"},
+]
+
 const FIGHT_LABEL := "「（拔刀）」"
 const LEAVE_LABEL := "「（不说了，走吧）」"
+
+
+
+func mood_of(npc_id: String, favor: int) -> String:
+	var out := ""
+	for m in MOODS:
+		if favor >= int(m["min"]):
+			out = str(m["text"])
+	return out
+
+
+func action_of(npc_id: String, tp: Dictionary) -> String:
+	var a := str(tp.get("action", ""))
+	if a != "":
+		return a
+	return mood_of(npc_id, int(GameState.impressions.get(npc_id, 0)))
 
 
 func has(npc_id: String) -> bool:

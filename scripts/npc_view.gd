@@ -53,6 +53,7 @@ class Box:
 	var overlay: Control
 	var line_lbl: Label
 	var favor_lbl: Label
+var mood_lbl: Label
 	var opt_root: VBoxContainer
 	var mode := "topics"        # topics / responses
 	var current_topic: Dictionary = {}
@@ -101,6 +102,14 @@ class Box:
 		title.add_theme_color_override("font_color", DIM)
 		StoryDB.apply_serif(title)
 		overlay.add_child(title)
+
+		mood_lbl = Label.new()
+		mood_lbl.position = Vector2(470, 132)
+		mood_lbl.size = Vector2(700, 28)
+		mood_lbl.add_theme_font_size_override("font_size", 17)
+		mood_lbl.add_theme_color_override("font_color", Color(0.72, 0.66, 0.52))
+		StoryDB.apply_serif(mood_lbl)
+		overlay.add_child(mood_lbl)
 
 		favor_lbl = Label.new()
 		favor_lbl.position = Vector2(1060, 60)
@@ -180,6 +189,7 @@ class Box:
 		current_topic = {}
 		clear_opt()
 		favor_lbl.text = "好感 %d" % favor
+		mood_lbl.text = NpcDB.mood_of(npc_id, favor)
 
 		for tp in NpcDB.available_topics(npc_id, favor, seen):
 			var b := _opt_button(str(tp.get("label", "")), 17, NpcView.TEXT)
@@ -211,6 +221,7 @@ class Box:
 	func pick_topic(tp: Dictionary) -> void:
 		current_topic = tp
 		line_lbl.text = NpcDB.line_of(npc_id, tp)
+		mood_lbl.text = "—— " + NpcDB.action_of(npc_id, tp)
 		if not seen.has(str(tp.get("id", ""))):
 			seen.append(str(tp.get("id", "")))
 			GameState.npc_seen[npc_id] = seen
