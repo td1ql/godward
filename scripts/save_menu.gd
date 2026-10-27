@@ -239,11 +239,13 @@ func _build_debug_buttons() -> void:
 		{"text": "调试：耶梦加得", "action": _debug_serpent},
 		{"text": "调试：英雄 NPC", "action": _debug_npc},
 	]
-	var y := 610.0
+	# 两列排，全部落在屏幕内（原来第 4 个跑到 y=718，屏幕只有 720 高）
+	var col := 0
+	var row := 0
 	for it in items:
 		var b := Button.new()
 		b.text = str(it["text"])
-		b.position = Vector2(40, y)
+		b.position = Vector2(40 + col * 200, 606 + row * 38)
 		b.size = Vector2(190, 32)
 		b.focus_mode = Control.FOCUS_NONE
 		b.add_theme_font_size_override("font_size", 14)
@@ -251,4 +253,7 @@ func _build_debug_buttons() -> void:
 		b.pressed.connect(act)
 		UiKit.ghost_button(b, 14)
 		add_child(b)
-		y += 36.0
+		col += 1
+		if col >= 2:
+			col = 0
+			row += 1
