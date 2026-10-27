@@ -77,61 +77,6 @@ const EVENTS := [
 		],
 	},
 	{
-		"text": "{name}拦住了你。\n「求你了，帮我一把，」他说，「我快撑不住了。」",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "分他一半的水（-5 生命）", "hp": -5, "moral": 8, "meet_picked": true},
-			{"label": "问他能拿什么换", "next": {
-				"text": "他想了很久。\n从怀里掏出一份契约。",
-				"choices": [
-					{"label": "收下（习得「誓约」）", "hp": -5, "cards": ["誓约"], "meet_picked": true},
-					{"label": "走开", "moral": -2},
-				],
-			}},
-			{"label": "推开他", "sin": 5, "meet_picked": true},
-			{"label": "（罪恶≥40）杀了他", "sin": 10, "moral": -5, "kill_picked": true, "min_sin": 40},
-		],
-	},
-	{
-		"text": "{name}正在磨着沾血的刀。\n他看了你一眼，没有停下。\n「你也想动手？」",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "站在他的面前", "next": {
-				"text": "他举起刀。\n「我们俩没有直接恩怨，我来这里只是为了杀他。」",
-				"choices": [
-					{"label": "结盟", "moral": 5, "ally_picked": true},
-					{"label": "交易（+40 金币）", "gold": 40, "meet_picked": true},
-					{"label": "起身离开"},
-				],
-			}},
-			{"label": "先动手（-6 生命）", "hp": -6, "sin": 8, "meet_picked": true},
-			{"label": "离开"},
-		],
-	},
-	{
-		"text": "你突然发现身后一直有人跟着。\n是{name}。\n他没有想要解释的样子。",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "回头问他", "next": {
-				"text": "「放心，我对你没兴趣。」他说。\n「但前面有不详的气息，两个人总能有个照应。」",
-				"choices": [
-					{"label": "让他继续跟着", "moral": 5, "ally_picked": true},
-					{"label": "让他走开", "moral": -3},
-				],
-			}},
-			{"label": "不管他", "meet_picked": true},
-			{"label": "（罪恶≥50）趁他不备", "sin": 12, "moral": -8, "kill_picked": true, "min_sin": 50},
-		],
-	},
-	{
-		"text": "{name}蹲在地上，面前摊着一堆金光闪闪的金币。\n他没有抬头。\n「见者有份，怎么样。」",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "拿走一半（+30 金币）", "gold": 30, "sin": 3, "meet_picked": true},
-			{"label": "什么都不要", "moral": 5, "meet_picked": true},
-			{"label": "全都拿走（+60 金币，-5 生命）", "gold": 60, "hp": -5, "sin": 8, "meet_picked": true},
-		],
-	},	{
 		"text": "一个人跪在路边。\n他的眼神无比虔诚。\n「伸出你的手吧，」他说，「伟大的主将会降临！」",
 		"choices": [
 			{"label": "伸出手", "next": {
@@ -336,7 +281,6 @@ const DIVINE_EVENTS := [
 		],
 	},
 ]
-
 
 # ===== 第三幕：燃烧的人间 =====
 const ACT3_EVENTS := [
