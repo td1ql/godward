@@ -98,6 +98,499 @@ const NPCS := {
 			},
 		],
 	},
+	"赫克托耳": {
+		"title": "冷静",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "他不肯离开路口。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"奥德修斯": {
+		"title": "狡诈",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "他什么都换。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"赫拉克勒斯": {
+		"title": "好战",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "营地里的活都是他干的。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"珀尔修斯": {
+		"title": "敏锐",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "他有一面铜盾，磨得很亮。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"忒修斯": {
+		"title": "冷静",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "他走到哪都在墙上刻一道。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"伊阿宋": {
+		"title": "狡诈",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "他总在说以后。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"俄耳甫斯": {
+		"title": "神秘",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "他唱歌的时候，没人说话。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"卡珊德拉": {
+		"title": "疯狂",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "她跟每一个人说同一个名字。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"美狄亚": {
+		"title": "疯狂",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "她给营地的人治病，不收钱。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"阿塔兰忒": {
+		"title": "敏锐",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "探路的人是她。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"普罗米修斯": {
+		"title": "虔诚",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "他有一小堆火。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"西西弗斯": {
+		"title": "冷静",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "他在填一个塌方。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"齐格弗里德": {
+		"title": "好战",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "他一个人走。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"布伦希尔德": {
+		"title": "沉默",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "她把死者的名字记在一张长纸条上。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"洛基": {
+		"title": "狡诈",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "他不干活，只在各处坐着。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"海姆达尔": {
+		"title": "沉默",
+		"portrait": "res://assets/art/enemy/caster.webp",
+		"bond_favor": 45,
+		"greeting": "他守夜，从不睡。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
+	"提尔": {
+		"title": "虔诚",
+		"portrait": "res://assets/art/enemy/warden.webp",
+		"bond_favor": 45,
+		"greeting": "他答应过的事，都做到。",
+		"topics": [
+			{
+				"id": "t1",
+				"label": "「（先开口）」",
+				"action": "他看了你一眼。",
+				"text": "（这个话题还没写。）",
+				"responses": [
+					{"label": "「（继续听）」", "text": "（这个回答还没写。）", "favor": 6},
+					{"label": "「（不说了）」", "text": "他没有留你。", "favor": 0},
+				],
+			},
+			{
+				"id": "t2",
+				"label": "「（问他的过去）」",
+				"action": "他沉默了一会。",
+				"text": "（这个话题还没写。）",
+				"requires": {"topics": ["t1"]},
+				"responses": [
+					{"label": "「（听他说完）」", "text": "（这个回答还没写。）", "favor": 8},
+					{"label": "「（打断他）」", "text": "他停了。", "favor": -2},
+				],
+			},
+		],
+	},
 }
 
 

@@ -12,9 +12,9 @@ const CELL_W := 560.0
 const CELL_H := 88.0
 
 const BY_ACT := {
-	1: ["battle", "elite", "boss", "event", "shop", "rest", "contestant", "start"],
+	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start"],
 	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start"],
-	3: ["battle", "god", "wealth", "shell", "contestant", "event", "serpent"],
+	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent"],
 }
 
 const NOTE := {
@@ -24,7 +24,7 @@ const NOTE := {
 	"event": "说不清会发生什么。",
 	"shop": "用金币换牌，或者删掉一张。",
 	"rest": "恢复，或者做点别的。",
-	"contestant": "和你一样在逐神的人。",
+	"npc": "和你一样在逐神的人。",
 	"remnant": "过去某一世的你。",
 	"divine": "神国的造物。",
 	"divine_elite": "神国的守卫。",

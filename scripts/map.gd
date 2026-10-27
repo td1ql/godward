@@ -263,6 +263,8 @@ func _icon_alias(t: String) -> String:
 	match t:
 		"serpent":
 			return "boss"
+		"npc":
+			return "contestant"
 		"tree":
 			return "boss"
 		_:
@@ -469,6 +471,8 @@ func _show_encounter(t: String) -> void:
 			_encounter_god(title, body, vbox)
 		"shell":
 			_encounter_shell(title, body, vbox)
+		"npc":
+			_encounter_npc(title, body, vbox)
 		"contestant":
 			_encounter_contestant(title, body, vbox)
 
@@ -694,6 +698,46 @@ func _take_remnant(r: Dictionary) -> void:
 	var summary := Reward.apply(r)
 	Toast.show_text("%s\n%s" % [str(r["name"]), summary], 3.0)
 	_close_encounter()
+
+
+# ===== 英雄 NPC：直接打开 galgame 式对话界面 =====
+func _encounter_npc(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	# 这个节点遇到的是谁：优先用存档里记的，没有就随机抽一个入册英雄
+	var npc_id := str(GameState.pending_snapshot.get("npc_id", ""))
+	if npc_id == "" or not NpcDB.has(npc_id):
+		var pool: Array = []
+		for cid in GameState.contestants:
+			if NpcDB.has(cid):
+				pool.append(cid)
+		if pool.is_empty():
+			pool = NpcDB.NPCS.keys()
+		npc_id = str(pool[randi() % pool.size()])
+		GameState.pending_snapshot["npc_id"] = npc_id
+		GameState.save_game()
+
+	title.text = "同行的英雄"
+	body.text = ""
+	for ch in vbox.get_children():
+		ch.queue_free()
+
+	var open_btn := _ink_button("「（走过去）」")
+	open_btn.pressed.connect(func() -> void:
+		NpcView.open(ui_layer, npc_id, func(action: String, who: String) -> void:
+			match action:
+				"fight":
+					_fight_contestant(who)
+				"bond":
+					Toast.show_text("「%s」记住了你。" % who, 2.5)
+					_close_encounter()
+				_:
+					_close_encounter()
+		)
+	)
+	vbox.add_child(open_btn)
+
+	var leave := _ink_button("「（绕开）」")
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
 
 func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	if GameState.act == 3:
