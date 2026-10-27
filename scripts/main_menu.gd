@@ -21,6 +21,12 @@ func _ready() -> void:
 		StoryDump.write()
 		get_tree().quit()
 		return
+	if "--test-npc" in OS.get_cmdline_user_args():
+		# 冒烟测试：打开 NPC 界面，看有没有运行时报错
+		NpcView.open(self, "阿喀琉斯", func(_a: String, _b: String) -> void: pass)
+		print("[npc] opened ok")
+		get_tree().quit()
+		return
 	AudioManager.play_bgm("menu")
 	var bg_path := "res://assets/art/bg/bg_menu.webp"
 	if ResourceLoader.exists(bg_path):

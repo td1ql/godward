@@ -223,6 +223,13 @@ func _debug_act2() -> void:
 	_debug_prepare(2)
 	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
+
+# 打开英雄 NPC 的对话样板（只对阿喀琉斯有效）
+func _debug_npc() -> void:
+	NpcView.open(self, "阿喀琉斯", func(_what: String, _who: String) -> void:
+		Toast.show_text("（样板结束）", 2.0)
+	)
+
 func _build_debug_buttons() -> void:
 	if not OS.is_debug_build():
 		return
@@ -230,6 +237,7 @@ func _build_debug_buttons() -> void:
 		{"text": "调试：第三幕", "action": _debug_act3},
 		{"text": "调试：第二幕", "action": _debug_act2},
 		{"text": "调试：耶梦加得", "action": _debug_serpent},
+		{"text": "调试：英雄 NPC", "action": _debug_npc},
 	]
 	var y := 610.0
 	for it in items:

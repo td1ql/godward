@@ -43,6 +43,8 @@ var organs: Array[String] = []
 # 通关过第三幕（解锁自由配置）
 var act3_cleared := false
 var impressions := {}
+# 每个英雄 NPC 已经聊过哪些话题：{英雄名: [话题id]}
+var npc_seen := {}
 var meet_count := {}
 var energy_bonus := 0
 
@@ -91,6 +93,7 @@ func reset_run() -> void:
 	wealth_draw = 0
 	vocation_history.clear()
 	impressions.clear()
+	npc_seen.clear()
 	meet_count.clear()
 	_roll_vocation()
 	divinity = 50
@@ -189,6 +192,7 @@ func save_game() -> void:
 		"streams": streams,
 		"save_version": SAVE_VERSION,
 		"impressions": impressions,
+		"npc_seen": npc_seen,
 		"meet_count": meet_count,
 		"morality": morality,
 		"sin": sin,
@@ -278,6 +282,7 @@ func load_game(slot: int = -1) -> bool:
 	wealth_str = int(data.get("wealth_str", 0))
 	wealth_draw = int(data.get("wealth_draw", 0))
 	impressions = data.get("impressions", {})
+	npc_seen = data.get("npc_seen", {})
 	meet_count = data.get("meet_count", {})
 	prologue_seen = bool(data.get("prologue_seen", false))
 	act = int(data.get("act", 1))
