@@ -215,10 +215,10 @@ func _ready() -> void:
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		spr.position = Vector2(1106, 30)
-		spr.size = Vector2(150, 256)
+		spr.size = Vector2(150, 200)
 		spr.modulate = Color(1, 1, 1, 0.92)
 		add_child(spr)
-		var ef := ArtFrame.make(Rect2(1106, 30, 150, 256), 0.45, 0.22)
+		var ef := ArtFrame.make(Rect2(1106, 30, 150, 200), 0.45, 0.22)
 		ef.corner = 16.0
 		add_child(ef)
 		spr.pivot_offset = spr.size / 2.0
@@ -238,9 +238,9 @@ func _ready() -> void:
 		pc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		pc.position = Vector2(252, 30)
-		pc.size = Vector2(150, 256)
+		pc.size = Vector2(150, 200)
 		add_child(pc)
-		var pf := ArtFrame.make(Rect2(252, 30, 150, 256), 0.45, 0.22)
+		var pf := ArtFrame.make(Rect2(252, 30, 150, 200), 0.45, 0.22)
 		pf.corner = 16.0
 		add_child(pf)
 

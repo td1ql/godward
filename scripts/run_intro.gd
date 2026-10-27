@@ -58,10 +58,10 @@ func _ready() -> void:
 		card.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		card.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		card.position = Vector2(70, 140)
-		card.size = Vector2(330, 549)
+		card.size = Vector2(330, 440)
 		add_child(card)
 		_page_nodes.append(card)
-		var cf := ArtFrame.make(Rect2(70, 140, 330, 549), 0.45, 0.22)
+		var cf := ArtFrame.make(Rect2(70, 140, 330, 440), 0.45, 0.22)
 		cf.corner = 26.0
 		add_child(cf)
 		_page_nodes.append(cf)

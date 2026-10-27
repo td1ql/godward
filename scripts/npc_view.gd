@@ -24,7 +24,7 @@ const DIM := Color(0.58, 0.54, 0.46)
 const GOLD := Color(0.95, 0.86, 0.62)
 
 const PORTRAIT_POS := Vector2(92, 104)
-const PORTRAIT_SIZE := Vector2(340, 470)
+const PORTRAIT_SIZE := Vector2(340, 453)
 const OPT_X := 470.0
 const OPT_W := 760.0
 const OPT_BOTTOM := 470.0     # 选项区贴着对话框上沿
