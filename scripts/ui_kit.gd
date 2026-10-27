@@ -8,31 +8,17 @@ extends RefCounted
 # 要改配色/字号/边框，改这里，所有界面一起变。
 # ============================================================
 
-# ===== 美术色卡（docs/ART_STYLE.md）=====
-# 双色世界：深夜蓝黑 + 羊皮纸暖白，金线只用一根细的。
-const NIGHT := Color("1d3143")
-const NIGHT_DEEP := Color("141e28")
-const INK_BLACK := Color("0b0f14")
-const PAPER := Color("f9ecd8")
-const PAPER_HI := Color("fbf3e1")
-const PAPER_SHADE := Color("eaddc4")
-const PAPER_DIM := Color("a49681")
-const GOLD := Color("c9a86a")
-const GOLD_HI := Color("e0c48a")
-const MOON := Color("faefd1")
-const BLOOD := Color("7a2e2a")
+const INK_TEXT := Color(0.93, 0.88, 0.74)
+const INK_TEXT_HOVER := Color(1.0, 0.95, 0.78)
+const INK_BORDER := Color(0.55, 0.44, 0.24, 0.45)
+const INK_BORDER_HOVER := Color(0.85, 0.68, 0.34, 0.95)
+const INK_BG_DARK := Color(0.05, 0.06, 0.09, 0.72)
+const INK_BG := Color(0.13, 0.14, 0.18, 0.92)
+const INK_BG_HOVER := Color(0.55, 0.42, 0.16, 0.32)
 
-const INK_TEXT := Color("e9dfc6")
-const INK_TEXT_HOVER := Color("fbf3e1")
-const INK_BORDER := Color("c9a86a")
-const INK_BORDER_HOVER := Color("e0c48a")
-const INK_BG_DARK := Color(0.043, 0.059, 0.078, 0.82)
-const INK_BG := Color(0.078, 0.118, 0.161, 0.94)
-const INK_BG_HOVER := Color(0.788, 0.659, 0.416, 0.14)
-
-const PARCHMENT_BG := Color(0.976, 0.925, 0.847, 0.96)
-const PARCHMENT_BORDER := Color(0.788, 0.659, 0.416, 0.62)
-const PARCHMENT_SHADOW := Color(0.043, 0.059, 0.078, 0.40)
+const PARCHMENT_BG := Color(0.94, 0.90, 0.80, 0.92)
+const PARCHMENT_BORDER := Color(0.48, 0.37, 0.18, 0.55)
+const PARCHMENT_SHADOW := Color(0.10, 0.07, 0.03, 0.35)
 
 
 static func style(b: Button, font_size: int = 20, dark: bool = false) -> void:
@@ -48,12 +34,12 @@ static func style(b: Button, font_size: int = 20, dark: bool = false) -> void:
 	nb.border_width_right = 1
 	nb.border_width_top = 1
 	nb.border_width_bottom = 1
-	nb.border_color = Color(INK_BORDER, 0.42)
+	nb.border_color = INK_BORDER
 	b.add_theme_stylebox_override("normal", nb)
 
 	var hb: StyleBoxFlat = nb.duplicate()
 	hb.bg_color = INK_BG_HOVER
-	hb.border_color = Color(INK_BORDER_HOVER, 0.95)
+	hb.border_color = INK_BORDER_HOVER
 	b.add_theme_stylebox_override("hover", hb)
 	b.add_theme_stylebox_override("pressed", hb)
 	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())

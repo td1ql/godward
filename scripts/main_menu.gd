@@ -38,13 +38,9 @@ func _ready() -> void:
 		add_child(bg)
 	else:
 		var fallback := ColorRect.new()
-		fallback.color = UiKit.NIGHT_DEEP
+		fallback.color = Color(0.07, 0.08, 0.11)
 		fallback.size = Vector2(1280, 720)
 		add_child(fallback)
-
-	# 一圈极细的金线（参考图那种）
-	_add_frame(Vector2(26, 20), Vector2(1228, 680), 0.5)
-	_add_frame(Vector2(32, 26), Vector2(1216, 668), 0.28)
 
 
 	var title := Label.new()
@@ -54,7 +50,7 @@ func _ready() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 70)
-	title.add_theme_color_override("font_color", UiKit.INK_TEXT)
+	title.add_theme_color_override("font_color", Color(0.13, 0.14, 0.20))
 	StoryDB.apply_serif(title)
 	add_child(title)
 
@@ -64,7 +60,7 @@ func _ready() -> void:
 	sub.size = Vector2(600, 40)
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	sub.add_theme_font_size_override("font_size", 24)
-	sub.add_theme_color_override("font_color", UiKit.PAPER_DIM)
+	sub.add_theme_color_override("font_color", Color(0.37, 0.31, 0.25))
 	StoryDB.apply_serif(sub)
 	add_child(sub)
 
@@ -130,20 +126,6 @@ func _on_toggle_bgm() -> void:
 	AudioManager.set_bgm_muted(not AudioManager.bgm_muted)
 	_update_bgm_btn()
 
-
-# 一圈极细的金线框
-func _add_frame(pos: Vector2, size: Vector2, alpha: float) -> void:
-	var p := Panel.new()
-	p.position = pos
-	p.size = size
-	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0, 0, 0, 0)
-	sb.border_color = Color(UiKit.GOLD, alpha)
-	sb.set_border_width_all(1)
-	p.add_theme_stylebox_override("panel", sb)
-	add_child(p)
-
 func _make_menu_button(content: String, y: float) -> Button:
 	var b := Button.new()
 	b.text = content
@@ -151,21 +133,21 @@ func _make_menu_button(content: String, y: float) -> Button:
 	b.size = Vector2(430, 54)
 	b.focus_mode = Control.FOCUS_NONE
 	b.add_theme_font_size_override("font_size", 26)
-	b.add_theme_color_override("font_color", UiKit.INK_TEXT)
-	b.add_theme_color_override("font_hover_color", UiKit.GOLD_HI)
-	b.add_theme_color_override("font_pressed_color", UiKit.MOON)
+	b.add_theme_color_override("font_color", Color(0.18, 0.16, 0.13))
+	b.add_theme_color_override("font_hover_color", Color(0.45, 0.32, 0.15))
+	b.add_theme_color_override("font_pressed_color", Color(0.10, 0.09, 0.07))
 	StoryDB.apply_serif(b)
 
 	var normal := StyleBoxFlat.new()
 	normal.bg_color = Color(1, 1, 1, 0.0)
 	normal.border_width_bottom = 1
-	normal.border_color = Color(UiKit.GOLD, 0.40)
+	normal.border_color = Color(0.42, 0.33, 0.20, 0.45)
 	b.add_theme_stylebox_override("normal", normal)
 
 	var hover := StyleBoxFlat.new()
-	hover.bg_color = Color(UiKit.GOLD, 0.10)
+	hover.bg_color = Color(0.16, 0.14, 0.10, 0.07)
 	hover.border_width_bottom = 1
-	hover.border_color = Color(UiKit.GOLD_HI, 0.95)
+	hover.border_color = Color(0.55, 0.42, 0.20, 0.85)
 	b.add_theme_stylebox_override("hover", hover)
 
 	var pressed := StyleBoxFlat.new()

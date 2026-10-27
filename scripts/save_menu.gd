@@ -26,7 +26,7 @@ func _ready() -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 52)
-	title.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
+	title.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
 	StoryDB.apply_serif(title)
 	add_child(title)
 
@@ -55,7 +55,7 @@ func _build_slot(i: int) -> void:
 	var panel := Panel.new()
 	panel.position = Vector2(200, y)
 	panel.size = Vector2(880, 114)
-	panel.add_theme_stylebox_override("panel", _parchment(Color(0.91, 0.87, 0.77, 0.96), Color(0.788, 0.659, 0.416, 0.62)))
+	panel.add_theme_stylebox_override("panel", _parchment(Color(0.91, 0.87, 0.77, 0.96), Color(0.50, 0.38, 0.18, 0.62)))
 	add_child(panel)
 
 	var tag := Label.new()
@@ -113,7 +113,7 @@ func _solid_button(content: String, x: float, y: float, w: float, h: float) -> B
 	b.add_theme_color_override("font_color", Color(0.20, 0.17, 0.12))
 	b.add_theme_color_override("font_hover_color", Color(0.08, 0.06, 0.04))
 	StoryDB.apply_serif(b)
-	b.add_theme_stylebox_override("normal", _parchment(Color(0.91, 0.87, 0.77, 0.96), Color(0.788, 0.659, 0.416, 0.62)))
+	b.add_theme_stylebox_override("normal", _parchment(Color(0.91, 0.87, 0.77, 0.96), Color(0.50, 0.38, 0.18, 0.62)))
 	b.add_theme_stylebox_override("hover", _parchment(Color(0.95, 0.91, 0.81, 1.0), Color(0.62, 0.46, 0.18, 0.95)))
 	b.add_theme_stylebox_override("pressed", _parchment(Color(0.84, 0.80, 0.70, 1.0), Color(0.45, 0.33, 0.15, 1.0)))
 	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
