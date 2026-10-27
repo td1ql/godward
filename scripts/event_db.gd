@@ -90,43 +90,6 @@ const EVENTS := [
 		],
 	},
 	{
-		"text": "{name}拦住了你。\n「求你了，帮我一把，」他说，「我快撑不住了。」",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "分他一半的水（-5 生命）", "hp": -5, "moral": 8, "meet_picked": true},
-			{"label": "问他能拿什么换", "moral": 2, "meet_picked": true},
-			{"label": "推开他", "sin": 5, "meet_picked": true},
-			{"label": "杀了他（罪恶+20）", "sin": 20, "moral": -5, "kill_picked": true},
-		],
-	},
-	{
-		"text": "{name}正在磨着沾血的刀。\n他看了你一眼，没有停下。\n「你也想动手？」",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "站在他的面前", "moral": 5, "ally_picked": true},
-			{"label": "先动手（-6 生命）", "hp": -6, "sin": 8, "meet_picked": true},
-			{"label": "离开"},
-		],
-	},
-	{
-		"text": "你突然发现身后一直有人跟着。\n是{name}。\n他没有想要解释的样子。",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "回头问他", "moral": 5, "ally_picked": true},
-			{"label": "不管他", "meet_picked": true},
-			{"label": "趁他不备（罪恶+20）", "sin": 20, "moral": -8, "kill_picked": true},
-		],
-	},
-	{
-		"text": "{name}蹲在地上，面前摊着一堆金光闪闪的金币。\n他没有抬头。\n「见者有份，怎么样。」",
-		"pick_contestant": true,
-		"choices": [
-			{"label": "拿走一半（+30 金币）", "gold": 30, "sin": 3, "meet_picked": true},
-			{"label": "什么都不要", "moral": 5, "meet_picked": true},
-			{"label": "全都拿走（+60 金币，-5 生命）", "gold": 60, "hp": -5, "sin": 8, "meet_picked": true},
-		],
-	},
-	{
 		"text": "一个人跪在路边。\n他的眼神无比虔诚。\n「伸出你的手吧，」他说，「伟大的主将会降临！」",
 		"choices": [
 			{"label": "伸出手", "hp": -4, "moral": 3, "cards": ["血约"]},
