@@ -59,6 +59,9 @@ const GOD_BG := {
 }
 
 func _is_shown_in_bg() -> bool:
+	# 这些敌人的形象直接画在战斗背景里，不再叠立绘
+	if str(enemy.label_name) == "世界树":
+		return true
 	return GOD_BG.has(str(enemy.label_name))
 
 func _ready() -> void:
@@ -72,7 +75,7 @@ func _ready() -> void:
 		if pn == "serpent":
 			bg_path = "res://assets/art/bg/bg_battle_3_boss.webp"
 		elif pn == "tree":
-			bg_path = "res://assets/art/bg/bg_battle_2_3.webp"
+			bg_path = "res://assets/art/bg/bg_battle_tree.webp"
 		elif pn == "god":
 			bg_path = "res://assets/art/bg/bg_battle_3_boss.webp"
 	# 兜底：按敌人名字认特殊背景
@@ -82,7 +85,7 @@ func _ready() -> void:
 		if ResourceLoader.exists(gb):
 			bg_path = gb
 	elif en == "世界树":
-		bg_path = "res://assets/art/bg/bg_battle_2_3.webp"
+		bg_path = "res://assets/art/bg/bg_battle_tree.webp"
 	if not ResourceLoader.exists(bg_path):
 		bg_path = "res://assets/art/bg/bg_battle_%d.webp" % randi_range(1, 5)
 	if ResourceLoader.exists(bg_path):

@@ -204,7 +204,7 @@ const SILHOUETTE := {
 	"圣骸行者": "giant", "灰烬修女": "caster",
 	"奥丁": "idol", "赫尔墨斯": "shade", "阿斯克勒庇俄斯": "giant", "赫菲斯托斯": "caster",
 	"耶梦加得": "beast",
-	"世界树": "giant",
+	"世界树": "tree",
 	"守门人": "warden",
 	"教皇": "pope",
 	"原罪*贪婪": "greed",
