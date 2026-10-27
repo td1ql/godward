@@ -59,6 +59,10 @@ func _ready() -> void:
 		card.size = Vector2(330, 549)
 		add_child(card)
 		_page_nodes.append(card)
+		var cf := ArtFrame.make(Rect2(70, 140, 330, 549), 0.45, 0.22)
+		cf.corner = 26.0
+		add_child(cf)
+		_page_nodes.append(cf)
 	else:
 		var ph := ColorRect.new()
 		ph.color = Color(0.88, 0.84, 0.74, 0.8)

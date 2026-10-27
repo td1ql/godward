@@ -80,7 +80,8 @@ class Box:
 		pic.position = NpcView.PORTRAIT_POS
 		pic.size = NpcView.PORTRAIT_SIZE
 		overlay.add_child(pic)
-		frame(NpcView.PORTRAIT_POS, NpcView.PORTRAIT_SIZE)
+		var fr := ArtFrame.make(Rect2(NpcView.PORTRAIT_POS, NpcView.PORTRAIT_SIZE))
+		overlay.add_child(fr)
 
 		# ---- 右上角名字 ----
 		var name_lbl := Label.new()

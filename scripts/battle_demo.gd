@@ -216,6 +216,9 @@ func _ready() -> void:
 		spr.size = Vector2(150, 256)
 		spr.modulate = Color(1, 1, 1, 0.92)
 		add_child(spr)
+		var ef := ArtFrame.make(Rect2(1106, 30, 150, 256), 0.45, 0.22)
+		ef.corner = 16.0
+		add_child(ef)
 		spr.pivot_offset = spr.size / 2.0
 		var tw := create_tween().set_loops()
 		tw.set_parallel(true)
@@ -235,6 +238,9 @@ func _ready() -> void:
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 256)
 		add_child(pc)
+		var pf := ArtFrame.make(Rect2(252, 30, 150, 256), 0.45, 0.22)
+		pf.corner = 16.0
+		add_child(pf)
 
 	# 状态：显示在立绘正下方
 	status_label = Label.new()
