@@ -1,5 +1,7 @@
 extends Node2D
 
+const ArtFrame = preload("res://scripts/art_frame.gd")
+
 var _card_btn: Button
 var _discard_btn: Button
 var _claiming := false

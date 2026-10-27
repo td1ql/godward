@@ -15,6 +15,8 @@
 class_name NpcView
 extends RefCounted
 
+const ArtFrame = preload("res://scripts/art_frame.gd")
+
 const BOX_BG := Color(0.055, 0.05, 0.048, 1.0)
 const BOX_EDGE := Color(0.62, 0.50, 0.28)
 const TEXT := Color(0.92, 0.88, 0.78)

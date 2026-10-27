@@ -1,5 +1,7 @@
 extends Node2D
 
+const ArtFrame = preload("res://scripts/art_frame.gd")
+
 const BLOCK_DAMAGE_CAP := 60
 
 var deck := Deck.new()

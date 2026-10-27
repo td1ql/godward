@@ -1,4 +1,3 @@
-class_name ArtFrame
 extends Control
 
 # ============================================================
@@ -62,8 +61,8 @@ func _draw() -> void:
 
 
 # 便捷构造
-static func make(rect: Rect2, a_outer: float = 0.42, a_inner: float = 0.22) -> ArtFrame:
-	var f := ArtFrame.new()
+static func make(rect: Rect2, a_outer: float = 0.42, a_inner: float = 0.22) -> Control:
+	var f = load("res://scripts/art_frame.gd").new()
 	f.frame_rect = rect
 	f.outer_alpha = a_outer
 	f.inner_alpha = a_inner
