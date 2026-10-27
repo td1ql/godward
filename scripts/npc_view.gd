@@ -53,7 +53,7 @@ class Box:
 	var overlay: Control
 	var line_lbl: Label
 	var favor_lbl: Label
-var mood_lbl: Label
+	var mood_lbl: Label
 	var opt_root: VBoxContainer
 	var mode := "topics"        # topics / responses
 	var current_topic: Dictionary = {}
