@@ -127,7 +127,7 @@ func _ready() -> void:
 	enter.size = Vector2(340, 58)
 	enter.focus_mode = Control.FOCUS_NONE
 	enter.add_theme_font_size_override("font_size", 24)
-	enter.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	enter.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
 	enter.add_theme_color_override("font_hover_color", Color(1.0, 0.94, 0.76))
 	StoryDB.apply_serif(enter)
 

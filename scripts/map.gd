@@ -48,17 +48,17 @@ func _ready() -> void:
 	player_marker.size = Vector2(56, 56)
 	player_marker.z_index = 5
 	var mk := StyleBoxFlat.new()
-	mk.bg_color = Color(0.11, 0.09, 0.07, 0.96)
+	mk.bg_color = Color(0.078, 0.118, 0.161, 0.96)
 	mk.border_width_left = 2
 	mk.border_width_right = 2
 	mk.border_width_top = 2
 	mk.border_width_bottom = 2
-	mk.border_color = Color(0.82, 0.70, 0.44)
+	mk.border_color = Color(0.788, 0.659, 0.416)
 	mk.corner_radius_top_left = 28
 	mk.corner_radius_top_right = 28
 	mk.corner_radius_bottom_left = 28
 	mk.corner_radius_bottom_right = 28
-	mk.shadow_color = Color(0.08, 0.06, 0.03, 0.55)
+	mk.shadow_color = Color(0.043, 0.059, 0.078, 0.55)
 	mk.shadow_size = 9
 	player_marker.add_theme_stylebox_override("panel", mk)
 	world.add_child(player_marker)
@@ -69,7 +69,7 @@ func _ready() -> void:
 	pl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pl.add_theme_font_size_override("font_size", 22)
-	pl.add_theme_color_override("font_color", Color(0.96, 0.92, 0.82))
+	pl.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
 	StoryDB.apply_serif(pl)
 	player_marker.add_child(pl)
 
@@ -85,14 +85,14 @@ func _ready() -> void:
 	plate.position = Vector2(8, 8)
 	plate.size = Vector2(310, 200)
 	var ps := StyleBoxFlat.new()
-	ps.bg_color = Color(0.94, 0.90, 0.80, 0.92)
+	ps.bg_color = Color(0.976, 0.925, 0.847, 0.94)
 	ps.border_width_left = 1
 	ps.border_width_right = 1
 	ps.border_width_top = 1
 	ps.border_width_bottom = 1
-	ps.border_color = Color(0.48, 0.37, 0.18, 0.55)
+	ps.border_color = Color(0.788, 0.659, 0.416, 0.55)
 	ps.set_corner_radius_all(3)
-	ps.shadow_color = Color(0.10, 0.07, 0.03, 0.35)
+	ps.shadow_color = Color(0.043, 0.059, 0.078, 0.35)
 	ps.shadow_size = 6
 	plate.add_theme_stylebox_override("panel", ps)
 	hud.add_child(plate)
@@ -136,7 +136,7 @@ func _ready() -> void:
 	])
 
 	for lb in [hint, gold_label, hp_label, moral_label]:
-		lb.add_theme_color_override("font_color", Color(0.17, 0.13, 0.08))
+		lb.add_theme_color_override("font_color", Color(0.047, 0.071, 0.098))
 		lb.add_theme_font_size_override("font_size", 23)
 		StoryDB.apply_serif(lb)
 
@@ -444,7 +444,7 @@ func _show_encounter(t: String) -> void:
 
 	var title := Label.new()
 	title.add_theme_font_size_override("font_size", 28)
-	title.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	title.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
 	StoryDB.apply_serif(title)
 	vbox.add_child(title)
 

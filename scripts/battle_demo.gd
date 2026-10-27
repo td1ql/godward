@@ -93,12 +93,12 @@ func _ready() -> void:
 		move_child(bgr, 0)
 	else:
 		var fb := ColorRect.new()
-		fb.color = Color(0.05, 0.06, 0.09)
+		fb.color = Color(0.078, 0.118, 0.161)
 		fb.size = Vector2(1280, 720)
 		add_child(fb)
 
 	var dim := ColorRect.new()
-	dim.color = Color(0.03, 0.04, 0.07, 0.38)
+	dim.color = Color(0.043, 0.059, 0.078, 0.38)
 	dim.size = Vector2(1280, 720)
 	add_child(dim)
 	move_child(dim, 1)
@@ -162,7 +162,7 @@ func _ready() -> void:
 	end_turn_button.size = Vector2(180, 40)
 	end_turn_button.add_theme_font_size_override("font_size", 22)
 	end_turn_button.add_theme_constant_override("outline_size", 2)
-	end_turn_button.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	end_turn_button.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
 	player_label = Label.new()
 	# 能量：放在手牌左边
@@ -171,9 +171,9 @@ func _ready() -> void:
 	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	info_label.add_theme_font_size_override("font_size", 26)
-	info_label.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	info_label.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
 	info_label.add_theme_constant_override("outline_size", 2)
-	info_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	info_label.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 
 	# 牌堆计数：屏幕正下方
 	pile_label = Label.new()
@@ -182,10 +182,10 @@ func _ready() -> void:
 	pile_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pile_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	pile_label.add_theme_font_size_override("font_size", 20)
-	pile_label.add_theme_color_override("font_color", Color(0.86, 0.82, 0.72))
+	pile_label.add_theme_color_override("font_color", Color(0.914, 0.867, 0.769))
 	# 用描边假装加粗
 	pile_label.add_theme_constant_override("outline_size", 3)
-	pile_label.add_theme_color_override("font_outline_color", Color(0.10, 0.09, 0.08))
+	pile_label.add_theme_color_override("font_outline_color", Color(0.043, 0.059, 0.078))
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
@@ -199,10 +199,10 @@ func _ready() -> void:
 	combat_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	combat_label.add_theme_font_size_override("font_size", 19)
 	combat_label.add_theme_constant_override("outline_size", 2)
-	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	combat_label.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	player_label.add_theme_font_size_override("font_size", 19)
 	player_label.add_theme_constant_override("outline_size", 2)
-	player_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	player_label.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var boss_bg := _is_shown_in_bg()
@@ -243,9 +243,9 @@ func _ready() -> void:
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status_label.add_theme_font_size_override("font_size", 15)
-	status_label.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	status_label.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
 	status_label.add_theme_constant_override("outline_size", 2)
-	status_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	status_label.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	StoryDB.apply_serif(status_label)
 	add_child(status_label)
 
@@ -255,7 +255,7 @@ func _ready() -> void:
 	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ally_label.add_theme_font_size_override("font_size", 16)
 	ally_label.add_theme_constant_override("outline_size", 2)
-	ally_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	ally_label.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	ally_label.add_theme_color_override("font_color", Color(0.6, 0.9, 0.6))
 	add_child(ally_label)
 	var deck_btn := Button.new()
@@ -265,7 +265,7 @@ func _ready() -> void:
 	deck_btn.pressed.connect(DeckViewer.toggle)
 	deck_btn.add_theme_font_size_override("font_size", 20)
 	deck_btn.add_theme_constant_override("outline_size", 2)
-	deck_btn.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	deck_btn.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	add_child(deck_btn)
 	var pile_btn := Button.new()
 	pile_btn.text = StoryDB.t("battle_piles")
@@ -274,7 +274,7 @@ func _ready() -> void:
 	pile_btn.pressed.connect(_open_piles)
 	pile_btn.add_theme_font_size_override("font_size", 20)
 	pile_btn.add_theme_constant_override("outline_size", 2)
-	pile_btn.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	pile_btn.add_theme_color_override("font_outline_color", Color(0.078, 0.118, 0.161))
 	add_child(pile_btn)
 	if not tutorial:
 		var menu_btn := Button.new()
@@ -345,7 +345,7 @@ func _open_battle_menu() -> void:
 	_menu_popup.add_child(dim)
 
 	var panel := ColorRect.new()
-	panel.color = Color(0.08, 0.09, 0.12, 0.97)
+	panel.color = Color(0.078, 0.118, 0.161, 0.97)
 	panel.position = Vector2(970, 64)
 	panel.size = Vector2(290, 210)
 	_menu_popup.add_child(panel)
@@ -1019,7 +1019,7 @@ func _show_cleanup_prompt() -> void:
 	add_child(overlay)
 
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.93)
+	dim.color = Color(0.043, 0.059, 0.078, 0.93)
 	dim.size = Vector2(1280, 720)
 	overlay.add_child(dim)
 
@@ -1058,7 +1058,7 @@ func _show_cleanup_result(text: String, summary: String) -> void:
 	Modal.title(overlay, StoryDB.t("cleanup_result_title"), 150, 44)
 	Modal.text(overlay, text, 260, 22, 60)
 	var gain := Modal.text(overlay, summary if summary != "" else StoryDB.t("cleanup_result_empty"), 340, 20, 80)
-	gain.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
+	gain.add_theme_color_override("font_color", Color(0.788, 0.659, 0.416))
 	var left := _surviving_contestants().size()
 	var label := StoryDB.f("cleanup_continue", [left]) if left > 0 else StoryDB.t("cleanup_go")
 	Modal.button(overlay, label, 500, 470, 280, 64, _start_next_cleanup)
@@ -1147,7 +1147,7 @@ func _show_reward() -> void:
 	hint.size = Vector2(1280, 32)
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.add_theme_font_size_override("font_size", 18)
-	hint.add_theme_color_override("font_color", Color(0.72, 0.68, 0.58))
+	hint.add_theme_color_override("font_color", Color(0.643, 0.588, 0.506))
 	StoryDB.apply_serif(hint)
 	overlay.add_child(hint)
 
@@ -1222,7 +1222,7 @@ func _show_pope() -> void:
 	Modal.title(overlay, StoryDB.t("pope_title"), 140, 44)
 	Modal.text(overlay, StoryDB.t("pope_body"), 240, 22, 100)
 	var trans := Modal.text(overlay, "第 %d 次转生结束 → 第 %d 次转生开始\n职业：%s\n词条：%s" % [old_trans, GameState.transmigration, GameState.vocation, TraitDB.text_of(GameState.traits)], 360, 20, 100)
-	trans.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
+	trans.add_theme_color_override("font_color", Color(0.788, 0.659, 0.416))
 	Modal.button(overlay, StoryDB.t("pope_button"), 530, 500, 220, 60, _transmigrate)
 
 func _transmigrate() -> void:
@@ -1294,7 +1294,7 @@ func _show_tree_reveal() -> void:
 	hand_view.hide_cards()
 	var overlay := Modal.open(self, 0.97)
 	var title := Modal.title(overlay, "伪·世界树", 120, 48)
-	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
+	title.add_theme_color_override("font_color", Color(0.878, 0.769, 0.541))
 	var key := "ending_body_good" if Morality.is_saint() else "ending_body_dark"
 	Modal.text(overlay, StoryDB.t(key), 240, 22, 260)
 	Modal.button(overlay, "抬头", 520, 560, 240, 60, func() -> void:
@@ -1306,12 +1306,12 @@ func _show_fake_ending() -> void:
 	hand_view.hide_cards()
 	var overlay := Modal.open(self, 0.97)
 	var title := Modal.title(overlay, StoryDB.t("ending_title"), 130, 52)
-	title.add_theme_color_override("font_color", Color(0.95, 0.9, 0.7))
+	title.add_theme_color_override("font_color", Color(0.878, 0.769, 0.541))
 	Modal.text(overlay, StoryDB.t("ending_body"), 260, 24, 200)
 	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary()], 460, 20, 100)
-	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
+	stats.add_theme_color_override("font_color", Color(0.643, 0.588, 0.506))
 	var hint := Modal.text(overlay, "（一切似乎都结束了）", 545, 17, 30)
-	hint.add_theme_color_override("font_color", Color(0.55, 0.52, 0.48))
+	hint.add_theme_color_override("font_color", Color(0.427, 0.392, 0.353))
 	Modal.button(overlay, StoryDB.t("ending_button"), 520, 590, 240, 60, _end_fake_run)
 
 
@@ -1323,7 +1323,7 @@ func _on_pope_defeated() -> void:
 
 func _show_title(text: String, next: Callable) -> void:
 	var layer := ColorRect.new()
-	layer.color = Color(0.02, 0.02, 0.03, 0.0)
+	layer.color = Color(0.043, 0.059, 0.078, 0.0)
 	layer.size = Vector2(1280, 720)
 	layer.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(layer)
@@ -1335,16 +1335,16 @@ func _show_title(text: String, next: Callable) -> void:
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	lbl.add_theme_font_size_override("font_size", 64)
-	lbl.add_theme_color_override("font_color", Color(0.92, 0.86, 0.72))
+	lbl.add_theme_color_override("font_color", Color(0.878, 0.812, 0.678))
 	lbl.modulate.a = 0.0
 	StoryDB.apply_serif(lbl)
 	layer.add_child(lbl)
 
 	var tw := create_tween()
-	tw.tween_property(layer, "color", Color(0.02, 0.02, 0.03, 0.94), 0.5)
+	tw.tween_property(layer, "color", Color(0.043, 0.059, 0.078, 0.94), 0.5)
 	tw.parallel().tween_property(lbl, "modulate:a", 1.0, 0.9)
 	tw.tween_interval(1.2)
-	tw.tween_property(layer, "color", Color(0.02, 0.02, 0.03, 0.0), 0.5)
+	tw.tween_property(layer, "color", Color(0.043, 0.059, 0.078, 0.0), 0.5)
 	tw.parallel().tween_property(lbl, "modulate:a", 0.0, 0.5)
 	tw.tween_callback(func() -> void:
 		layer.queue_free()
@@ -1406,11 +1406,11 @@ func _show_serpent_ending() -> void:
 	var title := StoryDB.t("ending_god_title") if GameState.divinity >= 71 else (StoryDB.t("ending_loop_title") if GameState.divinity >= 31 else StoryDB.t("ending_human_title"))
 	Modal.title(overlay, title, 150, 46)
 	var stats := Modal.text(overlay, "第 %d 次转生\n剩余生命: %d / %d\n%s\n神性: %d" % [GameState.transmigration, player_hp, GameState.player_max_hp, Morality.summary(), GameState.divinity], 300, 20, 140)
-	stats.add_theme_color_override("font_color", Color(0.8, 0.8, 0.85))
+	stats.add_theme_color_override("font_color", Color(0.643, 0.588, 0.506))
 
 	if _first_clear:
 		var unlock := Modal.text(overlay, "★ 解锁「自由配置」：下次开局可以自选职业与流派", 452, 18, 40)
-		unlock.add_theme_color_override("font_color", Color(0.95, 0.82, 0.45))
+		unlock.add_theme_color_override("font_color", Color(0.878, 0.769, 0.416))
 	Modal.button(overlay, "回到开始", 530, 520, 220, 58, _end_true_run)
 
 func _end_true_run() -> void:

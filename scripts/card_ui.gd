@@ -48,16 +48,16 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	var cbody := str(parts[2]) if parts.size() > 2 else ""
 
 	var bc := border_of(d)
-	var paper := Color(0.93, 0.89, 0.79)
-	var ink := Color(0.14, 0.11, 0.08)
+	var paper := Color(0.976, 0.925, 0.847)
+	var ink := Color(0.075, 0.110, 0.149)
 
 	var btn := Button.new()
 	btn.text = ""
 	btn.focus_mode = Control.FOCUS_NONE
 	btn.add_theme_stylebox_override("normal", style(paper, bc, 2))
-	btn.add_theme_stylebox_override("hover", style(paper.lightened(0.05), Color(0.91, 0.75, 0.35), 3))
-	btn.add_theme_stylebox_override("pressed", style(paper.darkened(0.08), Color(0.85, 0.66, 0.25), 3))
-	btn.add_theme_stylebox_override("disabled", style(Color(0.60, 0.57, 0.50), Color(0.32, 0.30, 0.26), 2))
+	btn.add_theme_stylebox_override("hover", style(paper.lightened(0.05), Color(0.910, 0.749, 0.541), 3))
+	btn.add_theme_stylebox_override("pressed", style(paper.darkened(0.08), Color(0.788, 0.659, 0.416), 3))
+	btn.add_theme_stylebox_override("disabled", style(Color(0.643, 0.588, 0.506), Color(0.290, 0.243, 0.196), 2))
 	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 	# 流派底图（垫在最下面）
@@ -78,7 +78,7 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 
 		# 纸色蒙版：让底图变成隐约的花纹，文字才读得清
 		var veil := ColorRect.new()
-		veil.color = Color(0.94, 0.90, 0.80, 0.80)
+		veil.color = Color(0.976, 0.925, 0.847, 0.80)
 		veil.set_anchors_preset(Control.PRESET_FULL_RECT)
 		veil.offset_left = 2
 		veil.offset_top = 2
@@ -104,7 +104,7 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	cost_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	cost_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	cost_lbl.add_theme_font_size_override("font_size", font_size)
-	cost_lbl.add_theme_color_override("font_color", Color(0.96, 0.92, 0.82))
+	cost_lbl.add_theme_color_override("font_color", Color(0.976, 0.925, 0.847))
 	cost_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(cost_lbl)
 	badge.add_child(cost_lbl)
@@ -151,7 +151,7 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 		clbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		clbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		clbl.add_theme_font_size_override("font_size", max(10, font_size - 3))
-		clbl.add_theme_color_override("font_color", Color(0.98, 0.90, 0.86))
+		clbl.add_theme_color_override("font_color", Color(0.976, 0.902, 0.859))
 		clbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		StoryDB.apply_serif(clbl)
 		cbadge.add_child(clbl)
@@ -178,9 +178,9 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	tag_lbl.offset_bottom = bs + 24
 	tag_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	tag_lbl.add_theme_font_size_override("font_size", max(10, font_size - 4))
-	tag_lbl.add_theme_color_override("font_color", Color(0.42, 0.36, 0.27))
+	tag_lbl.add_theme_color_override("font_color", Color(0.420, 0.357, 0.271))
 	tag_lbl.add_theme_constant_override("outline_size", 1)
-	tag_lbl.add_theme_color_override("font_outline_color", Color(0.42, 0.36, 0.27))
+	tag_lbl.add_theme_color_override("font_outline_color", Color(0.420, 0.357, 0.271))
 	tag_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(tag_lbl)
 	btn.add_child(tag_lbl)
