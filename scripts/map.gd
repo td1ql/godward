@@ -585,15 +585,32 @@ func _encounter_event(title: Label, body: Label, vbox: VBoxContainer) -> void:
 		GameState.pending_snapshot = {"kind": "event", "event": ev, "path": []}
 		GameState.save_game()
 
+	# 这个事件需要一位参赛者（正文里的 {name}）
+	if ev.get("pick_contestant", false) and not GameState.pending_snapshot.has("picked"):
+		var pool: Array = []
+		for cid in GameState.contestants:
+			if not GameState.eliminated.has(cid) and not GameState.met_contestants.has(cid):
+				pool.append(cid)
+		if pool.is_empty():
+			for cid in GameState.contestants:
+				if not GameState.eliminated.has(cid):
+					pool.append(cid)
+		if not pool.is_empty():
+			GameState.pending_snapshot["picked"] = str(pool[randi() % pool.size()])
+			GameState.save_game()
+
+	var picked_name := ""
+	if GameState.pending_snapshot.has("picked"):
+		picked_name = ContestantDB.name_of(str(GameState.pending_snapshot["picked"]))
 	var node: Dictionary = _event_node(ev)
 	title.text = "事件"
-	body.text = str(node.get("text", "")) + "\n\n（当前金币: %d）" % GameState.gold
+	body.text = str(node.get("text", "")).replace("{name}", picked_name) + "\n\n（当前金币: %d）" % GameState.gold
 
 	var choices: Array = node.get("choices", [])
 	for i in range(choices.size()):
 		var c: Dictionary = choices[i]
 		var b := Button.new()
-		b.text = _choice_label(c)
+		b.text = _choice_label(c).replace("{name}", picked_name)
 		if b.text.contains("\n"):
 			b.custom_minimum_size = Vector2(0, 74)
 		var cost: int = int(c.get("gold", 0))
@@ -655,6 +672,17 @@ func _pick_event_choice(index: int, c: Dictionary) -> void:
 		Toast.show_text("金币不足。")
 		return
 	Reward.apply(c)
+
+	var picked: String = str(GameState.pending_snapshot.get("picked", ""))
+	if picked != "":
+		if c.get("kill_picked", false) and not GameState.eliminated.has(picked):
+			GameState.eliminated.append(picked)
+			Morality.add(-5, 10)
+		if c.get("meet_picked", false) and not GameState.met_contestants.has(picked):
+			GameState.met_contestants.append(picked)
+		if c.get("ally_picked", false) and not GameState.allies.has(picked):
+			GameState.allies.append(picked)
+			Toast.show_text("「%s」成为了你的盟友" % ContestantDB.name_of(picked), 2.5)
 
 	if int(c.get("discard", 0)) > 0 and not GameState.deck.is_empty():
 		_close_encounter()
