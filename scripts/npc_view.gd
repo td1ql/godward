@@ -198,6 +198,14 @@ class Box:
 			var bond := _opt_button("「跟我一起走。」", 19, NpcView.GOLD)
 			bond.pressed.connect(func() -> void: do_bond())
 			opt_root.add_child(bond)
+		elif NpcDB.available_topics(npc_id, favor, seen).is_empty():
+			var done := Label.new()
+			done.text = "（他不再说话了。你们之间只剩风。）" if not NpcDB.has_locked_topics(npc_id, favor, seen) else "（他好像还有话，但没说。）"
+			done.custom_minimum_size = Vector2(0, 32)
+			done.add_theme_font_size_override("font_size", 15)
+			done.add_theme_color_override("font_color", NpcView.DIM)
+			StoryDB.apply_serif(done)
+			opt_root.add_child(done)
 
 	# ---------- 点开一个话题：说话 + 弹出回答 ----------
 	func pick_topic(tp: Dictionary) -> void:

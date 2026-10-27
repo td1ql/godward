@@ -142,13 +142,26 @@ func unlocked(tp: Dictionary, favor: int, seen: Array) -> bool:
 	return true
 
 
+# 可聊的话题：已聊过的自然消失（一次性），好感够了会冒出新的
 func available_topics(npc_id: String, favor: int, seen: Array) -> Array:
 	var out: Array = []
 	for tp in info_of(npc_id).get("topics", []):
+		if seen.has(str(tp.get("id", ""))):
+			continue
 		if not unlocked(tp, favor, seen):
 			continue
 		out.append(tp)
 	return out
+
+
+# 全部聊完之后，还有没有「等好感解锁」的
+func has_locked_topics(npc_id: String, favor: int, seen: Array) -> bool:
+	for tp in info_of(npc_id).get("topics", []):
+		if seen.has(str(tp.get("id", ""))):
+			continue
+		if not unlocked(tp, favor, seen):
+			return true
+	return false
 
 
 # NPC 的开场白：优先用职业专属版本
