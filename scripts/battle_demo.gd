@@ -213,7 +213,7 @@ func _ready() -> void:
 		var spr := TextureRect.new()
 		spr.texture = load(sil_path)
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		spr.position = Vector2(1106, 30)
 		spr.size = Vector2(150, 256)
 		spr.modulate = Color(1, 1, 1, 0.92)
@@ -236,7 +236,7 @@ func _ready() -> void:
 		var pc := TextureRect.new()
 		pc.texture = load(voc_path)
 		pc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 256)
 		add_child(pc)

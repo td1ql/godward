@@ -16,8 +16,8 @@ extends Control
 const GOLD := Color("c9a86a")
 
 var frame_rect := Rect2(0, 0, 340, 470)
-var outer_alpha := 0.42
-var inner_alpha := 0.22
+var outer_alpha := 0.62
+var inner_alpha := 0.34
 var corner := 26.0        # 角饰半径
 var inset := 6.0
 
@@ -31,13 +31,13 @@ func _draw() -> void:
 	var r := frame_rect
 
 	# 外圈
-	draw_rect(r, Color(GOLD, outer_alpha), false, 1.0)
+	draw_rect(r, Color(GOLD, outer_alpha), false, 1.2)
 	# 内圈
 	var ri := r.grow(-inset)
 	draw_rect(ri, Color(GOLD, inner_alpha), false, 1.0)
 
 	# 四角藤蔓：一小段弧 + 一根短须
-	var c := Color(GOLD, 0.75)
+	var c := Color(GOLD, 0.95)
 	for k in [[0, 0], [1, 0], [0, 1], [1, 1]]:
 		var cx: float = r.position.x + (corner if k[0] == 0 else r.size.x - corner)
 		var cy: float = r.position.y + (corner if k[1] == 0 else r.size.y - corner)
@@ -52,12 +52,12 @@ func _draw() -> void:
 			start = -PI * 0.5
 		else:
 			start = PI
-		draw_arc(center, corner, start, start + PI * 0.5, 16, c, 1.0, true)
+		draw_arc(center, corner, start, start + PI * 0.5, 20, c, 1.4, true)
 		# 短须：从弧中点伸出一小段
 		var mid := start + PI * 0.25
 		var p1 := center + Vector2(cos(mid), sin(mid)) * corner
 		var p2 := center + Vector2(cos(mid), sin(mid)) * (corner + 10.0)
-		draw_line(p1, p2, Color(GOLD, 0.5), 1.0, true)
+		draw_line(p1, p2, Color(GOLD, 0.75), 1.0, true)
 
 
 # 便捷构造

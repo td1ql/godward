@@ -78,7 +78,7 @@ class Box:
 		if ResourceLoader.exists(path):
 			pic.texture = load(path)
 		pic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		pic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		pic.position = NpcView.PORTRAIT_POS
 		pic.size = NpcView.PORTRAIT_SIZE
 		overlay.add_child(pic)

@@ -56,7 +56,7 @@ func _ready() -> void:
 		var card := TextureRect.new()
 		card.texture = load(card_path)
 		card.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		card.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		card.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		card.position = Vector2(70, 140)
 		card.size = Vector2(330, 549)
 		add_child(card)
