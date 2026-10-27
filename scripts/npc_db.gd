@@ -639,6 +639,10 @@ func greeting_of(npc_id: String) -> String:
 
 
 func portrait_of(npc_id: String) -> String:
+	# 优先用专属立绘 assets/art/hero/<名字>.webp；没有就退回配置里的占位图
+	var hero_path := "res://assets/art/hero/%s.webp" % npc_id
+	if ResourceLoader.exists(hero_path):
+		return hero_path
 	return str(info_of(npc_id).get("portrait", "res://assets/art/enemy/soldier.webp"))
 
 
