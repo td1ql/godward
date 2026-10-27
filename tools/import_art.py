@@ -11,9 +11,9 @@
   python tools/import_art.py 源图.png --kind hero --name 西西弗斯
 
 kind 对应：
-  vocation 670x1042  职业立绘
-  hero     670x1042  英雄立绘
-  enemy     512x768  敌人立绘（透明底）
+  vocation 670x893   职业立绘
+  hero     670x893   英雄立绘
+  enemy     512x682  敌人立绘（透明底）
   battle   2048x1089 战斗背景
   node      128x128  地图图标（透明底）
   card      512x512  卡面插图（透明底）
@@ -27,9 +27,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART = os.path.join(ROOT, "assets", "art")
 
 SPECS = {
-    "vocation": ("vocation", 670, 1042, False),
-    "hero":     ("hero",     670, 1042, False),
-    "enemy":    ("enemy",    512, 768,  True),
+    "vocation": ("vocation", 670, 893, False),
+    "hero":     ("hero",     670, 893, False),
+    "enemy":    ("enemy",    512, 682,  True),
     "battle":   ("bg",       2048, 1089, False),
     "node":     ("node",     128, 128,  True),
     "card":     ("card",     512, 512,  True),
