@@ -103,8 +103,8 @@ func _ready() -> void:
 		add_child(fb)
 
 	# 左上/右上信息块的暗底（必须在所有标签之前加，否则会被标签或背景盖住）
-	_backing(Vector2(40, 20), Vector2(212, 330))
-	_backing(Vector2(840, 20), Vector2(272, 330), true)
+	_backing(Vector2(40, 20), Vector2(206, 150))
+	_backing(Vector2(846, 20), Vector2(262, 150), true)
 
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
@@ -1111,8 +1111,8 @@ func _backing(pos: Vector2, size: Vector2, align_right: bool = false) -> void:
 	p.size = size
 	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0.02, 0.03, 0.05, 0.80)
-	sb.border_color = Color(0.79, 0.66, 0.42, 0.50)
+	sb.bg_color = Color(0.02, 0.03, 0.05, 0.55)
+	sb.border_color = Color(0.79, 0.66, 0.42, 0.42)
 	sb.set_border_width_all(1)
 	sb.set_corner_radius_all(2)
 	p.add_theme_stylebox_override("panel", sb)
@@ -1124,10 +1124,12 @@ func _update_ui() -> void:
 		deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(), GameState.gold
 	]
 
-	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
 	var status_txt: String = StatusSystem.text(player_status)
-	status_label.text = status_txt
-	status_label.visible = status_txt != ""
+	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
+	if status_txt != "":
+		ptext += "\n" + status_txt
+	if status_label != null:
+		status_label.visible = false
 	if pending_effect >= 0:
 		ptext += "\n选择 %d 张手牌消耗（已选 %d）" % [pending_need, pending_selected.size()]
 	player_label.text = ptext
