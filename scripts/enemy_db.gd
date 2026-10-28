@@ -181,11 +181,11 @@ func pick_for_node(node_type: String, depth: int = 0) -> Dictionary:
 	return data
 
 const SILHOUETTE := {
-	"奥古斯丁": "caster",
-	"安布罗斯": "caster",
-	"耶柔米": "caster",
-	"格里高利": "warden",
-	"金口约翰": "caster",
+	"奥古斯丁": "augustine",
+	"安布罗斯": "ambrose",
+	"耶柔米": "jerome",
+	"格里高利": "gregory",
+	"金口约翰": "chrysostom",
 
 	"史莱姆": "beast", "腐化史莱姆": "beast", "毒蜘蛛": "beast",
 	"蝙蝠群": "beast", "哥布林": "beast", "荆棘兽": "beast",
@@ -205,7 +205,7 @@ const SILHOUETTE := {
 	"奥丁": "idol", "赫尔墨斯": "shade", "阿斯克勒庇俄斯": "giant", "赫菲斯托斯": "caster",
 	"耶梦加得": "beast",
 	"世界树": "tree",
-	"守门人": "warden",
+	"守门人": "gatekeeper",
 	"教皇": "pope",
 	"原罪*贪婪": "greed",
 }
