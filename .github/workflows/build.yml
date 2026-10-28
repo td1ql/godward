@@ -172,3 +172,69 @@ jobs:
             build/Godward.exe
             build/Godward.apk
           generate_release_notes: true
+
+  # ============================================================
+  # Web 版：给 iPhone / 平板 / 随便谁一个链接就能玩
+  # ============================================================
+  export-web:
+    name: 导出 Web 版
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 下载 Godot
+        run: |
+          set -e
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_linux.x86_64.zip"
+          unzip -q "Godot_v${GODOT_RELEASE}_linux.x86_64.zip"
+          mv "Godot_v${GODOT_RELEASE}_linux.x86_64" /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --version
+
+      - name: 下载导出模板
+        run: |
+          set -e
+          wget -q "https://github.com/godotengine/godot/releases/download/${GODOT_RELEASE}/Godot_v${GODOT_RELEASE}_export_templates.tpz"
+          unzip -q "Godot_v${GODOT_RELEASE}_export_templates.tpz" -d /tmp/tpl
+          mkdir -p "$HOME/.local/share/godot/export_templates"
+          mv /tmp/tpl/templates "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          ls "$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable" | grep -i web || true
+
+      - name: 导入资源
+        run: godot --headless --path . --import || godot --headless --path . --quit
+
+      - name: 导出 Web
+        run: |
+          set -e
+          mkdir -p build/web
+          godot --headless --path . --export-release "Web" build/web/index.html
+          ls -lh build/web
+          echo "--- 体积 ---"
+          du -sh build/web
+
+      - name: 上传 Pages 产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy-web:
+    name: 发布到 GitHub Pages
+    needs: export-web
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 启用 / 配置 Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: 部署
+        id: deployment
+        uses: actions/deploy-pages@v4
