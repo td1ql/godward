@@ -102,6 +102,10 @@ func _ready() -> void:
 		fb.size = Vector2(1280, 720)
 		add_child(fb)
 
+	# 左上/右上信息块的暗底（必须在所有标签之前加，否则会被标签或背景盖住）
+	_backing(Vector2(40, 20), Vector2(212, 330))
+	_backing(Vector2(840, 20), Vector2(272, 330), true)
+
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
 	dim.size = Vector2(1280, 720)
@@ -194,12 +198,9 @@ func _ready() -> void:
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
-	# 左上信息块（含状态）加暗底
-	_backing(Vector2(40, 20), Vector2(212, 330))
 	player_label.position = Vector2(52, 30)
 	player_label.size = Vector2(196, 300)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_backing(Vector2(840, 20), Vector2(272, 330), true)
 	combat_label.position = Vector2(852, 30)
 	combat_label.size = Vector2(248, 300)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -1105,21 +1106,17 @@ func _start_next_cleanup() -> void:
 
 # 给左上/右上的信息块加一块暗底，保证在战斗背景上看得清
 func _backing(pos: Vector2, size: Vector2, align_right: bool = false) -> void:
-	var c := ColorRect.new()
-	c.position = pos
-	c.size = size
-	c.color = Color(0.035, 0.05, 0.07, 0.66)
-	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	c.z_index = -1
-	add_child(c)
-	if align_right:
-		var line := ColorRect.new()
-		line.position = pos + Vector2(size.x - 2, 0)
-		line.size = Vector2(2, size.y)
-		line.color = Color(0.79, 0.66, 0.42, 0.55)
-		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		line.z_index = -1
-		add_child(line)
+	var p := Panel.new()
+	p.position = pos
+	p.size = size
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.02, 0.03, 0.05, 0.80)
+	sb.border_color = Color(0.79, 0.66, 0.42, 0.50)
+	sb.set_border_width_all(1)
+	sb.set_corner_radius_all(2)
+	p.add_theme_stylebox_override("panel", sb)
+	add_child(p)
 
 func _update_ui() -> void:
 	info_label.text = "能量 %d/%d" % [player_energy, max_energy]
