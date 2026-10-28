@@ -103,8 +103,8 @@ func _ready() -> void:
 		add_child(fb)
 
 	# 左上/右上信息块的暗底（必须在所有标签之前加，否则会被标签或背景盖住）
-	_backing(Vector2(40, 20), Vector2(206, 150))
-	_backing(Vector2(846, 20), Vector2(262, 150), true)
+	_backing(Vector2(40, 30), Vector2(206, 200))
+	_backing(Vector2(846, 30), Vector2(260, 200), true)
 
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
@@ -198,11 +198,11 @@ func _ready() -> void:
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
-	player_label.position = Vector2(52, 30)
-	player_label.size = Vector2(196, 300)
+	player_label.position = Vector2(54, 40)
+	player_label.size = Vector2(188, 190)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	combat_label.position = Vector2(852, 30)
-	combat_label.size = Vector2(248, 300)
+	combat_label.position = Vector2(856, 40)
+	combat_label.size = Vector2(240, 190)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	combat_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	combat_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
