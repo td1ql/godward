@@ -225,9 +225,10 @@ func _ready() -> void:
 		spr.size = Vector2(150, 200)
 		spr.modulate = Color(1, 1, 1, 0.92)
 		add_child(spr)
-		var ef := ArtFrame.make(Rect2(1106, 30, 150, 200), 0.45, 0.22)
+		# 框挂成立绘的子节点，浮动/缩放时严丝合缝
+		var ef := ArtFrame.make(Rect2(0, 0, 150, 200), 0.55, 0.28)
 		ef.corner = 16.0
-		add_child(ef)
+		spr.add_child(ef)
 		spr.pivot_offset = spr.size / 2.0
 		var tw := create_tween().set_loops()
 		tw.set_parallel(true)
@@ -247,9 +248,9 @@ func _ready() -> void:
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 200)
 		add_child(pc)
-		var pf := ArtFrame.make(Rect2(252, 30, 150, 200), 0.45, 0.22)
+		var pf := ArtFrame.make(Rect2(0, 0, 150, 200), 0.55, 0.28)
 		pf.corner = 16.0
-		add_child(pf)
+		pc.add_child(pf)
 
 	# 状态：显示在立绘正下方
 	status_label = Label.new()
