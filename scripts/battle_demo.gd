@@ -1117,6 +1117,9 @@ func _backing(pos: Vector2, size: Vector2, align_right: bool = false) -> void:
 	sb.set_corner_radius_all(2)
 	p.add_theme_stylebox_override("panel", sb)
 	add_child(p)
+	# 放到背景图之上、所有文字之下
+	if get_child_count() > 1:
+		move_child(p, 1)
 
 func _update_ui() -> void:
 	info_label.text = "能量 %d/%d" % [player_energy, max_energy]
