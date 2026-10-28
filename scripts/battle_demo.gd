@@ -194,9 +194,12 @@ func _ready() -> void:
 	StoryDB.apply_serif(pile_label)
 	add_child(pile_label)
 
+	# 左上信息块（含状态）加暗底
+	_backing(Vector2(40, 20), Vector2(212, 330))
 	player_label.position = Vector2(52, 30)
 	player_label.size = Vector2(196, 300)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_backing(Vector2(840, 20), Vector2(272, 330), true)
 	combat_label.position = Vector2(852, 30)
 	combat_label.size = Vector2(248, 300)
 	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -249,12 +252,12 @@ func _ready() -> void:
 
 	# 状态：显示在立绘正下方
 	status_label = Label.new()
-	status_label.position = Vector2(246, 292)
-	status_label.size = Vector2(174, 96)
+	status_label.position = Vector2(48, 250)
+	status_label.size = Vector2(200, 96)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	status_label.add_theme_font_size_override("font_size", 15)
-	status_label.add_theme_color_override("font_color", Color(0.93, 0.87, 0.71))
+	status_label.add_theme_font_size_override("font_size", 17)
+	status_label.add_theme_color_override("font_color", Color(0.95, 0.85, 0.55))
 	status_label.add_theme_constant_override("outline_size", 2)
 	status_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	StoryDB.apply_serif(status_label)
@@ -1098,6 +1101,25 @@ func _start_next_cleanup() -> void:
 	GameState.pending_snapshot = {"kind": "contestant_fight", "id": id, "enemy": enemy_data}
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main.tscn")
+
+
+# 给左上/右上的信息块加一块暗底，保证在战斗背景上看得清
+func _backing(pos: Vector2, size: Vector2, align_right: bool = false) -> void:
+	var c := ColorRect.new()
+	c.position = pos
+	c.size = size
+	c.color = Color(0.035, 0.05, 0.07, 0.66)
+	c.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	c.z_index = -1
+	add_child(c)
+	if align_right:
+		var line := ColorRect.new()
+		line.position = pos + Vector2(size.x - 2, 0)
+		line.size = Vector2(2, size.y)
+		line.color = Color(0.79, 0.66, 0.42, 0.55)
+		line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		line.z_index = -1
+		add_child(line)
 
 func _update_ui() -> void:
 	info_label.text = "能量 %d/%d" % [player_energy, max_energy]
