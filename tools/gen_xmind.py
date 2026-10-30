@@ -88,10 +88,6 @@ def to_xmind_topic(label, children):
     t = {"id": uid(), "class": "topic", "title": label}
     if children:
         t["children"] = {"attached": [to_xmind_topic(c[0], c[1]) for c in children]}
-    if label.endswith("（已写）"):
-        t["style"] = {"id": uid(), "properties": {"svg:fill": "#2b3a2f"}}
-    elif label.endswith("（待写）"):
-        t["style"] = {"id": uid(), "properties": {"svg:fill": "#2a2f38"}}
     return t
 
 

@@ -7,18 +7,18 @@ ROOT = r"C:\Projects\slay-the-tower"
 OUT = os.path.join(ROOT, "docs", "dialogue-map.png")
 
 # 游戏里的字体是子集化的，缺各种符号；这里直接用系统宋体
-FONT_PATH = r"C:\Windows\Fonts\simsun.ttc"
+FONT_PATH = r"C:\Windows\Fonts\msyhbd.ttc"
 if not os.path.exists(FONT_PATH):
     FONT_PATH = r"C:\Windows\Fonts\msyh.ttc"
 if not os.path.exists(FONT_PATH):
     FONT_PATH = os.path.join(ROOT, "assets", "fonts", "NotoSerifCJKsc-Regular.otf")
 
-BG = (18, 23, 30)
-GOLD = (201, 168, 106)
-CREAM = (233, 223, 198)
-DIM = (168, 158, 136)
-FAINT = (128, 120, 102)
-LINE = (96, 84, 62)
+BG = (247, 242, 230)
+GOLD = (92, 64, 22)
+CREAM = (18, 14, 10)
+DIM = (42, 35, 25)
+FAINT = (64, 54, 38)
+LINE = (150, 128, 92)
 
 
 def F(size):
@@ -84,13 +84,13 @@ def height(n):
 def draw(d, n, x, y, depth):
     # 文字
     if depth == 0:
-        fnt, col = F(20), CREAM
+        fnt, col = F(22), (22, 78, 44)
     elif depth == 1:
-        fnt, col = F(18), (215, 205, 180)
+        fnt, col = F(19), (30, 24, 16)
     elif depth == 2:
-        fnt, col = F(16), DIM
+        fnt, col = F(17), DIM
     else:
-        fnt, col = F(15), FAINT
+        fnt, col = F(16), FAINT
     d.text((x, y + 4), n["t"], font=fnt, fill=col)
 
     if not n["c"]:
