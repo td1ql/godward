@@ -221,11 +221,11 @@ class Box:
 			opt_root.add_child(done)
 
 	# ---------- 点开一个话题：说话 + 弹出回答 ----------
-	func pick_topic(tp: Dictionary) -> void:
+	func pick_topic(tp: Dictionary, from_branch: bool = false) -> void:
 		current_topic = tp
 		line_lbl.text = NpcDB.line_of(npc_id, tp)
 		mood_lbl.text = "—— " + NpcDB.action_of(npc_id, tp)
-		if not seen.has(str(tp.get("id", ""))):
+		if not from_branch and not seen.has(str(tp.get("id", ""))):
 			seen.append(str(tp.get("id", "")))
 			GameState.npc_seen[npc_id] = seen
 			GameState.save_game()
@@ -245,7 +245,33 @@ class Box:
 		line_lbl.text = str(r.get("text", ""))
 		favor = clampi(favor + int(r.get("favor", 0)), 0, 100)
 		GameState.impressions[npc_id] = favor
+
+		# 附加效果：回血 / 扣血 / 给牌 / 道德
+		var heal := int(r.get("heal", 0))
+		if heal != 0:
+			GameState.player_hp = clamp(GameState.player_hp + heal, 0, GameState.player_max_hp)
+			Toast.show_text("生命 %+d" % heal, 1.6)
+		var dmg := int(r.get("hp", 0))
+		if dmg != 0:
+			GameState.player_hp = clamp(GameState.player_hp + dmg, 1, GameState.player_max_hp)
+			Toast.show_text("生命 %+d" % dmg, 1.6)
+		for cid in r.get("cards", []):
+			GameState.deck.append(str(cid))
+		if r.has("moral"):
+			Morality.add(int(r["moral"]), int(r.get("sin", 0)))
 		GameState.save_game()
+
+		# 对话走向：跳到指定话题 / 结束 / 回到话题列表
+		if bool(r.get("end", false)):
+			close()
+			on_leave.call("leave", npc_id)
+			return
+		var nxt := str(r.get("next", ""))
+		if nxt != "":
+			var tp := NpcDB.topic_of(npc_id, nxt)
+			if not tp.is_empty():
+				pick_topic(tp, true)
+				return
 		show_topics()
 
 	func do_bond() -> void:
