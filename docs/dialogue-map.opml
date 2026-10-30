@@ -1,0 +1,2090 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="2.0">
+  <head>
+    <title>逐神 · 英雄对话分支</title>
+  </head>
+  <body>
+      <outline text="逐神 · 英雄对话分支">
+        <outline text="阿喀琉斯">
+          <outline text="等待丈夫的新娘（已写）">
+            <outline text="① t1 初见">
+              <outline text="他看见你身上的什么痕迹"/>
+              <outline text="「这位小姐好像也有着一段守望的过往」"/>
+              <outline text="「我能看见你眼神中的思念。」"/>
+            </outline>
+            <outline text="② 三个回答">
+              <outline text="「守望？」 → +1"/>
+              <outline text="（不说话，一同守望） → +5"/>
+              <outline text="「为什么？」 → +3"/>
+            </outline>
+            <outline text="③ t2 深入">
+              <outline text="「呼~」"/>
+              <outline text="「我们都为一个无法放下的人而背起了一段过去」"/>
+              <outline text="「我的守望或许只是片刻休憩。」"/>
+            </outline>
+            <outline text="④ 分叉">
+              <outline text="「那人是我的丈夫」 → +5 → t3a">
+                <outline text="「"/>
+                <outline text="「"/>
+                <outline text="「"/>
+                <outline text="回"/>
+                <outline text="→"/>
+              </outline>
+              <outline text="「那人是你的爱人吗」 → +1 → t3b（待写）"/>
+              <outline text="「那人是你的亲人吗」 → +2 → t3b（待写）"/>
+            </outline>
+            <outline text="⑤ t3b 荣耀线">
+              <outline text="「唉——无妨」"/>
+              <outline text="「曾经的我将荣耀视作生命」"/>
+              <outline text="「而荣耀是危险的高台」"/>
+              <outline text="「向荣耀与曾经发问？」 → +8"/>
+              <outline text="「向他的挚友发问？」 → +10"/>
+            </outline>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="赫克托耳">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="奥德修斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="赫拉克勒斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="珀尔修斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="忒修斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="伊阿宋">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="俄耳甫斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="卡珊德拉">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="美狄亚">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="阿塔兰忒">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="普罗米修斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="西西弗斯">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="齐格弗里德">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="布伦希尔德">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="洛基">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="海姆达尔">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+        <outline text="提尔">
+          <outline text="等待丈夫的新娘（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="失明的守钟人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="饥饿的朝圣者（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="沉默的执剑人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="疯癫的先知（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="褴褛的记账人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="断臂的旗手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="无名的旅人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="溺水的小公主（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="焚书的疯子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="守夜的哨兵（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="数星星的瞎子（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="磨刀的哑巴（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="收尸的妇人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="执棋未落的妙手（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+          <outline text="等死的病人（待写）">
+            <outline text="① t1 初见：他看见你身上的什么痕迹？"/>
+            <outline text="② 三个回答：顺着问 / 沉默 / 追问原因"/>
+            <outline text="③ t2 深入：他把哪件事说给你听？"/>
+            <outline text="④ 分叉：一条通向专属结局，两条通向通用追问"/>
+            <outline text="⑤ 专属结局：好感 +15~20，附带回血 / 给牌 / 掉落"/>
+          </outline>
+        </outline>
+      </outline>
+  </body>
+</opml>
