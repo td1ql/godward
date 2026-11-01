@@ -196,8 +196,13 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	body_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	body_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	body_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	body_lbl.add_theme_font_size_override("font_size", max(11, font_size - 2))
+	# 字多的时候自动缩字号：每多 6 个字缩 1px，最小 9px
+	var body_fs: int = max(11, font_size - 2)
+	var extra: int = max(0, cbody.length() - 16)
+	body_fs = max(9, body_fs - int(extra / 6))
+	body_lbl.add_theme_font_size_override("font_size", body_fs)
 	body_lbl.add_theme_color_override("font_color", ink)
+	body_lbl.clip_text = true
 	body_lbl.add_theme_constant_override("outline_size", 1)
 	body_lbl.add_theme_color_override("font_outline_color", ink)
 	body_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE

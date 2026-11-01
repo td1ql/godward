@@ -278,8 +278,8 @@ func card_text(id: String) -> String:
 	var effects: Array[String] = []
 	var hits: int = d.get("hits", 1)
 	if d.get("damage_from_block", false):
-		effects.append("伤害 = 当前格挡")
-		effects.append("格挡值减半")
+		effects.append("伤害=格挡")
+		effects.append("格挡减半")
 	if d["damage"] > 0:
 		if hits > 1:
 			effects.append("%d 伤害×%d" % [d["damage"], hits])
@@ -327,7 +327,7 @@ func card_text(id: String) -> String:
 	if d.get("zero_block_after", false) and not d.get("damage_from_block", false):
 		effects.append("清空格挡")
 	if int(d.get("block_damage_mult", 1)) > 1:
-		effects.append("格挡伤害 ×%d" % d["block_damage_mult"])
+		effects.append("格挡×%d" % d["block_damage_mult"])
 	if d.get("next_energy", 0) != 0:
 		effects.append("下回合能量 %+d" % d["next_energy"])
 	if d.get("exhaust", false):

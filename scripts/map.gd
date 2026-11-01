@@ -33,6 +33,7 @@ var _seen_ids := {}
 var _path_index := {}
 var _cam_target := Vector2.ZERO
 var _cam_lag := 0.0
+var _fog_mat: ShaderMaterial
 
 func _ready() -> void:
 	AudioManager.play_bgm("map_%d" % GameState.act)
@@ -112,6 +113,18 @@ func _ready() -> void:
 	plate.cut = 20.0
 	plate.alpha = 0.90
 	hud.add_child(plate)
+	# 迷雾层：在 HUD 之下、世界之上
+	var fog_layer := CanvasLayer.new()
+	fog_layer.layer = 15
+	add_child(fog_layer)
+	var fog_rect := ColorRect.new()
+	fog_rect.size = Vector2(1280, 720)
+	fog_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_fog_mat = ShaderMaterial.new()
+	_fog_mat.shader = load("res://shaders/map_fog.gdshader")
+	fog_rect.material = _fog_mat
+	fog_layer.add_child(fog_rect)
+
 	ui_layer = CanvasLayer.new()
 	ui_layer.layer = 20
 	add_child(ui_layer)
@@ -455,8 +468,22 @@ func _trigger_node(id: int) -> void:
 	GameState.pending_node = -1
 	GameState.save_game()
 
+
+# 迷雾跟随玩家
+func _update_fog() -> void:
+	if _fog_mat == null:
+		return
+	var screen_pos := get_viewport().get_canvas_transform() * player_marker.position
+	var vp := get_viewport_rect().size
+	if vp.x <= 0.0:
+		return
+	var uv := screen_pos / vp
+	_fog_mat.set_shader_parameter("center", uv)
+	_fog_mat.set_shader_parameter("aspect", vp.x / vp.y)
+
 func _process(delta: float) -> void:
 	_update_hud()
+	_update_fog()
 	# 镜头持续追向目标（走完之后还会慢慢靠拢）
 	if _cam_lag > 0.0:
 		_cam_lag -= delta
