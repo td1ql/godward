@@ -106,13 +106,13 @@ func _ready() -> void:
 		["守则", TraitDB.creed_text(GameState.vocation)],
 		["流派", " / ".join(GameState.streams)],
 	]
-	var ry := 228.0
+	var ry := 224.0
 	for r in rows:
 		var key := Label.new()
 		key.text = str(r[0])
 		key.position = Vector2(442, ry)
-		key.size = Vector2(56, 28)
-		key.add_theme_font_size_override("font_size", 15)
+		key.size = Vector2(64, 30)
+		key.add_theme_font_size_override("font_size", 17)
 		key.add_theme_color_override("font_color", Color(0.79, 0.66, 0.42, 0.9))
 		StoryDB.apply_serif(key)
 		add_child(key)
@@ -120,15 +120,15 @@ func _ready() -> void:
 
 		var val := Label.new()
 		val.text = str(r[1])
-		val.position = Vector2(504, ry)
-		val.size = Vector2(680, 64)
+		val.position = Vector2(516, ry)
+		val.size = Vector2(660, 68)
 		val.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		val.add_theme_font_size_override("font_size", 16)
+		val.add_theme_font_size_override("font_size", 20)
 		val.add_theme_color_override("font_color", Color(0.80, 0.77, 0.68))
 		StoryDB.apply_serif(val)
 		add_child(val)
 		_page_nodes.append(val)
-		ry += 64.0
+		ry += 78.0 if str(r[0]) == "词条" else 62.0
 
 	# ③ 数字：初始生命 / 金币
 	var stats := [["初始生命", GameState.player_hp], ["初始金币", GameState.gold]]
@@ -136,7 +136,7 @@ func _ready() -> void:
 	for st in stats:
 		var cap := Label.new()
 		cap.text = str(st[0])
-		cap.position = Vector2(sx, 430)
+		cap.position = Vector2(sx, 470)
 		cap.size = Vector2(160, 24)
 		cap.add_theme_font_size_override("font_size", 14)
 		cap.add_theme_color_override("font_color", Color(0.55, 0.51, 0.44))
@@ -146,7 +146,7 @@ func _ready() -> void:
 
 		var num := Label.new()
 		num.text = str(st[1])
-		num.position = Vector2(sx, 454)
+		num.position = Vector2(sx, 494)
 		num.size = Vector2(200, 56)
 		num.add_theme_font_size_override("font_size", 44)
 		num.add_theme_color_override("font_color", Color(0.95, 0.82, 0.46))
@@ -160,7 +160,7 @@ func _ready() -> void:
 		_card_btn = Button.new()
 		_card_btn.text = "轮回馈赠 · 三选一效果牌"
 		_card_btn.size = Vector2(330, 50)
-		_card_btn.position = Vector2(bx, 500)
+		_card_btn.position = Vector2(bx, 570)
 		_card_btn.add_theme_font_size_override("font_size", 18)
 		_card_btn.pressed.connect(_claim_card)
 		add_child(_card_btn)
@@ -171,7 +171,7 @@ func _ready() -> void:
 		_discard_btn = Button.new()
 		_discard_btn.text = "轮回馈赠 · 弃一张牌"
 		_discard_btn.size = Vector2(330, 50)
-		_discard_btn.position = Vector2(bx, 500)
+		_discard_btn.position = Vector2(bx, 552)
 		_discard_btn.add_theme_font_size_override("font_size", 18)
 		_discard_btn.pressed.connect(_claim_discard)
 		add_child(_discard_btn)
