@@ -140,14 +140,14 @@ func _ready() -> void:
 	# 玩家格挡白条（在血条上面一层）
 	_block_bar_bg = ColorRect.new()
 	_block_bar_bg.color = Color(0.85, 0.85, 0.85, 0.16)
-	_block_bar_bg.position = Vector2(56, 124)
+	_block_bar_bg.position = Vector2(56, 100)
 	_block_bar_bg.size = Vector2(180, 5)
 	_block_bar_bg.z_index = 2
 	_block_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_block_bar_bg)
 	_block_bar = ColorRect.new()
 	_block_bar.color = Color(0.96, 0.96, 0.92, 0.92)
-	_block_bar.position = Vector2(56, 124)
+	_block_bar.position = Vector2(56, 100)
 	_block_bar.size = Vector2(0, 5)
 	_block_bar.z_index = 2
 	_block_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -156,14 +156,14 @@ func _ready() -> void:
 	# 敌人格挡白条
 	_eblock_bar_bg = ColorRect.new()
 	_eblock_bar_bg.color = Color(0.85, 0.85, 0.85, 0.16)
-	_eblock_bar_bg.position = Vector2(860, 124)
+	_eblock_bar_bg.position = Vector2(860, 100)
 	_eblock_bar_bg.size = Vector2(230, 5)
 	_eblock_bar_bg.z_index = 2
 	_eblock_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_eblock_bar_bg)
 	_eblock_bar = ColorRect.new()
 	_eblock_bar.color = Color(0.96, 0.96, 0.92, 0.92)
-	_eblock_bar.position = Vector2(860, 124)
+	_eblock_bar.position = Vector2(860, 100)
 	_eblock_bar.size = Vector2(0, 5)
 	_eblock_bar.z_index = 2
 	_eblock_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -174,14 +174,14 @@ func _ready() -> void:
 	_hp_bar_bg.z_index = 2
 	_hp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_hp_bar_bg.position = Vector2(56, 132)
+	_hp_bar_bg.position = Vector2(56, 108)
 	_hp_bar_bg.size = Vector2(180, 6)
 	add_child(_hp_bar_bg)
 	_hp_bar = ColorRect.new()
 	_hp_bar.z_index = 2
 	_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar.color = Color(0.88, 0.74, 0.42)
-	_hp_bar.position = Vector2(56, 132)
+	_hp_bar.position = Vector2(56, 108)
 	_hp_bar.size = Vector2(180, 6)
 	add_child(_hp_bar)
 
@@ -190,14 +190,14 @@ func _ready() -> void:
 	_ehp_bar_bg.z_index = 2
 	_ehp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_ehp_bar_bg.position = Vector2(860, 132)
+	_ehp_bar_bg.position = Vector2(860, 108)
 	_ehp_bar_bg.size = Vector2(230, 6)
 	add_child(_ehp_bar_bg)
 	_ehp_bar = ColorRect.new()
 	_ehp_bar.z_index = 2
 	_ehp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
-	_ehp_bar.position = Vector2(860, 132)
+	_ehp_bar.position = Vector2(860, 108)
 	_ehp_bar.size = Vector2(230, 6)
 	add_child(_ehp_bar)
 
@@ -346,7 +346,7 @@ func _ready() -> void:
 
 	# 血条下面的状态 / 意图
 	player_detail_label = Label.new()
-	player_detail_label.position = Vector2(54, 160)
+	player_detail_label.position = Vector2(54, 134)
 	player_detail_label.size = Vector2(188, 70)
 	player_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	player_detail_label.add_theme_font_size_override("font_size", 16)
@@ -359,7 +359,7 @@ func _ready() -> void:
 	add_child(player_detail_label)
 
 	enemy_detail_label = Label.new()
-	enemy_detail_label.position = Vector2(856, 160)
+	enemy_detail_label.position = Vector2(856, 134)
 	enemy_detail_label.size = Vector2(240, 70)
 	enemy_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	enemy_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
