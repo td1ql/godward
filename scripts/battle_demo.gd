@@ -2,6 +2,7 @@ extends Node2D
 
 const ArtFrame = preload("res://scripts/art_frame.gd")
 const SkillCutIn = preload("res://scripts/skill_cutin.gd")
+const EnemyFx = preload("res://scripts/enemy_fx.gd")
 const ArkPanel = preload("res://scripts/ark_panel.gd")
 
 const BLOCK_DAMAGE_CAP := 60
@@ -36,6 +37,12 @@ var first_attack_used := false
 var first_card_used := false
 var _ending_turn := false
 var _skill_btn: Button
+var _enemy_sprite: TextureRect
+var _last_enemy_hp := -1
+var _last_player_hp := -1
+var _last_intent := 0
+var _telegraphed := false
+var _player_sprite: TextureRect
 var player_detail_label: Label
 var enemy_detail_label: Label
 var _skill_used := false
@@ -387,6 +394,7 @@ func _ready() -> void:
 	var sil_path := "res://assets/art/enemy/%s.webp" % sil
 	if not boss_bg and ResourceLoader.exists(sil_path):
 		var spr := TextureRect.new()
+		_enemy_sprite = spr
 		spr.texture = load(sil_path)
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
@@ -400,6 +408,7 @@ func _ready() -> void:
 		ef.corner = 16.0
 		spr.add_child(ef)
 		spr.pivot_offset = spr.size / 2.0
+		call_deferred("EmFx_appear")
 		var tw := create_tween().set_loops()
 		tw.set_parallel(true)
 		tw.tween_property(spr, "scale", Vector2(1.02, 1.02), 2.6).set_trans(Tween.TRANS_SINE)
@@ -412,6 +421,7 @@ func _ready() -> void:
 	var voc_path := "res://assets/art/vocation/%s.webp" % GameState.vocation
 	if ResourceLoader.exists(voc_path):
 		var pc := TextureRect.new()
+		_player_sprite = pc
 		pc.texture = load(voc_path)
 		pc.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
@@ -1415,6 +1425,11 @@ func _after_skill() -> void:
 	if not game_over:
 		hand_view.render(deck.hand, player_energy, pending_effect, pending_selected, _new_cards)
 
+func EmFx_appear() -> void:
+	if _enemy_sprite != null and is_instance_valid(_enemy_sprite):
+		EnemyFx.appear(_enemy_sprite)
+
+
 func _update_ui() -> void:
 	info_label.text = "能量 %d/%d" % [player_energy, max_energy]
 	pile_label.text = "抽牌堆 %d　　手牌 %d　　弃牌堆 %d　　金币 %d" % [
@@ -1448,6 +1463,35 @@ func _update_ui() -> void:
 	if pending_effect >= 0:
 		ptext += "\n选择 %d 张手牌消耗（已选 %d）" % [pending_need, pending_selected.size()]
 	player_label.text = ptext
+	# —— 敌人 HP 变化 → 受击 / 回血 / 死亡 ——
+	if _enemy_sprite != null and is_instance_valid(_enemy_sprite):
+		if _last_enemy_hp >= 0 and enemy.hp < _last_enemy_hp:
+			var delta: int = _last_enemy_hp - enemy.hp
+			EnemyFx.hit(_enemy_sprite, delta, delta >= 15)
+		elif _last_enemy_hp >= 0 and enemy.hp > _last_enemy_hp:
+			EnemyFx.heal(_enemy_sprite, enemy.hp - _last_enemy_hp)
+		if enemy.hp <= 0 and _last_enemy_hp > 0:
+			EnemyFx.death(_enemy_sprite)
+		_last_enemy_hp = enemy.hp
+
+	# —— 玩家 HP 变化 → 受击 ——
+	if _player_sprite != null and is_instance_valid(_player_sprite):
+		if _last_player_hp >= 0 and player_hp < _last_player_hp:
+			EnemyFx.hit(_player_sprite, _last_player_hp - player_hp, _last_player_hp - player_hp >= 15)
+		elif _last_player_hp >= 0 and player_hp > _last_player_hp:
+			EnemyFx.heal(_player_sprite, player_hp - _last_player_hp)
+		_last_player_hp = player_hp
+
+	# —— 敌人意图是大招 → 预警（每回合只播一次）——
+	if _enemy_sprite != null and enemy.hp > 0:
+		var cur_intent: int = DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
+		if cur_intent >= maxi(10, int(float(enemy.attack) * 2.0)) and not _telegraphed:
+			_telegraphed = true
+			EnemyFx.telegraph(_enemy_sprite, 2 if cur_intent >= 15 else 1)
+		elif cur_intent < maxi(10, int(float(enemy.attack) * 2.0)):
+			_telegraphed = false
+		_last_intent = cur_intent
+
 	_refresh_skill_btn()
 
 	# 上：名字 + HP（血条就在这下面）

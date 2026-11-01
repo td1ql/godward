@@ -110,6 +110,30 @@ def parse_cards(text: str) -> dict:
     return cards
 
 
+
+# 按卡名关键词决定画什么（优先于按效果推导，解决「214 张全是剑」）
+NAME_OBJECTS = [
+    (["焚", "火", "焰", "烬", "燃", "烧"], "a pile of charred books and rising embers, orange glow in ash"),
+    (["钟", "敲", "响"], "a cracked bronze bell hanging on a rusted chain, dust in the air"),
+    (["书", "页", "读", "阅", "览", "记", "录"], "an open old book with burned edges, loose pages flying"),
+    (["星", "月", "夜", "梦"], "a dark night sky with a single cold star above broken terrain"),
+    (["墙", "壁", "垒", "障", "守", "防", "盾", "甲"], "a cracked stone wall with an old shield leaning on it, dust"),
+    (["药", "毒", "医", "伤", "愈", "血", "疗"], "glass vials and dried herbs on a stained wooden table"),
+    (["牌", "牌组", "抽"], "a handful of worn cards scattered on dark cloth"),
+    (["骨", "尸", "葬", "殓", "墓", "埋"], "old bones and a rusted shovel half buried in dirt"),
+    (["锁", "链", "约", "誓"], "a heavy iron chain with a broken lock on wet stone"),
+    (["镜", "影", "回"], "a cracked black mirror reflecting nothing"),
+    (["旗", "军", "阵", "战"], "a torn war banner on a broken spear stuck in mud"),
+    (["灯", "光", "辉", "烛"], "a single guttering candle in a rusted holder, long shadows"),
+    (["刀", "剑", "刃", "锋", "斩", "刺", "击", "砍", "劈"], "a worn blade resting on dark cloth, dull steel, dried blood"),
+    (["手", "拳", "力", "勇"], "a scarred hand gripping a rough stone"),
+    (["路", "旅", "行", "程", "途"], "a winding road disappearing into cold mist"),
+    (["水", "溺", "深", "潜"], "still black water with a faint ripple and a sinking stone"),
+    (["风", "疾", "速", "连"], "dust and ash blown across stone, motion streaks"),
+    (["默", "哑", "声", "静"], "a closed mouth carved in stone, heavily weathered"),
+]
+
+
 def build_prompt(name: str, c: dict) -> dict:
     st = c.get("status", {})
     ss = c.get("self_status", {})
@@ -122,6 +146,13 @@ def build_prompt(name: str, c: dict) -> dict:
         if k in name:
             flavor = ", " + v
             break
+
+    # 先按卡名关键词选象征物（比按效果推导多样得多）
+    for keys, obj in NAME_OBJECTS:
+        for k in keys:
+            if k in name:
+                kind = OBJ
+                return {"kind": kind, "prompt": obj + flavor}
 
     if "中毒" in st:
         return {"kind": OBJ, "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone" + flavor}

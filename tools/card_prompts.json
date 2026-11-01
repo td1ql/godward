@@ -1,27 +1,27 @@
 {
  "尘光": {
   "kind": "obj",
-  "prompt": "a glowing white flower and floating pages of paper, pale light, faint golden light"
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "无上耀光": {
-  "kind": "sil",
-  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying, faint golden light"
+  "kind": "obj",
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "光之隙": {
-  "kind": "sil",
-  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying, faint golden light"
+  "kind": "obj",
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "圣辉": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light, radiant golden light"
+  "prompt": "a single guttering candle in a rusted holder, long shadows, radiant golden light"
  },
  "晨光": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, faint golden light"
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "余烬": {
   "kind": "obj",
-  "prompt": "a blood-stained curved blade resting on wet stone"
+  "prompt": "a pile of charred books and rising embers, orange glow in ash"
  },
  "未竟": {
   "kind": "obj",
@@ -33,11 +33,11 @@
  },
  "回望": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a cracked black mirror reflecting nothing"
  },
  "守夜": {
   "kind": "obj",
-  "prompt": "a massive wall of stacked stone blocks, glowing protective sigil, moonlight through iron bars"
+  "prompt": "a dark night sky with a single cold star above broken terrain, moonlight through iron bars"
  },
  "执念": {
   "kind": "obj",
@@ -49,19 +49,19 @@
  },
  "旧伤": {
   "kind": "obj",
-  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "旧誓": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a heavy iron chain with a broken lock on wet stone"
  },
  "残响": {
-  "kind": "sil",
-  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+  "kind": "obj",
+  "prompt": "a cracked bronze bell hanging on a rusted chain, dust in the air"
  },
  "灯": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "a single guttering candle in a rusted holder, long shadows"
  },
  "遗志": {
   "kind": "obj",
@@ -77,11 +77,11 @@
  },
  "长夜": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light, moonlight through iron bars"
+  "prompt": "a dark night sky with a single cold star above broken terrain, moonlight through iron bars"
  },
  "最后一击": {
-  "kind": "sil",
-  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+  "kind": "obj",
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "久候": {
   "kind": "obj",
@@ -93,7 +93,7 @@
  },
  "启程": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a winding road disappearing into cold mist"
  },
  "咳嗽": {
   "kind": "obj",
@@ -101,11 +101,11 @@
  },
  "擎旗": {
   "kind": "obj",
-  "prompt": "a shield and a sword crossed on dark ground, faint gold glow"
+  "prompt": "a torn war banner on a broken spear stuck in mud"
  },
  "敲钟": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim, a cracked bronze bell"
+  "prompt": "a cracked bronze bell hanging on a rusted chain, dust in the air, a cracked bronze bell"
  },
  "浮木": {
   "kind": "obj",
@@ -113,7 +113,7 @@
  },
  "火折": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, rising embers and orange flame"
+  "prompt": "a pile of charred books and rising embers, orange glow in ash, rising embers and orange flame"
  },
  "白布": {
   "kind": "obj",
@@ -129,7 +129,7 @@
  },
  "药渣": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "落子": {
   "kind": "obj",
@@ -137,7 +137,7 @@
  },
  "试刀": {
   "kind": "obj",
-  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "谵语": {
   "kind": "obj",
@@ -149,11 +149,11 @@
  },
  "远路": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a winding road disappearing into cold mist"
  },
  "钟摆": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke, a cracked bronze bell"
+  "prompt": "a cracked bronze bell hanging on a rusted chain, dust in the air, a cracked bronze bell"
  },
  "预兆": {
   "kind": "obj",
@@ -165,15 +165,15 @@
  },
  "入殓": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "old bones and a rusted shovel half buried in dirt"
  },
  "冲锋": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "剑息": {
   "kind": "obj",
-  "prompt": "a crumbling stone statue, half broken, dust falling"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "合眼": {
   "kind": "obj",
@@ -181,11 +181,11 @@
  },
  "呛水": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "still black water with a faint ripple and a sinking stone"
  },
  "哑声": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a closed mouth carved in stone, heavily weathered"
  },
  "啃食": {
   "kind": "obj",
@@ -193,27 +193,27 @@
  },
  "回光": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, faint golden light"
+  "prompt": "a cracked black mirror reflecting nothing, faint golden light"
  },
  "回音": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a cracked black mirror reflecting nothing"
  },
  "夜巡": {
   "kind": "obj",
-  "prompt": "a shield and a sword crossed on dark ground, faint gold glow, moonlight through iron bars"
+  "prompt": "a dark night sky with a single cold star above broken terrain, moonlight through iron bars"
  },
  "夜路": {
   "kind": "obj",
-  "prompt": "a shield and a sword crossed on dark ground, faint gold glow, moonlight through iron bars"
+  "prompt": "a dark night sky with a single cold star above broken terrain, moonlight through iron bars"
  },
  "妄言": {
   "kind": "obj",
   "prompt": "a long curved blade slashing through the air, sparks along the edge"
  },
  "守空房": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "布局": {
   "kind": "obj",
@@ -221,7 +221,7 @@
  },
  "开刃": {
   "kind": "obj",
-  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "归鞘": {
   "kind": "sil",
@@ -237,19 +237,19 @@
  },
  "数星": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a dark night sky with a single cold star above broken terrain"
  },
  "旗不倒": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a torn war banner on a broken spear stuck in mud"
  },
  "星位": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a dark night sky with a single cold star above broken terrain"
  },
  "星辉": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light, radiant golden light"
+  "prompt": "a dark night sky with a single cold star above broken terrain, radiant golden light"
  },
  "望归": {
   "kind": "obj",
@@ -265,7 +265,7 @@
  },
  "焚页": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a pile of charred books and rising embers, orange glow in ash"
  },
  "省粮": {
   "kind": "obj",
@@ -273,7 +273,7 @@
  },
  "磨刃": {
   "kind": "obj",
-  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "窥视": {
   "kind": "obj",
@@ -281,19 +281,19 @@
  },
  "翻页": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "an open old book with burned edges, loose pages flying"
  },
  "蓄刃": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "行囊": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a winding road disappearing into cold mist"
  },
  "记债": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "an open old book with burned edges, loose pages flying"
  },
  "轮值": {
   "kind": "obj",
@@ -301,23 +301,23 @@
  },
  "余响": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked bronze bell hanging on a rusted chain, dust in the air"
  },
  "吐锋": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "将军": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a torn war banner on a broken spear stuck in mud"
  },
  "归途": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "a winding road disappearing into cold mist"
  },
  "断臂旗": {
   "kind": "obj",
-  "prompt": "a shield and a sword crossed on dark ground, faint gold glow"
+  "prompt": "a torn war banner on a broken spear stuck in mud"
  },
  "最后一眼": {
   "kind": "sil",
@@ -325,11 +325,11 @@
  },
  "流星": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a dark night sky with a single cold star above broken terrain"
  },
  "深潜": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "still black water with a faint ripple and a sinking stone"
  },
  "结账": {
   "kind": "obj",
@@ -337,7 +337,7 @@
  },
  "送行": {
   "kind": "obj",
-  "prompt": "a crumbling stone statue, half broken, dust falling"
+  "prompt": "a winding road disappearing into cold mist"
  },
  "拾遗": {
   "kind": "obj",
@@ -353,11 +353,11 @@
  },
  "余火": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone, rising embers and orange flame"
+  "prompt": "a pile of charred books and rising embers, orange glow in ash, rising embers and orange flame"
  },
  "哑歌": {
   "kind": "obj",
-  "prompt": "a glowing white flower and floating pages of paper, pale light"
+  "prompt": "a closed mouth carved in stone, heavily weathered"
  },
  "妄念": {
   "kind": "obj",
@@ -369,23 +369,23 @@
  },
  "断刃": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "神国余晖": {
   "kind": "obj",
   "prompt": "a glowing white flower and floating pages of paper, pale light"
  },
  "血约": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+  "kind": "obj",
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "誓约": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "a heavy iron chain with a broken lock on wet stone"
  },
  "圣约": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "a heavy iron chain with a broken lock on wet stone"
  },
  "献祭": {
   "kind": "obj",
@@ -401,7 +401,7 @@
  },
  "圣光弹": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, faint golden light"
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "圣言": {
   "kind": "obj",
@@ -425,11 +425,11 @@
  },
  "圣光": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim, faint golden light"
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "惊梦": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a dark night sky with a single cold star above broken terrain"
  },
  "灵感": {
   "kind": "obj",
@@ -449,7 +449,7 @@
  },
  "快速思考": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "dust and ash blown across stone, motion streaks"
  },
  "冥想": {
   "kind": "obj",
@@ -461,91 +461,91 @@
  },
  "火球": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, rising embers and orange flame"
+  "prompt": "a pile of charred books and rising embers, orange glow in ash, rising embers and orange flame"
  },
  "铁壁": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim, rusted iron chains"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust, rusted iron chains"
  },
  "毒刃": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "毒牙": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "毒雾": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "淬毒": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "突刺": {
   "kind": "obj",
-  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "毒潮": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "剧毒": {
   "kind": "obj",
-  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "以血换力": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+  "kind": "obj",
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "受激": {
   "kind": "obj",
   "prompt": "a single candle flame in darkness, faint smoke"
  },
  "灵光": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, faint golden light"
+  "kind": "obj",
+  "prompt": "a single guttering candle in a rusted holder, long shadows, faint golden light"
  },
  "蓄力": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a scarred hand gripping a rough stone"
  },
  "血祭": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+  "kind": "obj",
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "力量药剂": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "反击": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "战吼": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a torn war banner on a broken spear stuck in mud"
  },
  "无上威严": {
   "kind": "sil",
   "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
  },
  "铁骨": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, old bone fragments"
+  "kind": "obj",
+  "prompt": "old bones and a rusted shovel half buried in dirt, old bone fragments"
  },
  "蛮勇": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a scarred hand gripping a rough stone"
  },
  "重甲": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+  "kind": "obj",
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "血勇": {
-  "kind": "sil",
-  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+  "kind": "obj",
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "威慑": {
   "kind": "obj",
@@ -553,7 +553,7 @@
  },
  "死守": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "祈祷": {
   "kind": "obj",
@@ -561,19 +561,19 @@
  },
  "回敬": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked black mirror reflecting nothing"
  },
  "坚壁": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "坚守": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "壁垒": {
   "kind": "obj",
-  "prompt": "a massive wall of stacked stone blocks, glowing protective sigil"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "拒马": {
   "kind": "obj",
@@ -593,15 +593,15 @@
  },
  "盾墙": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "防御": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "高墙": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "再生术": {
   "kind": "obj",
@@ -609,31 +609,31 @@
  },
  "守护": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "坚守之志": {
   "kind": "obj",
-  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "盾击": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "铁壁冲撞": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke, rusted iron chains"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust, rusted iron chains"
  },
  "疾书": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "an open old book with burned edges, loose pages flying"
  },
  "静养": {
   "kind": "obj",
-  "prompt": "a glowing white flower and floating pages of paper, pale light"
+  "prompt": "a closed mouth carved in stone, heavily weathered"
  },
  "鲜血之赐": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire, dark red blood"
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "割腕": {
   "kind": "obj",
@@ -641,11 +641,11 @@
  },
  "回响": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a cracked bronze bell hanging on a rusted chain, dust in the air"
  },
  "天降横牌": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "a handful of worn cards scattered on dark cloth"
  },
  "洞悉": {
   "kind": "obj",
@@ -657,11 +657,11 @@
  },
  "翻阅": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "an open old book with burned edges, loose pages flying"
  },
  "速记": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "an open old book with burned edges, loose pages flying"
  },
  "顿悟": {
   "kind": "obj",
@@ -673,19 +673,19 @@
  },
  "博览": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+  "prompt": "an open old book with burned edges, loose pages flying"
  },
  "疾风连击": {
   "kind": "obj",
-  "prompt": "three glowing cards floating in a spiral, edges catching fire, wind blown dust"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood, wind blown dust"
  },
  "掘墓者": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke"
+  "prompt": "old bones and a rusted shovel half buried in dirt"
  },
  "疾风斩": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, wind blown dust"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood, wind blown dust"
  },
  "万钧": {
   "kind": "sil",
@@ -693,7 +693,7 @@
  },
  "乱击": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "催化": {
   "kind": "obj",
@@ -701,27 +701,27 @@
  },
  "劈砍": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "双重打击": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "打击": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "毒源": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "渴血": {
   "kind": "obj",
-  "prompt": "a blood-stained curved blade resting on wet stone, dark red blood"
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "疾风": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke, wind blown dust"
+  "prompt": "dust and ash blown across stone, motion streaks, wind blown dust"
  },
  "痛觉": {
   "kind": "obj",
@@ -733,19 +733,19 @@
  },
  "血刃": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge, dark red blood"
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "连击": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "连斩": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "重击": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "引爆": {
   "kind": "obj",
@@ -753,7 +753,7 @@
  },
  "斩首": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "断掌": {
   "kind": "obj",
@@ -769,7 +769,7 @@
  },
  "破防斩": {
   "kind": "obj",
-  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "终结技": {
   "kind": "sil",
@@ -781,7 +781,7 @@
  },
  "千刀万剐": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "处决": {
   "kind": "sil",
@@ -797,7 +797,7 @@
  },
  "敏捷连刺": {
   "kind": "obj",
-  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "过载": {
   "kind": "obj",
@@ -805,7 +805,7 @@
  },
  "薪火": {
   "kind": "obj",
-  "prompt": "a single candle flame in darkness, faint smoke, rising embers and orange flame"
+  "prompt": "a pile of charred books and rising embers, orange glow in ash, rising embers and orange flame"
  },
  "榨取": {
   "kind": "obj",
@@ -817,11 +817,11 @@
  },
  "破甲": {
   "kind": "obj",
-  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "破防": {
   "kind": "obj",
-  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+  "prompt": "a cracked stone wall with an old shield leaning on it, dust"
  },
  "缴械": {
   "kind": "obj",
@@ -829,11 +829,11 @@
  },
  "虚弱打击": {
   "kind": "obj",
-  "prompt": "a crumbling stone statue, half broken, dust falling"
+  "prompt": "a worn blade resting on dark cloth, dull steel, dried blood"
  },
  "虚弱药剂": {
   "kind": "obj",
-  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  },
  "净化": {
   "kind": "obj",
@@ -845,7 +845,7 @@
  },
  "吸血": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light, dark red blood"
+  "prompt": "glass vials and dried herbs on a stained wooden table, dark red blood"
  },
  "绷带": {
   "kind": "obj",
@@ -853,6 +853,6 @@
  },
  "圣愈": {
   "kind": "obj",
-  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+  "prompt": "glass vials and dried herbs on a stained wooden table"
  }
 }

@@ -24,8 +24,9 @@ CKPT = "animagine-xl-4.0.safetensors"
 STYLE_OBJ = (
     "masterpiece, high score, great score, absurdres, "
     "still life, no humans, object focus, "
-    "semi-realistic dark fantasy illustration, dramatic chiaroscuro lighting, "
-    "rich muted colors, cool teal shadows with warm amber key light, "
+    "semi-realistic dark fantasy illustration, low key lighting, matte surfaces, "
+    "dull weathered metal, patina and grime, no specular highlight, "
+    "desaturated muted colors, deep teal shadows, faint warm amber light, "
     "intricate detail, centered composition, dark background with soft glow, "
     "no text, no watermark, no frame"
 )
@@ -41,7 +42,10 @@ NEG = (
     "extra digit, fewer digits, cropped, worst quality, low quality, "
     "normal quality, jpeg artifacts, signature, watermark, username, blurry, "
     "face, closeup, portrait, bright cheerful, saturated neon, "
-    "frame, border, multiple views, sepia, monochrome orange, brown tint"
+    "frame, border, multiple views, sepia, brown tint, "
+    "shiny, glossy, reflective, chrome, polished metal, metallic sheen, "
+    "specular highlight, lens flare, bloom, glowing edges, bright, overexposed, "
+    "jewel, gemstone, sparkling, ray of light, holy aura"
 )
 
 
