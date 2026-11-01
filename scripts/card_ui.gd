@@ -89,6 +89,44 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(art)
 
+		# 窗口内阴影：四边各一条渐隐的暗带，让插画像嵌在卡里
+		for e in [["top", 2, ART_H, 2, 10], ["bottom", ART_H - 10, ART_H, 2, -1]]:
+			pass
+		var shade_t := ColorRect.new()
+		shade_t.color = Color(0.04, 0.05, 0.07, 0.55)
+		shade_t.anchor_right = 1.0
+		shade_t.offset_left = 2
+		shade_t.offset_right = -2
+		shade_t.offset_top = 2
+		shade_t.offset_bottom = 12
+		shade_t.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(shade_t)
+
+		var shade_b := ColorRect.new()
+		shade_b.color = Color(0.04, 0.05, 0.07, 0.55)
+		shade_b.anchor_right = 1.0
+		shade_b.offset_left = 2
+		shade_b.offset_right = -2
+		shade_b.offset_top = ART_H - 12
+		shade_b.offset_bottom = ART_H
+		shade_b.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(shade_b)
+
+		# 窗口边框：细金线一圈
+		var frame := Panel.new()
+		frame.anchor_right = 1.0
+		frame.offset_left = 1
+		frame.offset_right = -1
+		frame.offset_top = 1
+		frame.offset_bottom = ART_H + 1
+		var fsb := StyleBoxFlat.new()
+		fsb.bg_color = Color(0, 0, 0, 0)
+		fsb.border_color = Color(0.62, 0.52, 0.34, 0.75)
+		fsb.set_border_width_all(1)
+		frame.add_theme_stylebox_override("panel", fsb)
+		frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(frame)
+
 		# 插画下沿一条金线，和下面信息区分开
 		var rule := ColorRect.new()
 		rule.color = Color(0.79, 0.66, 0.42, 0.55)

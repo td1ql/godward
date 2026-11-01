@@ -115,7 +115,7 @@ func _ready() -> void:
 	hud.add_child(plate)
 	# 迷雾层：在 HUD 之下、世界之上
 	var fog_layer := CanvasLayer.new()
-	fog_layer.layer = 5
+	fog_layer.layer = 1
 	add_child(fog_layer)
 	var fog_rect := ColorRect.new()
 	fog_rect.size = Vector2(1280, 720)
@@ -235,6 +235,9 @@ func _ensure_positions() -> void:
 				if away.length() < 1.0:
 					away = Vector2(cos(angle), sin(angle))
 				cand += away.normalized() * 26.0
+			# 收敛到安全区（HUD 左上角 + 右侧菜单都留出空位）
+			cand.x = clampf(cand.x, 150.0, 1120.0)
+			cand.y = clampf(cand.y, 120.0, 640.0)
 			world_pos[id] = cand
 			changed = true
 

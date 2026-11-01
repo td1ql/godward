@@ -41,6 +41,7 @@ var _enemy_sprite: TextureRect
 var _info_strip: Control
 var _info_name: Label
 var _info_detail: Label
+var _domain_label: Label
 var _last_enemy_hp := -1
 var _last_player_hp := -1
 var _last_intent := 0
@@ -381,6 +382,18 @@ func _ready() -> void:
 	enemy_detail_label.add_theme_constant_override("outline_size", 2)
 	enemy_detail_label.add_theme_color_override("font_outline_color", Color(0.06, 0.05, 0.04))
 	_info_detail = enemy_detail_label
+	# 领域单独一条：挂在敌人脚下（不挤在头顶信息条里）
+	_domain_label = Label.new()
+	_domain_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_domain_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_domain_label.add_theme_font_size_override("font_size", 14)
+	_domain_label.add_theme_color_override("font_color", Color(0.83, 0.68, 0.42))
+	_domain_label.add_theme_constant_override("outline_size", 3)
+	_domain_label.add_theme_color_override("font_outline_color", Color(0.05, 0.06, 0.08, 0.9))
+	_domain_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_domain_label.z_index = 5
+	StoryDB.apply_serif(_domain_label)
+	add_child(_domain_label)
 	enemy_detail_label.z_index = 5
 	enemy_detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(enemy_detail_label)
@@ -1522,6 +1535,12 @@ func _update_ui() -> void:
 			_ehp_bar_bg.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 34.0)
 			_ehp_bar_bg.size = Vector2(strip_w - 16.0, 4)
 
+	if _enemy_sprite != null and is_instance_valid(_enemy_sprite) and _domain_label != null:
+		var dw: float = 420.0
+		var dcx: float = _enemy_sprite.position.x + _enemy_sprite.size.x * 0.5
+		_domain_label.position = Vector2(dcx - dw * 0.5, 588.0)
+		_domain_label.size = Vector2(dw, 22.0)
+
 	_refresh_skill_btn()
 
 	# 上：名字 + HP（血条就在这下面）
@@ -1535,9 +1554,8 @@ func _update_ui() -> void:
 		edetail += "状态 %s" % es
 	var dtxt: String = EnemyDB.domain_text(enemy.domain)
 	if dtxt != "":
-		if edetail != "":
-			edetail += "\n"
-		edetail += "领域 %s" % dtxt
+		if dtxt != "" and _domain_label != null:
+			_domain_label.text = "领域 // %s" % dtxt
 	if enemy.hp > 0 and player_hp > 0:
 		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 		var hit_extra := StatusSystem.text(enemy.on_hit)
