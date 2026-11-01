@@ -38,16 +38,16 @@ func _ready() -> void:
 	bg_rect = TextureRect.new()
 	bg_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	bg_rect.stretch_mode = TextureRect.STRETCH_SCALE
-	var map_bg := "res://assets/art/bg/bg_map_%d.webp" % GameState.act
+	var map_bg := "res://assets/art/bg/bg_map_%d_cold.webp" % GameState.act
 	if not ResourceLoader.exists(map_bg):
-		map_bg = "res://assets/art/bg/bg_map.webp"
+		map_bg = "res://assets/art/bg/bg_map_cold.webp"
 	if ResourceLoader.exists(map_bg):
 		bg_rect.texture = load(map_bg)
 	world.add_child(bg_rect)
 
 	# 压暗：让地图退到后面，节点浮起来
 	var dim := ColorRect.new()
-	dim.color = Color(0.024, 0.035, 0.047, 0.72)
+	dim.color = Color(0.024, 0.035, 0.047, 0.25)
 	dim.size = Vector2(8000, 8000)
 	dim.position = Vector2(-4000, -4000)
 	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
