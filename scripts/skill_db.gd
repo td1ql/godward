@@ -215,13 +215,13 @@ func ready(vocation: String, st: Dictionary) -> bool:
 			var mx := int(st.get("max_hp", 1))
 			return mx > 0 and float(st.get("hp", mx)) / float(mx) < 0.3
 		"block_zero":
-			return int(st.get("block", 1)) <= 0 and int(st.get("turn", 0)) >= 2
+			return int(st.get("block", 1)) <= 0
 		"hand_min_6":
 			return int(st.get("hand", 0)) >= 6
 		"damage_taken":
 			return int(st.get("damage_taken", 0)) >= 20
 		"energy_zero":
-			return int(st.get("energy", 1)) <= 0 and int(st.get("turn", 0)) >= 2
+			return int(st.get("energy", 1)) <= 0
 		"enemy_poison":
 			return int(st.get("enemy_poison", 0)) >= 5
 	return false

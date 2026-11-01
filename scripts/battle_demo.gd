@@ -37,7 +37,7 @@ var first_card_used := false
 var _ending_turn := false
 var _skill_btn: Button
 var _skill_used := false
-var _turn_no := 0
+var _turn_no := 1
 var _no_attack_turns := 0
 var attacked_last_turn := false
 var attacked_this_turn := false
@@ -1195,6 +1195,7 @@ func _refresh_skill_btn() -> void:
 		_skill_btn.text = "◈ " + SkillDB.hint_of(voc)
 		_skill_btn.add_theme_color_override("font_color", Color(0.62, 0.57, 0.47))
 		_skill_btn.modulate = Color(1, 1, 1, 0.75)
+	_skill_btn.disabled = not ok
 
 
 func _on_skill_pressed() -> void:
