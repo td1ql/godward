@@ -1484,10 +1484,10 @@ func _update_ui() -> void:
 	# —— 敌人意图是大招 → 预警（每回合只播一次）——
 	if _enemy_sprite != null and enemy.hp > 0:
 		var cur_intent: int = DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
-		if cur_intent >= maxi(10, int(float(enemy.attack) * 2.0)) and not _telegraphed:
+		if cur_intent >= maxi(10, int(float(enemy.attack_power) * 2.0)) and not _telegraphed:
 			_telegraphed = true
 			EnemyFx.telegraph(_enemy_sprite, 2 if cur_intent >= 15 else 1)
-		elif cur_intent < maxi(10, int(float(enemy.attack) * 2.0)):
+		elif cur_intent < maxi(10, int(float(enemy.attack_power) * 2.0)):
 			_telegraphed = false
 		_last_intent = cur_intent
 
