@@ -37,6 +37,7 @@ var first_card_used := false
 var _ending_turn := false
 var _skill_btn: Button
 var _skill_used := false
+var _skill_btn_layer: CanvasLayer
 var _hp_bar: ColorRect
 var _hp_bar_bg: ColorRect
 var _ehp_bar: ColorRect
@@ -223,6 +224,15 @@ func _ready() -> void:
 	add_child(hand_view)
 	hand_view.card_pressed.connect(_on_card_pressed)
 
+	# 把结束回合按钮搬到一个高层 CanvasLayer：CanvasLayer 的层级比 z_index 更硬，
+	# 不会再被任何同场景的 Control 挡住（只影响按钮，不影响其它 HUD）
+	if end_turn_button.get_parent() == self:
+		remove_child(end_turn_button)
+		var btn_layer := CanvasLayer.new()
+		btn_layer.layer = 30
+		add_child(btn_layer)
+		btn_layer.add_child(end_turn_button)
+		_skill_btn_layer = btn_layer
 	end_turn_button.position = Vector2(1080, 652)
 	end_turn_button.size = Vector2(180, 40)
 	end_turn_button.add_theme_font_size_override("font_size", 22)
@@ -253,7 +263,7 @@ func _ready() -> void:
 	_skill_btn.add_theme_stylebox_override("pressed", skh)
 	_skill_btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	_skill_btn.pressed.connect(_on_skill_pressed)
-	add_child(_skill_btn)
+	_skill_btn_layer.add_child(_skill_btn)
 	player_label = Label.new()
 	# 能量：放在手牌左边
 	info_label.position = Vector2(22, 400)
