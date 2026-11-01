@@ -126,29 +126,54 @@ func _ready() -> void:
 	rp.alpha = 0.86
 	add_child(rp)
 
-	# 玩家血条
+	# 兜底：纯色底板（ArkPanel 万一没画出来也不至于透明）
+	for r in [Rect2(40, 30, 206, 200), Rect2(846, 30, 260, 200)]:
+		var solid := ColorRect.new()
+		solid.color = Color(0.025, 0.035, 0.047, 0.82)
+		solid.position = r.position
+		solid.size = r.size
+		solid.z_index = 0
+		solid.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		add_child(solid)
+		# 背景图在 0，场景里的 InfoLabel / CombatLabel 在后面；底衬插到 1
+		if get_child_count() > 1:
+			move_child(solid, 1)
+
+	# 玩家血条（放到底层，避免盖住文字）
 	_hp_bar_bg = ColorRect.new()
+	_hp_bar_bg.z_index = 0
 	_hp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_hp_bar_bg.position = Vector2(54, 118)
+	_hp_bar_bg.position = Vector2(56, 146)
 	_hp_bar_bg.size = Vector2(180, 6)
 	add_child(_hp_bar_bg)
+	if get_child_count() > 1:
+		move_child(_hp_bar_bg, 2)
 	_hp_bar = ColorRect.new()
+	_hp_bar.z_index = 0
 	_hp_bar.color = Color(0.88, 0.74, 0.42)
-	_hp_bar.position = Vector2(54, 118)
+	_hp_bar.position = Vector2(56, 146)
 	_hp_bar.size = Vector2(180, 6)
 	add_child(_hp_bar)
+	if get_child_count() > 1:
+		move_child(_hp_bar, 3)
 
 	# 敌人血条
 	_ehp_bar_bg = ColorRect.new()
+	_ehp_bar_bg.z_index = 0
 	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_ehp_bar_bg.position = Vector2(860, 118)
+	_ehp_bar_bg.position = Vector2(860, 146)
 	_ehp_bar_bg.size = Vector2(230, 6)
 	add_child(_ehp_bar_bg)
+	if get_child_count() > 1:
+		move_child(_ehp_bar_bg, 2)
 	_ehp_bar = ColorRect.new()
+	_ehp_bar.z_index = 0
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
-	_ehp_bar.position = Vector2(860, 118)
+	_ehp_bar.position = Vector2(860, 146)
 	_ehp_bar.size = Vector2(230, 6)
 	add_child(_ehp_bar)
+	if get_child_count() > 1:
+		move_child(_ehp_bar, 3)
 
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
