@@ -38,6 +38,9 @@ var first_card_used := false
 var _ending_turn := false
 var _skill_btn: Button
 var _enemy_sprite: TextureRect
+var _info_strip: Control
+var _info_name: Label
+var _info_detail: Label
 var _last_enemy_hp := -1
 var _last_player_hp := -1
 var _last_intent := 0
@@ -135,9 +138,10 @@ func _ready() -> void:
 	lp.alpha = 0.86
 	add_child(lp)
 	var rp := ArkPanel.new()
-	rp.position = Vector2(846, 30)
-	rp.size = Vector2(260, 250)
-	rp.cut = 18.0
+	_info_strip = rp
+	rp.position = Vector2(966, 86)
+	rp.size = Vector2(300, 58)
+	rp.cut = 14.0
 	rp.z_index = 1
 	rp.alpha = 0.86
 	add_child(rp)
@@ -164,7 +168,7 @@ func _ready() -> void:
 	_eblock_bar_bg = ColorRect.new()
 	_eblock_bar_bg.color = Color(0.85, 0.85, 0.85, 0.16)
 	_eblock_bar_bg.position = Vector2(860, 140)
-	_eblock_bar_bg.size = Vector2(230, 5)
+	_eblock_bar_bg.size = Vector2(276, 4)
 	_eblock_bar_bg.z_index = 2
 	_eblock_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_eblock_bar_bg)
@@ -197,14 +201,14 @@ func _ready() -> void:
 	_ehp_bar_bg.z_index = 2
 	_ehp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_ehp_bar_bg.position = Vector2(860, 148)
-	_ehp_bar_bg.size = Vector2(230, 6)
+	_ehp_bar_bg.position = Vector2(978, 116)
+	_ehp_bar_bg.size = Vector2(276, 5)
 	add_child(_ehp_bar_bg)
 	_ehp_bar = ColorRect.new()
 	_ehp_bar.z_index = 2
 	_ehp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
-	_ehp_bar.position = Vector2(860, 148)
+	_ehp_bar.position = Vector2(978, 116)
 	_ehp_bar.size = Vector2(230, 6)
 	add_child(_ehp_bar)
 
@@ -341,16 +345,17 @@ func _ready() -> void:
 	player_label.position = Vector2(54, 40)
 	player_label.size = Vector2(188, 190)
 	player_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	combat_label.position = Vector2(856, 40)
-	combat_label.size = Vector2(240, 190)
-	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	combat_label.position = Vector2(974, 90)
+	combat_label.size = Vector2(286, 24)
+	combat_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	combat_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	combat_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	combat_label.add_theme_font_size_override("font_size", 19)
+	combat_label.add_theme_font_size_override("font_size", 18)
 	combat_label.add_theme_constant_override("outline_size", 2)
 	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	_info_name = combat_label
 	combat_label.z_index = 5
-	combat_label.add_theme_constant_override("line_spacing", -6)
+
 
 	# 血条下面的状态 / 意图
 	player_detail_label = Label.new()
@@ -367,14 +372,15 @@ func _ready() -> void:
 	add_child(player_detail_label)
 
 	enemy_detail_label = Label.new()
-	enemy_detail_label.position = Vector2(856, 172)
-	enemy_detail_label.size = Vector2(240, 70)
-	enemy_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	enemy_detail_label.position = Vector2(974, 122)
+	enemy_detail_label.size = Vector2(286, 20)
+	enemy_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	enemy_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	enemy_detail_label.add_theme_font_size_override("font_size", 16)
+	enemy_detail_label.add_theme_font_size_override("font_size", 13)
 	enemy_detail_label.add_theme_color_override("font_color", Color(0.85, 0.72, 0.55))
 	enemy_detail_label.add_theme_constant_override("outline_size", 2)
 	enemy_detail_label.add_theme_color_override("font_outline_color", Color(0.06, 0.05, 0.04))
+	_info_detail = enemy_detail_label
 	enemy_detail_label.z_index = 5
 	enemy_detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(enemy_detail_label)
@@ -401,7 +407,7 @@ func _ready() -> void:
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		# 按高度缩放（最大 420），宽度按比例
-		var max_h := 420.0
+		var max_h := 360.0
 		var ratio := max_h / float(tex.get_height())
 		var draw_w := float(tex.get_width()) * ratio
 		spr.size = Vector2(draw_w, max_h)
@@ -410,7 +416,7 @@ func _ready() -> void:
 		spr.modulate = Color(1, 1, 1, 0.97)
 		add_child(spr)
 		# 底对齐 y=560，水平居中在 x=1150
-		spr.position = Vector2(1150.0 - draw_w * 0.5, 560.0 - max_h)
+		spr.position = Vector2(1078.0 - draw_w * 0.5, 566.0 - max_h)
 		call_deferred("EmFx_appear")
 		# 极缓慢的呼吸浮动
 		var tw := create_tween().set_loops()
@@ -1449,10 +1455,10 @@ func _update_ui() -> void:
 		_block_bar.size.x = 180.0 * clamp(float(player_block) / 50.0, 0.0, 1.0)
 	if _eblock_bar != null:
 		var eb := int(enemy.status.get("守护", 0)) + int(enemy.status.get("格挡", 0))
-		_eblock_bar.size.x = 230.0 * clamp(float(eb) / 50.0, 0.0, 1.0)
+		_eblock_bar.size.x = 276.0 * clamp(float(eb) / 50.0, 0.0, 1.0)
 	if _ehp_bar != null:
 		var emx: int = maxi(1, enemy.max_hp)
-		_ehp_bar.size.x = 230.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
+		_ehp_bar.size.x = 276.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
 
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
 	if player_detail_label != null:
@@ -1491,29 +1497,53 @@ func _update_ui() -> void:
 			_telegraphed = false
 		_last_intent = cur_intent
 
+	# —— 敌人信息条跟着立绘走（居中于敌人、贴在其头顶）——
+	if _info_strip != null and _enemy_sprite != null and is_instance_valid(_enemy_sprite):
+		var sw: float = _enemy_sprite.size.x
+		var cx: float = _enemy_sprite.position.x + sw * 0.5
+		var strip_w: float = 300.0
+		_info_strip.position = Vector2(cx - strip_w * 0.5, _enemy_sprite.position.y - 62.0)
+		if _info_name != null:
+			_info_name.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 58.0)
+			_info_name.size = Vector2(strip_w - 16.0, 24.0)
+		if _info_detail != null:
+			_info_detail.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 28.0)
+			_info_detail.size = Vector2(strip_w - 16.0, 20.0)
+			# 长文本自动缩字号（13 → 11 → 10），再长就裁掉
+			var dlen: int = _info_detail.text.length()
+			var fs: int = 13 if dlen <= 24 else (11 if dlen <= 32 else 10)
+			_info_detail.add_theme_font_size_override("font_size", fs)
+			_info_detail.clip_text = dlen > 40
+		if _ehp_bar != null:
+			_ehp_bar.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 34.0)
+			_ehp_bar.size.x = (strip_w - 16.0) * clamp(float(enemy.hp) / float(maxi(1, enemy.max_hp)), 0.0, 1.0)
+		if _ehp_bar_bg != null:
+			_ehp_bar_bg.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 34.0)
+			_ehp_bar_bg.size = Vector2(strip_w - 16.0, 4)
+
 	_refresh_skill_btn()
 
 	# 上：名字 + HP（血条就在这下面）
-	var etext := "【%s】\nHP: %d" % [enemy.label_name, enemy.hp]
+	var etext := "【%s】  HP %d" % [enemy.label_name, enemy.hp]
 	combat_label.text = etext
 
 	# 下：状态 / 领域 / 意图（血条之下）
 	var edetail := ""
 	var es := StatusSystem.text(enemy.status)
 	if es != "":
-		edetail += "状态: %s" % es
+		edetail += "状态 %s" % es
 	var dtxt: String = EnemyDB.domain_text(enemy.domain)
 	if dtxt != "":
 		if edetail != "":
-			edetail += "\n"
-		edetail += "领域: %s" % dtxt
+			edetail += "  ·  "
+		edetail += "领域 %s" % dtxt
 	if enemy.hp > 0 and player_hp > 0:
 		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 		var hit_extra := StatusSystem.text(enemy.on_hit)
 		if hit_extra != "":
 			intent += " + %s" % hit_extra
 		if edetail != "":
-			edetail += "\n"
+			edetail += "  ·  "
 		edetail += intent
 	if enemy.hp <= 0:
 		edetail += "\n你赢了！"
