@@ -115,7 +115,7 @@ func _ready() -> void:
 	hud.add_child(plate)
 	# 迷雾层：在 HUD 之下、世界之上
 	var fog_layer := CanvasLayer.new()
-	fog_layer.layer = 15
+	fog_layer.layer = 5
 	add_child(fog_layer)
 	var fog_rect := ColorRect.new()
 	fog_rect.size = Vector2(1280, 720)

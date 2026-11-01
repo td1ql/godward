@@ -4,9 +4,9 @@ shader_type canvas_item;
 // 地图迷雾：以玩家为中心开一个洞，四周压暗
 // ============================================================
 uniform vec2 center = vec2(0.5, 0.5);   // 屏幕归一化坐标
-uniform float radius = 0.22;
+uniform float radius = 0.26;
 uniform float softness = 0.20;
-uniform vec4 fog_color : source_color = vec4(0.016, 0.024, 0.031, 0.82);
+uniform vec4 fog_color : source_color = vec4(0.016, 0.024, 0.031, 0.70);
 uniform float aspect = 1.78;
 
 void fragment() {
