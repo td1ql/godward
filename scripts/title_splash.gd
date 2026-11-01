@@ -85,13 +85,27 @@ func _build() -> void:
 	_sweep.position = Vector2(-10, 0)
 	add_child(_sweep)
 
+	# 全屏透明按钮接管点击：Control 的 _gui_input 在某些父节点下收不到事件
+	var clicker := Button.new()
+	clicker.flat = true
+	clicker.focus_mode = Control.FOCUS_NONE
+	clicker.set_anchors_preset(Control.PRESET_FULL_RECT)
+	clicker.mouse_filter = Control.MOUSE_FILTER_STOP
+	clicker.add_theme_stylebox_override("normal", StyleBoxEmpty.new())
+	clicker.add_theme_stylebox_override("hover", StyleBoxEmpty.new())
+	clicker.add_theme_stylebox_override("pressed", StyleBoxEmpty.new())
+	clicker.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	clicker.pressed.connect(_close)
+	add_child(clicker)
+
 	_hint = Label.new()
 	_hint.text = "点击开始"
-	_hint.position = Vector2(0, 620)
+	_hint.position = Vector2(0, 636)
 	_hint.size = Vector2(1280, 40)
 	_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_hint.add_theme_font_size_override("font_size", 18)
 	_hint.add_theme_color_override("font_color", Color(CREAM, 0.0))
+	_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(_hint)
 	add_child(_hint)
 
@@ -136,3 +150,8 @@ func _close() -> void:
 	var t := create_tween()
 	t.tween_property(self, "modulate:a", 0.0, 0.5)
 	t.tween_callback(queue_free)
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not _done and event is InputEventKey and event.pressed:
+		_close()
