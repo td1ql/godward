@@ -1,6 +1,8 @@
 extends Node2D
 
 const MapNode = preload("res://scripts/map_node.gd")
+const ArkPanel = preload("res://scripts/ark_panel.gd")
+const GridOverlay = preload("res://scripts/grid_overlay.gd")
 
 # ---------- 世界布局 ----------
 const NODE_SIZE := Vector2(66, 66)
@@ -43,6 +45,22 @@ func _ready() -> void:
 		bg_rect.texture = load(map_bg)
 	world.add_child(bg_rect)
 
+	# 压暗：让地图退到后面，节点浮起来
+	var dim := ColorRect.new()
+	dim.color = Color(0.024, 0.035, 0.047, 0.72)
+	dim.size = Vector2(8000, 8000)
+	dim.position = Vector2(-4000, -4000)
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	world.add_child(dim)
+
+	# 网格
+	var grid := GridOverlay.new()
+	grid.size = Vector2(8000, 8000)
+	grid.position = Vector2(-4000, -4000)
+	grid.step = 96.0
+	grid.line = Color(0.79, 0.66, 0.42, 0.055)
+	world.add_child(grid)
+
 	edge_root = Node2D.new()
 	edge_root.z_index = 0
 	world.add_child(edge_root)
@@ -84,16 +102,11 @@ func _ready() -> void:
 	var hud := CanvasLayer.new()
 	hud.layer = 10
 	add_child(hud)
-	var plate := Panel.new()
+	var plate := ArkPanel.new()
 	plate.position = Vector2(8, 8)
-	plate.size = Vector2(310, 200)
-	var ps := StyleBoxFlat.new()
-	ps.bg_color = Color(0.043, 0.059, 0.078, 0.88)
-	ps.border_width_left = 1
-	ps.border_width_bottom = 1
-	ps.border_color = Color(0.79, 0.66, 0.42, 0.55)
-	ps.set_corner_radius_all(0)
-	plate.add_theme_stylebox_override("panel", ps)
+	plate.size = Vector2(320, 210)
+	plate.cut = 20.0
+	plate.alpha = 0.90
 	hud.add_child(plate)
 	ui_layer = CanvasLayer.new()
 	ui_layer.layer = 20

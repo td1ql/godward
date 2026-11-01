@@ -38,6 +38,10 @@ func setup(k: String, tex: Texture2D, st: String) -> void:
 	focus_mode = Control.FOCUS_NONE
 	mouse_filter = Control.MOUSE_FILTER_STOP if st == "walkable" else Control.MOUSE_FILTER_IGNORE
 
+	# 清掉 Button 自带的灰色圆角底（不然节点外面会有一个灰方块）
+	for key in ["normal", "hover", "pressed", "disabled", "focus"]:
+		add_theme_stylebox_override(key, StyleBoxEmpty.new())
+
 	_icon = TextureRect.new()
 	_icon.texture = tex
 	_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
