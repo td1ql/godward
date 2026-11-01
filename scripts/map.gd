@@ -30,6 +30,9 @@ var bg_rect: TextureRect
 var edge_root: Node2D
 var _path_ids := {}
 var _seen_ids := {}
+var _path_index := {}
+var _cam_target := Vector2.ZERO
+var _cam_lag := 0.0
 
 func _ready() -> void:
 	AudioManager.play_bgm("map_%d" % GameState.act)
@@ -242,8 +245,10 @@ func _rebuild_view() -> void:
 
 	var path := _path_to_current()
 	_path_ids.clear()
-	for pid in path:
-		_path_ids[pid] = true
+	_path_index.clear()
+	for pi in range(path.size()):
+		_path_ids[path[pi]] = true
+		_path_index[path[pi]] = pi
 
 	var i := 0
 	while i < path.size() - 1:
@@ -309,15 +314,32 @@ func _add_edge(a: int, b: int) -> void:
 		var t := float(i) / 20.0
 		pts.append(pa.lerp(ctrl, t).lerp(ctrl.lerp(pb, t), t))
 
+	# 离当前几步：0/1 = 最近两步，亮；2 步以上 = 旧路，暗
+	var steps := 99
+	if on_path:
+		steps = mini(int(_path_index.get(a, 99)), int(_path_index.get(b, 99)))
+
 	var ln := Line2D.new()
 	ln.points = pts
-	ln.width = 2.0 if on_path else 1.0
-	ln.default_color = Color(0.79, 0.66, 0.42, 0.85) if on_path else Color(0.42, 0.38, 0.30, 0.30)
 	ln.antialiased = true
+	if steps <= 1:
+		ln.width = 2.2
+		ln.default_color = Color(0.88, 0.74, 0.46, 0.95)
+	elif steps <= 3:
+		ln.width = 1.5
+		ln.default_color = Color(0.79, 0.66, 0.42, 0.45)
+	elif on_path:
+		ln.width = 1.0
+		ln.default_color = Color(0.62, 0.54, 0.38, 0.26)
+	else:
+		ln.width = 1.0
+		ln.default_color = Color(0.42, 0.38, 0.30, 0.28)
 	edge_root.add_child(ln)
-	if on_path:
-		var tw := create_tween()
+
+	# 最近这一步：从起点长出来
+	if steps == 0:
 		ln.modulate.a = 0.0
+		var tw := create_tween()
 		tw.tween_property(ln, "modulate:a", 1.0, 0.45)
 
 
@@ -380,7 +402,9 @@ func _on_node_pressed(id: int) -> void:
 func _walk(t: float, from: Vector2, to: Vector2) -> void:
 	var p := from.lerp(to, t)
 	player_marker.position = p - player_marker.size / 2.0
-	camera.position = p
+	# 镜头比角色慢一点点，有重量感
+	_cam_target = p
+	camera.position = camera.position.lerp(p, 0.28)
 
 func _after_walk(id: int) -> void:
 	current_id = id
@@ -391,6 +415,9 @@ func _after_walk(id: int) -> void:
 	GameState.map_nodes = nodes
 	GameState.save_game()
 	_rebuild_view()
+	# 站住 0.2 秒，让玩家看清走到哪了，再触发节点
+	_cam_lag = 0.2
+	await get_tree().create_timer(0.2).timeout
 	is_moving = false
 	_trigger_node(id)
 
@@ -408,8 +435,13 @@ func _trigger_node(id: int) -> void:
 	GameState.pending_node = -1
 	GameState.save_game()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	_update_hud()
+	# 镜头持续追向目标（走完之后还会慢慢靠拢）
+	if _cam_lag > 0.0:
+		_cam_lag -= delta
+	elif not is_moving:
+		camera.position = camera.position.lerp(_cam_target, clamp(delta * 6.0, 0.0, 1.0))
 
 # ---------- 生成 ----------
 func _generate_map() -> void:
