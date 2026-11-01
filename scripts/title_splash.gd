@@ -152,6 +152,18 @@ func _close() -> void:
 	t.tween_callback(queue_free)
 
 
+# 场景级输入：鼠标点、键盘按、手柄都收得到
+func _input(event: InputEvent) -> void:
+	if _done:
+		return
+	if event is InputEventMouseButton and event.pressed:
+		_close()
+		get_viewport().set_input_as_handled()
+	elif event is InputEventKey and event.pressed and not event.echo:
+		_close()
+		get_viewport().set_input_as_handled()
+
+
 func _unhandled_key_input(event: InputEvent) -> void:
 	if not _done and event is InputEventKey and event.pressed:
 		_close()
