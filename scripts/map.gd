@@ -1,5 +1,7 @@
 extends Node2D
 
+const MapNode = preload("res://scripts/map_node.gd")
+
 # ---------- 世界布局 ----------
 const NODE_SIZE := Vector2(66, 66)
 const RADIUS := 210.0
@@ -272,36 +274,28 @@ func _icon_alias(t: String) -> String:
 
 func _make_node_button(id: int, pos: Vector2) -> Button:
 	var t := str(nodes[id]["type"])
-	var info: Dictionary = MapDB.info_of(t)
-	var b := Button.new()
+	var b := MapNode.new()
 	b.size = NODE_SIZE
 	b.position = pos - NODE_SIZE / 2.0
-	b.focus_mode = Control.FOCUS_NONE
 
 	var icon_path := "res://assets/art/node/%s.webp" % _icon_alias(t)
+	var tex: Texture2D = null
 	if ResourceLoader.exists(icon_path):
-		b.icon = load(icon_path)
-		b.expand_icon = true
-	else:
-		b.text = str(info["label"])
-		b.add_theme_font_size_override("font_size", 16)
-		b.add_theme_color_override("font_color", Color(0.98, 0.95, 0.86))
+		tex = load(icon_path)
 
-	var normal := StyleBoxFlat.new()
-	normal.bg_color = Color(0, 0, 0, 0)
-	b.add_theme_stylebox_override("normal", normal)
-	b.add_theme_stylebox_override("hover", normal)
-	b.add_theme_stylebox_override("pressed", normal)
-	b.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
-	StoryDB.apply_serif(b)
-
+	# 判断状态
 	var clickable: bool = (nodes[current_id]["children"] as Array).has(id)
+	var st := "locked"
+	if id == current_id:
+		st = "current"
+	elif clickable:
+		st = "walkable"
+	elif int(nodes[id].get("depth", 0)) < int(nodes.get(current_id, {}).get("depth", 0)):
+		st = "visited"
+
+	b.setup(t, tex, st)
 	if clickable:
 		b.pressed.connect(_on_node_pressed.bind(id))
-		b.mouse_entered.connect(func() -> void: b.modulate = Color(1.28, 1.2, 1.06, 1.0))
-		b.mouse_exited.connect(func() -> void: b.modulate = Color(1, 1, 1, 1))
-	elif id != current_id:
-		b.modulate = Color(1, 1, 1, 0.45)
 
 	world.add_child(b)
 	node_buttons[id] = b
