@@ -128,26 +128,17 @@ func _ready() -> void:
 	rp.alpha = 0.86
 	add_child(rp)
 
-	# 兜底：纯色底板（ArkPanel 万一没画出来也不至于透明）
-	for r in [Rect2(40, 30, 206, 200), Rect2(846, 30, 260, 200)]:
-		var solid := ColorRect.new()
-		solid.color = Color(0.025, 0.035, 0.047, 0.82)
-		solid.position = r.position
-		solid.size = r.size
-		solid.z_index = 0
-		solid.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(solid)
 		# 背景图在 0，场景里的 InfoLabel / CombatLabel 在后面；底衬插到 1
 
 	# 玩家血条（放到底层，避免盖住文字）
 	_hp_bar_bg = ColorRect.new()
-	_hp_bar_bg.z_index = 0
+	_hp_bar_bg.z_index = 2
 	_hp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
 	_hp_bar_bg.position = Vector2(56, 146)
 	_hp_bar_bg.size = Vector2(180, 6)
 	add_child(_hp_bar_bg)
 	_hp_bar = ColorRect.new()
-	_hp_bar.z_index = 0
+	_hp_bar.z_index = 2
 	_hp_bar.color = Color(0.88, 0.74, 0.42)
 	_hp_bar.position = Vector2(56, 146)
 	_hp_bar.size = Vector2(180, 6)
@@ -155,13 +146,13 @@ func _ready() -> void:
 
 	# 敌人血条
 	_ehp_bar_bg = ColorRect.new()
-	_ehp_bar_bg.z_index = 0
+	_ehp_bar_bg.z_index = 2
 	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
 	_ehp_bar_bg.position = Vector2(860, 146)
 	_ehp_bar_bg.size = Vector2(230, 6)
 	add_child(_ehp_bar_bg)
 	_ehp_bar = ColorRect.new()
-	_ehp_bar.z_index = 0
+	_ehp_bar.z_index = 2
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
 	_ehp_bar.position = Vector2(860, 146)
 	_ehp_bar.size = Vector2(230, 6)
@@ -297,10 +288,12 @@ func _ready() -> void:
 	combat_label.add_theme_constant_override("outline_size", 2)
 	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	combat_label.z_index = 5
+	combat_label.add_theme_color_override("font_color", Color(0.93, 0.88, 0.78))
 	player_label.add_theme_font_size_override("font_size", 19)
 	player_label.add_theme_constant_override("outline_size", 2)
 	player_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	player_label.z_index = 5
+	player_label.add_theme_color_override("font_color", Color(0.93, 0.88, 0.78))
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var boss_bg := _is_shown_in_bg()
