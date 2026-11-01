@@ -36,6 +36,8 @@ var first_attack_used := false
 var first_card_used := false
 var _ending_turn := false
 var _skill_btn: Button
+var player_detail_label: Label
+var enemy_detail_label: Label
 var _skill_used := false
 var _skill_btn_layer: CanvasLayer
 var _hp_bar: ColorRect
@@ -136,14 +138,14 @@ func _ready() -> void:
 	_hp_bar_bg.z_index = 2
 	_hp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_hp_bar_bg.position = Vector2(56, 146)
+	_hp_bar_bg.position = Vector2(56, 132)
 	_hp_bar_bg.size = Vector2(180, 6)
 	add_child(_hp_bar_bg)
 	_hp_bar = ColorRect.new()
 	_hp_bar.z_index = 2
 	_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar.color = Color(0.88, 0.74, 0.42)
-	_hp_bar.position = Vector2(56, 146)
+	_hp_bar.position = Vector2(56, 132)
 	_hp_bar.size = Vector2(180, 6)
 	add_child(_hp_bar)
 
@@ -152,14 +154,14 @@ func _ready() -> void:
 	_ehp_bar_bg.z_index = 2
 	_ehp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
-	_ehp_bar_bg.position = Vector2(860, 146)
+	_ehp_bar_bg.position = Vector2(860, 132)
 	_ehp_bar_bg.size = Vector2(230, 6)
 	add_child(_ehp_bar_bg)
 	_ehp_bar = ColorRect.new()
 	_ehp_bar.z_index = 2
 	_ehp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
-	_ehp_bar.position = Vector2(860, 146)
+	_ehp_bar.position = Vector2(860, 132)
 	_ehp_bar.size = Vector2(230, 6)
 	add_child(_ehp_bar)
 
@@ -305,6 +307,34 @@ func _ready() -> void:
 	combat_label.add_theme_constant_override("outline_size", 2)
 	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	combat_label.z_index = 5
+
+	# 血条下面的状态 / 意图
+	player_detail_label = Label.new()
+	player_detail_label.position = Vector2(54, 160)
+	player_detail_label.size = Vector2(188, 70)
+	player_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	player_detail_label.add_theme_font_size_override("font_size", 16)
+	player_detail_label.add_theme_color_override("font_color", Color(0.82, 0.74, 0.52))
+	player_detail_label.add_theme_constant_override("outline_size", 2)
+	player_detail_label.add_theme_color_override("font_outline_color", Color(0.06, 0.05, 0.04))
+	player_detail_label.z_index = 5
+	player_detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	StoryDB.apply_serif(player_detail_label)
+	add_child(player_detail_label)
+
+	enemy_detail_label = Label.new()
+	enemy_detail_label.position = Vector2(856, 160)
+	enemy_detail_label.size = Vector2(240, 70)
+	enemy_detail_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	enemy_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	enemy_detail_label.add_theme_font_size_override("font_size", 16)
+	enemy_detail_label.add_theme_color_override("font_color", Color(0.85, 0.72, 0.55))
+	enemy_detail_label.add_theme_constant_override("outline_size", 2)
+	enemy_detail_label.add_theme_color_override("font_outline_color", Color(0.06, 0.05, 0.04))
+	enemy_detail_label.z_index = 5
+	enemy_detail_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	StoryDB.apply_serif(enemy_detail_label)
+	add_child(enemy_detail_label)
 	combat_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	combat_label.add_theme_color_override("font_color", Color(0.93, 0.88, 0.78))
 	player_label.add_theme_font_size_override("font_size", 19)
@@ -1363,8 +1393,8 @@ func _update_ui() -> void:
 		_ehp_bar.size.x = 230.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
 
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
-	if status_txt != "":
-		ptext += "\n" + status_txt
+	if player_detail_label != null:
+		player_detail_label.text = status_txt
 	if status_label != null:
 		status_label.visible = false
 	if pending_effect >= 0:
@@ -1372,24 +1402,33 @@ func _update_ui() -> void:
 	player_label.text = ptext
 	_refresh_skill_btn()
 
+	# 上：名字 + HP（血条就在这下面）
 	var etext := "【%s】\nHP: %d" % [enemy.label_name, enemy.hp]
+	combat_label.text = etext
+
+	# 下：状态 / 领域 / 意图（血条之下）
+	var edetail := ""
 	var es := StatusSystem.text(enemy.status)
 	if es != "":
-		etext += "\n状态: %s" % es
+		edetail += "状态: %s" % es
 	var dtxt: String = EnemyDB.domain_text(enemy.domain)
 	if dtxt != "":
-		etext += "\n领域: %s" % dtxt
+		if edetail != "":
+			edetail += "\n"
+		edetail += "领域: %s" % dtxt
 	if enemy.hp > 0 and player_hp > 0:
 		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
 		var hit_extra := StatusSystem.text(enemy.on_hit)
 		if hit_extra != "":
 			intent += " + %s" % hit_extra
-		etext += "\n" + intent
+		if edetail != "":
+			edetail += "\n"
+		edetail += intent
 	if enemy.hp <= 0:
-		etext += "\n你赢了！"
+		edetail += "\n你赢了！"
 	elif player_hp <= 0:
-		etext += "\n你被打败了..."
-	combat_label.text = etext
+		edetail += "\n你被打败了..."
+	enemy_detail_label.text = edetail
 	
 func _show_reward() -> void:
 	hand_view.hide_cards()
