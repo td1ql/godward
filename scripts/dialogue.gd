@@ -62,16 +62,16 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 
 	speaker_label = Label.new()
 	speaker_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	speaker_label.position = Vector2(240, 196)
-	speaker_label.size = Vector2(800, 30)
-	speaker_label.add_theme_font_size_override("font_size", 15)
-	speaker_label.add_theme_color_override("font_color", Color(GOLD, 0.85))
+	speaker_label.position = Vector2(240, 178)
+	speaker_label.size = Vector2(800, 40)
+	speaker_label.add_theme_font_size_override("font_size", 26)
+	speaker_label.add_theme_color_override("font_color", Color(CREAM, 0.95))
 	overlay.add_child(speaker_label)
 
 	text_label = Label.new()
 	text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	text_label.position = Vector2(240, 236)
-	text_label.size = Vector2(800, 260)
+	text_label.position = Vector2(240, 244)
+	text_label.size = Vector2(800, 280)
 	text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -82,7 +82,7 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 
 	_rule = ColorRect.new()
 	_rule.color = Color(GOLD, 0.30)
-	_rule.position = Vector2(240, 224)
+	_rule.position = Vector2(240, 228)
 	_rule.size = Vector2(800, 1)
 	_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	overlay.add_child(_rule)
@@ -92,7 +92,6 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 	hint_label.position = Vector2(0, 640)
 	hint_label.size = Vector2(1280, 30)
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint_label.add_theme_font_size_override("font_size", 16)
 	hint_label.add_theme_color_override("font_color", Color(GOLD, 0.55))
 	hint_label.add_theme_font_size_override("font_size", 15)
 	overlay.add_child(hint_label)
