@@ -16,7 +16,8 @@ CKPT = "animagine-xl-4.0.safetensors"
 STYLE = (
     "masterpiece, best quality, absurdres, "
     "medieval dark fantasy illustration, single character, "
-    "detailed clothing, layered fabric, dirt and wear, visible face, "
+    "detailed clothing, layered fabric, dirt and wear, "
+    "visible face, face clearly lit from the side, warm light on the face, "
     "semi-realistic painterly concept art, matte surfaces, "
     "desaturated muted colors, deep teal shadows, soft directional light, "
     "stone wall or wooden plank background, shallow depth, "
@@ -28,7 +29,8 @@ NEG = (
     "sci-fi, futuristic, neon, glowing outline, rim light on figure, "
     "modern building, city street, car, "
     "extra limbs, extra fingers, bad hands, bad anatomy, deformed face, "
-    "multiple people, crowd, cute, cartoon, chibi, 3d render, photorealistic"
+    "multiple people, crowd, cute, cartoon, chibi, 3d render, photorealistic, "
+    "faceless, blank face, featureless, dark silhouette, backlit silhouette"
 )
 
 SUBJECTS = {}
