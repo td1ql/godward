@@ -1419,7 +1419,12 @@ func _update_ui() -> void:
 		deck.draw_pile.size(), deck.hand.size(), deck.discard_pile.size(), GameState.gold
 	]
 
-	var status_txt: String = StatusSystem.text(player_status)
+	# 状态里混进的「格挡 / 守护」要去掉——血条已经显示了这个信息
+	var clean_status := {}
+	for k in player_status:
+		if str(k) != "格挡" and str(k) != "守护":
+			clean_status[k] = player_status[k]
+	var status_txt: String = StatusSystem.text(clean_status)
 	# 血条
 	if _hp_bar != null:
 		var mx: int = maxi(1, GameState.player_max_hp)
