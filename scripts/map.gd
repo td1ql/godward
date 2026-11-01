@@ -206,7 +206,23 @@ func _ensure_positions() -> void:
 			var step_vec := Vector2(cos(angle), sin(angle)) * RADIUS * rad_mul
 			# 屏幕是 16:9，把纵向压缩到 0.72，整圈才都能进画面
 			step_vec.y *= 0.72
-			world_pos[id] = world_pos[pid] + step_vec
+			var cand: Vector2 = world_pos[pid] + step_vec
+
+			# 和已有的任何节点太近就把它推开（防止节点叠在一起）
+			const MIN_DIST := 92.0
+			for _try in range(8):
+				var clash := false
+				for other in world_pos.values():
+					if (other as Vector2).distance_to(cand) < MIN_DIST:
+						clash = true
+						break
+				if not clash:
+					break
+				var away: Vector2 = cand - world_pos[pid]
+				if away.length() < 1.0:
+					away = Vector2(cos(angle), sin(angle))
+				cand += away.normalized() * 26.0
+			world_pos[id] = cand
 			changed = true
 
 func _parent_of(id: int) -> int:
@@ -252,14 +268,16 @@ func _rebuild_view() -> void:
 		_path_ids[path[pi]] = true
 		_path_index[path[pi]] = pi
 
-	var i := 0
-	while i < path.size() - 1:
-		_add_edge(path[i], path[i + 1])
-		i += 1
+	# 只画最近一步（从哪来）+ 从当前出发的岔路；更早走过的路不再显示
+	if path.size() >= 2:
+		_add_edge(path[1], path[0])
 	for cid in nodes[current_id]["children"]:
 		_add_edge(current_id, cid)
 
-	var visible_ids: Array = path.duplicate()
+	var visible_ids: Array = []
+	if path.size() >= 2:
+		visible_ids.append(path[1])
+	visible_ids.append(path[0])
 	for cid in nodes[current_id]["children"]:
 		if not visible_ids.has(cid):
 			visible_ids.append(cid)
