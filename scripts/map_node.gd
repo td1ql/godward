@@ -26,7 +26,7 @@ var state := "locked"
 var _pulse := 0.0
 
 
-func setup(k: String, _tex: Texture2D, st: String) -> void:
+func setup(k: String, _tex = null, st: String = "locked") -> void:
 	kind = k
 	state = st
 	custom_minimum_size = Vector2(SIZE, SIZE)
