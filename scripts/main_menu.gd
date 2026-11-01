@@ -9,6 +9,7 @@ var _sub_open := false
 
 
 const CardDump = preload("res://tools/dump_cards.gd")
+const TitleSplash = preload("res://scripts/title_splash.gd")
 const StoryDump = preload("res://tools/dump_story.gd")
 
 func _ready() -> void:
@@ -97,6 +98,12 @@ func _ready() -> void:
 	_quit_btn = _make_menu_button("退出游戏", 498)
 	_quit_btn.pressed.connect(_on_quit)
 	_check_prologue()
+	# 开局展示界面（点一下才进主菜单）
+	call_deferred("_spawn_splash")
+
+func _spawn_splash() -> void:
+	TitleSplash.show_on(self)
+
 
 func _update_mute_btn() -> void:
 	_mute_btn.text = "音效：" + ("开" if not AudioManager.muted else "关")

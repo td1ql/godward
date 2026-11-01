@@ -1,0 +1,858 @@
+{
+ "尘光": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light, faint golden light"
+ },
+ "无上耀光": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying, faint golden light"
+ },
+ "光之隙": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying, faint golden light"
+ },
+ "圣辉": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light, radiant golden light"
+ },
+ "晨光": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, faint golden light"
+ },
+ "余烬": {
+  "kind": "obj",
+  "prompt": "a blood-stained curved blade resting on wet stone"
+ },
+ "未竟": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "遗忘": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "回望": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "守夜": {
+  "kind": "obj",
+  "prompt": "a massive wall of stacked stone blocks, glowing protective sigil, moonlight through iron bars"
+ },
+ "执念": {
+  "kind": "obj",
+  "prompt": "a massive wall of stacked stone blocks, glowing protective sigil"
+ },
+ "断章": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "旧伤": {
+  "kind": "obj",
+  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+ },
+ "旧誓": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "残响": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "灯": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "遗志": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "遗恨": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "遗言": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "长夜": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light, moonlight through iron bars"
+ },
+ "最后一击": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "久候": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "利滚利": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "启程": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "咳嗽": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "擎旗": {
+  "kind": "obj",
+  "prompt": "a shield and a sword crossed on dark ground, faint gold glow"
+ },
+ "敲钟": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim, a cracked bronze bell"
+ },
+ "浮木": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "火折": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, rising embers and orange flame"
+ },
+ "白布": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "示警": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "空腹": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "药渣": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "落子": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "试刀": {
+  "kind": "obj",
+  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+ },
+ "谵语": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "赊账": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "远路": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "钟摆": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke, a cracked bronze bell"
+ },
+ "预兆": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "余温": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "入殓": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "冲锋": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "剑息": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "合眼": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light"
+ },
+ "呛水": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "哑声": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "啃食": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "回光": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, faint golden light"
+ },
+ "回音": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "夜巡": {
+  "kind": "obj",
+  "prompt": "a shield and a sword crossed on dark ground, faint gold glow, moonlight through iron bars"
+ },
+ "夜路": {
+  "kind": "obj",
+  "prompt": "a shield and a sword crossed on dark ground, faint gold glow, moonlight through iron bars"
+ },
+ "妄言": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "守空房": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "布局": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "开刃": {
+  "kind": "obj",
+  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+ },
+ "归鞘": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "打捞": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "放哨": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "数星": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "旗不倒": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "星位": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "星辉": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light, radiant golden light"
+ },
+ "望归": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "来信": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "残局": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "焚页": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "省粮": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "磨刃": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "窥视": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "翻页": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "蓄刃": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "行囊": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "记债": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "轮值": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "余响": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "吐锋": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "将军": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "归途": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "断臂旗": {
+  "kind": "obj",
+  "prompt": "a shield and a sword crossed on dark ground, faint gold glow"
+ },
+ "最后一眼": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "流星": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "深潜": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "结账": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "送行": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "拾遗": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "赎罪": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "传说": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "余火": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone, rising embers and orange flame"
+ },
+ "哑歌": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light"
+ },
+ "妄念": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "忏悔": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light"
+ },
+ "断刃": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "神国余晖": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light"
+ },
+ "血约": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+ },
+ "誓约": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "圣约": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "献祭": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "神谕": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "信仰": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "圣光弹": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, faint golden light"
+ },
+ "圣言": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "审判": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "苦修": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "圣痕": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "启示": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "圣光": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim, faint golden light"
+ },
+ "惊梦": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "灵感": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "陷阱": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "霉运": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "纠缠": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "快速思考": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "冥想": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "急救": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "火球": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, rising embers and orange flame"
+ },
+ "铁壁": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim, rusted iron chains"
+ },
+ "毒刃": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "毒牙": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "毒雾": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "淬毒": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "突刺": {
+  "kind": "obj",
+  "prompt": "a thin dagger with blood dripping from the tip, dark red glow"
+ },
+ "毒潮": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "剧毒": {
+  "kind": "obj",
+  "prompt": "a glass vial of black venom tipping over, dark green liquid spreading on stone"
+ },
+ "以血换力": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+ },
+ "受激": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "灵光": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, faint golden light"
+ },
+ "蓄力": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "血祭": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+ },
+ "力量药剂": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "反击": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "战吼": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "无上威严": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "铁骨": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, old bone fragments"
+ },
+ "蛮勇": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "重甲": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers"
+ },
+ "血勇": {
+  "kind": "sil",
+  "prompt": "silhouette of a fighter clenching a fist, golden light leaking between the fingers, dark red blood"
+ },
+ "威慑": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "死守": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "祈祷": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light"
+ },
+ "回敬": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "坚壁": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "坚守": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "壁垒": {
+  "kind": "obj",
+  "prompt": "a massive wall of stacked stone blocks, glowing protective sigil"
+ },
+ "拒马": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "撤退": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "清创": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "献身": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "盾墙": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "防御": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "高墙": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "再生术": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "守护": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "坚守之志": {
+  "kind": "obj",
+  "prompt": "an ancient round shield, cracked, runes glowing along the rim"
+ },
+ "盾击": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "铁壁冲撞": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke, rusted iron chains"
+ },
+ "疾书": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "静养": {
+  "kind": "obj",
+  "prompt": "a glowing white flower and floating pages of paper, pale light"
+ },
+ "鲜血之赐": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire, dark red blood"
+ },
+ "割腕": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "回响": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "天降横牌": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "洞悉": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "瓦解": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "翻阅": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "速记": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "顿悟": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "麻痹": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "博览": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire"
+ },
+ "疾风连击": {
+  "kind": "obj",
+  "prompt": "three glowing cards floating in a spiral, edges catching fire, wind blown dust"
+ },
+ "掘墓者": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "疾风斩": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, wind blown dust"
+ },
+ "万钧": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "乱击": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "催化": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "劈砍": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "双重打击": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "打击": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "毒源": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "渴血": {
+  "kind": "obj",
+  "prompt": "a blood-stained curved blade resting on wet stone, dark red blood"
+ },
+ "疾风": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke, wind blown dust"
+ },
+ "痛觉": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "终结": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "血刃": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge, dark red blood"
+ },
+ "连击": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "连斩": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "重击": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "引爆": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "斩首": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "断掌": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "无畏之心": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "狂化": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "破防斩": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "终结技": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "重压": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "千刀万剐": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "处决": {
+  "kind": "sil",
+  "prompt": "silhouette of a warrior delivering a heavy overhead strike, dust and debris flying"
+ },
+ "贯心": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "急救术": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "敏捷连刺": {
+  "kind": "obj",
+  "prompt": "a long curved blade slashing through the air, sparks along the edge"
+ },
+ "过载": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke"
+ },
+ "薪火": {
+  "kind": "obj",
+  "prompt": "a single candle flame in darkness, faint smoke, rising embers and orange flame"
+ },
+ "榨取": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "削弱": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "破甲": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "破防": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "缴械": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "虚弱打击": {
+  "kind": "obj",
+  "prompt": "a crumbling stone statue, half broken, dust falling"
+ },
+ "虚弱药剂": {
+  "kind": "obj",
+  "prompt": "a suit of armor with a deep crack across the chest plate, dark and dented"
+ },
+ "净化": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "吞噬": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "吸血": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light, dark red blood"
+ },
+ "绷带": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ },
+ "圣愈": {
+  "kind": "obj",
+  "prompt": "a small white flower blooming out of cracked ash, soft warm light"
+ }
+}
