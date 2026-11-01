@@ -110,9 +110,10 @@ func _ready() -> void:
 	for r in rows:
 		var key := Label.new()
 		key.text = str(r[0])
-		key.position = Vector2(442, ry + 2)
-		key.size = Vector2(64, 30)
-		key.add_theme_font_size_override("font_size", 17)
+		key.position = Vector2(442, ry)
+		key.size = Vector2(60, 28)
+		key.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+		key.add_theme_font_size_override("font_size", 18)
 		key.add_theme_color_override("font_color", Color(0.79, 0.66, 0.42, 0.9))
 		StoryDB.apply_serif(key)
 		add_child(key)
@@ -120,11 +121,12 @@ func _ready() -> void:
 
 		var val := Label.new()
 		val.text = str(r[1])
-		val.position = Vector2(510, ry)
+		val.position = Vector2(506, ry)
 		val.size = Vector2(700, 80)
 		val.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
 		val.add_theme_font_size_override("font_size", 18)
 		val.add_theme_constant_override("line_spacing", 2)
+		val.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 		val.add_theme_color_override("font_color", Color(0.80, 0.77, 0.68))
 		StoryDB.apply_serif(val)
 		add_child(val)
