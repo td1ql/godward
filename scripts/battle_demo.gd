@@ -182,11 +182,11 @@ func _ready() -> void:
 
 	# 职业技能按钮
 	_skill_btn = Button.new()
-	_skill_btn.visible = false
-	_skill_btn.position = Vector2(1040, 556)
-	_skill_btn.size = Vector2(240, 52)
+	_skill_btn.visible = false   # 由 _refresh_skill_btn 决定
+	_skill_btn.position = Vector2(14, 596)
+	_skill_btn.size = Vector2(196, 46)
 	_skill_btn.focus_mode = Control.FOCUS_NONE
-	_skill_btn.add_theme_font_size_override("font_size", 19)
+	_skill_btn.add_theme_font_size_override("font_size", 15)
 	_skill_btn.add_theme_color_override("font_color", Color(0.95, 0.82, 0.45))
 	_skill_btn.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.7))
 	StoryDB.apply_serif(_skill_btn)
@@ -1183,9 +1183,18 @@ func _refresh_skill_btn() -> void:
 		_skill_btn.visible = false
 		return
 	var ok := SkillDB.ready(voc, _skill_state())
-	_skill_btn.visible = ok and not game_over and pending_effect < 0
-	if _skill_btn.visible:
-		_skill_btn.text = "【%s】 %s" % [SkillDB.name_of(voc), SkillDB.en_of(voc)]
+	var show := not game_over and pending_effect < 0
+	_skill_btn.visible = show
+	if not show:
+		return
+	if ok:
+		_skill_btn.text = "【%s】%s" % [SkillDB.name_of(voc), SkillDB.en_of(voc)]
+		_skill_btn.add_theme_color_override("font_color", Color(0.98, 0.84, 0.46))
+		_skill_btn.modulate = Color(1, 1, 1, 1)
+	else:
+		_skill_btn.text = "◈ " + SkillDB.hint_of(voc)
+		_skill_btn.add_theme_color_override("font_color", Color(0.62, 0.57, 0.47))
+		_skill_btn.modulate = Color(1, 1, 1, 0.75)
 
 
 func _on_skill_pressed() -> void:
