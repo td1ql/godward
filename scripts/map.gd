@@ -232,8 +232,10 @@ func _update_bg() -> void:
 
 func _snap_camera() -> void:
 	if world_pos.has(current_id):
-		player_marker.position = world_pos[current_id] - player_marker.size / 2.0
-		camera.position = world_pos[current_id]
+		var p: Vector2 = world_pos[current_id]
+		player_marker.position = p - player_marker.size / 2.0
+		camera.position = p
+		_cam_target = p
 
 func _rebuild_view() -> void:
 	for b in node_buttons.values():
@@ -440,7 +442,7 @@ func _process(delta: float) -> void:
 	# 镜头持续追向目标（走完之后还会慢慢靠拢）
 	if _cam_lag > 0.0:
 		_cam_lag -= delta
-	elif not is_moving:
+	elif not is_moving and _cam_target != Vector2.ZERO:
 		camera.position = camera.position.lerp(_cam_target, clamp(delta * 6.0, 0.0, 1.0))
 
 # ---------- 生成 ----------
