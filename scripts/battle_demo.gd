@@ -41,6 +41,10 @@ var enemy_detail_label: Label
 var _skill_used := false
 var _skill_btn_layer: CanvasLayer
 var _hp_bar: ColorRect
+var _block_bar_bg: ColorRect
+var _block_bar: ColorRect
+var _eblock_bar_bg: ColorRect
+var _eblock_bar: ColorRect
 var _hp_bar_bg: ColorRect
 var _ehp_bar: ColorRect
 var _ehp_bar_bg: ColorRect
@@ -132,6 +136,38 @@ func _ready() -> void:
 	add_child(rp)
 
 		# 背景图在 0，场景里的 InfoLabel / CombatLabel 在后面；底衬插到 1
+
+	# 玩家格挡白条（在血条上面一层）
+	_block_bar_bg = ColorRect.new()
+	_block_bar_bg.color = Color(0.85, 0.85, 0.85, 0.16)
+	_block_bar_bg.position = Vector2(56, 124)
+	_block_bar_bg.size = Vector2(180, 5)
+	_block_bar_bg.z_index = 2
+	_block_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_block_bar_bg)
+	_block_bar = ColorRect.new()
+	_block_bar.color = Color(0.96, 0.96, 0.92, 0.92)
+	_block_bar.position = Vector2(56, 124)
+	_block_bar.size = Vector2(0, 5)
+	_block_bar.z_index = 2
+	_block_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_block_bar)
+
+	# 敌人格挡白条
+	_eblock_bar_bg = ColorRect.new()
+	_eblock_bar_bg.color = Color(0.85, 0.85, 0.85, 0.16)
+	_eblock_bar_bg.position = Vector2(860, 124)
+	_eblock_bar_bg.size = Vector2(230, 5)
+	_eblock_bar_bg.z_index = 2
+	_eblock_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_eblock_bar_bg)
+	_eblock_bar = ColorRect.new()
+	_eblock_bar.color = Color(0.96, 0.96, 0.92, 0.92)
+	_eblock_bar.position = Vector2(860, 124)
+	_eblock_bar.size = Vector2(0, 5)
+	_eblock_bar.z_index = 2
+	_eblock_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_eblock_bar)
 
 	# 玩家血条（放到底层，避免盖住文字）
 	_hp_bar_bg = ColorRect.new()
@@ -1388,6 +1424,11 @@ func _update_ui() -> void:
 	if _hp_bar != null:
 		var mx: int = maxi(1, GameState.player_max_hp)
 		_hp_bar.size.x = 180.0 * clamp(float(player_hp) / float(mx), 0.0, 1.0)
+	if _block_bar != null:
+		_block_bar.size.x = 180.0 * clamp(float(player_block) / 50.0, 0.0, 1.0)
+	if _eblock_bar != null:
+		var eb := int(enemy.status.get("守护", 0)) + int(enemy.status.get("格挡", 0))
+		_eblock_bar.size.x = 230.0 * clamp(float(eb) / 50.0, 0.0, 1.0)
 	if _ehp_bar != null:
 		var emx: int = maxi(1, enemy.max_hp)
 		_ehp_bar.size.x = 230.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
