@@ -1,6 +1,8 @@
 extends Node2D
 
 const ArtFrame = preload("res://scripts/art_frame.gd")
+const SkillCutIn = preload("res://scripts/skill_cutin.gd")
+const ArkPanel = preload("res://scripts/ark_panel.gd")
 
 const BLOCK_DAMAGE_CAP := 60
 
@@ -33,6 +35,10 @@ var creed := {}
 var first_attack_used := false
 var first_card_used := false
 var _ending_turn := false
+var _skill_btn: Button
+var _skill_used := false
+var _turn_no := 0
+var _no_attack_turns := 0
 var attacked_last_turn := false
 var attacked_this_turn := false
 var first_hurt_used := false
@@ -173,6 +179,29 @@ func _ready() -> void:
 	end_turn_button.add_theme_constant_override("outline_size", 2)
 	end_turn_button.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
+
+	# 职业技能按钮
+	_skill_btn = Button.new()
+	_skill_btn.visible = false
+	_skill_btn.position = Vector2(1040, 556)
+	_skill_btn.size = Vector2(240, 52)
+	_skill_btn.focus_mode = Control.FOCUS_NONE
+	_skill_btn.add_theme_font_size_override("font_size", 19)
+	_skill_btn.add_theme_color_override("font_color", Color(0.95, 0.82, 0.45))
+	_skill_btn.add_theme_color_override("font_hover_color", Color(1.0, 0.95, 0.7))
+	StoryDB.apply_serif(_skill_btn)
+	var sk := StyleBoxFlat.new()
+	sk.bg_color = Color(0.09, 0.06, 0.02, 0.92)
+	sk.border_color = Color(0.88, 0.70, 0.35, 0.90)
+	sk.set_border_width_all(1)
+	_skill_btn.add_theme_stylebox_override("normal", sk)
+	var skh := sk.duplicate()
+	skh.bg_color = Color(0.85, 0.66, 0.30, 0.22)
+	_skill_btn.add_theme_stylebox_override("hover", skh)
+	_skill_btn.add_theme_stylebox_override("pressed", skh)
+	_skill_btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	_skill_btn.pressed.connect(_on_skill_pressed)
+	add_child(_skill_btn)
 	player_label = Label.new()
 	# 能量：放在手牌左边
 	info_label.position = Vector2(22, 400)
@@ -901,6 +930,12 @@ func _domain_tick() -> void:
 			player_status["中毒"] = int(player_status.get("中毒", 0)) + v
 
 func _start_new_turn() -> void:
+	_turn_no += 1
+	if not attacked_this_turn:
+		_no_attack_turns += 1
+	else:
+		_no_attack_turns = 0
+	attacked_this_turn = false
 	_domain_tick()
 	if game_over:
 		return
@@ -1122,6 +1157,110 @@ func _backing(pos: Vector2, size: Vector2, align_right: bool = false) -> void:
 	if get_child_count() > 1:
 		move_child(p, 1)
 
+
+# ============================================================
+# 职业技能
+# ============================================================
+func _skill_state() -> Dictionary:
+	return {
+		"turn": _turn_no,
+		"hp": player_hp,
+		"max_hp": GameState.player_max_hp,
+		"block": player_block,
+		"energy": player_energy,
+		"hand": deck.hand.size(),
+		"damage_taken": damage_taken,
+		"no_attack_turns": _no_attack_turns,
+		"enemy_poison": int(enemy.status.get("中毒", 0)),
+	}
+
+
+func _refresh_skill_btn() -> void:
+	if _skill_btn == null:
+		return
+	var voc := str(GameState.vocation)
+	if _skill_used or not SkillDB.has(voc):
+		_skill_btn.visible = false
+		return
+	var ok := SkillDB.ready(voc, _skill_state())
+	_skill_btn.visible = ok and not game_over and pending_effect < 0
+	if _skill_btn.visible:
+		_skill_btn.text = "【%s】 %s" % [SkillDB.name_of(voc), SkillDB.en_of(voc)]
+
+
+func _on_skill_pressed() -> void:
+	if _skill_used or _skill_btn == null:
+		return
+	var voc := str(GameState.vocation)
+	if not SkillDB.ready(voc, _skill_state()):
+		return
+	_skill_used = true
+	_skill_btn.visible = false
+	Tutorial.notify("skill_used")
+	SkillCutIn.play(self, voc, func() -> void:
+		_apply_skill_effect(voc)
+	)
+
+
+func _apply_skill_effect(voc: String) -> void:
+	var e: Dictionary = SkillDB.effect_of(voc)
+	AudioManager.play("victory")
+
+	# 格挡
+	if int(e.get("block", 0)) > 0:
+		player_block += int(e["block"])
+	# 回复
+	if int(e.get("heal", 0)) > 0:
+		player_hp = min(GameState.player_max_hp, player_hp + int(e["heal"]))
+	# 能量 / 抽牌
+	if int(e.get("energy", 0)) > 0:
+		player_energy += int(e["energy"])
+	if int(e.get("draw", 0)) > 0:
+		_draw_cards(int(e["draw"]))
+	# 自我状态
+	for k in e.get("status_self", {}):
+		player_status[k] = int(player_status.get(k, 0)) + int(e["status_self"][k])
+	# 敌人状态
+	for k in e.get("status_all", {}):
+		enemy.status[k] = int(enemy.status.get(k, 0)) + int(e["status_all"][k])
+	# 全场伤害
+	if int(e.get("damage_all", 0)) > 0:
+		var dmg := int(e["damage_all"])
+		enemy.hp = max(0, enemy.hp - dmg)
+		AudioManager.play("hit")
+	# 中毒倍率伤害
+	if int(e.get("damage_per_poison", 0)) > 0:
+		var pois := int(enemy.status.get("中毒", 0))
+		var dmg2 := pois * int(e["damage_per_poison"])
+		enemy.hp = max(0, enemy.hp - dmg2)
+		AudioManager.play("hit")
+	# 烧掉手牌，每张造成伤害
+	if bool(e.get("burn_hand", false)):
+		var n := deck.hand.size()
+		var per := int(e.get("damage_per_card", 6))
+		for cid in deck.hand.duplicate():
+			deck.hand.erase(cid)
+			deck.discard_pile.append(cid)
+		enemy.hp = max(0, enemy.hp - n * per)
+		AudioManager.play("hit")
+	# 按已损失生命造成伤害
+	if float(e.get("damage_self_hp_pct", 0.0)) > 0.0:
+		var lost := GameState.player_max_hp - player_hp
+		enemy.hp = max(0, enemy.hp - int(lost * float(e["damage_self_hp_pct"])))
+		AudioManager.play("hit")
+	# 下回合攻击倍率
+	if float(e.get("mult_next", 1.0)) > 1.0:
+		player_status["力量"] = int(player_status.get("力量", 0)) + int((float(e["mult_next"]) - 1.0) * 6.0)
+
+	_after_skill()
+
+
+func _after_skill() -> void:
+	_update_ui()
+	_check_game_over()
+	if not game_over:
+		hand_view.render(deck.hand, player_energy, pending_effect, pending_selected, _new_cards)
+
 func _update_ui() -> void:
 	info_label.text = "能量 %d/%d" % [player_energy, max_energy]
 	pile_label.text = "抽牌堆 %d　　手牌 %d　　弃牌堆 %d　　金币 %d" % [
@@ -1137,6 +1276,7 @@ func _update_ui() -> void:
 	if pending_effect >= 0:
 		ptext += "\n选择 %d 张手牌消耗（已选 %d）" % [pending_need, pending_selected.size()]
 	player_label.text = ptext
+	_refresh_skill_btn()
 
 	var etext := "【%s】\nHP: %d" % [enemy.label_name, enemy.hp]
 	var es := StatusSystem.text(enemy.status)
