@@ -60,36 +60,49 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	btn.add_theme_stylebox_override("disabled", style(Color(0.60, 0.57, 0.50), Color(0.32, 0.30, 0.26), 2))
 	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
-	# 流派底图（垫在最下面）
-	var art_path := "res://assets/art/card/%s.webp" % stream_of(id)
+	# ---- 卡面插画：卡片上半部分（每张卡自己的图，没有就退回流派图）----
+	const ART_H := 84
+	var art_path := "res://assets/art/cardart2/%s.png" % id
+	if not ResourceLoader.exists(art_path):
+		art_path = "res://assets/art/card/%s.webp" % stream_of(id)
 	if ResourceLoader.exists(art_path):
+		# 深色底衬：插画四周不留白
+		var back := ColorRect.new()
+		back.color = Color(0.10, 0.12, 0.15, 1.0)
+		back.anchor_right = 1.0
+		back.offset_left = 2
+		back.offset_right = -2
+		back.offset_top = 2
+		back.offset_bottom = ART_H
+		back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(back)
+
 		var art := TextureRect.new()
 		art.texture = load(art_path)
 		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		art.set_anchors_preset(Control.PRESET_FULL_RECT)
+		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		art.anchor_right = 1.0
 		art.offset_left = 2
-		art.offset_top = 2
 		art.offset_right = -2
-		art.offset_bottom = -2
-		art.modulate = Color(1, 1, 1, 1)
+		art.offset_top = 2
+		art.offset_bottom = ART_H
 		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(art)
 
-		# 纸色蒙版：让底图变成隐约的花纹，文字才读得清
-		var veil := ColorRect.new()
-		veil.color = Color(0.94, 0.90, 0.80, 0.80)
-		veil.set_anchors_preset(Control.PRESET_FULL_RECT)
-		veil.offset_left = 2
-		veil.offset_top = 2
-		veil.offset_right = -2
-		veil.offset_bottom = -2
-		veil.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		btn.add_child(veil)
+		# 插画下沿一条金线，和下面信息区分开
+		var rule := ColorRect.new()
+		rule.color = Color(0.79, 0.66, 0.42, 0.55)
+		rule.anchor_right = 1.0
+		rule.offset_left = 2
+		rule.offset_right = -2
+		rule.offset_top = ART_H
+		rule.offset_bottom = ART_H + 1
+		rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(rule)
 
 	var bs: int = font_size + 11
 	var badge := Panel.new()
-	badge.position = Vector2(5, 4)
+	badge.position = Vector2(4, 4)
 	badge.size = Vector2(bs, bs)
 	var bstyle := StyleBoxFlat.new()
 	bstyle.bg_color = bc.darkened(0.18)
@@ -115,8 +128,8 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	name_lbl.anchor_right = 1.0
 	name_lbl.offset_left = bs + 9
 	name_lbl.offset_right = -5
-	name_lbl.offset_top = 4
-	name_lbl.offset_bottom = bs + 6
+	name_lbl.offset_top = 88
+	name_lbl.offset_bottom = 110
 	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	name_lbl.add_theme_font_size_override("font_size", font_size)
@@ -174,8 +187,8 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	tag_lbl.anchor_right = 1.0
 	tag_lbl.offset_left = 6
 	tag_lbl.offset_right = -5
-	tag_lbl.offset_top = bs + 8
-	tag_lbl.offset_bottom = bs + 24
+	tag_lbl.offset_top = 110
+	tag_lbl.offset_bottom = 124
 	tag_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	tag_lbl.add_theme_font_size_override("font_size", max(10, font_size - 4))
 	tag_lbl.add_theme_color_override("font_color", Color(0.42, 0.36, 0.27))
@@ -191,8 +204,8 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	body_lbl.anchor_bottom = 1.0
 	body_lbl.offset_left = 6
 	body_lbl.offset_right = -6
-	body_lbl.offset_top = bs + 28
-	body_lbl.offset_bottom = -6
+	body_lbl.offset_top = 124
+	body_lbl.offset_bottom = -4
 	body_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	body_lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	body_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
