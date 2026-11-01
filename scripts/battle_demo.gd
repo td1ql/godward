@@ -1318,10 +1318,10 @@ func _update_ui() -> void:
 	var status_txt: String = StatusSystem.text(player_status)
 	# 血条
 	if _hp_bar != null:
-		var mx := max(1, GameState.player_max_hp)
+		var mx: int = maxi(1, GameState.player_max_hp)
 		_hp_bar.size.x = 180.0 * clamp(float(player_hp) / float(mx), 0.0, 1.0)
 	if _ehp_bar != null:
-		var emx := max(1, enemy.max_hp)
+		var emx: int = maxi(1, enemy.max_hp)
 		_ehp_bar.size.x = 230.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
 
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
