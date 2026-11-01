@@ -133,12 +133,14 @@ func _ready() -> void:
 	# 玩家血条（放到底层，避免盖住文字）
 	_hp_bar_bg = ColorRect.new()
 	_hp_bar_bg.z_index = 2
+	_hp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
 	_hp_bar_bg.position = Vector2(56, 146)
 	_hp_bar_bg.size = Vector2(180, 6)
 	add_child(_hp_bar_bg)
 	_hp_bar = ColorRect.new()
 	_hp_bar.z_index = 2
+	_hp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_hp_bar.color = Color(0.88, 0.74, 0.42)
 	_hp_bar.position = Vector2(56, 146)
 	_hp_bar.size = Vector2(180, 6)
@@ -147,12 +149,14 @@ func _ready() -> void:
 	# 敌人血条
 	_ehp_bar_bg = ColorRect.new()
 	_ehp_bar_bg.z_index = 2
+	_ehp_bar_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
 	_ehp_bar_bg.position = Vector2(860, 146)
 	_ehp_bar_bg.size = Vector2(230, 6)
 	add_child(_ehp_bar_bg)
 	_ehp_bar = ColorRect.new()
 	_ehp_bar.z_index = 2
+	_ehp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
 	_ehp_bar.position = Vector2(860, 146)
 	_ehp_bar.size = Vector2(230, 6)
@@ -225,6 +229,7 @@ func _ready() -> void:
 	end_turn_button.add_theme_constant_override("outline_size", 2)
 	end_turn_button.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	end_turn_button.pressed.connect(_on_end_turn_pressed)
+	end_turn_button.z_index = 10
 
 	# 职业技能按钮
 	_skill_btn = Button.new()
@@ -253,6 +258,7 @@ func _ready() -> void:
 	# 能量：放在手牌左边
 	info_label.position = Vector2(22, 400)
 	info_label.z_index = 5
+	info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	info_label.size = Vector2(150, 46)
 	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -265,6 +271,7 @@ func _ready() -> void:
 	pile_label = Label.new()
 	pile_label.position = Vector2(0, 652)
 	pile_label.z_index = 5
+	pile_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	pile_label.size = Vector2(1280, 40)
 	pile_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pile_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -288,11 +295,13 @@ func _ready() -> void:
 	combat_label.add_theme_constant_override("outline_size", 2)
 	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	combat_label.z_index = 5
+	combat_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	combat_label.add_theme_color_override("font_color", Color(0.93, 0.88, 0.78))
 	player_label.add_theme_font_size_override("font_size", 19)
 	player_label.add_theme_constant_override("outline_size", 2)
 	player_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
 	player_label.z_index = 5
+	player_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_label.add_theme_color_override("font_color", Color(0.93, 0.88, 0.78))
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
@@ -339,6 +348,7 @@ func _ready() -> void:
 	# 状态：显示在立绘正下方
 	status_label = Label.new()
 	status_label.position = Vector2(48, 250)
+	status_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	status_label.size = Vector2(200, 96)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -351,6 +361,7 @@ func _ready() -> void:
 
 	ally_label = Label.new()
 	ally_label.position = Vector2(14, 400)
+	ally_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ally_label.size = Vector2(520, 120)
 	ally_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	ally_label.add_theme_font_size_override("font_size", 16)
