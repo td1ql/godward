@@ -90,28 +90,40 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(art)
 
-		# 窗口内阴影：四边各一条渐隐的暗带，让插画像嵌在卡里
-		for e in [["top", 2, ART_H, 2, 10], ["bottom", ART_H - 10, ART_H, 2, -1]]:
-			pass
+		# 顶部轻压暗（让插画上沿不冲）
 		var shade_t := ColorRect.new()
-		shade_t.color = Color(0.04, 0.05, 0.07, 0.55)
+		shade_t.color = Color(0.04, 0.05, 0.07, 0.38)
 		shade_t.anchor_right = 1.0
 		shade_t.offset_left = 2
 		shade_t.offset_right = -2
 		shade_t.offset_top = 2
-		shade_t.offset_bottom = 12
+		shade_t.offset_bottom = 10
 		shade_t.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(shade_t)
 
-		var shade_b := ColorRect.new()
-		shade_b.color = Color(0.04, 0.05, 0.07, 0.55)
-		shade_b.anchor_right = 1.0
-		shade_b.offset_left = 2
-		shade_b.offset_right = -2
-		shade_b.offset_top = ART_H - 12
-		shade_b.offset_bottom = ART_H
-		shade_b.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		btn.add_child(shade_b)
+		# 下沿渐变淡出：插画底边融进卡底色，不再是硬边
+		var grad := Gradient.new()
+		grad.set_color(0, Color(0.10, 0.12, 0.15, 0.0))
+		grad.set_color(1, Color(0.10, 0.12, 0.15, 1.0))
+		grad.set_offset(0, 0.0)
+		grad.set_offset(1, 1.0)
+		var gtex := GradientTexture2D.new()
+		gtex.gradient = grad
+		gtex.fill_from = Vector2(0, 0)
+		gtex.fill_to = Vector2(0, 1)
+		gtex.width = 8
+		gtex.height = 64
+		var fade := TextureRect.new()
+		fade.texture = gtex
+		fade.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		fade.stretch_mode = TextureRect.STRETCH_SCALE
+		fade.anchor_right = 1.0
+		fade.offset_left = 2
+		fade.offset_right = -2
+		fade.offset_top = ART_H - 26
+		fade.offset_bottom = ART_H
+		fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(fade)
 
 		# 窗口边框：细金线一圈
 		var frame := Panel.new()
@@ -178,6 +190,16 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 	name_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	StoryDB.apply_serif(name_lbl)
 	btn.add_child(name_lbl)
+
+	var nrule := ColorRect.new()
+	nrule.color = Color(0.72, 0.59, 0.36, 0.60)
+	nrule.anchor_right = 1.0
+	nrule.offset_left = 30
+	nrule.offset_right = -30
+	nrule.offset_top = 109
+	nrule.offset_bottom = 110
+	nrule.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	btn.add_child(nrule)
 
 	var need: int = int(d.get("consume", 0))
 	if need > 0:
