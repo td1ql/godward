@@ -21,6 +21,14 @@ func _ready() -> void:
 		StoryDump.write()
 		get_tree().quit()
 		return
+	if "--test-skill" in OS.get_cmdline_user_args():
+		var sc = load("res://scripts/skill_cutin.gd")
+		sc.play(self, "等待丈夫的新娘", func() -> void:
+			print("[skill] cutin done")
+			get_tree().quit()
+		)
+		print("[skill] cutin started")
+		return
 	if "--test-npc" in OS.get_cmdline_user_args():
 		# 冒烟测试：打开 NPC 界面，看有没有运行时报错
 		NpcView.open(self, "阿喀琉斯", func(_a: String, _b: String) -> void: pass)

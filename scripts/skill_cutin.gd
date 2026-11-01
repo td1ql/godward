@@ -70,7 +70,8 @@ func _build() -> void:
 	_en_lbl.size = Vector2(1040, 110)
 	_en_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_en_lbl.add_theme_font_size_override("font_size", 84)
-	_en_lbl.add_theme_color_override("font_color", Color(GOLD_HI, 0.0))
+	_en_lbl.add_theme_color_override("font_color", GOLD_HI)
+	_en_lbl.modulate.a = 0.0
 	_en_lbl.add_theme_constant_override("outline_size", 0)
 	add_child(_en_lbl)
 
@@ -80,13 +81,15 @@ func _build() -> void:
 	_cn_lbl.position = Vector2(124, 340)
 	_cn_lbl.size = Vector2(700, 80)
 	_cn_lbl.add_theme_font_size_override("font_size", 52)
-	_cn_lbl.add_theme_color_override("font_color", Color(CREAM, 0.0))
+	_cn_lbl.add_theme_color_override("font_color", CREAM)
+	_cn_lbl.modulate.a = 0.0
 	StoryDB.apply_serif(_cn_lbl)
 	add_child(_cn_lbl)
 
 	# 分隔线
 	var rule := ColorRect.new()
-	rule.color = Color(GOLD, 0.0)
+	rule.color = GOLD
+	rule.modulate.a = 0.0
 	rule.position = Vector2(124, 428)
 	rule.size = Vector2(0, 1)
 	rule.name = "Rule"
@@ -100,7 +103,8 @@ func _build() -> void:
 	_line_lbl.size = Vector2(820, 80)
 	_line_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_line_lbl.add_theme_font_size_override("font_size", 22)
-	_line_lbl.add_theme_color_override("font_color", Color(0.78, 0.74, 0.64, 0.0))
+	_line_lbl.add_theme_color_override("font_color", Color(0.78, 0.74, 0.64))
+	_line_lbl.modulate.a = 0.0
 	StoryDB.apply_serif(_line_lbl)
 	add_child(_line_lbl)
 
@@ -115,27 +119,34 @@ func _build() -> void:
 
 
 func _start() -> void:
-	var tw := create_tween()
-	tw.set_parallel(false)
-	# ① 压暗
-	tw.tween_property(_veil, "color:a", 0.88, 0.22)
-	# ② 光带掠过
-	tw.parallel().tween_property(_band, "color:a", 0.30, 0.14)
-	tw.parallel().tween_property(_band, "position:x", -520.0, 0.42).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	# ③ 英文滑入
-	tw.parallel().tween_property(_en_lbl, "font_color:a", 0.55, 0.30)
-	tw.parallel().tween_property(_en_lbl, "position:x", 124.0, 0.34).from(80.0)
-	# ④ 中文 + 线
-	tw.parallel().tween_property(_cn_lbl, "font_color:a", 1.0, 0.26).set_delay(0.06)
-	tw.parallel().tween_property($Rule, "size:x", 560.0, 0.30).set_delay(0.06)
-	tw.parallel().tween_property($Rule, "color:a", 0.55, 0.20).set_delay(0.06)
-	# ⑤ 台词淡入
-	tw.parallel().tween_property(_line_lbl, "font_color:a", 1.0, 0.22).set_delay(0.12)
+	# 用多条独立 Tween，避免 parallel()/chain() 链式调用出问题
+	var total := _line_full.length()
+
+	var t1 := create_tween()
+	t1.tween_property(_veil, "color:a", 0.88, 0.22)
+
+	var t2 := create_tween()
+	t2.tween_property(_band, "color:a", 0.30, 0.10)
+	t2.tween_property(_band, "position:x", -520.0, 0.42).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	t2.parallel().tween_property(_band, "color:a", 0.0, 0.30)
+
+	var t3 := create_tween()
+	t3.tween_property(_en_lbl, "modulate:a", 0.55, 0.30)
+	t3.parallel().tween_property(_en_lbl, "position:x", 124.0, 0.34).from(80.0)
+
+	var t4 := create_tween()
+	t4.tween_interval(0.10)
+	t4.tween_property(_cn_lbl, "modulate:a", 1.0, 0.26)
+	t4.parallel().tween_property($Rule, "size:x", 560.0, 0.30)
+	t4.parallel().tween_property($Rule, "modulate:a", 0.55, 0.20)
+
+	var t5 := create_tween()
+	t5.tween_interval(0.30)
+	t5.tween_property(_line_lbl, "modulate:a", 1.0, 0.22)
 
 	# 台词逐字
-	var total := _line_full.length()
 	var type_tw := create_tween()
-	type_tw.tween_interval(0.55)
+	type_tw.tween_interval(0.45)
 	for i in range(total):
 		type_tw.tween_callback(func() -> void:
 			_line_lbl.text = _line_full.substr(0, i + 1)
@@ -143,15 +154,20 @@ func _start() -> void:
 		type_tw.tween_interval(0.045)
 
 	# 停留 → 冲击 → 淡出
-	tw.chain().tween_interval(0.55 + total * 0.045 + 0.35)
-	tw.chain().tween_callback(_impact)
-	tw.chain().tween_interval(0.28)
-	tw.chain().tween_property(_veil, "color:a", 0.0, 0.26)
-	tw.parallel().tween_property(_en_lbl, "font_color:a", 0.0, 0.20)
-	tw.parallel().tween_property(_cn_lbl, "font_color:a", 0.0, 0.20)
-	tw.parallel().tween_property(_line_lbl, "font_color:a", 0.0, 0.20)
-	tw.parallel().tween_property($Rule, "color:a", 0.0, 0.20)
-	tw.chain().tween_callback(_finish)
+	var hold := 0.45 + total * 0.045 + 0.40
+	var t6 := create_tween()
+	t6.tween_interval(hold)
+	t6.tween_callback(_impact)
+	t6.tween_interval(0.28)
+
+	var t7 := create_tween()
+	t7.tween_interval(hold + 0.28)
+	t7.tween_property(_veil, "color:a", 0.0, 0.26)
+	t7.parallel().tween_property(_en_lbl, "modulate:a", 0.0, 0.20)
+	t7.parallel().tween_property(_cn_lbl, "modulate:a", 0.0, 0.20)
+	t7.parallel().tween_property(_line_lbl, "modulate:a", 0.0, 0.20)
+	t7.parallel().tween_property($Rule, "modulate:a", 0.0, 0.20)
+	t7.tween_callback(_finish)
 
 
 # 冲击帧：白闪 + 屏幕抖
