@@ -391,32 +391,31 @@ func _ready() -> void:
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var boss_bg := _is_shown_in_bg()
-	var sil_path := "res://assets/art/enemy/%s.webp" % sil
+	# 新立绘：透明 PNG（自带地面阴影），底对齐同一条地面线
+	var sil_path := "res://assets/art/enemy_cut/%s.png" % sil
 	if not boss_bg and ResourceLoader.exists(sil_path):
+		var tex: Texture2D = load(sil_path)
 		var spr := TextureRect.new()
 		_enemy_sprite = spr
-		spr.texture = load(sil_path)
+		spr.texture = tex
 		spr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		spr.position = Vector2(1106, 30)
-		spr.size = Vector2(150, 200)
-		spr.z_index = 2
-		spr.modulate = Color(1, 1, 1, 0.92)
-		add_child(spr)
-		# 框挂成立绘的子节点，浮动/缩放时严丝合缝
-		var ef := ArtFrame.make(Rect2(0, 0, 150, 200), 0.55, 0.28)
-		ef.corner = 16.0
-		spr.add_child(ef)
+		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		# 按高度缩放（最大 420），宽度按比例
+		var max_h := 420.0
+		var ratio := max_h / float(tex.get_height())
+		var draw_w := float(tex.get_width()) * ratio
+		spr.size = Vector2(draw_w, max_h)
 		spr.pivot_offset = spr.size / 2.0
+		spr.z_index = 2
+		spr.modulate = Color(1, 1, 1, 0.97)
+		add_child(spr)
+		# 底对齐 y=560，水平居中在 x=1150
+		spr.position = Vector2(1150.0 - draw_w * 0.5, 560.0 - max_h)
 		call_deferred("EmFx_appear")
+		# 极缓慢的呼吸浮动
 		var tw := create_tween().set_loops()
-		tw.set_parallel(true)
-		tw.tween_property(spr, "scale", Vector2(1.02, 1.02), 2.6).set_trans(Tween.TRANS_SINE)
-		tw.tween_property(spr, "position:y", spr.position.y - 4.0, 2.6).set_trans(Tween.TRANS_SINE)
-		tw.chain()
-		tw.set_parallel(true)
-		tw.tween_property(spr, "scale", Vector2(1.0, 1.0), 2.6).set_trans(Tween.TRANS_SINE)
-		tw.tween_property(spr, "position:y", spr.position.y, 2.6).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(spr, "position:y", spr.position.y - 5.0, 3.0).set_trans(Tween.TRANS_SINE)
+		tw.tween_property(spr, "position:y", spr.position.y, 3.0).set_trans(Tween.TRANS_SINE)
 
 	var voc_path := "res://assets/art/vocation/%s.webp" % GameState.vocation
 	if ResourceLoader.exists(voc_path):
