@@ -222,8 +222,8 @@ func _ensure_positions() -> void:
 			var cand: Vector2 = world_pos[pid] + step_vec
 
 			# 和已有的任何节点太近就把它推开（防止节点叠在一起）
-			const MIN_DIST := 92.0
-			for _try in range(8):
+			const MIN_DIST := 132.0
+			for _try in range(24):
 				var clash := false
 				for other in world_pos.values():
 					if (other as Vector2).distance_to(cand) < MIN_DIST:
@@ -234,7 +234,7 @@ func _ensure_positions() -> void:
 				var away: Vector2 = cand - world_pos[pid]
 				if away.length() < 1.0:
 					away = Vector2(cos(angle), sin(angle))
-				cand += away.normalized() * 26.0
+				cand += away.normalized() * 30.0
 			# 收敛到安全区（HUD 左上角 + 右侧菜单都留出空位）
 			cand.x = clampf(cand.x, 150.0, 1120.0)
 			cand.y = clampf(cand.y, 120.0, 640.0)

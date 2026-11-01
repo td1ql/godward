@@ -80,12 +80,13 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 		var art := TextureRect.new()
 		art.texture = load(art_path)
 		art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		art.anchor_right = 1.0
 		art.offset_left = 2
 		art.offset_right = -2
 		art.offset_top = 2
 		art.offset_bottom = ART_H
+		art.modulate = Color(0.82, 0.84, 0.88, 1.0)
 		art.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(art)
 

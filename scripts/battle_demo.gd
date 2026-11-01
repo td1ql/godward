@@ -271,6 +271,8 @@ func _ready() -> void:
 		deck.setup(GameState.deck)
 
 	hand_view = HandView.new()
+	# 手牌永远压在敌人立绘之上
+	hand_view.z_index = 8
 	add_child(hand_view)
 	hand_view.card_pressed.connect(_on_card_pressed)
 
