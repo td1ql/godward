@@ -26,6 +26,7 @@ var camera: Camera2D
 var player_marker: Panel
 var bg_rect: TextureRect
 var edge_root: Node2D
+var _path_ids := {}
 
 func _ready() -> void:
 	AudioManager.play_bgm("map_%d" % GameState.act)
@@ -87,15 +88,11 @@ func _ready() -> void:
 	plate.position = Vector2(8, 8)
 	plate.size = Vector2(310, 200)
 	var ps := StyleBoxFlat.new()
-	ps.bg_color = Color(0.94, 0.90, 0.80, 0.92)
+	ps.bg_color = Color(0.043, 0.059, 0.078, 0.88)
 	ps.border_width_left = 1
-	ps.border_width_right = 1
-	ps.border_width_top = 1
 	ps.border_width_bottom = 1
-	ps.border_color = Color(0.48, 0.37, 0.18, 0.55)
-	ps.set_corner_radius_all(3)
-	ps.shadow_color = Color(0.10, 0.07, 0.03, 0.35)
-	ps.shadow_size = 6
+	ps.border_color = Color(0.79, 0.66, 0.42, 0.55)
+	ps.set_corner_radius_all(0)
 	plate.add_theme_stylebox_override("panel", ps)
 	hud.add_child(plate)
 	ui_layer = CanvasLayer.new()
@@ -103,19 +100,19 @@ func _ready() -> void:
 	add_child(ui_layer)
 
 	var hint := Label.new()
-	hint.text = "选择要前往的节点"
+	hint.text = "MAP  //  选择要前往的节点"
 	hint.position = Vector2(20, 20)
 	hint.add_theme_font_size_override("font_size", 20)
 	hud.add_child(hint)
 
 	gold_label = Label.new()
 	gold_label.position = Vector2(20, 52)
-	gold_label.text = "金币：%d" % GameState.gold
+	gold_label.text = "GOLD   %d" % GameState.gold
 	hud.add_child(gold_label)
 
 	hp_label = Label.new()
 	hp_label.position = Vector2(20, 84)
-	hp_label.text = "HP：%d / %d" % [GameState.player_hp, GameState.player_max_hp]
+	hp_label.text = "HP     %d / %d" % [GameState.player_hp, GameState.player_max_hp]
 	hud.add_child(hp_label)
 
 	moral_label = Label.new()
@@ -138,7 +135,7 @@ func _ready() -> void:
 	])
 
 	for lb in [hint, gold_label, hp_label, moral_label]:
-		lb.add_theme_color_override("font_color", Color(0.17, 0.13, 0.08))
+		lb.add_theme_color_override("font_color", Color(0.92, 0.88, 0.78))
 		lb.add_theme_font_size_override("font_size", 23)
 		StoryDB.apply_serif(lb)
 
@@ -219,6 +216,9 @@ func _rebuild_view() -> void:
 		c.queue_free()
 
 	var path := _path_to_current()
+	_path_ids.clear()
+	for pid in path:
+		_path_ids[pid] = true
 
 	var i := 0
 	while i < path.size() - 1:
