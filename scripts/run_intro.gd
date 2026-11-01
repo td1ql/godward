@@ -110,7 +110,7 @@ func _ready() -> void:
 	for r in rows:
 		var key := Label.new()
 		key.text = str(r[0])
-		key.position = Vector2(442, ry)
+		key.position = Vector2(442, ry + 2)
 		key.size = Vector2(64, 30)
 		key.add_theme_font_size_override("font_size", 17)
 		key.add_theme_color_override("font_color", Color(0.79, 0.66, 0.42, 0.9))
@@ -120,15 +120,16 @@ func _ready() -> void:
 
 		var val := Label.new()
 		val.text = str(r[1])
-		val.position = Vector2(516, ry)
-		val.size = Vector2(660, 68)
-		val.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		val.add_theme_font_size_override("font_size", 20)
+		val.position = Vector2(510, ry)
+		val.size = Vector2(700, 80)
+		val.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+		val.add_theme_font_size_override("font_size", 18)
+		val.add_theme_constant_override("line_spacing", 2)
 		val.add_theme_color_override("font_color", Color(0.80, 0.77, 0.68))
 		StoryDB.apply_serif(val)
 		add_child(val)
 		_page_nodes.append(val)
-		ry += 78.0 if str(r[0]) == "词条" else 62.0
+		ry += 86.0 if str(r[0]) == "词条" else 62.0
 
 	# ③ 数字：初始生命 / 金币
 	var stats := [["初始生命", GameState.player_hp], ["初始金币", GameState.gold]]
