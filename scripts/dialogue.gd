@@ -22,6 +22,11 @@ var on_skip: Callable
 var bg_rect: TextureRect
 var _cur_bg := ""
 
+const GOLD := Color("c9a86a")
+const GOLD_HI := Color("e6c98c")
+const CREAM := Color("ede0c7")
+var _rule: ColorRect
+
 
 static func play(parent: Node, lines: Array, on_finish: Callable = Callable(), on_skip: Callable = Callable()) -> void:
 	if lines.is_empty():
@@ -57,22 +62,30 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 
 	speaker_label = Label.new()
 	speaker_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	speaker_label.position = Vector2(0, 220)
-	speaker_label.size = Vector2(1280, 40)
-	speaker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	speaker_label.add_theme_font_size_override("font_size", 24)
-	speaker_label.add_theme_color_override("font_color", Color(0.95, 0.85, 0.55))
+	speaker_label.position = Vector2(240, 196)
+	speaker_label.size = Vector2(800, 30)
+	speaker_label.add_theme_font_size_override("font_size", 15)
+	speaker_label.add_theme_color_override("font_color", Color(GOLD, 0.85))
 	overlay.add_child(speaker_label)
 
 	text_label = Label.new()
 	text_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	text_label.position = Vector2(140, 285)
-	text_label.size = Vector2(1000, 200)
+	text_label.position = Vector2(240, 236)
+	text_label.size = Vector2(800, 260)
 	text_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	text_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	text_label.add_theme_font_size_override("font_size", 22)
+	text_label.add_theme_font_size_override("font_size", 26)
+	text_label.add_theme_color_override("font_color", CREAM)
+	text_label.add_theme_constant_override("line_spacing", 14)
 	overlay.add_child(text_label)
+
+	_rule = ColorRect.new()
+	_rule.color = Color(GOLD, 0.30)
+	_rule.position = Vector2(240, 224)
+	_rule.size = Vector2(800, 1)
+	_rule.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	overlay.add_child(_rule)
 
 	hint_label = Label.new()
 	hint_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -80,7 +93,8 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 	hint_label.size = Vector2(1280, 30)
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint_label.add_theme_font_size_override("font_size", 16)
-	hint_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7))
+	hint_label.add_theme_color_override("font_color", Color(GOLD, 0.55))
+	hint_label.add_theme_font_size_override("font_size", 15)
 	overlay.add_child(hint_label)
 	StoryDB.apply_serif(speaker_label)
 	StoryDB.apply_serif(text_label)
@@ -89,7 +103,9 @@ func _start(parent: Node, source: Array, finish: Callable, skip_cb: Callable = C
 	skip.text = "跳过"
 	skip.size = Vector2(120, 44)
 	skip.position = Vector2(1130, 650)
-	skip.add_theme_font_size_override("font_size", 16)
+	skip.add_theme_font_size_override("font_size", 15)
+	skip.add_theme_color_override("font_color", Color(GOLD, 0.8))
+	skip.add_theme_color_override("font_hover_color", GOLD_HI)
 	skip.pressed.connect(_finish.bind(true))
 	overlay.add_child(skip)
 	Modal.apply_ink(skip, 18)

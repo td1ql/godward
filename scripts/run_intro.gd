@@ -45,7 +45,7 @@ func _ready() -> void:
 
 	var title := Label.new()
 	title.text = "第 %d 次转生" % GameState.transmigration
-	title.position = Vector2(0, 50)
+	title.position = Vector2(0, 54)
 	title.size = Vector2(1280, 70)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 48)
@@ -58,7 +58,7 @@ func _ready() -> void:
 		card.texture = load(card_path)
 		card.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		card.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-		card.position = Vector2(70, 140)
+		card.position = Vector2(70, 150)
 		card.size = Vector2(330, 440)
 		add_child(card)
 		_page_nodes.append(card)
@@ -68,14 +68,14 @@ func _ready() -> void:
 	else:
 		var ph := ColorRect.new()
 		ph.color = Color(0.88, 0.84, 0.74, 0.8)
-		ph.position = Vector2(70, 140)
+		ph.position = Vector2(70, 150)
 		ph.size = Vector2(330, 549)
 		add_child(ph)
 		_page_nodes.append(ph)
 
 	var panel := ArkPanel.new()
-	panel.position = Vector2(430, 150)
-	panel.size = Vector2(820, 520)
+	panel.position = Vector2(410, 150)
+	panel.size = Vector2(800, 520)
 	panel.cut = 28.0
 	panel.alpha = 0.80
 	add_child(panel)
@@ -84,15 +84,15 @@ func _ready() -> void:
 	# 分隔线（面板上沿的装饰）
 	var rule := ColorRect.new()
 	rule.color = Color(0.79, 0.66, 0.42, 0.30)
-	rule.position = Vector2(462, 196)
-	rule.size = Vector2(756, 1)
+	rule.position = Vector2(442, 196)
+	rule.size = Vector2(736, 1)
 	add_child(rule)
 	_page_nodes.append(rule)
 
 	# ① 身份：职业名（大字）
 	var name_lbl := Label.new()
 	name_lbl.text = str(GameState.vocation)
-	name_lbl.position = Vector2(462, 160)
+	name_lbl.position = Vector2(442, 160)
 	name_lbl.size = Vector2(700, 40)
 	name_lbl.add_theme_font_size_override("font_size", 30)
 	name_lbl.add_theme_color_override("font_color", Color(0.93, 0.88, 0.76))
@@ -110,7 +110,7 @@ func _ready() -> void:
 	for r in rows:
 		var key := Label.new()
 		key.text = str(r[0])
-		key.position = Vector2(462, ry)
+		key.position = Vector2(442, ry)
 		key.size = Vector2(56, 28)
 		key.add_theme_font_size_override("font_size", 15)
 		key.add_theme_color_override("font_color", Color(0.79, 0.66, 0.42, 0.9))
@@ -120,8 +120,8 @@ func _ready() -> void:
 
 		var val := Label.new()
 		val.text = str(r[1])
-		val.position = Vector2(524, ry)
-		val.size = Vector2(700, 64)
+		val.position = Vector2(504, ry)
+		val.size = Vector2(680, 64)
 		val.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		val.add_theme_font_size_override("font_size", 16)
 		val.add_theme_color_override("font_color", Color(0.80, 0.77, 0.68))
@@ -132,7 +132,7 @@ func _ready() -> void:
 
 	# ③ 数字：初始生命 / 金币
 	var stats := [["初始生命", GameState.player_hp], ["初始金币", GameState.gold]]
-	var sx := 462.0
+	var sx := 442.0
 	for st in stats:
 		var cap := Label.new()
 		cap.text = str(st[0])
@@ -179,7 +179,7 @@ func _ready() -> void:
 
 	var enter := Button.new()
 	enter.text = "戏幕开场"
-	enter.position = Vector2(830, 592)
+	enter.position = Vector2(830, 588)
 	enter.size = Vector2(340, 58)
 	enter.focus_mode = Control.FOCUS_NONE
 	enter.add_theme_font_size_override("font_size", 24)
