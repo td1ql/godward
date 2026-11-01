@@ -1,4 +1,4 @@
-extends Node2D
+﻿extends Node2D
 
 const MapNode = preload("res://scripts/map_node.gd")
 const ArkPanel = preload("res://scripts/ark_panel.gd")
@@ -29,6 +29,7 @@ var player_marker: Panel
 var bg_rect: TextureRect
 var edge_root: Node2D
 var _path_ids := {}
+var _seen_ids := {}
 
 func _ready() -> void:
 	AudioManager.play_bgm("map_%d" % GameState.act)
@@ -190,8 +191,16 @@ func _ensure_positions() -> void:
 			var sibs: Array = nodes[pid]["children"]
 			var idx := sibs.find(id)
 			var n := sibs.size()
-			var angle := -PI / 2.0 + float(idx) * TAU / float(n)
-			world_pos[id] = world_pos[pid] + Vector2(cos(angle), sin(angle)) * RADIUS
+			# 每个节点用 id 做种子，保证同一节点每次布局都一样
+			var rng := RandomNumberGenerator.new()
+			rng.seed = id * 7919 + pid * 104729 + GameState.transmigration * 31
+			var base := -PI / 2.0 + float(idx) * TAU / float(n)
+			# 角度偏移：±22 度
+			var ang_off := rng.randf_range(-0.38, 0.38)
+			# 半径：0.78 ~ 1.30 倍
+			var rad_mul := rng.randf_range(0.78, 1.30)
+			var angle := base + ang_off
+			world_pos[id] = world_pos[pid] + Vector2(cos(angle), sin(angle)) * RADIUS * rad_mul
 			changed = true
 
 func _parent_of(id: int) -> int:
@@ -245,9 +254,22 @@ func _rebuild_view() -> void:
 		if not visible_ids.has(cid):
 			visible_ids.append(cid)
 
+	var reveal_i := 0
 	for id in visible_ids:
 		if nodes.has(id) and world_pos.has(id):
-			_make_node_button(id, world_pos[id])
+			var b := _make_node_button(id, world_pos[id])
+			# 新出现的节点：从 0.6 缩放 + 淡入，按顺序错开
+			var is_new: bool = not _seen_ids.has(id)
+			if is_new:
+				b.modulate.a = 0.0
+				b.scale = Vector2(0.6, 0.6)
+				b.pivot_offset = NODE_SIZE / 2.0
+				var tw := create_tween()
+				tw.tween_interval(0.08 * reveal_i)
+				tw.tween_property(b, "modulate:a", 1.0, 0.28)
+				tw.parallel().tween_property(b, "scale", Vector2(1, 1), 0.34).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+				reveal_i += 1
+			_seen_ids[id] = true
 
 	_update_bg()
 
@@ -266,11 +288,34 @@ func _path_to_current() -> Array:
 func _add_edge(a: int, b: int) -> void:
 	if not world_pos.has(a) or not world_pos.has(b):
 		return
+	var on_path := _path_ids.has(a) and _path_ids.has(b)
+	var pa: Vector2 = world_pos[a]
+	var pb: Vector2 = world_pos[b]
+
+	# 二次贝塞尔：控制点在中点垂直方向偏一点，做成弧
+	var mid := (pa + pb) / 2.0
+	var dir := pb - pa
+	var perp := Vector2(-dir.y, dir.x).normalized()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = a * 131 + b * 977
+	var bend := rng.randf_range(-0.16, 0.16) * dir.length()
+	var ctrl := mid + perp * bend
+
+	var pts := PackedVector2Array()
+	for i in range(21):
+		var t := float(i) / 20.0
+		pts.append(pa.lerp(ctrl, t).lerp(ctrl.lerp(pb, t), t))
+
 	var ln := Line2D.new()
-	ln.points = PackedVector2Array([world_pos[a], world_pos[b]])
-	ln.width = 3.0
-	ln.default_color = Color(0.24, 0.16, 0.09, 0.55)
+	ln.points = pts
+	ln.width = 2.0 if on_path else 1.0
+	ln.default_color = Color(0.79, 0.66, 0.42, 0.85) if on_path else Color(0.42, 0.38, 0.30, 0.30)
+	ln.antialiased = true
 	edge_root.add_child(ln)
+	if on_path:
+		var tw := create_tween()
+		ln.modulate.a = 0.0
+		tw.tween_property(ln, "modulate:a", 1.0, 0.45)
 
 
 # 没有专属图标的节点，借用最接近的一张
