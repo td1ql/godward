@@ -12,3 +12,7 @@ build/
 # 原始字体（31MB，只用于重新子集化，不进仓库）
 assets/fonts/source/
 
+
+# 生成的卡面（体积大，不进仓库；用 tools/gen_card_art_xl.py 重新生成）
+assets/art/cardart/
+!assets/art/cardart/.gitkeep
