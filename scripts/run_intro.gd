@@ -1,6 +1,7 @@
 extends Node2D
 
 const ArtFrame = preload("res://scripts/art_frame.gd")
+const ArkPanel = preload("res://scripts/ark_panel.gd")
 
 var _card_btn: Button
 var _discard_btn: Button
@@ -72,37 +73,87 @@ func _ready() -> void:
 		add_child(ph)
 		_page_nodes.append(ph)
 
-	var panel := Panel.new()
+	var panel := ArkPanel.new()
 	panel.position = Vector2(430, 150)
 	panel.size = Vector2(820, 520)
-	var ps := StyleBoxFlat.new()
-	ps.bg_color = Color(0.05, 0.06, 0.09, 0.74)
-	ps.border_width_left = 1
-	ps.border_width_right = 1
-	ps.border_width_top = 1
-	ps.border_width_bottom = 1
-	ps.border_color = Color(0.55, 0.44, 0.24, 0.45)
-	panel.add_theme_stylebox_override("panel", ps)
+	panel.cut = 28.0
+	panel.alpha = 0.80
 	add_child(panel)
 	_page_nodes.append(panel)
 
-	var info := Label.new()
-	info.text = "%s\n\n词条：%s\n守则：%s\n流派：%s\n\n初始生命 %d　　初始金币 %d" % [
-		TraitDB.vocation_text(GameState.vocation),
-		TraitDB.text_of(GameState.traits),
-		TraitDB.creed_text(GameState.vocation),
-		" / ".join(GameState.streams),
-		GameState.player_hp,
-		GameState.gold,
+	# 分隔线（面板上沿的装饰）
+	var rule := ColorRect.new()
+	rule.color = Color(0.79, 0.66, 0.42, 0.30)
+	rule.position = Vector2(462, 196)
+	rule.size = Vector2(756, 1)
+	add_child(rule)
+	_page_nodes.append(rule)
+
+	# ① 身份：职业名（大字）
+	var name_lbl := Label.new()
+	name_lbl.text = str(GameState.vocation)
+	name_lbl.position = Vector2(462, 160)
+	name_lbl.size = Vector2(700, 40)
+	name_lbl.add_theme_font_size_override("font_size", 30)
+	name_lbl.add_theme_color_override("font_color", Color(0.93, 0.88, 0.76))
+	StoryDB.apply_serif(name_lbl)
+	add_child(name_lbl)
+	_page_nodes.append(name_lbl)
+
+	# ② 规则：词条 / 守则 / 流派
+	var rows := [
+		["词条", TraitDB.text_of(GameState.traits)],
+		["守则", TraitDB.creed_text(GameState.vocation)],
+		["流派", " / ".join(GameState.streams)],
 	]
-	info.position = Vector2(460, 172)
-	info.size = Vector2(750, 300)
-	info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info.add_theme_font_size_override("font_size", 20)
-	info.add_theme_color_override("font_color", Color(0.87, 0.83, 0.73))
-	StoryDB.apply_serif(info)
-	add_child(info)
-	_page_nodes.append(info)
+	var ry := 228.0
+	for r in rows:
+		var key := Label.new()
+		key.text = str(r[0])
+		key.position = Vector2(462, ry)
+		key.size = Vector2(56, 28)
+		key.add_theme_font_size_override("font_size", 15)
+		key.add_theme_color_override("font_color", Color(0.79, 0.66, 0.42, 0.9))
+		StoryDB.apply_serif(key)
+		add_child(key)
+		_page_nodes.append(key)
+
+		var val := Label.new()
+		val.text = str(r[1])
+		val.position = Vector2(524, ry)
+		val.size = Vector2(700, 64)
+		val.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		val.add_theme_font_size_override("font_size", 16)
+		val.add_theme_color_override("font_color", Color(0.80, 0.77, 0.68))
+		StoryDB.apply_serif(val)
+		add_child(val)
+		_page_nodes.append(val)
+		ry += 64.0
+
+	# ③ 数字：初始生命 / 金币
+	var stats := [["初始生命", GameState.player_hp], ["初始金币", GameState.gold]]
+	var sx := 462.0
+	for st in stats:
+		var cap := Label.new()
+		cap.text = str(st[0])
+		cap.position = Vector2(sx, 430)
+		cap.size = Vector2(160, 24)
+		cap.add_theme_font_size_override("font_size", 14)
+		cap.add_theme_color_override("font_color", Color(0.55, 0.51, 0.44))
+		StoryDB.apply_serif(cap)
+		add_child(cap)
+		_page_nodes.append(cap)
+
+		var num := Label.new()
+		num.text = str(st[1])
+		num.position = Vector2(sx, 454)
+		num.size = Vector2(200, 56)
+		num.add_theme_font_size_override("font_size", 44)
+		num.add_theme_color_override("font_color", Color(0.95, 0.82, 0.46))
+		add_child(num)
+		_page_nodes.append(num)
+		sx += 260.0
+
 
 	var bx := 470
 	if GameState.transmigration >= 3 and not GameState.milestone_card:
