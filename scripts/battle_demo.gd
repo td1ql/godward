@@ -140,7 +140,7 @@ func _ready() -> void:
 	var rp := ArkPanel.new()
 	_info_strip = rp
 	rp.position = Vector2(966, 86)
-	rp.size = Vector2(300, 58)
+	rp.size = Vector2(300, 76)
 	rp.cut = 14.0
 	rp.z_index = 1
 	rp.alpha = 0.86
@@ -1507,13 +1507,14 @@ func _update_ui() -> void:
 			_info_name.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 58.0)
 			_info_name.size = Vector2(strip_w - 16.0, 24.0)
 		if _info_detail != null:
-			_info_detail.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 28.0)
-			_info_detail.size = Vector2(strip_w - 16.0, 20.0)
+			_info_detail.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 26.0)
+			_info_detail.size = Vector2(strip_w - 16.0, 38.0)
 			# 长文本自动缩字号（13 → 11 → 10），再长就裁掉
 			var dlen: int = _info_detail.text.length()
-			var fs: int = 13 if dlen <= 24 else (11 if dlen <= 32 else 10)
+			var fs: int = 12 if dlen <= 20 else (11 if dlen <= 34 else 10)
 			_info_detail.add_theme_font_size_override("font_size", fs)
-			_info_detail.clip_text = dlen > 40
+			_info_detail.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
+			_info_detail.clip_text = dlen > 70
 		if _ehp_bar != null:
 			_ehp_bar.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 34.0)
 			_ehp_bar.size.x = (strip_w - 16.0) * clamp(float(enemy.hp) / float(maxi(1, enemy.max_hp)), 0.0, 1.0)
@@ -1535,7 +1536,7 @@ func _update_ui() -> void:
 	var dtxt: String = EnemyDB.domain_text(enemy.domain)
 	if dtxt != "":
 		if edetail != "":
-			edetail += "  ·  "
+			edetail += "\n"
 		edetail += "领域 %s" % dtxt
 	if enemy.hp > 0 and player_hp > 0:
 		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
@@ -1543,7 +1544,7 @@ func _update_ui() -> void:
 		if hit_extra != "":
 			intent += " + %s" % hit_extra
 		if edetail != "":
-			edetail += "  ·  "
+			edetail += "\n"
 		edetail += intent
 	if enemy.hp <= 0:
 		edetail += "\n你赢了！"
