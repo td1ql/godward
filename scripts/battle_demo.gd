@@ -105,7 +105,7 @@ func _ready() -> void:
 		bgr.stretch_mode = TextureRect.STRETCH_SCALE
 		bgr.size = Vector2(1280, 720)
 		add_child(bgr)
-		move_child(bgr, 0)
+		bgr.z_index = -10
 	else:
 		var fb := ColorRect.new()
 		fb.color = Color(0.05, 0.06, 0.09)
@@ -117,12 +117,14 @@ func _ready() -> void:
 	lp.position = Vector2(40, 30)
 	lp.size = Vector2(206, 200)
 	lp.cut = 18.0
+	lp.z_index = 1
 	lp.alpha = 0.86
 	add_child(lp)
 	var rp := ArkPanel.new()
 	rp.position = Vector2(846, 30)
 	rp.size = Vector2(260, 200)
 	rp.cut = 18.0
+	rp.z_index = 1
 	rp.alpha = 0.86
 	add_child(rp)
 
@@ -136,8 +138,6 @@ func _ready() -> void:
 		solid.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(solid)
 		# 背景图在 0，场景里的 InfoLabel / CombatLabel 在后面；底衬插到 1
-		if get_child_count() > 1:
-			move_child(solid, 1)
 
 	# 玩家血条（放到底层，避免盖住文字）
 	_hp_bar_bg = ColorRect.new()
@@ -146,16 +146,12 @@ func _ready() -> void:
 	_hp_bar_bg.position = Vector2(56, 146)
 	_hp_bar_bg.size = Vector2(180, 6)
 	add_child(_hp_bar_bg)
-	if get_child_count() > 1:
-		move_child(_hp_bar_bg, 2)
 	_hp_bar = ColorRect.new()
 	_hp_bar.z_index = 0
 	_hp_bar.color = Color(0.88, 0.74, 0.42)
 	_hp_bar.position = Vector2(56, 146)
 	_hp_bar.size = Vector2(180, 6)
 	add_child(_hp_bar)
-	if get_child_count() > 1:
-		move_child(_hp_bar, 3)
 
 	# 敌人血条
 	_ehp_bar_bg = ColorRect.new()
@@ -164,16 +160,12 @@ func _ready() -> void:
 	_ehp_bar_bg.position = Vector2(860, 146)
 	_ehp_bar_bg.size = Vector2(230, 6)
 	add_child(_ehp_bar_bg)
-	if get_child_count() > 1:
-		move_child(_ehp_bar_bg, 2)
 	_ehp_bar = ColorRect.new()
 	_ehp_bar.z_index = 0
 	_ehp_bar.color = Color(0.80, 0.35, 0.30)
 	_ehp_bar.position = Vector2(860, 146)
 	_ehp_bar.size = Vector2(230, 6)
 	add_child(_ehp_bar)
-	if get_child_count() > 1:
-		move_child(_ehp_bar, 3)
 
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
@@ -246,6 +238,7 @@ func _ready() -> void:
 	# 职业技能按钮
 	_skill_btn = Button.new()
 	_skill_btn.visible = false   # 由 _refresh_skill_btn 决定
+	_skill_btn.z_index = 6
 	_skill_btn.position = Vector2(14, 596)
 	_skill_btn.size = Vector2(196, 46)
 	_skill_btn.focus_mode = Control.FOCUS_NONE
@@ -268,6 +261,7 @@ func _ready() -> void:
 	player_label = Label.new()
 	# 能量：放在手牌左边
 	info_label.position = Vector2(22, 400)
+	info_label.z_index = 5
 	info_label.size = Vector2(150, 46)
 	info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -279,6 +273,7 @@ func _ready() -> void:
 	# 牌堆计数：屏幕正下方
 	pile_label = Label.new()
 	pile_label.position = Vector2(0, 652)
+	pile_label.z_index = 5
 	pile_label.size = Vector2(1280, 40)
 	pile_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	pile_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -301,9 +296,11 @@ func _ready() -> void:
 	combat_label.add_theme_font_size_override("font_size", 19)
 	combat_label.add_theme_constant_override("outline_size", 2)
 	combat_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	combat_label.z_index = 5
 	player_label.add_theme_font_size_override("font_size", 19)
 	player_label.add_theme_constant_override("outline_size", 2)
 	player_label.add_theme_color_override("font_outline_color", Color(0.08, 0.07, 0.06))
+	player_label.z_index = 5
 	add_child(player_label)
 	var sil: String = EnemyDB.silhouette_of(str(enemy.label_name))
 	var boss_bg := _is_shown_in_bg()
@@ -315,6 +312,7 @@ func _ready() -> void:
 		spr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		spr.position = Vector2(1106, 30)
 		spr.size = Vector2(150, 200)
+		spr.z_index = 2
 		spr.modulate = Color(1, 1, 1, 0.92)
 		add_child(spr)
 		# 框挂成立绘的子节点，浮动/缩放时严丝合缝
@@ -339,6 +337,7 @@ func _ready() -> void:
 		pc.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 200)
+		pc.z_index = 2
 		add_child(pc)
 		var pf := ArtFrame.make(Rect2(0, 0, 150, 200), 0.55, 0.28)
 		pf.corner = 16.0
