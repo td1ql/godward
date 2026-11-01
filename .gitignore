@@ -16,3 +16,13 @@ assets/fonts/source/
 # 生成的卡面（体积大，不进仓库；用 tools/gen_card_art_xl.py 重新生成）
 assets/art/cardart/
 !assets/art/cardart/.gitkeep
+
+# AI 生成的中间产物（体积大，不进仓库）
+assets/art/enemy2/
+assets/art/enemy_cut/
+assets/art/_rejected_*/
+assets/art/enemy_v9*/
+assets/art/enemy_v10*/
+assets/art/enemy_v11*/
+assets/art/enemy_v12*/
+assets/art/enemytest*/
