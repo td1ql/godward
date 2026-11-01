@@ -7,7 +7,7 @@ const GridOverlay = preload("res://scripts/grid_overlay.gd")
 # ---------- 世界布局 ----------
 const NODE_SIZE := Vector2(66, 66)
 const RADIUS := 210.0
-const ZOOM := 1.45
+const ZOOM := 1.12
 const WALK_TIME := 0.55
 const FADE_TIME := 0.22
 
@@ -198,9 +198,12 @@ func _ensure_positions() -> void:
 			# 角度偏移：±22 度
 			var ang_off := rng.randf_range(-0.38, 0.38)
 			# 半径：0.78 ~ 1.30 倍
-			var rad_mul := rng.randf_range(0.78, 1.30)
+			var rad_mul := rng.randf_range(0.82, 1.12)
 			var angle := base + ang_off
-			world_pos[id] = world_pos[pid] + Vector2(cos(angle), sin(angle)) * RADIUS * rad_mul
+			var step_vec := Vector2(cos(angle), sin(angle)) * RADIUS * rad_mul
+			# 屏幕是 16:9，把纵向压缩到 0.72，整圈才都能进画面
+			step_vec.y *= 0.72
+			world_pos[id] = world_pos[pid] + step_vec
 			changed = true
 
 func _parent_of(id: int) -> int:
