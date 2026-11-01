@@ -37,6 +37,10 @@ var first_card_used := false
 var _ending_turn := false
 var _skill_btn: Button
 var _skill_used := false
+var _hp_bar: ColorRect
+var _hp_bar_bg: ColorRect
+var _ehp_bar: ColorRect
+var _ehp_bar_bg: ColorRect
 var _turn_no := 1
 var _no_attack_turns := 0
 var attacked_last_turn := false
@@ -109,8 +113,42 @@ func _ready() -> void:
 		add_child(fb)
 
 	# 左上/右上信息块的暗底（必须在所有标签之前加，否则会被标签或背景盖住）
-	_backing(Vector2(40, 30), Vector2(206, 200))
-	_backing(Vector2(846, 30), Vector2(260, 200), true)
+	var lp := ArkPanel.new()
+	lp.position = Vector2(40, 30)
+	lp.size = Vector2(206, 200)
+	lp.cut = 18.0
+	lp.alpha = 0.86
+	add_child(lp)
+	var rp := ArkPanel.new()
+	rp.position = Vector2(846, 30)
+	rp.size = Vector2(260, 200)
+	rp.cut = 18.0
+	rp.alpha = 0.86
+	add_child(rp)
+
+	# 玩家血条
+	_hp_bar_bg = ColorRect.new()
+	_hp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
+	_hp_bar_bg.position = Vector2(54, 118)
+	_hp_bar_bg.size = Vector2(180, 6)
+	add_child(_hp_bar_bg)
+	_hp_bar = ColorRect.new()
+	_hp_bar.color = Color(0.88, 0.74, 0.42)
+	_hp_bar.position = Vector2(54, 118)
+	_hp_bar.size = Vector2(180, 6)
+	add_child(_hp_bar)
+
+	# 敌人血条
+	_ehp_bar_bg = ColorRect.new()
+	_ehp_bar_bg.color = Color(0.72, 0.60, 0.36, 0.18)
+	_ehp_bar_bg.position = Vector2(860, 118)
+	_ehp_bar_bg.size = Vector2(230, 6)
+	add_child(_ehp_bar_bg)
+	_ehp_bar = ColorRect.new()
+	_ehp_bar.color = Color(0.80, 0.35, 0.30)
+	_ehp_bar.position = Vector2(860, 118)
+	_ehp_bar.size = Vector2(230, 6)
+	add_child(_ehp_bar)
 
 	var dim := ColorRect.new()
 	dim.color = Color(0.03, 0.04, 0.07, 0.38)
@@ -1278,6 +1316,14 @@ func _update_ui() -> void:
 	]
 
 	var status_txt: String = StatusSystem.text(player_status)
+	# 血条
+	if _hp_bar != null:
+		var mx := max(1, GameState.player_max_hp)
+		_hp_bar.size.x = 180.0 * clamp(float(player_hp) / float(mx), 0.0, 1.0)
+	if _ehp_bar != null:
+		var emx := max(1, enemy.max_hp)
+		_ehp_bar.size.x = 230.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
+
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
 	if status_txt != "":
 		ptext += "\n" + status_txt
