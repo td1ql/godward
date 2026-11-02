@@ -184,7 +184,7 @@ func _on_toggle_audio() -> void:
 	_update_mute_btn()
 
 func _on_start() -> void:
-	get_tree().change_scene_to_file("res://scenes/save_menu.tscn")
+	SceneFade.change_to("res://scenes/save_menu.tscn")
 
 func _on_quit() -> void:
 	get_tree().quit()

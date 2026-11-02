@@ -228,7 +228,7 @@ func _slot_name(slot: int) -> String:
 	return ["一", "二", "三"][clampi(slot, 0, 2)]
 
 func _on_back() -> void:
-	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
+	SceneFade.change_to("res://scenes/main_menu.tscn")
 
 # ===== 调试入口（仅调试版可见，导出版没有）=====
 func _debug_starter_deck() -> Array[String]:
