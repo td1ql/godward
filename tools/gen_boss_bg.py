@@ -45,20 +45,13 @@ NEG = (
 
 # Boss 名 → (场景描述, 参考立绘文件名不含扩展名)
 BOSSES = {
-    "odin": ("a broken throne hall open to a stormy sky, a lone crowned figure standing far away, "
-             "cracked stone floor receding", "odin"),
-    "pope": ("a vast cathedral nave, a single robed figure on the steps far ahead, "
-             "rows of columns receding", "pope"),
-    "asclepius": ("a circular healing temple, one figure kneeling at the far altar, "
-                  "ringed stone floor receding", "asclepius"),
-    "hephaestus": ("a colossal forge hall, one smith standing before a glowing anvil far away, "
-                   "channels of molten metal", "hephaestus"),
-    "hermes": ("a long colonnade open to a dark sky, one figure walking away down the center",
-               "hermes"),
-    "godchaser": ("a ruined battlefield at dusk, one armored figure standing alone in the distance",
-                  "godchaser"),
-    "world_tree": ("an immense hollow beneath a world tree, one tiny figure standing at the base "
-                   "of the trunk", "ascetic"),
+    "odin": ("a broken throne hall open to a stormy sky, a lone crowned figure standing far away, cracked stone floor receding", "疯癫的先知"),
+    "pope": ("a vast cathedral nave, a single robed figure on the steps far ahead, rows of columns receding", "数星星的瞎子"),
+    "asclepius": ("a circular healing temple, one figure kneeling at the far altar, ringed stone floor receding", "等死的病人"),
+    "hephaestus": ("a colossal forge hall, one smith standing before a glowing anvil far away, channels of molten metal", "磨刀的哑巴"),
+    "hermes": ("a long colonnade open to a dark sky, one figure walking away down the center", "无名的旅人"),
+    "godchaser": ("a ruined battlefield at dusk, one armored figure standing alone in the distance", "断臂的旗手"),
+    "world_tree": ("an immense hollow beneath a world tree, one tiny figure standing at the base of the trunk", "饥饿的朝圣者"),
 }
 
 
