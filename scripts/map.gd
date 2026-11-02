@@ -220,6 +220,8 @@ func _ensure_positions() -> void:
 			# 屏幕是 16:9，把纵向压缩到 0.72，整圈才都能进画面
 			step_vec.y *= 0.72
 			var cand: Vector2 = world_pos[pid] + step_vec
+			cand.x = clampf(cand.x, 150.0, 1120.0)
+			cand.y = clampf(cand.y, 120.0, 640.0)
 
 			# 和已有的任何节点太近就把它推开（防止节点叠在一起）
 			const MIN_DIST := 132.0
@@ -235,9 +237,8 @@ func _ensure_positions() -> void:
 				if away.length() < 1.0:
 					away = Vector2(cos(angle), sin(angle))
 				cand += away.normalized() * 30.0
-			# 收敛到安全区（HUD 左上角 + 右侧菜单都留出空位）
-			cand.x = clampf(cand.x, 150.0, 1120.0)
-			cand.y = clampf(cand.y, 120.0, 640.0)
+				cand.x = clampf(cand.x, 150.0, 1120.0)
+				cand.y = clampf(cand.y, 120.0, 640.0)
 			world_pos[id] = cand
 			changed = true
 
