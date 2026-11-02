@@ -303,5 +303,3 @@ func _build_debug_buttons() -> void:
 		if col >= 2:
 			col = 0
 			row += 1
-
-
