@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """卡面 v3 批量生成：人物 + 动作 + 场景"""
-import json, os, shutil, sys, time, urllib.request, zlib
+import json, os, re, shutil, sys, time, urllib.request, zlib
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from card_subjects_v3a import SUBJECTS_V3_A
@@ -8,8 +8,8 @@ from card_subjects_v3b import SUBJECTS_V3_B
 
 API = "http://127.0.0.1:8188"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "assets", "art", "cardart3")
-DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop", "逐神卡面v3")
+OUT = os.path.join(ROOT, "assets", "art", "cardart3b")
+DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop", "逐神卡面v3b")
 COMFY_OUT = r"C:\ComfyUI\output"
 CKPT = "animagine-xl-4.0.safetensors"
 
@@ -17,7 +17,8 @@ STYLE = (
     "masterpiece, best quality, absurdres, "
     "medieval dark fantasy illustration, single character, "
     "detailed clothing, layered fabric, dirt and wear, "
-    "visible face, face clearly lit from the side, warm light on the face, "
+    "face turned toward the viewer, clear facial features, eyes visible, "
+    "face clearly lit from the side, warm light on the face, "
     "semi-realistic painterly concept art, matte surfaces, "
     "desaturated muted colors, deep teal shadows, soft directional light, "
     "stone wall or wooden plank background, shallow depth, "
@@ -36,6 +37,8 @@ NEG = (
 SUBJECTS = {}
 SUBJECTS.update(SUBJECTS_V3_A)
 SUBJECTS.update(SUBJECTS_V3_B)
+# 去掉 hooded / cloaked / robed —— 这三个词会让 SDXL 把人画成兜帽黑影
+SUBJECTS = {k: re.sub(r"\\b(hooded|cloaked|robed)\\s+", "", v) for k, v in SUBJECTS.items()}
 
 
 def post(wf):
