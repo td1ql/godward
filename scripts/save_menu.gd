@@ -16,9 +16,6 @@ const DIM := Color(0.55, 0.51, 0.44)
 
 func _ready() -> void:
 	AudioManager.play_bgm("menu")
-	NavMenu.attach(self, [
-		{"text": "返回主菜单", "action": func() -> void: get_tree().change_scene_to_file("res://scenes/main_menu.tscn")},
-	])
 
 	var bg_path := "res://assets/art/bg/bg_menu.webp"
 	if ResourceLoader.exists(bg_path):
