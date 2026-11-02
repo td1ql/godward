@@ -11,12 +11,13 @@ const ArkPanel = preload("res://scripts/ark_panel.gd")
 
 const COLS := 2
 const CELL_W := 520.0
-const CELL_H := 78.0
+const CELL_H := 86.0
 
 const BY_ACT := {
-	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start", "shell", "remnant"],
-	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start", "shell"],
-	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent", "tree", "divine", "divine_elite", "start"],
+	# 严格对齐 MapDB 的生成池：只列本幕真会出现的
+	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start"],
+	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start"],
+	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent", "tree", "start"],
 }
 
 const NOTE := {
