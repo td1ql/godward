@@ -101,6 +101,7 @@ func _ready() -> void:
 	_quit_btn.pressed.connect(_on_quit)
 	_check_prologue()
 	# 开局展示界面（点一下才进主菜单）
+	call_deferred("_play_entry_zoom")
 	call_deferred("_spawn_splash")
 
 func _spawn_splash() -> void:
@@ -192,8 +193,8 @@ func _on_start() -> void:
 	_starting = true
 	var tw := create_tween()
 	tw.set_parallel(true)
-	tw.tween_property(self, "scale", Vector2(1.22, 1.22), 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
-	tw.tween_property(self, "position", Vector2(-160, -70), 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	# 以左上角为锚点放大（position 保持 0,0，scale 会从原点展开）
+	tw.tween_property(self, "scale", Vector2(1.28, 1.28), 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	await tw.finished
 	SceneFade.change_to("res://scenes/save_menu.tscn")
 
@@ -236,3 +237,13 @@ func _finish_prologue() -> void:
 
 func _skip_prologue() -> void:
 	_set_stage(3)
+
+
+# ---------- 从存档页返回时的入场：从放大态缩回正常 ----------
+func _play_entry_zoom() -> void:
+	if not GameState.returning_from_save:
+		return
+	GameState.returning_from_save = false
+	scale = Vector2(1.28, 1.28)
+	var tw := create_tween()
+	tw.tween_property(self, "scale", Vector2(1.0, 1.0), 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)

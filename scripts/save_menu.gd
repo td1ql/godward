@@ -233,6 +233,13 @@ func _slot_name(slot: int) -> String:
 	return ["一", "二", "三"][clampi(slot, 0, 2)]
 
 func _on_back() -> void:
+	GameState.returning_from_save = true
+	# 返回时整页放大，像镜头倒退拉远
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(self, "scale", Vector2(1.24, 1.24), 0.42).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(self, "modulate", Color(1, 1, 1, 0.0), 0.42)
+	await tw.finished
 	SceneFade.change_to("res://scenes/main_menu.tscn")
 
 # ===== 调试入口（仅调试版可见，导出版没有）=====

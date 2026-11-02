@@ -17,6 +17,8 @@ var pending_snapshot: Dictionary = {}
 var transmigration := 1
 # 本次启动是否已经播过标题开场（只在打开游戏时播一次）
 var intro_played := false
+# 是否是从存档页返回主菜单（用返场的缩小动画）
+var returning_from_save := false
 var traits: Array[String] = []
 var vocation := ""
 var vocation_history: Array[String] = []
