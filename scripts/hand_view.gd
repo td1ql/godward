@@ -32,9 +32,9 @@ func render(cards: Array[String], energy: int, pending_effect: int, pending_sele
 				btn.modulate = Color(1, 1, 1, 0.75)
 		else:
 			btn.disabled = energy < d["cost"]
-	# 能量不够时整张卡（含插画子节点）一起压暗，一眼看出打不出
-	if btn.disabled:
-		btn.modulate = Color(0.46, 0.46, 0.50, 1.0)
+		# 能量不够时整张卡（含插画子节点）一起压暗，一眼看出打不出
+		if btn.disabled:
+			btn.modulate = Color(0.46, 0.46, 0.50, 1.0)
 		btn.pressed.connect(_on_press.bind(i))
 		add_child(btn)
 		_buttons.append(btn)
