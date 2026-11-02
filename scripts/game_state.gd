@@ -15,6 +15,8 @@ var current_slot := 0
 var pending_node: int = -1
 var pending_snapshot: Dictionary = {}
 var transmigration := 1
+# 本次启动是否已经播过标题开场（只在打开游戏时播一次）
+var intro_played := false
 var traits: Array[String] = []
 var vocation := ""
 var vocation_history: Array[String] = []

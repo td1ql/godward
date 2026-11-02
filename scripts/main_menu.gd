@@ -102,6 +102,10 @@ func _ready() -> void:
 	call_deferred("_spawn_splash")
 
 func _spawn_splash() -> void:
+	# 每次「打开游戏」才播开场动画；从战斗/地图返回主菜单不重播
+	if GameState.intro_played:
+		return
+	GameState.intro_played = true
 	TitleSplash.show_on(self)
 
 
