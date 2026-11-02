@@ -1,5 +1,7 @@
 extends Node2D
 
+var _starting := false
+
 var _mute_btn: Button
 var _bgm_btn: Button
 var _master_btn: Button
@@ -184,6 +186,15 @@ func _on_toggle_audio() -> void:
 	_update_mute_btn()
 
 func _on_start() -> void:
+	# 镜头推近：整体放大并把画面中心往右移（朝存档界面主体区域推）
+	if _starting:
+		return
+	_starting = true
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(self, "scale", Vector2(1.22, 1.22), 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(self, "position", Vector2(-160, -70), 0.55).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	await tw.finished
 	SceneFade.change_to("res://scenes/save_menu.tscn")
 
 func _on_quit() -> void:

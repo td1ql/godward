@@ -1,5 +1,7 @@
 extends Node2D
 
+var _slot_groups: Array = []
+
 # ============================================================
 # 存档界面 —— 明日方舟风格
 #   深墨底 + 切角面板 + 金色细线 + 章节副标题
@@ -84,6 +86,8 @@ func _ready() -> void:
 
 	for i in range(GameState.SLOT_COUNT):
 		_build_slot(i)
+	# 记录每个槽的节点组，供入场动画使用
+	_play_enter_anim()
 
 	var back := _ghost_button("返 回", 540, 630, 200, 50)
 	back.pressed.connect(_on_back)
@@ -95,6 +99,7 @@ func _build_slot(i: int) -> void:
 	var y := 196 + i * 132
 
 	# 切角底板
+	var _g0 := get_child_count()
 	var panel := ArkPanel.new()
 	panel.position = Vector2(120, y)
 	panel.size = Vector2(1040, 112)
@@ -301,3 +306,48 @@ func _build_debug_buttons() -> void:
 		if col >= 2:
 			col = 0
 			row += 1
+
+
+# ---------- 入场动画：背景渐暗 + 三条槽依次从右侧滑入 ----------
+func _play_enter_anim() -> void:
+	# 背景压暗层（在背景之上、槽之下）
+	var dim := ColorRect.new()
+	dim.color = Color(0.01, 0.02, 0.03, 0.0)
+	dim.size = Vector2(1280, 720)
+	dim.z_index = 0
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(dim)
+	var dtw := create_tween()
+	dtw.tween_property(dim, "color:a", 0.42, 0.85).set_trans(Tween.TRANS_SINE)
+
+	# 按槽分组：每个槽是 _build_slot 期间新增的节点
+	var groups: Array = []
+	var cur: Array = []
+	for c in get_children():
+		if c == dim:
+			continue
+		if c is ArkPanel or (c is Label and (c as Label).text in ["01", "02", "03"]):
+			if not cur.is_empty():
+				groups.append(cur)
+			cur = [c]
+		elif not cur.is_empty():
+			cur.append(c)
+	if not cur.is_empty():
+		groups.append(cur)
+
+	var idx := 0
+	for g in groups:
+		if idx >= 3:
+			break
+		var delay := 0.10 + idx * 0.11
+		var tw := create_tween()
+		tw.set_parallel(true)
+		for n in g:
+			if not (n is Node2D) and not (n is Control):
+				continue
+			var start_x: float = n.position.x + 360.0
+			n.position.x = start_x
+			n.modulate.a = 0.0
+			tw.tween_property(n, "position:x", start_x - 360.0, 0.46).set_delay(delay).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+			tw.tween_property(n, "modulate:a", 1.0, 0.34).set_delay(delay)
+		idx += 1
