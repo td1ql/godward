@@ -23,7 +23,7 @@ STYLE = (
     "detailed clothing, layered fabric, dirt and wear, "
     "visible face, face clearly lit from the side, warm light on the face, "
     "semi-realistic painterly concept art, matte surfaces, "
-    "desaturated muted colors, deep teal shadows, soft directional light, "
+    "desaturated muted colors, warm light from the side, clear light and shadow, "
     
     "clear readable silhouette, no text, no watermark, no frame"
 )
