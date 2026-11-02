@@ -11,12 +11,12 @@ const ArkPanel = preload("res://scripts/ark_panel.gd")
 
 const COLS := 2
 const CELL_W := 520.0
-const CELL_H := 74.0
+const CELL_H := 78.0
 
 const BY_ACT := {
-	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start", "shell", "wealth", "god", "serpent", "tree"],
-	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start", "shell", "wealth", "god", "serpent", "tree"],
-	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent", "tree", "divine", "divine_elite"],
+	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start", "shell", "remnant"],
+	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start", "shell"],
+	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent", "tree", "divine", "divine_elite", "start"],
 }
 
 const NOTE := {
