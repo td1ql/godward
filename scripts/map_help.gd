@@ -11,12 +11,12 @@ const ArkPanel = preload("res://scripts/ark_panel.gd")
 
 const COLS := 2
 const CELL_W := 520.0
-const CELL_H := 86.0
+const CELL_H := 74.0
 
 const BY_ACT := {
-	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start"],
-	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start"],
-	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent"],
+	1: ["battle", "elite", "boss", "event", "shop", "rest", "npc", "start", "shell", "wealth", "god", "serpent", "tree"],
+	2: ["divine", "divine_elite", "pope", "event", "shop", "rest", "remnant", "start", "shell", "wealth", "god", "serpent", "tree"],
+	3: ["battle", "god", "wealth", "shell", "npc", "event", "serpent", "tree", "divine", "divine_elite"],
 }
 
 const NOTE := {
@@ -32,6 +32,7 @@ const NOTE := {
 	"divine_elite": "神国的守卫。",
 	"pope": "他在教堂里等你。",
 	"start": "你从这里出发。",
+	"tree": "世界树的一截。到这里就快到头了。",
 	"god": "疯了的神。打赢它，拿走它的一部分。",
 	"wealth": "用金币换属性。它只收金币。",
 	"shell": "没有器官的尸骸。拿走什么，就得放下什么。",
@@ -138,9 +139,9 @@ static func open(parent: Node) -> void:
 
 		var note := Label.new()
 		note.text = str(NOTE.get(t, ""))
-		note.position = Vector2(x + 78, y + 34)
-		note.size = Vector2(CELL_W - 96, 44)
-		note.add_theme_font_size_override("font_size", 14)
+		note.position = Vector2(x + 78, y + 32)
+		note.size = Vector2(CELL_W - 96, 38)
+		note.add_theme_font_size_override("font_size", 13)
 		note.add_theme_color_override("font_color", Color(0.62, 0.58, 0.50))
 		note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		StoryDB.apply_serif(note)
