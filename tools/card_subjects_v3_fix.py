@@ -55,4 +55,9 @@ FIXES = {
     "余火": "a survivor sitting by a dying fire, face lit orange, looking forward",
     "拒马": "a soldier bending to set an iron spiked barricade across a road, face visible",
     "毒潮": "a hooded poisoner tipping a jar, green liquid spilling, face in profile",
+    # 用户反馈「意义不明」的 4 张
+    "打击": "a young swordsman mid-swing with both hands on the hilt, face toward the viewer, cloak flying",
+    "毒潮": "a woman tipping a jar of green liquid onto the floor, face visible in profile, sleeves stained",
+    "防御": "a young soldier holding a round shield up in front of his chest, eyes looking over the rim",
+    "铁骨": "a bare-chested strongman flexing both arms, face visible, old scars across his chest",
 }
