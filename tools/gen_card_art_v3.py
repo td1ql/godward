@@ -39,6 +39,12 @@ SUBJECTS.update(SUBJECTS_V3_A)
 SUBJECTS.update(SUBJECTS_V3_B)
 # 去掉 hooded / cloaked / robed —— 这三个词会让 SDXL 把人画成兜帽黑影
 SUBJECTS = {k: re.sub(r"\\b(hooded|cloaked|robed)\\s+", "", v) for k, v in SUBJECTS.items()}
+try:
+    from card_subjects_v3_fix import FIXES
+    SUBJECTS.update(FIXES)
+    print("已应用 %d 条人工修正" % len(FIXES))
+except Exception as _e:
+    print("无修正表:", _e)
 
 
 def post(wf):

@@ -15,6 +15,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ART = os.path.join(ROOT, "assets", "art", "cardart3")
+if len(sys.argv) > 2:
+    ART = sys.argv[2]
 OUT_DIR = os.path.join(os.environ.get("TEMP", "."), "card3_review")
 FONT = r"C:\Windows\Fonts\msyh.ttc"
 CHUNK = 30
@@ -49,7 +51,8 @@ def build(batch_index):
         line = subj if len(subj) <= 34 else subj[:33] + "…"
         dr.text((x + 1, y + S + 20), line, fill=(150, 150, 155), font=small)
     os.makedirs(OUT_DIR, exist_ok=True)
-    out = os.path.join(OUT_DIR, "batch_%02d.png" % batch_index)
+    tag = os.path.basename(ART.rstrip("/\\"))
+    out = os.path.join(OUT_DIR, "batch_%02d_%s.png" % (batch_index, tag))
     sheet.save(out, "PNG")
     return out
 
