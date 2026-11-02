@@ -428,6 +428,7 @@ func _ready() -> void:
 		spr.size = Vector2(draw_w, max_h)
 		spr.pivot_offset = spr.size / 2.0
 		spr.z_index = 2
+		spr.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		spr.modulate = Color(1, 1, 1, 0.97)
 		add_child(spr)
 		# 底对齐 y=560，水平居中在 x=1150
@@ -448,6 +449,7 @@ func _ready() -> void:
 		pc.position = Vector2(252, 30)
 		pc.size = Vector2(150, 200)
 		pc.z_index = 2
+		pc.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(pc)
 		var pf := ArtFrame.make(Rect2(0, 0, 150, 200), 0.55, 0.28)
 		pf.corner = 16.0
