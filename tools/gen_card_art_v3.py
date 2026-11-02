@@ -18,7 +18,9 @@ CKPT = "animagine-xl-4.0.safetensors"
 STYLE = (
     "masterpiece, best quality, absurdres, "
     "medieval dark fantasy illustration, single character, "
-    "detailed clothing, layered fabric, dirt and wear, hands in frame, "
+    "medium shot, full upper body and head visible, hands in frame, "
+    "face visible in three-quarter view, centered composition, "
+    "detailed clothing, layered fabric, dirt and wear, "
     "visible face, face clearly lit from the side, warm light on the face, "
     "semi-realistic painterly concept art, matte surfaces, "
     "desaturated muted colors, deep teal shadows, soft directional light, "
@@ -42,6 +44,12 @@ SUBJECTS.update(SUBJECTS_V4_C)
 SUBJECTS.update(SUBJECTS_V4_D)
 # 去掉 hooded / cloaked / robed —— 这三个词会让 SDXL 把人画成兜帽黑影
 SUBJECTS = {k: re.sub(r"\\b(hooded|cloaked|robed)\\s+", "", v) for k, v in SUBJECTS.items()}
+try:
+    from card_subjects_v4_fix import FIXES as F4
+    SUBJECTS.update(F4)
+    print("v4 修正表 %d 条" % len(F4))
+except Exception as _e:
+    print("无 v4 修正表")
 print("使用 v4 描述表 %d 条" % len(SUBJECTS))
 
 
