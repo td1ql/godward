@@ -18,8 +18,6 @@ config/icon="res://assets/icon.png"
 
 [autoload]
 
-SceneFade="*res://scripts/scene_fade.gd"
-
 RunConfig="*res://scripts/run_config.gd"
 CardDB="*res://scripts/card_db.gd"
 ContestantDB="*res://scripts/contestant_db.gd"
