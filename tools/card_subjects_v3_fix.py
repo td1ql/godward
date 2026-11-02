@@ -48,4 +48,11 @@ FIXES = {
     "拒马": "a sapper driving an iron caltrop into the road, face visible",
     "防御": "a knight raising a round shield, eyes looking over the rim",
     "盾墙": "two soldiers shoulder to shoulder behind raised shields, faces toward the viewer",
+    # 第 6 轮：仍不合格的 6 张
+    "记债": "a moneylender writing in a ledger under a lamp, face visible, stack of tally sticks beside him",
+    "将军": "an old commander standing over a chessboard, one hand pushing a piece over, face visible",
+    "翻页": "a girl reading a heavy book on her lap, one hand turning the page, face visible",
+    "余火": "a survivor sitting by a dying fire, face lit orange, looking forward",
+    "拒马": "a soldier bending to set an iron spiked barricade across a road, face visible",
+    "毒潮": "a hooded poisoner tipping a jar, green liquid spilling, face in profile",
 }
