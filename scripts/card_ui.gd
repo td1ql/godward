@@ -62,7 +62,7 @@ static func make_button(id: String, font_size: int = 15) -> Button:
 
 	# ---- 卡面插画：卡片上半部分（每张卡自己的图，没有就退回流派图）----
 	const ART_H := 84
-	var art_path := "res://assets/art/cardart3b/%s.png" % id
+	var art_path := "res://assets/art/cardart3c/%s.png" % id
 	if not ResourceLoader.exists(art_path):
 		art_path = "res://assets/art/card/%s.webp" % stream_of(id)
 	if ResourceLoader.exists(art_path):

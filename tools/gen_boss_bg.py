@@ -21,7 +21,7 @@ OUT = os.path.join(ROOT, "assets", "art", "boss_bg")
 DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop", "逐神Boss背景")
 COMFY_OUT = r"C:\ComfyUI\output"
 CKPT = "animagine-xl-4.0.safetensors"
-IPADAPTER = "ip-adapter_sdxl.safetensors"
+IPADAPTER = "ip-adapter-plus_sdxl_vit-h.safetensors"
 CLIP_VISION = "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors"
 HERO_DIR = os.path.join(ROOT, "assets", "art", "vocation")
 
@@ -90,8 +90,8 @@ def build(scene, ref_name, seed):
         "7": {"class_type": "CLIPTextEncode", "inputs": {"text": NEG, "clip": ["1", 1]}},
         "8": {"class_type": "IPAdapterAdvanced", "inputs": {
             "model": ["1", 0], "ipadapter": ["2", 0], "image": ["4", 0],
-            "clip_vision": ["3", 0], "weight": 0.75, "weight_type": "linear",
-            "combine_embeds": "concat", "start_at": 0.0, "end_at": 0.85,
+            "clip_vision": ["3", 0], "weight": 0.42, "weight_type": "style transfer",
+            "combine_embeds": "concat", "start_at": 0.0, "end_at": 0.7,
             "embeds_scaling": "V only"}},
         "9": {"class_type": "KSampler", "inputs": {
             "seed": seed, "steps": 32, "cfg": 6.5,

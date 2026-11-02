@@ -3,25 +3,26 @@
 import json, os, re, shutil, sys, time, urllib.request, zlib
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from card_subjects_v3a import SUBJECTS_V3_A
-from card_subjects_v3b import SUBJECTS_V3_B
+from card_subjects_v4a import SUBJECTS_V4_A
+from card_subjects_v4b import SUBJECTS_V4_B
+from card_subjects_v4c import SUBJECTS_V4_C
+from card_subjects_v4d import SUBJECTS_V4_D
 
 API = "http://127.0.0.1:8188"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "assets", "art", "cardart3b")
-DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop", "逐神卡面v3b")
+OUT = os.path.join(ROOT, "assets", "art", "cardart3c")
+DESKTOP = os.path.join(os.path.expanduser("~"), "Desktop", "逐神卡面v3c")
 COMFY_OUT = r"C:\ComfyUI\output"
 CKPT = "animagine-xl-4.0.safetensors"
 
 STYLE = (
     "masterpiece, best quality, absurdres, "
     "medieval dark fantasy illustration, single character, "
-    "detailed clothing, layered fabric, dirt and wear, "
-    "face turned toward the viewer, clear facial features, eyes visible, "
-    "face clearly lit from the side, warm light on the face, "
+    "detailed clothing, layered fabric, dirt and wear, hands in frame, "
+    "visible face, face clearly lit from the side, warm light on the face, "
     "semi-realistic painterly concept art, matte surfaces, "
     "desaturated muted colors, deep teal shadows, soft directional light, "
-    "stone wall or wooden plank background, shallow depth, "
+    
     "clear readable silhouette, no text, no watermark, no frame"
 )
 NEG = (
@@ -35,16 +36,33 @@ NEG = (
 )
 
 SUBJECTS = {}
-SUBJECTS.update(SUBJECTS_V3_A)
-SUBJECTS.update(SUBJECTS_V3_B)
+SUBJECTS.update(SUBJECTS_V4_A)
+SUBJECTS.update(SUBJECTS_V4_B)
+SUBJECTS.update(SUBJECTS_V4_C)
+SUBJECTS.update(SUBJECTS_V4_D)
 # 去掉 hooded / cloaked / robed —— 这三个词会让 SDXL 把人画成兜帽黑影
 SUBJECTS = {k: re.sub(r"\\b(hooded|cloaked|robed)\\s+", "", v) for k, v in SUBJECTS.items()}
-try:
-    from card_subjects_v3_fix import FIXES
-    SUBJECTS.update(FIXES)
-    print("已应用 %d 条人工修正" % len(FIXES))
-except Exception as _e:
-    print("无修正表:", _e)
+print("使用 v4 描述表 %d 条" % len(SUBJECTS))
+
+
+# 背景池：按卡序号轮换，避免 214 张全是同一堵墙
+BG_POOL = [
+    "in a dim candlelit room",
+    "in a torch-lit stone corridor",
+    "on a foggy forest road",
+    "inside a ruined chapel",
+    "on a muddy battlefield",
+    "in a bare stone cell",
+    "in a snowy mountain pass",
+    "in a crowded tavern corner",
+    "by a river at dusk",
+    "in a collapsed cloister garden",
+]
+
+
+def styled(subject, index):
+    bg = BG_POOL[index % len(BG_POOL)]
+    return "%s, %s, %s" % (subject, bg, STYLE)
 
 
 def post(wf):
@@ -72,7 +90,7 @@ def build(prompt, seed):
         "5": {"class_type": "EmptyLatentImage",
               "inputs": {"width": 832, "height": 704, "batch_size": 1}},
         "6": {"class_type": "CLIPTextEncode",
-              "inputs": {"text": "%s, %s" % (prompt, STYLE), "clip": ["4", 1]}},
+              "inputs": {"text": prompt, "clip": ["4", 1]}},
         "7": {"class_type": "CLIPTextEncode", "inputs": {"text": NEG, "clip": ["4", 1]}},
         "3": {"class_type": "KSampler", "inputs": {
             "seed": seed, "steps": 30, "cfg": 7.0,
@@ -81,7 +99,7 @@ def build(prompt, seed):
             "negative": ["7", 0], "latent_image": ["5", 0]}},
         "8": {"class_type": "VAEDecode", "inputs": {"samples": ["3", 0], "vae": ["4", 2]}},
         "9": {"class_type": "SaveImage",
-              "inputs": {"filename_prefix": "card3_", "images": ["8", 0]}},
+              "inputs": {"filename_prefix": "card3c_", "images": ["8", 0]}},
     }
 
 
@@ -96,7 +114,7 @@ def main():
         el = time.time() - t0
         eta = (el / i * (len(todo) - i)) if i > 1 else 0
         print("[%d/%d] %-8s 已用 %ds 剩余约 %ds" % (i, len(todo), name, int(el), int(eta)), flush=True)
-        pid = post(build(SUBJECTS[name], zlib.crc32(("c3" + name).encode()) % 900000 + 1000))
+        pid = post(build(styled(SUBJECTS[name], i), zlib.crc32(("c3c" + name).encode()) % 900000 + 1000))
         outs = wait(pid)
         imgs = outs.get("9", {}).get("images", [])
         if not imgs:
