@@ -63,12 +63,17 @@ func change_to(path: String) -> void:
 		tw.tween_property(_new_root, "position:x", 0.0, DUR).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	await tw.finished
 
-	# 4) 交接：把新场景挂到 current_scene 上，删掉截图
+	# 4) 交接：把新场景挂到 root 上，释放旧场景，删掉截图
 	var tree := get_tree()
+	var old_scene := tree.current_scene
 	if _new_root != null and is_instance_valid(_new_root):
 		remove_child(_new_root)
 		tree.root.add_child(_new_root)
 		tree.current_scene = _new_root
+		# 旧场景必须释放，否则一直留在内存里
+		if old_scene != null and is_instance_valid(old_scene) and old_scene != _new_root:
+			tree.root.remove_child(old_scene)
+			old_scene.queue_free()
 		if _new_root is Node2D:
 			(_new_root as Node2D).position.x = 0
 		elif _new_root is Control:
