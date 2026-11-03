@@ -3,6 +3,7 @@ extends Node2D
 const SkillCutIn = preload("res://scripts/skill_cutin.gd")
 const EnemyFx = preload("res://scripts/enemy_fx.gd")
 const BattleHud = preload("res://scripts/battle_hud.gd")
+const BattleFlow = preload("res://scripts/battle_flow.gd")
 
 const BLOCK_DAMAGE_CAP := 60
 
@@ -305,478 +306,53 @@ func _render_hand() -> void:
 	hand_view.render(deck.hand, player_energy, pending_effect, pending_selected, _new_cards)
 	_new_cards = 0
 
-# 返回本场战斗还能用几次；-1 表示不限制
+# ===== 发牌 / 出牌 / 结算 / 回合推进 已迁到 battle_flow.gd（阶段 B） =====
+# 这里只留同签名转发，原有调用点（信号连接、_ready）不用改。
+
 func _uses_left(card: String) -> int:
-	var limit: int = int(CardDB.get_card(card).get("max_uses", 0))
-	if limit <= 0:
-		return -1
-	return max(0, limit - int(battle_uses.get(card, 0)))
+	return BattleFlow._uses_left(self, card)
 
 func _mark_used(card: String) -> void:
-	battle_uses[card] = int(battle_uses.get(card, 0)) + 1
+	BattleFlow._mark_used(self, card)
 
 func _draw_cards(n: int) -> void:
-	AudioManager.play("draw")
-	if _draw_depth >= 3:
-		return
-	_draw_depth += 1
-
-	var encounters: Array[String] = []
-	var extra_draw := 0
-	for card in deck.draw_raw(n):
-		if CardDB.kind_of(card) == "encounter":
-			if _uses_left(card) == 0:
-				continue
-			_mark_used(card)
-			_apply_card_effects(card)
-			deck.discard_pile.append(card)
-			encounters.append(CardDB.card_text(card).replace("\n", " "))
-			Tutorial.notify("encounter_triggered")
-			extra_draw += int(CardDB.get_card(card).get("draw", 0))
-			if player_hp <= 0:
-				_check_game_over()
-				_draw_depth -= 1
-				return
-		else:
-			deck.hand.append(card)
-			_new_cards += 1
-
-	if not encounters.is_empty():
-		var msg := ""
-		for e in encounters:
-			if msg != "":
-				msg += "  |  "
-			msg += e
-		Toast.show_text("遭遇牌：" + msg)
-
-	if extra_draw > 0:
-		_draw_cards(extra_draw)
-
-	_draw_depth -= 1
+	BattleFlow._draw_cards(self, n)
 
 func _apply_card_effects(c: String) -> void:
-	var d: Dictionary = CardDB.get_card(c)
-	var hits: int = d.get("hits", 1)
-	var hits_key := str(d.get("hits_from_enemy_status", ""))
-	if hits_key != "":
-		hits = max(1, int(enemy.status.get(hits_key, 0)))
-	var per_st_pre: Dictionary = d.get("damage_per_enemy_status", {})
-	var has_scale: bool = int(d.get("damage_per_strength", 0)) > 0
-	for key in per_st_pre:
-		if int(per_st_pre[key]) != 0:
-			has_scale = true
-	if d["damage"] > 0 or d.get("damage_from_block", false) or has_scale:
-		var base_damage: int = int(d["damage"])
-		if d.get("damage_from_block", false):
-			base_damage = min(player_block * int(d.get("block_damage_mult", 1)), BLOCK_DAMAGE_CAP)
-		if d.get("damage_from_gold", false):
-			base_damage = GameState.gold
-		var per_st: Dictionary = d.get("damage_per_enemy_status", {})
-		for key in per_st:
-			base_damage += int(enemy.status.get(key, 0)) * int(per_st[key])
-		if int(d.get("damage_per_strength", 0)) > 0:
-			base_damage += int(player_status.get("力量", 0)) * int(d["damage_per_strength"])
-		var ck := str(creed.get("key", ""))
-		if ck == "first_attack_double" and not first_attack_used:
-			base_damage *= 2
-			first_attack_used = true
-		elif ck == "first_attack_bonus" and not first_attack_used:
-			base_damage += int(creed.get("value", 0))
-			first_attack_used = true
-		if ck == "no_attack_bonus" and not attacked_last_turn:
-			base_damage = int(base_damage * int(creed.get("value", 150)) / 100.0)
-		if ck == "low_hp_bonus" and player_hp * 100 / max(1, GameState.player_max_hp) < 30:
-			base_damage = int(base_damage * int(creed.get("value", 150)) / 100.0)
-		attacked_this_turn = true
-		var per := DamageCalc.compute(base_damage, player_status, enemy.status)
-		var leech := int(player_status.get("嗜血", 0))
-		if leech > 0:
-			player_hp = min(GameState.player_max_hp, player_hp + leech)
-		enemy.hp = max(0, enemy.hp - per * hits)
-		var clear_key := str(d.get("clear_enemy_status", ""))
-		if clear_key != "":
-			enemy.status.erase(clear_key)
-		AudioManager.play("attack")
-		if d.get("zero_block_after", false):
-			player_block = 0
-		elif d.get("damage_from_block", false):
-			player_block = int(player_block / 2.0)
-		var thorns: int = int(enemy.status.get("荆棘", 0))
-		if thorns > 0:
-			player_hp = max(0, player_hp - thorns)
-			_on_player_hurt(true)
-		if str(enemy.domain.get("type", "")) == "attack_recoil":
-			player_hp = max(0, player_hp - int(enemy.domain.get("value", 0)))
-			_on_player_hurt()
-	var gained_block: int = int(d["block"])
-	if str(enemy.domain.get("type", "")) == "half_block":
-		gained_block = int(gained_block / 2.0)
-	player_block += gained_block
-	if d.get("poison_double", false):
-		enemy.status["中毒"] = int(enemy.status.get("中毒", 0)) * 2
-	if d["block"] > 0:
-		Tutorial.notify("blocked")
-	if d.has("status"):
-		StatusSystem.apply(enemy.status, d["status"])
-	if d.has("self_status"):
-		StatusSystem.apply(player_status, d["self_status"])
-	if d.get("skip_enemy_turn", 0) > 0:
-		skip_enemy += int(d["skip_enemy_turn"])
-	if d.get("next_energy", 0) != 0:
-		bonus_energy += int(d["next_energy"])
-	if int(d.get("heal_percent_missing", 0)) > 0:
-		var missing := GameState.player_max_hp - player_hp
-		var amt := int(missing * int(d["heal_percent_missing"]) / 100.0)
-		if amt > 0:
-			AudioManager.play("heal")
-			player_hp = min(GameState.player_max_hp, player_hp + amt)
-			_on_player_hurt(false)
-	if d.get("heal", 0) > 0:
-		if str(enemy.domain.get("type", "")) != "no_heal":
-			AudioManager.play("heal")
-			player_hp = min(GameState.player_max_hp, player_hp + d["heal"])
-	if d.get("self_damage", 0) > 0 and not _player_immune():
-		player_hp = max(0, player_hp - d["self_damage"])
-		_on_player_hurt(true)
-	if d.get("gain_energy", 0) > 0:
-		player_energy += int(d["gain_energy"])
-	if d.get("retrieve_top", false):
-		if not deck.discard_pile.is_empty():
-			deck.hand.append(deck.discard_pile.pop_back())
-
-	if CardDB.kind_of(c) == "effect":
-		var ek := str(creed.get("key", ""))
-		if ek == "effect_damage":
-			enemy.hp = max(0, enemy.hp - int(creed.get("value", 0)))
-		elif ek == "effect_draw":
-			_draw_cards(int(creed.get("value", 0)))
+	BattleFlow._apply_card_effects(self, c)
 
 func _on_card_pressed(index: int) -> void:
-	if game_over:
-		return
-	if pending_effect >= 0:
-		_on_effect_select(index)
-		return
-	if index < 0 or index >= deck.hand.size():
-		return
-	var c: String = deck.hand[index]
-	if _uses_left(c) == 0:
-		Toast.show_text("「%s」本场战斗已用完" % c, 2.0)
-		return
-	var d: Dictionary = CardDB.get_card(c)
-	var extra_cost := int(enemy.domain.get("value", 0)) if str(enemy.domain.get("type", "")) == "cost_up" else 0
-	var discount := OrganDB.total("first_discount") if not first_card_used else 0
-	extra_cost = max(-int(d["cost"]), extra_cost - discount)
-	if player_energy < int(d["cost"]) + extra_cost:
-		var req: Dictionary = d.get("min_self_status", {})
-		for k in req:
-			if int(player_status.get(k, 0)) < int(req[k]):
-				Toast.show_text("力量不足", 1.5)
-				return
-		return
-	if CardDB.kind_of(c) == "effect" and CardDB.consume_count(c) > 0:
-		if deck.hand.size() - 1 < CardDB.consume_count(c):
-			return
-		pending_effect = index
-		pending_need = CardDB.consume_count(c)
-		pending_selected.clear()
-		_render_hand()
-		_update_ui()
-		return
-	AudioManager.play("click")
-	var spent = hand_view.take_button(index)
-	player_energy -= d["cost"]
-	last_card_played = c
-	first_card_used = true
-	AudioManager.play("play")
-	_apply_card_effects(c)
-	Tutorial.notify("card_played")
-	if CardDB.kind_of(c) == "effect":
-		Tutorial.notify("effect_played")
-	deck.hand.remove_at(index)
-	# exhaust：本场战斗用掉就消失（不进弃牌堆）
-	if not bool(d.get("exhaust", false)):
-		deck.discard_pile.append(c)
-	_mark_used(c)
-	_check_game_over()
-	_render_hand()
-	CardAnim.play_to_center(self, spent)
-	_update_ui()
-	var draw_n: int = int(d.get("draw", 0))
-	if draw_n > 0:
-		_draw_cards(draw_n)
-	_check_game_over()
-	_render_hand()
-	_update_ui()
+	BattleFlow._on_card_pressed(self, index)
 
 func _on_effect_select(index: int) -> void:
-	if index == pending_effect:
-		pending_effect = -1
-		pending_need = 0
-		pending_selected.clear()
-		_render_hand()
-		_update_ui()
-		return
-	if pending_selected.has(index):
-		pending_selected.erase(index)
-	else:
-		if pending_selected.size() >= pending_need:
-			return
-		pending_selected.append(index)
-	if pending_selected.size() == pending_need:
-		_resolve_effect()
-		return
-	_render_hand()
-	_update_ui()
+	BattleFlow._on_effect_select(self, index)
 
 func _resolve_effect() -> void:
-	var idx := pending_effect
-	var c: String = deck.hand[idx]
-	AudioManager.play("click")
-	player_energy -= CardDB.get_card(c)["cost"]
-	_apply_card_effects(c)
+	BattleFlow._resolve_effect(self)
 
-	var consumed: Array[String] = []
-	var remove_idx: Array = [idx]
-	for i in pending_selected:
-		consumed.append(deck.hand[i])
-		remove_idx.append(i)
-	remove_idx.sort()
-	remove_idx.reverse()
-	var ghosts := {}
-	for i in remove_idx:
-		ghosts[i] = hand_view.take_button(i)
-		deck.hand.remove_at(i)
-
-	# 效果牌先进弃牌堆，消耗的牌盖在它上面
-	deck.discard_pile.append(c)
-	for card in consumed:
-		deck.discard_pile.append(card)
-
-	var draw_n: int = int(CardDB.get_card(c).get("draw", 0))
-	if draw_n > 0:
-		_draw_cards(draw_n)
-
-	pending_effect = -1
-	pending_need = 0
-	pending_selected.clear()
-	_check_game_over()
-	_render_hand()
-	CardAnim.play_to_center(self, ghosts.get(idx))
-	for i in remove_idx:
-		if i != idx:
-			CardAnim.discard_to(self, ghosts.get(i), Vector2(140, 655))
-	_update_ui()
-
-# ===== 回合流程（分阶段）=====
 func _on_end_turn_pressed() -> void:
-	if _ending_turn:
-		return
-	Tutorial.notify("turn_ended")
-	if game_over or pending_effect >= 0:
-		return
-	# 防连点：这一帧内不再接受结束回合
-	_ending_turn = true
-	if end_turn_button != null:
-		end_turn_button.disabled = true
-	_end_player_turn()
-	if skip_enemy > 0:
-		skip_enemy -= 1
-		Toast.show_text("你的威严使他退却", 2.0)
-		_start_new_turn()
-	else:
-		_resolve_enemy_turn()
-	_check_game_over()
-	_update_ui()
-	if game_over:
-		_ending_turn = false
-		if end_turn_button != null:
-			end_turn_button.disabled = false
-		return
-	_start_new_turn()
-	# 下一帧才恢复（挡住同一帧内的连点）
-	get_tree().create_timer(0.25).timeout.connect(func() -> void:
-		_ending_turn = false
-		if end_turn_button != null and not game_over:
-			end_turn_button.disabled = false
-	)
+	BattleFlow._on_end_turn_pressed(self)
 
 func _end_player_turn() -> void:
-	# 回合结束：手牌全部弃掉，下回合重新抽
-	for card in deck.hand:
-		deck.discard_pile.append(str(card))
-	deck.hand.clear()
-
-	var pp := StatusSystem.tick_damage(player_status)
-	if pp > 0:
-		player_hp = max(0, player_hp - pp)
-		_on_player_hurt()
-	var ph := StatusSystem.tick_heal(player_status)
-	if ph > 0:
-		player_hp = min(GameState.player_max_hp, player_hp + ph)
+	BattleFlow._end_player_turn(self)
 
 func _player_immune() -> bool:
-	return player_status.has("恒光")
+	return BattleFlow._player_immune(self)
 
 func _on_player_hurt(now: bool = false) -> void:
-	AudioManager.play("hurt")
-	if str(creed.get("key", "")) != "hurt_energy":
-		return
-	var v := int(creed.get("value", 0))
-	if now:
-		player_energy += v
-		_update_ui()
-	else:
-		bonus_energy += v
+	BattleFlow._on_player_hurt(self, now)
 
 func _resolve_enemy_turn() -> void:
-	var raw_dmg := DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
-	var absorbed: int = min(player_block, raw_dmg)
-	player_block = max(0, player_block - absorbed)
-	var dmg: int = max(0, raw_dmg - absorbed)
-	_update_ui()   # 格挡变化后立刻刷新
-	if dmg > 0 and int(player_status.get("护佑", 0)) > 0:
-		player_status["护佑"] = int(player_status["护佑"]) - 1
-		if int(player_status["护佑"]) <= 0:
-			player_status.erase("护佑")
-		dmg = 0
-	if _player_immune():
-		dmg = 0
-	var hk := str(creed.get("key", ""))
-	if dmg > 0 and hk == "first_hurt_half" and not first_hurt_used:
-		first_hurt_used = true
-		dmg = int(dmg / 2.0)
-	if dmg > 0 and hk == "first_hurt_zero" and not first_hurt_used:
-		first_hurt_used = true
-		dmg = 0
-	damage_taken += dmg
-	player_hp = max(0, player_hp - dmg)
-	if dmg > 0:
-		var reflect := int(player_status.get("反弹", 0))
-		if reflect > 0:
-			enemy.hp = max(0, enemy.hp - reflect)
-		var fury := int(player_status.get("狂怒", 0))
-		if fury > 0:
-			player_status["力量"] = int(player_status.get("力量", 0)) + fury
-		Tutorial.notify("hurt")
-	if not player_status.has("坚守"):
-		player_block = 0
-		_update_ui()   # 清空后也刷一次
-	if dmg > 0:
-		_on_player_hurt()
-	enemy.turn_index += 1
-
-	var ep := StatusSystem.tick_damage(enemy.status)
-	if ep > 0:
-		enemy.hp = max(0, enemy.hp - ep)
-
-	# 毒性增长（挂在敌人身上）：毒伤结算之后，每 4 层额外 +1
-	if enemy.status.has("毒性增长"):
-		var pz := int(enemy.status.get("中毒", 0))
-		if pz >= 4:
-			enemy.status["中毒"] = pz + int(float(pz) / 4.0)
-
-	var eh := StatusSystem.tick_heal(enemy.status)
-	if eh > 0:
-		enemy.hp = min(enemy.max_hp, enemy.hp + eh)
-
-	StatusSystem.decay(player_status)
-	StatusSystem.decay(enemy.status)
-
-	if not enemy.on_turn.is_empty():
-		StatusSystem.apply(enemy.status, enemy.on_turn)
-	if not enemy.on_hit.is_empty():
-		StatusSystem.apply(player_status, enemy.on_hit)
-
-	for s in enemy.due_skills():
-		if s.has("heal"):
-			enemy.hp = min(enemy.max_hp, enemy.hp + int(s["heal"]))
-		if s.has("status"):
-			var st: Dictionary = s["status"]
-			if str(s.get("to", "player")) == "self":
-				StatusSystem.apply(enemy.status, st)
-			else:
-				StatusSystem.apply(player_status, st)
-	if str(enemy.domain.get("type", "")) == "enemy_regen":
-		enemy.hp = min(enemy.max_hp, enemy.hp + int(enemy.domain.get("value", 0)))
+	BattleFlow._resolve_enemy_turn(self)
 
 func _apply_turn_creed() -> void:
-	first_attack_used = false
-	first_card_used = false
-	attacked_this_turn = false
-	if str(creed.get("key", "")) == "turn_block":
-		player_block += int(creed.get("value", 0))
+	BattleFlow._apply_turn_creed(self)
 
 func _domain_tick() -> void:
-	var t := str(enemy.domain.get("type", ""))
-	var v := int(enemy.domain.get("value", 0))
-	match t:
-		"damage_aura":
-			player_hp = max(0, player_hp - v)
-		"weak_aura":
-			player_status["虚弱"] = int(player_status.get("虚弱", 0)) + v
-		"bleed_aura":
-			player_status["流血"] = int(player_status.get("流血", 0)) + v
-		"block_decay":
-			player_block = max(0, player_block - v)
-		"poison_aura":
-			player_status["中毒"] = int(player_status.get("中毒", 0)) + v
+	BattleFlow._domain_tick(self)
 
 func _start_new_turn() -> void:
-	_turn_no += 1
-	if not attacked_this_turn:
-		_no_attack_turns += 1
-	else:
-		_no_attack_turns = 0
-	attacked_this_turn = false
-	_domain_tick()
-	if game_over:
-		return
-	for f in ally_fighters:
-		enemy.hp = max(0, enemy.hp - int(f["damage"]))
-	if not ally_fighters.is_empty():
-		AudioManager.play("hit")
-	_check_game_over()
-	if game_over:
-		return
-	if node_type == "tutorial":
-		Tutorial.advance()
-		for c in Tutorial.cards_for(Tutorial.turn):
-			var cn := str(c)
-			if CardDB.kind_of(cn) == "encounter":
-				_apply_card_effects(cn)
-				deck.discard_pile.append(cn)
-				Toast.show_text("遭遇牌：" + CardDB.card_text(cn).replace("\n", " "))
-			else:
-				deck.hand.append(cn)
-				_new_cards += 1
-	else:
-		var draw_count: int = RunConfig.BASE_DRAW + player_energy + OrganDB.total("draw") + GameState.wealth_draw
-		draw_count += int(player_status.get("洞察", 0))
-		draw_count = max(0, draw_count - int(player_status.get("迟钝", 0)))
-		var dt := str(enemy.domain.get("type", ""))
-		if dt == "draw_penalty" or dt == "less_draw":
-			draw_count = max(0, draw_count - int(enemy.domain.get("value", 0)))
-		if draw_count > 0:
-			_draw_cards(draw_count)
-	player_energy = max_energy + bonus_energy
-	bonus_energy = 0
-	player_energy += int(player_status.get("迅捷", 0))
-	player_energy = max(0, player_energy - int(player_status.get("重力", 0)))
-	if player_status.has("狂化"):
-		player_status["力量"] = int(player_status.get("力量", 0)) + 2
-	if str(enemy.domain.get("type", "")) == "energy_drain":
-		player_energy = max(0, player_energy - int(enemy.domain.get("value", 0)))
-	var guard := int(player_status.get("守护", 0))
-	if guard > 0:
-		player_block += guard
-	_apply_turn_creed()
-	var burn := int(player_status.get("炽热", 0))
-	if burn > 0:
-		enemy.hp = max(0, enemy.hp - burn)
-	attacked_last_turn = attacked_this_turn
-	_render_hand()
-	_update_ui()
+	BattleFlow._start_new_turn(self)
 
 func _check_game_over() -> void:
 	if game_over:
