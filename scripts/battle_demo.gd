@@ -4,6 +4,7 @@ const SkillCutIn = preload("res://scripts/skill_cutin.gd")
 const EnemyFx = preload("res://scripts/enemy_fx.gd")
 const BattleHud = preload("res://scripts/battle_hud.gd")
 const BattleFlow = preload("res://scripts/battle_flow.gd")
+const BattleVictory = preload("res://scripts/battle_victory.gd")
 
 const BLOCK_DAMAGE_CAP := 60
 
@@ -411,15 +412,41 @@ func _check_game_over() -> void:
 		await get_tree().create_timer(1.0).timeout
 		_show_game_over()
 
+# ===== 奖励 / 击杀复制 / 弃牌 / 清理 已迁到 battle_victory.gd（阶段 C） =====
+# 同样只留同签名转发，调用点（_check_game_over、_after_boss、信号）不用改。
+
 func _surviving_contestants() -> Array[String]:
-	var result: Array[String] = []
-	for id in GameState.contestants:
-		if GameState.eliminated.has(id):
-			continue
-		if GameState.allies.has(id):
-			continue
-		result.append(id)
-	return result
+	return BattleVictory._surviving_contestants(self)
+
+func _show_cleanup_prompt() -> void:
+	BattleVictory._show_cleanup_prompt(self)
+
+func _begin_cleanup() -> void:
+	BattleVictory._begin_cleanup(self)
+
+func _show_cleanup_result(text: String, summary: String) -> void:
+	BattleVictory._show_cleanup_result(self, text, summary)
+
+func _start_next_cleanup() -> void:
+	BattleVictory._start_next_cleanup(self)
+
+func _show_reward() -> void:
+	BattleVictory._show_reward(self)
+
+func _choose_reward(card_name: String) -> void:
+	BattleVictory._choose_reward(self, card_name)
+
+func _finish_reward() -> void:
+	BattleVictory._finish_reward(self)
+
+func _do_kill_pick(index: int) -> void:
+	BattleVictory._do_kill_pick(self, index)
+
+func _offer_discard() -> void:
+	BattleVictory._offer_discard(self)
+
+func _discard_card(index: int) -> void:
+	BattleVictory._discard_card(self, index)
 
 func _after_boss() -> void:
 	if not _surviving_contestants().is_empty():
@@ -427,87 +454,6 @@ func _after_boss() -> void:
 		return
 	GameState.pending_cleanup = false
 	_show_church()
-
-func _show_cleanup_prompt() -> void:
-	hand_view.hide_cards()
-	var n := _surviving_contestants().size()
-
-	var overlay := Control.new()
-	overlay.size = Vector2(1280, 720)
-	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
-	overlay.z_index = 100
-	add_child(overlay)
-
-	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.93)
-	dim.size = Vector2(1280, 720)
-	overlay.add_child(dim)
-
-	var title := Label.new()
-	title.text = StoryDB.t("cleanup_title")
-	title.position = Vector2(0, 180)
-	title.size = Vector2(1280, 70)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 44)
-	overlay.add_child(title)
-
-	var body := Label.new()
-	body.text = StoryDB.f("cleanup_body", [n])
-	body.position = Vector2(0, 290)
-	body.size = Vector2(1280, 100)
-	body.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	body.add_theme_font_size_override("font_size", 22)
-	overlay.add_child(body)
-
-	var btn := Button.new()
-	btn.text = StoryDB.t("cleanup_button")
-	btn.size = Vector2(240, 64)
-	btn.position = Vector2(520, 440)
-	btn.add_theme_font_size_override("font_size", 24)
-	btn.pressed.connect(_begin_cleanup)
-	overlay.add_child(btn)
-	_ghost_button(btn, 20)
-
-func _begin_cleanup() -> void:
-	GameState.pending_cleanup = true
-	GameState.save_game()
-	_start_next_cleanup()
-
-func _show_cleanup_result(text: String, summary: String) -> void:
-	var overlay := Modal.open(self, 0.93)
-	Modal.title(overlay, StoryDB.t("cleanup_result_title"), 150, 44)
-	Modal.text(overlay, text, 260, 22, 60)
-	var gain := Modal.text(overlay, summary if summary != "" else StoryDB.t("cleanup_result_empty"), 340, 20, 80)
-	gain.add_theme_color_override("font_color", Color(0.9, 0.8, 0.5))
-	var left := _surviving_contestants().size()
-	var label := StoryDB.f("cleanup_continue", [left]) if left > 0 else StoryDB.t("cleanup_go")
-	Modal.button(overlay, label, 500, 470, 280, 64, _start_next_cleanup)
-
-func _start_next_cleanup() -> void:
-	var targets := _surviving_contestants()
-	if targets.is_empty():
-		GameState.pending_cleanup = false
-		GameState.save_game()
-		_show_church()
-		return
-
-	var id: String = targets[0]
-	var c: Dictionary = ContestantDB.get_contestant(id)
-	var enemy_data := {
-		"name": c["name"],
-		"hp": int(c["hp"]),
-		"attack": int(c["attack"]),
-		"pattern": c.get("pattern", [1]),
-		"on_hit": c.get("on_hit", {}),
-		"domain": c.get("domain", {}),
-		"skills": c.get("skills", []),
-	}
-	GameState.pending_enemy = enemy_data
-	GameState.pending_contestant = id
-	GameState.pending_snapshot = {"kind": "contestant_fight", "id": id, "enemy": enemy_data}
-	GameState.save_game()
-	get_tree().change_scene_to_file("res://scenes/main.tscn")
-
 
 # 给左上/右上的信息块加一块暗底，保证在战斗背景上看得清
 func _backing(pos: Vector2, size: Vector2, align_right: bool = false) -> void:
@@ -767,78 +713,6 @@ func _update_ui() -> void:
 		edetail += "\n你被打败了..."
 	enemy_detail_label.text = edetail
 	
-func _show_reward() -> void:
-	hand_view.hide_cards()
-
-	var pool: Array = RewardDB.pick_cards(node_type, NodeRuleDB.cards_of(node_type), GameState.act)
-	var overlay := Modal.open(self, 0.85)
-	var title_key := "reward_title" if pool.size() > 0 else "reward_title_gold"
-	Modal.title(overlay, StoryDB.f(title_key, [last_gold_gain]), 110, 24)
-
-	var n: int = pool.size()
-	var spacing := 250.0
-	var card_w := 200.0
-	var total := (n - 1) * spacing + card_w
-	var start_x := (1280.0 - total) / 2.0
-	for i in range(n):
-		var card_name: String = pool[i]
-		var btn := CardUI.make_button(card_name, 18)
-		btn.size = Vector2(card_w, 240)
-		btn.position = Vector2(start_x + i * spacing, 200)
-		btn.pressed.connect(_choose_reward.bind(card_name))
-		overlay.add_child(btn)
-	var hint := Label.new()
-	hint.text = "点击一张，加入牌组"
-	hint.position = Vector2(0, 458)
-	hint.size = Vector2(1280, 32)
-	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hint.add_theme_font_size_override("font_size", 18)
-	hint.add_theme_color_override("font_color", Color(0.72, 0.68, 0.58))
-	StoryDB.apply_serif(hint)
-	overlay.add_child(hint)
-
-	var help := Modal.button(overlay, "状态说明", 40, 610, 170, 44, func() -> void: StatusHelp.open(self))
-	_ghost_button(help, 18)
-
-	if RunConfig.ALLOW_SKIP:
-		var skip := Modal.button(overlay, StoryDB.t("reward_skip"), 540, 520, 200, 50, _finish_reward)
-		_ghost_button(skip)
-
-func _choose_reward(card_name: String) -> void:
-	GameState.deck.append(card_name)
-	_finish_reward()
-
-func _finish_reward() -> void:
-	GameState.pending_node = -1
-	GameState.pending_snapshot = {}
-	GameState.save_game()
-	if _kill_pick_pending:
-		_kill_pick_pending = false
-		DeckViewer.open_choose("收殓：从牌组中复制一张", GameState.deck, _do_kill_pick)
-		return
-	if NodeRuleDB.discard_of(node_type):
-		_offer_discard()
-		return
-	get_tree().change_scene_to_file("res://scenes/map.tscn")
-
-func _do_kill_pick(index: int) -> void:
-	if index >= 0 and index < GameState.deck.size():
-		var c: String = GameState.deck[index]
-		GameState.deck.append(c)
-		GameState.save_game()
-		Toast.show_text("「%s」又进了一份" % c, 2.5)
-	get_tree().change_scene_to_file("res://scenes/map.tscn")
-
-func _offer_discard() -> void:
-	DeckViewer.open_choose("精英战利品：弃掉一张牌", GameState.deck, _discard_card)
-
-func _discard_card(index: int) -> void:
-	if index >= 0 and index < GameState.deck.size():
-		var removed: String = GameState.deck[index]
-		GameState.deck.remove_at(index)
-		Toast.show_text("弃掉了「%s」" % removed, 2.5)
-	GameState.save_game()
-	get_tree().change_scene_to_file("res://scenes/map.tscn")
 
 func _show_game_over() -> void:
 	var overlay := Modal.open(self, 0.85)
