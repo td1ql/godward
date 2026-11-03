@@ -89,8 +89,14 @@ scripts/
   # 战斗模块
   deck.gd  damage.gd  status_system.gd  enemy_state.gd
   card_ui.gd  hand_view.gd  toast.gd  deck_viewer.gd
+  # 战斗场景：battle_demo.gd 只留状态与协调，其余按职责拆成四个文件
+  battle_demo.gd         # 状态变量 + 菜单/技能/UI 刷新 + 流程协调
+  battle_hud.gd          # 界面搭建（背景/信息条/血条/立绘/手牌/按钮）
+  battle_flow.gd         # 发牌 / 出牌 / 结算 / 回合推进
+  battle_victory.gd      # 奖励 / 击杀复制 / 弃牌 / Boss 清理
+  battle_endings.gd      # 教皇 / 假结局 / 世界树 / 蛇 / 真结局 / 转生
   # 场景
-  main_menu.gd  save_menu.gd  run_intro.gd  map.gd  battle_demo.gd
+  main_menu.gd  save_menu.gd  run_intro.gd  map.gd
   # UI 组件
   ui_kit.gd  modal.gd  dialogue.gd  nav_menu.gd  map_help.gd  status_help.gd
   # 系统
@@ -113,7 +119,7 @@ tools/
 |----------|--------|
 | 卡牌 | `card_db.gd` 的 `CARDS` |
 | 敌人 | `enemy_db.gd` 的 `NORMAL / ELITE / BOSS / DIVINE / DIVINE_ELITE / GODS / POPE / TREE / SERPENT` |
-| 状态 | `status_db.gd` 的 `STATUS`（新增记得在 `battle_demo.gd` 里实现） |
+| 状态 | `status_db.gd` 的 `STATUS`（新增记得在 `battle_flow.gd` 的结算与 `battle_demo.gd` 的 `_update_ui` 里接上） |
 | 地图层数/节点 | `map_db.gd` |
 | 事件 | `event_db.gd` |
 | 节点奖励 | `node_rule_db.gd` 的 `RULES` |
