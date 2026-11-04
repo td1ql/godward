@@ -1,0 +1,47 @@
+{
+  "source": "C:\\Users\\td1ql\\.dsh\\attachments\\v1\\objects\\f3\\f39736329e675ead0cec2eac5ba6d5fc29e4267731b95b14d7fd366ee3dc6173",
+  "crop": "top 91.5% (watermark cut)",
+  "size": [
+    1024,
+    1249
+  ],
+  "palette": [
+    {
+      "hex": "#1B2B3B",
+      "ratio": 0.3753
+    },
+    {
+      "hex": "#213141",
+      "ratio": 0.2064
+    },
+    {
+      "hex": "#F2E2CA",
+      "ratio": 0.1203
+    },
+    {
+      "hex": "#3A4752",
+      "ratio": 0.077
+    },
+    {
+      "hex": "#15202C",
+      "ratio": 0.071
+    },
+    {
+      "hex": "#6A6868",
+      "ratio": 0.0671
+    },
+    {
+      "hex": "#0E141D",
+      "ratio": 0.0439
+    },
+    {
+      "hex": "#AB9A8A",
+      "ratio": 0.0391
+    }
+  ],
+  "stats": {
+    "saturation": 0.1157,
+    "luminance": 0.288
+  },
+  "shadow": "#1B2B3B"
+}

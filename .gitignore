@@ -1,4 +1,4 @@
-﻿.godot/
+.godot/
 .import/
 export.cfg
 *.translation
@@ -29,3 +29,6 @@ assets/art/enemytest*/
 assets/art/cardart2/
 assets/art/bg_battle/
 assets/art/cardstyle/
+
+# 卡面 v8 母版（832x480 原始 + 调色版 + 对照图，体积大；用 tools/gen_card_art_v8.py 重新生成）
+assets/art/_src_v8/
