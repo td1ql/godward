@@ -3,6 +3,7 @@ extends Node
 # 与 battle_hud.gd 同一套路：静态函数，第一个参数 b 是 battle_demo.gd 的实例。
 # 约定：跨文件引用一律 preload 常量，不使用 class_name。
 
+const EnemyFx = preload("res://scripts/enemy_fx.gd")
 const BLOCK_DAMAGE_CAP := 60
 
 # 返回本场战斗还能用几次；-1 表示不限制
