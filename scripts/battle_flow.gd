@@ -330,6 +330,9 @@ static func _on_player_hurt(b, now: bool = false) -> void:
 		b.bonus_energy += v
 
 static func _resolve_enemy_turn(b) -> void:
+	# 敌人出手：先扑一下再结算伤害（不 await，动画和结算并行）
+	if b.enemy.intent_damage() > 0:
+		EnemyFx.attack(b._enemy_sprite)
 	var raw_dmg := DamageCalc.compute(b.enemy.intent_damage(), b.enemy.status, b.player_status)
 	var absorbed: int = min(b.player_block, raw_dmg)
 	b.player_block = max(0, b.player_block - absorbed)
@@ -384,6 +387,7 @@ static func _resolve_enemy_turn(b) -> void:
 	StatusSystem.decay(b.enemy.status)
 
 	if not b.enemy.on_turn.is_empty():
+		EnemyFx.buff(b._enemy_sprite)
 		StatusSystem.apply(b.enemy.status, b.enemy.on_turn)
 	if not b.enemy.on_hit.is_empty():
 		StatusSystem.apply(b.player_status, b.enemy.on_hit)
@@ -394,6 +398,7 @@ static func _resolve_enemy_turn(b) -> void:
 		if s.has("status"):
 			var st: Dictionary = s["status"]
 			if str(s.get("to", "player")) == "self":
+				EnemyFx.buff(b._enemy_sprite)
 				StatusSystem.apply(b.enemy.status, st)
 			else:
 				StatusSystem.apply(b.player_status, st)

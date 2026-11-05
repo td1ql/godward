@@ -156,3 +156,48 @@ static func appear(portrait: Control) -> void:
 	t.set_parallel(true)
 	t.tween_property(portrait, "modulate:a", 0.92, 0.42).set_trans(Tween.TRANS_SINE)
 	t.tween_property(portrait, "position", base, 0.42).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+
+## 敌人出手：朝玩家方向扑一下再收回（攻击）
+static func attack(portrait: Control, dmg: int = 0) -> void:
+	if portrait == null or not is_instance_valid(portrait):
+		return
+	var base: Vector2 = portrait.position
+	var tw := portrait.create_tween()
+	tw.set_parallel(true)
+	# 扑向前方（向左）
+	tw.tween_property(portrait, "position:x", base.x - 64.0, 0.11).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tw.tween_property(portrait, "scale", Vector2(1.10, 0.94), 0.11).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	await tw.finished
+	var tw2 := portrait.create_tween()
+	tw2.set_parallel(true)
+	tw2.tween_property(portrait, "position:x", base.x, 0.20).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw2.tween_property(portrait, "scale", Vector2(1.0, 1.0), 0.20).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	# 出手时闪一下红光
+	portrait.modulate = Color(1.0, 0.72, 0.68, portrait.modulate.a)
+	await tw2.finished
+	portrait.modulate = Color(1, 1, 1, portrait.modulate.a)
+
+
+## 敌人给自己上 buff：一圈暖色光晕 + 轻微上浮
+static func buff(portrait: Control) -> void:
+	if portrait == null or not is_instance_valid(portrait):
+		return
+	var ring := ColorRect.new()
+	ring.color = Color(0.95, 0.78, 0.42, 0.0)
+	ring.size = portrait.size
+	ring.position = Vector2.ZERO
+	ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ring.z_index = 3
+	portrait.add_child(ring)
+
+	var tw := portrait.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(ring, "color:a", 0.34, 0.16).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(ring, "scale", Vector2(1.14, 1.14), 0.34).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(ring, "color:a", 0.0, 0.22).set_delay(0.22).set_trans(Tween.TRANS_SINE)
+	tw.tween_property(portrait, "position:y", portrait.position.y - 10.0, 0.18).set_trans(Tween.TRANS_SINE)
+	await tw.finished
+	portrait.position.y += 10.0
+	if is_instance_valid(ring):
+		ring.queue_free()
