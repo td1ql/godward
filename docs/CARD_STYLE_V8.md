@@ -25,6 +25,8 @@
 
 ## 二、目标观感（五条）
 
+> **v8.1（2026-11-04）**：人物统一改成二次元脸（大眼睛、赛璐璐脸、干净的动漫头发），水墨底和双色调不变。此后所有新卡都按这个来。
+
 1. **单人**，3/4 侧脸，脸和头发是画面最亮的地方；手和道具在画面中部。
 2. **暗场**：背景 65–80% 是最深墨，只有淡淡的晕染/溅点，没有白色纸底、没有光晕。
 3. **水墨画法**：湿墨晕开、枯笔飞白、边缘墨点、粗纸颗粒；不要硬边漫画线。
@@ -74,7 +76,7 @@ coarse xuan paper grain, monochrome duotone, deep navy ink, warm cream highlight
 very dark low-key scene, single soft key light from upper left, strong chiaroscuro,
 three-quarter shot, head to mid-thigh, head in upper third, hands and prop clearly visible,
 background almost entirely darkest ink, large dark negative space, three-quarter face,
-face visible, anime-influenced minimal facial features, calm restrained expression,
+face visible, anime face with large expressive eyes, cel-shaded face, clean anime hair, calm expression,
 dark tattered medieval robe, no gold, matte finish, no text, no watermark
 ```
 

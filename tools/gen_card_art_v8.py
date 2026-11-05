@@ -60,8 +60,8 @@ STYLE = (
     "coarse xuan paper grain, monochrome duotone, deep navy ink, warm cream highlights, very dark low-key scene, "
     "single soft key light from upper left, strong chiaroscuro, three-quarter shot, head to mid-thigh, "
     "head in upper third, hands and prop clearly visible, background almost entirely darkest ink, "
-    "large dark negative space, three-quarter face, face visible, anime-influenced minimal facial features, "
-    "calm restrained expression, dark tattered medieval robe, no gold, matte finish, no text, no watermark"
+    "large dark negative space, three-quarter face, face visible, anime face with large expressive eyes, "
+    "cel-shaded face, clean anime hair, calm expression, dark tattered medieval robe, no gold, matte finish, no text, no watermark"
 )
 
 NEG = (
@@ -76,7 +76,7 @@ NEG = (
     "smeared face paint, face markings, undead, corpse, skull, "
     "kimono, obi, crossed collar, wide sleeves, japanese clothing, hakama, samurai, katana, gold, brass, "
     "silver shine, glossy, specular highlight, vivid colors, saturated, neon, rainbow, glowing magic, "
-    "energy aura, 3d render, photorealistic, photo, dslr, plastic, cel shading, thick black outline, comic, "
+    "energy aura, 3d render, photorealistic, photo, dslr, plastic, thick black outline, "
     "nude, naked, exposed genitals, sexual, suggestive, "
     "chibi, cute mascot, text, watermark, signature, border"
 )
