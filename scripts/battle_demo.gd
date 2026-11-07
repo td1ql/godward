@@ -132,10 +132,9 @@ func _ready() -> void:
 	# 界面：阶段 A 起由 battle_hud.gd 统一搭建（背景/信息条/血条/立绘/按钮）
 	BattleHud.build(self)
 
-	var resume: Dictionary = GameState.pending_snapshot.get("resume", {})
-	if not resume.is_empty():
-		_restore_battle(resume)
-	elif tutorial:
+	# 兼容旧存档：以前会保存战斗中间态，现在一律按「这场战斗从头开始」处理
+	GameState.pending_snapshot.erase("resume")
+	if tutorial:
 		deck.draw_pile.clear()
 		deck.hand.clear()
 		deck.discard_pile.clear()
@@ -188,7 +187,7 @@ func _open_battle_menu() -> void:
 	var panel := ColorRect.new()
 	panel.color = Color(0.08, 0.09, 0.12, 0.97)
 	panel.position = Vector2(970, 64)
-	panel.size = Vector2(290, 210)
+	panel.size = Vector2(290, 250)
 	_menu_popup.add_child(panel)
 
 	var resume_btn := Button.new()
@@ -210,13 +209,23 @@ func _open_battle_menu() -> void:
 	_ghost_button(help_btn, 18)
 
 	var quit_btn := Button.new()
-	quit_btn.text = "返回首页"
+	quit_btn.text = "返回首页（本场重打）"
 	quit_btn.position = Vector2(986, 140)
 	quit_btn.size = Vector2(258, 48)
 	quit_btn.focus_mode = Control.FOCUS_NONE
 	quit_btn.pressed.connect(_back_to_menu_from_battle)
 	_menu_popup.add_child(quit_btn)
 	_ghost_button(quit_btn, 18)
+
+	var tip := Label.new()
+	tip.text = "离开后这场战斗从头开始\n（血量保留，敌人 / 手牌 / 能量重置）"
+	tip.position = Vector2(978, 254)
+	tip.size = Vector2(274, 48)
+	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	tip.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	tip.add_theme_font_size_override("font_size", 12)
+	tip.add_theme_color_override("font_color", Color(0.64, 0.60, 0.52))
+	_menu_popup.add_child(tip)
 
 func _close_battle_menu() -> void:
 	if _menu_popup != null and is_instance_valid(_menu_popup):
@@ -227,45 +236,21 @@ func _open_status_help() -> void:
 	_close_battle_menu()
 	StatusHelp.open(self)
 
-func _back_to_menu_from_battle() -> void:
+# 中途退出时的存档快照：不保存战斗中间态，重进时这场战斗从头开始
+func _exit_snapshot() -> Dictionary:
 	var snap: Dictionary = GameState.pending_snapshot.duplicate(true)
 	if snap.is_empty():
 		snap = {"kind": "battle", "enemy": {}}
-	snap["resume"] = {
-		"enemy_hp": enemy.hp,
-		"enemy_turn": enemy.turn_index,
-		"enemy_status": enemy.status.duplicate(true),
-		"player_hp": player_hp,
-		"player_block": player_block,
-		"player_status": player_status.duplicate(true),
-		"draw": deck.draw_pile.duplicate(),
-		"hand": deck.hand.duplicate(),
-		"discard": deck.discard_pile.duplicate(),
-	}
-	GameState.pending_snapshot = snap
+	snap.erase("resume")   # 旧存档可能残留
+	return snap
+
+func _back_to_menu_from_battle() -> void:
+	GameState.pending_snapshot = _exit_snapshot()
 	GameState.pending_enemy = {}
+	# 血量按退出时的值带走（重打不等于回血），敌人 / 手牌 / 能量全部重新开始
 	GameState.player_hp = max(1, player_hp)
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
-
-func _restore_battle(r: Dictionary) -> void:
-	enemy.hp = int(r.get("enemy_hp", enemy.hp))
-	enemy.turn_index = int(r.get("enemy_turn", 0))
-	enemy.status = r.get("enemy_status", {})
-	player_hp = int(r.get("player_hp", player_hp))
-	player_block = int(r.get("player_block", 0))
-	player_status = r.get("player_status", {})
-
-	deck.draw_pile.clear()
-	for c in r.get("draw", []):
-		deck.draw_pile.append(str(c))
-	deck.hand.clear()
-	for c in r.get("hand", []):
-		deck.hand.append(str(c))
-		_new_cards = deck.hand.size()
-	deck.discard_pile.clear()
-	for c in r.get("discard", []):
-		deck.discard_pile.append(str(c))
 
 func _finish_tutorial() -> void:
 	GameState.pending_snapshot = {}
