@@ -23,6 +23,7 @@ var player_hp := 0
 var player_block := 0
 var player_energy := 0
 var player_status := {}
+var _entry_hp := 0   # 进战时的血量：中途退出重打时回到这个值
 
 var node_type := "battle"
 var game_over := false
@@ -96,6 +97,7 @@ func _ready() -> void:
 		var bonus_strength: int = TraitDB.total_strength(GameState.traits)
 		if bonus_strength != 0:
 			player_status["力量"] = bonus_strength
+	_entry_hp = player_hp
 	if str(creed.get("key", "")) == "keep_block":
 		player_status["坚守"] = 1
 
@@ -218,7 +220,7 @@ func _open_battle_menu() -> void:
 	_ghost_button(quit_btn, 18)
 
 	var tip := Label.new()
-	tip.text = "离开后这场战斗从头开始\n（血量保留，敌人 / 手牌 / 能量重置）"
+	tip.text = "离开后这场战斗完全重来\n（血量、敌人、手牌、能量全部回到进战时）"
 	tip.position = Vector2(978, 254)
 	tip.size = Vector2(274, 48)
 	tip.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -247,8 +249,8 @@ func _exit_snapshot() -> Dictionary:
 func _back_to_menu_from_battle() -> void:
 	GameState.pending_snapshot = _exit_snapshot()
 	GameState.pending_enemy = {}
-	# 血量按退出时的值带走（重打不等于回血），敌人 / 手牌 / 能量全部重新开始
-	GameState.player_hp = max(1, player_hp)
+	# 重打就是完全重来：血量也回到进战时，不带任何代价
+	GameState.player_hp = max(1, _entry_hp)
 	GameState.save_game()
 	get_tree().change_scene_to_file("res://scenes/main_menu.tscn")
 
