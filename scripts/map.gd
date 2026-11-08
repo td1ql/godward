@@ -166,8 +166,19 @@ func _ready() -> void:
 	UiKit.ghost_button(deck_btn, 18)
 	hud.add_child(deck_btn)
 
+	# 背包：有掉落物/物品时才出现，避免空按钮占位
+	var bag_btn := Button.new()
+	bag_btn.text = "背包"
+	bag_btn.position = Vector2(20, 204)
+	bag_btn.size = Vector2(120, 44)
+	bag_btn.pressed.connect(InventoryView.toggle)
+	UiKit.ghost_button(bag_btn, 18)
+	bag_btn.visible = not (GameState.drops.is_empty() and GameState.items.is_empty())
+	hud.add_child(bag_btn)
+
 	NavMenu.attach(hud, [
 		{"text": "牌库", "action": func() -> void: DeckViewer.toggle()},
+		{"text": "背包", "action": func() -> void: InventoryView.toggle()},
 		{"text": "地图说明", "action": func() -> void: _show_map_hint()},
 		{"text": "返回主菜单", "action": Callable(self, "_on_back_to_menu")},
 	])
@@ -619,8 +630,10 @@ func _show_encounter(t: String) -> void:
 	overlay.add_child(dim)
 
 	var panel := Panel.new()
-	panel.position = Vector2(250, 56)
-	panel.size = Vector2(780, 608)
+	# 商店要多一行「货架」，给高一点，否则内容会顶出面板
+	var shop_pad: bool = t == "shop"
+	panel.position = Vector2(250, 40 if shop_pad else 56)
+	panel.size = Vector2(780, 640 if shop_pad else 608)
 	var ps := StyleBoxFlat.new()
 	ps.bg_color = Color(0.09, 0.10, 0.13, 0.96)
 	ps.border_width_left = 2
@@ -633,8 +646,8 @@ func _show_encounter(t: String) -> void:
 	overlay.add_child(panel)
 
 	var vbox := VBoxContainer.new()
-	vbox.position = Vector2(286, 86)
-	vbox.size = Vector2(708, 548)
+	vbox.position = Vector2(286, 66 if shop_pad else 86)
+	vbox.size = Vector2(708, 588 if shop_pad else 548)
 	vbox.add_theme_constant_override("separation", 10)
 	overlay.add_child(vbox)
 
@@ -763,10 +776,19 @@ func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	leave.pressed.connect(_close_encounter)
 	vbox.add_child(leave)
 
+# 清掉 vbox 里的按钮，但保留标题/正文 —— 它们由 _show_encounter 创建，不属于局部 UI。
+# 之前直接 queue_free() 全部子节点，会把 title/body 一起删掉，
+# 下一次再写 title.text 就是对已释放对象赋值 → 运行时报错、界面完全没反应。
+func _clear_actions(vbox: VBoxContainer, title: Label, body: Label) -> void:
+	for c in vbox.get_children():
+		if c == title or c == body:
+			continue
+		vbox.remove_child(c)
+		c.queue_free()
+
 # 休息处合成：列出能做的物品，点一个就消耗材料、拿到物品
 func _rest_craft(title: Label, body: Label, vbox: VBoxContainer) -> void:
-	for c in vbox.get_children():
-		c.queue_free()
+	_clear_actions(vbox, title, body)
 	title.text = "合 成"
 	body.text = "手里的东西可以拼一拼。"
 	var combos := Inventory.combinable()
@@ -793,9 +815,11 @@ func _do_craft(item_id: String, title: Label, body: Label, vbox: VBoxContainer) 
 	if not Inventory.combine(item_id):
 		Toast.show_text("材料不够。")
 		return
-	Toast.show_text("做好了 %s" % ItemDB.name_of(item_id))
 	GameState.save_game()
 	_rest_craft(title, body, vbox)
+	# 结果同时写进正文，不依赖 Toast（Toast 可能被弹窗盖住）
+	if is_instance_valid(body):
+		body.text = "做好了「%s」。\n%s" % [ItemDB.name_of(item_id), ItemDB.desc_of(item_id)]
 
 func _rest_heal(heal: int, body: Label) -> void:
 	GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + heal)
@@ -954,8 +978,7 @@ func _encounter_npc(title: Label, body: Label, vbox: VBoxContainer) -> void:
 
 	title.text = "同行的英雄"
 	body.text = ""
-	for ch in vbox.get_children():
-		ch.queue_free()
+	_clear_actions(vbox, title, body)
 
 	var open_btn := _ink_button("「（走过去）」")
 	open_btn.pressed.connect(func() -> void:
@@ -983,6 +1006,9 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 	var available: Array = []
 	for cid in GameState.contestants:
 		if GameState.eliminated.has(cid):
+			continue
+		# 自愿退赛的英雄本局不再出现
+		if GameState.retired.has(cid):
 			continue
 		available.append(cid)
 	if available.is_empty():
@@ -1032,6 +1058,79 @@ func _encounter_contestant(title: Label, body: Label, vbox: VBoxContainer) -> vo
 			b.text += "（%s）" % Morality.req_text(choice)
 		b.pressed.connect(_contestant_choice.bind(id, choice))
 		vbox.add_child(b)
+
+	# —— 物品交互：送礼 / 劝退 ——
+	body.text += "\n\n好感 %d　　（%d 就能劝他退赛）" % [
+		ContestantDB.favor_of(id), ContestantDB.RETIRE_FAVOR]
+
+	var giveables := _giveable_items()
+	if not giveables.is_empty():
+		var gift := Button.new()
+		gift.text = "递一样东西给他（%d 种可送）" % giveables.size()
+		gift.pressed.connect(_contestant_gift.bind(id, title, body, vbox))
+		vbox.add_child(gift)
+
+	if ContestantDB.can_retire(id):
+		var quit_btn := Button.new()
+		quit_btn.text = "劝他退出这一局"
+		quit_btn.pressed.connect(_contestant_retire.bind(id))
+		vbox.add_child(quit_btn)
+
+
+# 背包里能送的物品
+func _giveable_items() -> Array:
+	var out: Array = []
+	for iid in GameState.items.keys():
+		var item_id := str(iid)
+		if Inventory.item_count(item_id) <= 0:
+			continue
+		if ItemDB.can_give_to_hero(item_id):
+			out.append(item_id)
+	return out
+
+
+# 送礼列表（清空 vbox 重建，和 _rest_craft 同一个套路）
+func _contestant_gift(id: String, title: Label, body: Label, vbox: VBoxContainer) -> void:
+	_clear_actions(vbox, title, body)
+	title.text = "递 东 西"
+	body.text = "「%s」看着你手上的东西。" % ContestantDB.name_of(id)
+	var list := _giveable_items()
+	if list.is_empty():
+		body.text = "你手上没什么可以递出去的。"
+	else:
+		for iid in list:
+			var item_id := str(iid)
+			var b := Button.new()
+			b.text = "%s×%d　—　%s" % [
+				ItemDB.name_of(item_id), Inventory.item_count(item_id), ItemDB.desc_of(item_id)]
+			b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			b.custom_minimum_size = Vector2(0, 76)
+			b.pressed.connect(_do_gift.bind(id, item_id, title, body, vbox))
+			vbox.add_child(b)
+	var back := Button.new()
+	back.text = "收起来"
+	back.pressed.connect(_contestant_back.bind(id, title, body, vbox))
+	vbox.add_child(back)
+
+
+func _do_gift(id: String, item_id: String, title: Label, body: Label, vbox: VBoxContainer) -> void:
+	var r := ContestantDB.give_item(id, item_id)
+	Toast.show_text(str(r.get("text", "")), 3.0)
+	# 回到这位参赛者的界面，好感那一行会跟着变
+	_contestant_back(id, title, body, vbox)
+
+
+func _contestant_back(id: String, title: Label, body: Label, vbox: VBoxContainer) -> void:
+	_clear_actions(vbox, title, body)
+	_encounter_contestant(title, body, vbox)
+
+
+func _contestant_retire(id: String) -> void:
+	if ContestantDB.retire(id):
+		Toast.show_text("「%s」把武器收了起来。\n他不会再走到最后。" % ContestantDB.name_of(id), 3.5)
+	else:
+		Toast.show_text("他不为所动。")
+	_close_encounter()
 
 func _alive_count() -> int:
 	var n := 0
@@ -1098,11 +1197,17 @@ func _maybe_eliminate() -> void:
 
 func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var cards: Array
+	var goods: Array
 	if GameState.pending_snapshot.get("kind", "") == "shop":
 		cards = GameState.pending_snapshot["cards"]
+		goods = GameState.pending_snapshot.get("goods", [])
+		if goods.is_empty():
+			goods = _shop_goods(GameState.act)
+			GameState.pending_snapshot["goods"] = goods
 	else:
 		cards = ShopDB.pick_cards(GameState.act)
-		GameState.pending_snapshot = {"kind": "shop", "cards": cards}
+		goods = _shop_goods(GameState.act)
+		GameState.pending_snapshot = {"kind": "shop", "cards": cards, "goods": goods}
 		GameState.save_game()
 	title.text = "商 店"
 	body.text = "金币：%d　　挑一张，加入你的牌组。" % GameState.gold
@@ -1110,18 +1215,18 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 20)
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.custom_minimum_size = Vector2(700, 300)
+	row.custom_minimum_size = Vector2(700, 276)
 	vbox.add_child(row)
 
 	for card_name in cards:
 		var price: int = CardDB.price_of(card_name)
 		var col := VBoxContainer.new()
-		col.add_theme_constant_override("separation", 8)
+		col.add_theme_constant_override("separation", 6)
 		row.add_child(col)
 
 		var card := CardUI.make_button(card_name, 16)
-		card.custom_minimum_size = Vector2(176, 258)
-		card.size = Vector2(176, 258)
+		card.custom_minimum_size = Vector2(176, 232)
+		card.size = Vector2(176, 232)
 		card.disabled = GameState.gold < price
 		card.pressed.connect(_buy_card.bind(card_name, price, card, body))
 		col.add_child(card)
@@ -1129,30 +1234,21 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 		var tag := Label.new()
 		tag.text = "%d 金币" % price
 		tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		tag.add_theme_font_size_override("font_size", 19)
+		tag.add_theme_font_size_override("font_size", 18)
 		tag.add_theme_color_override("font_color", Color(0.90, 0.79, 0.50))
 		StoryDB.apply_serif(tag)
 		col.add_child(tag)
 
-	var gap := Control.new()
-	gap.custom_minimum_size = Vector2(0, 18)
-	vbox.add_child(gap)
-
-	# —— 掉落物 / 物品货架（表为空时整块不出现）——
-	var goods := _shop_goods(GameState.act)
+	# —— 掉落物 / 物品货架：横向一行，不占额外高度（表为空时整块不出现）——
 	if not goods.is_empty():
-		var shelf := Label.new()
-		shelf.text = "货 架"
-		shelf.add_theme_font_size_override("font_size", 20)
-		shelf.add_theme_color_override("font_color", Color(0.90, 0.79, 0.50))
-		StoryDB.apply_serif(shelf)
-		vbox.add_child(shelf)
+		var shelf_row := HBoxContainer.new()
+		shelf_row.add_theme_constant_override("separation", 10)
+		shelf_row.alignment = BoxContainer.ALIGNMENT_CENTER
+		shelf_row.custom_minimum_size = Vector2(700, 76)
+		vbox.add_child(shelf_row)
 		for g in goods:
 			var gi: Dictionary = g
-			_add_shop_goods_button(vbox, str(gi["id"]), str(gi["kind"]), int(gi["price"]), body)
-		var gap2 := Control.new()
-		gap2.custom_minimum_size = Vector2(0, 14)
-		vbox.add_child(gap2)
+			_add_shop_goods_button(shelf_row, str(gi["id"]), str(gi["kind"]), int(gi["price"]), body)
 
 	var leave := _ink_button("离 开")
 	leave.pressed.connect(_close_encounter)
@@ -1171,13 +1267,18 @@ func _shop_goods(act: int) -> Array:
 		out.append({"kind": "item", "id": str(items[i]), "price": ItemDB.price_of(str(items[i]))})
 	return out
 
-func _add_shop_goods_button(vbox: VBoxContainer, id: String, kind: String, price: int, body: Label) -> void:
+func _add_shop_goods_button(row: HBoxContainer, id: String, kind: String, price: int, body: Label) -> void:
 	var label := DropDB.name_of(id) if kind == "drop" else ItemDB.name_of(id)
-	var desc := DropDB.desc_of(id) if kind == "drop" else ItemDB.desc_of(id)
-	var b := _ink_button("%s　%d 金　—— %s" % [label, price, desc])
+	var b := Button.new()
+	b.text = "%s　%d 金" % [label, price]
+	b.custom_minimum_size = Vector2(220, 68)
+	b.add_theme_font_size_override("font_size", 17)
+	b.focus_mode = Control.FOCUS_NONE
 	b.disabled = GameState.gold < price
+	b.tooltip_text = DropDB.desc_of(id) if kind == "drop" else ItemDB.desc_of(id)
 	b.pressed.connect(_buy_goods.bind(id, kind, price, body))
-	vbox.add_child(b)
+	row.add_child(b)
+	UiKit.ghost_button(b, 17)
 
 func _buy_goods(id: String, kind: String, price: int, body: Label) -> void:
 	if GameState.gold < price:

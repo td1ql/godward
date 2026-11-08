@@ -26,6 +26,22 @@ extends Node
 # ============================================================
 
 const DROPS := {
+	"粗蜘蛛线": {
+		"name": "粗蜘蛛线",
+		"desc": "毒蜘蛛吐出来的丝，比头发还韧。",
+		"tier": 1,
+		"from_enemy": ["毒蜘蛛"],
+		"weight": 10,
+		"price": 8,
+	},
+	"火焰精华": {
+		"name": "火焰精华",
+		"desc": "火元素体内凝下来的一点热，装在小瓶里还烫手。",
+		"tier": 1,
+		"from_enemy": ["火元素"],
+		"weight": 10,
+		"price": 12,
+	},
 }
 
 
@@ -65,6 +81,20 @@ func pool_for_node(node_type: String) -> Array:
 	for id in DROPS.keys():
 		var from: Array = DROPS[id].get("from", [])
 		if from.is_empty() or from.has(node_type):
+			out.append(id)
+	return out
+
+
+# 某个敌人体内能掉的全部掉落物 id（按敌人名字匹配，这是主要的取法）
+# 没写 from_enemy 的条目视为「任何敌人都可能掉」
+func pool_for_enemy(enemy_name: String) -> Array:
+	var out: Array = []
+	for id in DROPS.keys():
+		var fe: Array = DROPS[id].get("from_enemy", [])
+		var fn: Array = DROPS[id].get("from", [])
+		if fe.is_empty() and fn.is_empty():
+			out.append(id)
+		elif fe.has(enemy_name):
 			out.append(id)
 	return out
 

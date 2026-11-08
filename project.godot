@@ -42,6 +42,7 @@ Tutorial="*res://scripts/tutorial.gd"
 DropDB="*res://scripts/drop_db.gd"
 ItemDB="*res://scripts/item_db.gd"
 Inventory="*res://scripts/inventory.gd"
+InventoryView="*res://scripts/inventory_view.gd"
 
 [display]
 

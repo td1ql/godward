@@ -95,32 +95,75 @@ static func _start_next_cleanup(b) -> void:
 	GameState.save_game()
 	b.get_tree().change_scene_to_file("res://scenes/main.tscn")
 
+# 胜利后的第一步：先看有没有掉落物可选（三选一），没有就直接进选牌
 static func _show_reward(b) -> void:
 	b.hand_view.hide_cards()
+	var pool := DropDB.pool_for_enemy(str(b.enemy.label_name))
+	if pool.is_empty():
+		_show_card_reward(b)
+		return
+	_show_drop_pick(b, pool)
 
-	# 掉落物：进背包（表为空时什么都不掉，不影响现有流程）
-	var got: Array = DropDB.roll(b.node_type, NodeRuleDB.drop_count_of(b.node_type))
-	if not got.is_empty():
-		Inventory.add_drops(got)
 
+# 掉落物三选一（池子里不够 3 个就全列出来）
+static func _show_drop_pick(b, pool: Array) -> void:
+	var cands := pool.duplicate()
+	cands.shuffle()
+	if cands.size() > 3:
+		cands = cands.slice(0, 3)
+
+	var overlay := Modal.open(b, 0.85)
+	Modal.title(overlay, "掉　落", 110, 24)
+
+	var hint := Label.new()
+	hint.text = "从「%s」身上，挑一样带走。" % str(b.enemy.label_name)
+	hint.position = Vector2(0, 158)
+	hint.size = Vector2(1280, 28)
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_font_size_override("font_size", 17)
+	hint.add_theme_color_override("font_color", Color(0.72, 0.68, 0.58))
+	StoryDB.apply_serif(hint)
+	overlay.add_child(hint)
+
+	var n: int = cands.size()
+	var spacing := 300.0
+	var bw := 260.0
+	var total := (n - 1) * spacing + bw
+	var start_x := (1280.0 - total) / 2.0
+	for i in range(n):
+		var drop_id: String = str(cands[i])
+		var btn := Button.new()
+		btn.text = "%s\n\n%s\n（已有 %d）" % [
+			DropDB.name_of(drop_id), DropDB.desc_of(drop_id), Inventory.drop_count(drop_id)]
+		btn.position = Vector2(start_x + i * spacing, 210)
+		btn.size = Vector2(bw, 180)
+		btn.add_theme_font_size_override("font_size", 16)
+		btn.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		btn.pressed.connect(_choose_drop.bind(b, overlay, drop_id))
+		b._ghost_button(btn, 16)
+		overlay.add_child(btn)
+
+	var skip := Modal.button(overlay, "什么都不要", 540, 430, 200, 50, func() -> void:
+		overlay.queue_free()
+		_show_card_reward(b))
+	b._ghost_button(skip, 18)
+
+
+static func _choose_drop(b, overlay: Control, drop_id: String) -> void:
+	Inventory.add_drop(drop_id, 1)
+	Toast.show_text("拾得 %s" % DropDB.name_of(drop_id))
+	GameState.save_game()
+	overlay.queue_free()
+	_show_card_reward(b)
+
+
+# 选牌那一屏
+static func _show_card_reward(b) -> void:
 	var pool: Array = RewardDB.pick_cards(b.node_type, NodeRuleDB.cards_of(b.node_type), GameState.act)
 	var overlay := Modal.open(b, 0.85)
 	var title_key := "reward_title" if pool.size() > 0 else "reward_title_gold"
 	Modal.title(overlay, StoryDB.f(title_key, [b.last_gold_gain]), 110, 24)
-
-	if not got.is_empty():
-		var drop_line := Label.new()
-		var names: Array[String] = []
-		for id in got:
-			names.append(DropDB.name_of(str(id)))
-		drop_line.text = "拾得：" + "、".join(names)
-		drop_line.position = Vector2(0, 158)
-		drop_line.size = Vector2(1280, 28)
-		drop_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		drop_line.add_theme_font_size_override("font_size", 17)
-		drop_line.add_theme_color_override("font_color", Color(0.86, 0.76, 0.48))
-		StoryDB.apply_serif(drop_line)
-		overlay.add_child(drop_line)
 
 	var n: int = pool.size()
 	var spacing := 250.0

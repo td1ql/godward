@@ -276,6 +276,45 @@ func _debug_npc() -> void:
 		Toast.show_text("（样板结束）", 2.0)
 	)
 
+
+# ===== 物品系统测试入口 =====
+
+# 给够合成一次的材料（粗蜘蛛线 ×3、火焰精华 ×3）
+func _debug_give_materials() -> void:
+	Inventory.add_drop("粗蜘蛛线", 3)
+	Inventory.add_drop("火焰精华", 3)
+	GameState.save_game()
+	Toast.show_text("给了　粗蜘蛛线×3、火焰精华×3\n（去休息处可以合成 3 次晴天项链）", 3.0)
+
+# 直接塞一条成品，跳过合成
+func _debug_give_necklace() -> void:
+	Inventory.add_item("晴天项链", 3)
+	GameState.save_game()
+	Toast.show_text("给了　晴天项链×3\n（送一条 +20 好感，三条就能劝退）", 3.0)
+
+# 把所有参赛者的好感刷到能劝退的线
+func _debug_favor_max() -> void:
+	var ids: Array = []
+	if not GameState.contestants.is_empty():
+		ids = GameState.contestants.duplicate()
+	else:
+		ids = ContestantDB.CONTESTANTS.keys()
+	for id in ids:
+		GameState.impressions[str(id)] = ContestantDB.RETIRE_FAVOR
+	GameState.save_game()
+	Toast.show_text("好感全刷到 %d —— 遇见英雄就能劝退" % ContestantDB.RETIRE_FAVOR, 3.0)
+
+# 清空背包（掉落物 + 物品 + 永久效果）
+func _debug_clear_bag() -> void:
+	Inventory.clear_all()
+	GameState.save_game()
+	Toast.show_text("背包已清空")
+
+# 看一眼背包里现在有什么（直接打开背包界面）
+func _debug_show_bag() -> void:
+	InventoryView.open()
+
+
 func _build_debug_buttons() -> void:
 	if not OS.is_debug_build():
 		return
@@ -284,8 +323,14 @@ func _build_debug_buttons() -> void:
 		{"text": "调试：第二幕", "action": _debug_act2},
 		{"text": "调试：耶梦加得", "action": _debug_serpent},
 		{"text": "调试：英雄 NPC", "action": _debug_npc},
+		{"text": "物品：给材料×3", "action": _debug_give_materials},
+		{"text": "物品：给项链×3", "action": _debug_give_necklace},
+		{"text": "物品：好感全满", "action": _debug_favor_max},
+		{"text": "物品：清空背包", "action": _debug_clear_bag},
+		{"text": "物品：查看背包", "action": _debug_show_bag},
 	]
-	# 两列排，全部落在屏幕内（原来第 4 个跑到 y=718，屏幕只有 720 高）
+	# 三列排，三行落在 606/644/682，最低 682+32=714，屏幕 720 内
+	var COLS := 3
 	var col := 0
 	var row := 0
 	for it in items:
@@ -300,6 +345,6 @@ func _build_debug_buttons() -> void:
 		UiKit.ghost_button(b, 14)
 		add_child(b)
 		col += 1
-		if col >= 2:
+		if col >= COLS:
 			col = 0
 			row += 1
