@@ -1,4 +1,4 @@
-﻿extends Control
+extends Control
 
 # 方舟风格的背景网格
 

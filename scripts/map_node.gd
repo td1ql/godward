@@ -74,15 +74,13 @@ func _draw() -> void:
 		_poly(c, r, 6, INK, ring)
 	elif kind == "elite":
 		_poly(c, r, 4, INK, ring)
-	else:
-		draw_circle(c, r, INK)
-		draw_arc(c, r, 0, TAU, 36, ring, 1.6, true)
-
-	if state == "current":
-		draw_arc(c, r - 6.5, 0, TAU, 30, Color(GOLD_HI, 0.50), 1.0, true)
+	# 普通节点不画外圈：只留图标，直接落在底图上
 
 	var ic := Color(ring, 0.92 if state != "locked" else 0.45)
-	_symbol(c, r * 0.46, ic)
+	var sym_r := r * 0.62
+	if is_big or kind == "elite":
+		sym_r = r * 0.46
+	_symbol(c, sym_r, ic)
 
 
 func _poly(c: Vector2, r: float, n: int, fill: Color, line: Color) -> void:

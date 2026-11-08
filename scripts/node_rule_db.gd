@@ -38,3 +38,18 @@ func cards_of(node_type: String) -> int:
 
 func discard_of(node_type: String) -> bool:
 	return bool(RULES.get(node_type, {}).get("discard", false))
+
+# 打这个节点掉几个掉落物（0 = 不掉）
+# 表里没写的按类型给默认值，想调平衡直接改这里
+func drop_count_of(node_type: String) -> int:
+	if RULES.has(node_type) and RULES[node_type].has("drops"):
+		return int(RULES[node_type]["drops"])
+	match node_type:
+		"elite", "divine_elite":
+			return 2
+		"boss", "pope", "god", "serpent", "tree":
+			return 3
+		"battle", "divine", "shell":
+			return 1
+		_:
+			return 0

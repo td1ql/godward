@@ -21,6 +21,8 @@ var enemy := EnemyState.new()
 
 var player_hp := 0
 var player_block := 0
+const ItemUse = preload("res://scripts/item_use.gd")
+
 var player_energy := 0
 var player_status := {}
 var _entry_hp := 0   # 进战时的血量：中途退出重打时回到这个值
@@ -44,6 +46,9 @@ var _enemy_sprite: TextureRect
 var _info_strip: Control
 var _info_name: Label
 var _info_detail: Label
+var _item_btn: Button
+var _intent_label: Label
+var _intent_sub: Label
 var _domain_label: Label
 var _last_enemy_hp := -1
 var _last_player_hp := -1
@@ -165,6 +170,11 @@ func _ready() -> void:
 		AudioManager.play_bgm("battle")
 	if node_type == "serpent":
 		_show_title("耶梦加得", Callable())
+
+func _open_items() -> void:
+	if ItemUse.open_picker(self):
+		return
+	Toast.show_text("没有能用的东西。")
 
 var _menu_popup: Control
 
@@ -599,10 +609,10 @@ func _update_ui() -> void:
 		_block_bar.size.x = 180.0 * clamp(float(player_block) / 50.0, 0.0, 1.0)
 	if _eblock_bar != null:
 		var eb := int(enemy.status.get("守护", 0)) + int(enemy.status.get("格挡", 0))
-		_eblock_bar.size.x = 276.0 * clamp(float(eb) / 50.0, 0.0, 1.0)
+		_eblock_bar.size.x = 284.0 * clamp(float(eb) / 50.0, 0.0, 1.0)
 	if _ehp_bar != null:
 		var emx: int = maxi(1, enemy.max_hp)
-		_ehp_bar.size.x = 276.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
+		_ehp_bar.size.x = 284.0 * clamp(float(enemy.hp) / float(emx), 0.0, 1.0)
 
 	var ptext := "【玩家】\nHP: %d\n格挡: %d" % [player_hp, player_block]
 	if player_detail_label != null:
@@ -646,13 +656,26 @@ func _update_ui() -> void:
 		var sw: float = _enemy_sprite.size.x
 		var cx: float = _enemy_sprite.position.x + sw * 0.5
 		var strip_w: float = 300.0
-		_info_strip.position = Vector2(cx - strip_w * 0.5, _enemy_sprite.position.y - 62.0)
+		_info_strip.position = Vector2(cx - strip_w * 0.5, _enemy_sprite.position.y - 100.0)
 		if _info_name != null:
-			_info_name.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 58.0)
+			_info_name.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 52.0)
 			_info_name.size = Vector2(strip_w - 16.0, 24.0)
+		if _intent_label != null:
+			_intent_label.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 96.0)
+			_intent_label.size = Vector2(strip_w - 16.0, 24.0)
+			# 文本过长时缩字号（18 → 16 → 14 → 12）
+			var ilen: int = _intent_label.text.length()
+			var ifs: int = 18 if ilen <= 11 else (16 if ilen <= 14 else (14 if ilen <= 17 else 12))
+			_intent_label.add_theme_font_size_override("font_size", ifs)
+		if _intent_sub != null:
+			_intent_sub.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 72.0)
+			_intent_sub.size = Vector2(strip_w - 16.0, 18.0)
+			var slen: int = _intent_sub.text.length()
+			var sfs: int = 13 if slen <= 15 else (12 if slen <= 20 else 11)
+			_intent_sub.add_theme_font_size_override("font_size", sfs)
 		if _info_detail != null:
-			_info_detail.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 26.0)
-			_info_detail.size = Vector2(strip_w - 16.0, 38.0)
+			_info_detail.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 14.0)
+			_info_detail.size = Vector2(strip_w - 16.0, 36.0)
 			# 长文本自动缩字号（13 → 11 → 10），再长就裁掉
 			var dlen: int = _info_detail.text.length()
 			var fs: int = 12 if dlen <= 20 else (11 if dlen <= 34 else 10)
@@ -660,11 +683,17 @@ func _update_ui() -> void:
 			_info_detail.autowrap_mode = TextServer.AUTOWRAP_ARBITRARY
 			_info_detail.clip_text = dlen > 70
 		if _ehp_bar != null:
-			_ehp_bar.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 34.0)
+			_ehp_bar.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 28.0)
 			_ehp_bar.size.x = (strip_w - 16.0) * clamp(float(enemy.hp) / float(maxi(1, enemy.max_hp)), 0.0, 1.0)
 		if _ehp_bar_bg != null:
-			_ehp_bar_bg.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 34.0)
+			_ehp_bar_bg.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 28.0)
 			_ehp_bar_bg.size = Vector2(strip_w - 16.0, 4)
+		# 敌人的格挡条也要跟着信息条走（之前写死在 (860,140)，会横穿面板）
+		if _eblock_bar_bg != null:
+			_eblock_bar_bg.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 21.0)
+			_eblock_bar_bg.size = Vector2(strip_w - 16.0, 4)
+		if _eblock_bar != null:
+			_eblock_bar.position = Vector2(cx - strip_w * 0.5 + 8.0, _enemy_sprite.position.y - 21.0)
 
 	if _enemy_sprite != null and is_instance_valid(_enemy_sprite) and _domain_label != null:
 		var dw: float = 420.0
@@ -673,6 +702,10 @@ func _update_ui() -> void:
 		_domain_label.size = Vector2(dw, 22.0)
 
 	_refresh_skill_btn()
+
+	# 物品按钮：手里有战斗可用的东西才出现
+	if _item_btn != null and is_instance_valid(_item_btn):
+		_item_btn.visible = not Inventory.battle_usable().is_empty()
 
 	# 上：名字 + HP（血条就在这下面）
 	var etext := "【%s】  HP %d" % [enemy.label_name, enemy.hp]
@@ -688,13 +721,20 @@ func _update_ui() -> void:
 		if dtxt != "" and _domain_label != null:
 			_domain_label.text = "领域 // %s" % dtxt
 	if enemy.hp > 0 and player_hp > 0:
-		var intent := "意图：攻击 %d" % DamageCalc.compute(enemy.intent_damage(), enemy.status, player_status)
-		var hit_extra := StatusSystem.text(enemy.on_hit)
-		if hit_extra != "":
-			intent += " + %s" % hit_extra
-		if edetail != "":
-			edetail += "\n"
-		edetail += intent
+		# 意图拆两条：上行「重击 12」，下行「给你中毒2、自己再生3」，见 BattleHud.intent_text
+		if _intent_label != null:
+			_intent_label.text = BattleHud.intent_text(self)
+			_intent_label.add_theme_color_override("font_color", BattleHud.intent_color(self))
+			_intent_label.visible = true
+		if _intent_sub != null:
+			var sub := BattleHud.intent_sub_text(self)
+			_intent_sub.text = sub
+			_intent_sub.visible = sub != ""
+	else:
+		if _intent_label != null:
+			_intent_label.visible = false
+		if _intent_sub != null:
+			_intent_sub.visible = false
 	if enemy.hp <= 0:
 		edetail += "\n你赢了！"
 	elif player_hp <= 0:

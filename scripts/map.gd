@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 
 const MapNode = preload("res://scripts/map_node.gd")
 const ArkPanel = preload("res://scripts/ark_panel.gd")
@@ -8,6 +8,14 @@ const GridOverlay = preload("res://scripts/grid_overlay.gd")
 const NODE_SIZE := Vector2(66, 66)
 const RADIUS := 210.0
 const ZOOM := 1.12
+# 节点活动范围：以起点 (0,0) 为中心的对称矩形。
+# 之前是 [150,1120]×[120,640]，但起点在 (0,0) —— 所有节点都被夹到右下角，
+# 地图变成一边倒，线也会贴到画面外。改成对称框，并按节点总数给足面积。
+# 一局大约 95 个节点，1400×940 能保证节点间距稳定在 100px 上下
+# （节点图标 66px，100px 间距 = 34px 净空，不会贴在一起）
+const MAP_MIN := Vector2(-700.0, -470.0)
+const MAP_MAX := Vector2(700.0, 470.0)
+const MIN_DIST := 100.0
 const WALK_TIME := 0.55
 const FADE_TIME := 0.22
 
@@ -220,33 +228,79 @@ func _ensure_positions() -> void:
 			# 屏幕是 16:9，把纵向压缩到 0.72，整圈才都能进画面
 			step_vec.y *= 0.72
 			var cand: Vector2 = world_pos[pid] + step_vec
-			cand.x = clampf(cand.x, 150.0, 1120.0)
-			cand.y = clampf(cand.y, 120.0, 640.0)
+			cand.x = clampf(cand.x, MAP_MIN.x, MAP_MAX.x)
+			cand.y = clampf(cand.y, MAP_MIN.y, MAP_MAX.y)
 
-			# 和已有的任何节点太近就把它推开（防止节点叠在一起）
-			const MIN_DIST := 132.0
-			for _try in range(24):
-				var clash := false
-				for other in world_pos.values():
-					if (other as Vector2).distance_to(cand) < MIN_DIST:
-						clash = true
+			# 防止节点叠在一起。
+			# 不能用「一路往外推」：推到边界后 clamp 会把推力吃掉，循环空转 24 次
+			# 最后还是叠着。改成：先看原位置，不行就在父节点周围整圈重撒一次。
+			var best := cand
+			var best_gap := _min_gap(cand)
+			if best_gap < MIN_DIST:
+				var jr := RandomNumberGenerator.new()
+				jr.seed = id * 2654435761 + pid * 40503 + 17
+				for _try in range(300):
+					var a2 := jr.randf_range(0.0, TAU)
+					var r2 := RADIUS * jr.randf_range(0.75, 1.35)
+					var c2: Vector2 = world_pos[pid] + Vector2(cos(a2) * r2, sin(a2) * r2 * 0.72)
+					c2.x = clampf(c2.x, MAP_MIN.x, MAP_MAX.x)
+					c2.y = clampf(c2.y, MAP_MIN.y, MAP_MAX.y)
+					var g2: float = _min_gap(c2)
+					if g2 > best_gap:
+						best_gap = g2
+						best = c2
+					if g2 >= MIN_DIST:
 						break
-				if not clash:
-					break
-				var away: Vector2 = cand - world_pos[pid]
-				if away.length() < 1.0:
-					away = Vector2(cos(angle), sin(angle))
-				cand += away.normalized() * 30.0
-				cand.x = clampf(cand.x, 150.0, 1120.0)
-				cand.y = clampf(cand.y, 120.0, 640.0)
-			world_pos[id] = cand
+			world_pos[id] = best
 			changed = true
+	# 最后一轮松弛：随机撒点天生会有几个挨得很近的，
+	# 两两互推几轮把它们匀开（夹在活动范围内，不会推出地图）
+	_relax_positions()
 
 func _parent_of(id: int) -> int:
 	for pid in nodes.keys():
 		if (nodes[pid]["children"] as Array).has(id):
 			return pid
 	return -1
+
+# 离已有节点最近的距离（节点布局用）
+func _min_gap(p: Vector2) -> float:
+	var g := 99999.0
+	for other in world_pos.values():
+		g = min(g, (other as Vector2).distance_to(p))
+	return g
+
+# 两两互推，把挨太近的节点匀开。起点 (id 0) 钉死不动。
+func _relax_positions() -> void:
+	for _it in range(30):
+		var moved := false
+		var ids: Array = world_pos.keys()
+		for i in range(ids.size()):
+			for j in range(i + 1, ids.size()):
+				var ia: int = int(ids[i])
+				var ib: int = int(ids[j])
+				var a: Vector2 = world_pos[ia]
+				var b: Vector2 = world_pos[ib]
+				var d: float = a.distance_to(b)
+				if d >= MIN_DIST:
+					continue
+				var dir: Vector2 = (b - a)
+				if dir.length() < 0.01:
+					dir = Vector2(1.0, 0.0)
+				var push: Vector2 = dir.normalized() * (MIN_DIST - d) * 0.5
+				if ia != 0:
+					a -= push
+				if ib != 0:
+					b += push
+				a.x = clampf(a.x, MAP_MIN.x, MAP_MAX.x)
+				a.y = clampf(a.y, MAP_MIN.y, MAP_MAX.y)
+				b.x = clampf(b.x, MAP_MIN.x, MAP_MAX.x)
+				b.y = clampf(b.y, MAP_MIN.y, MAP_MAX.y)
+				world_pos[ia] = a
+				world_pos[ib] = b
+				moved = true
+		if not moved:
+			break
 
 func _update_bg() -> void:
 	if world_pos.is_empty():
@@ -345,6 +399,10 @@ func _add_edge(a: int, b: int) -> void:
 	rng.seed = a * 131 + b * 977
 	var bend := rng.randf_range(-0.16, 0.16) * dir.length()
 	var ctrl := mid + perp * bend
+	# 控制点也夹进节点活动范围：二次贝塞尔落在三点凸包内，
+	# 三点都在框里，整条弧就不会甩到地图外面去。
+	ctrl.x = clampf(ctrl.x, MAP_MIN.x, MAP_MAX.x)
+	ctrl.y = clampf(ctrl.y, MAP_MIN.y, MAP_MAX.y)
 
 	var pts := PackedVector2Array()
 	for i in range(21):
@@ -692,10 +750,52 @@ func _encounter_rest(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	discard.pressed.connect(_rest_discard)
 	vbox.add_child(discard)
 
+	# —— 合成：手上材料凑得齐才出现 ——
+	var combos := Inventory.combinable()
+	if not combos.is_empty():
+		var craft := Button.new()
+		craft.text = "合成物品（%d 项可做）" % combos.size()
+		craft.pressed.connect(_rest_craft.bind(title, body, vbox))
+		vbox.add_child(craft)
+
 	var leave := Button.new()
 	leave.text = "离开"
 	leave.pressed.connect(_close_encounter)
 	vbox.add_child(leave)
+
+# 休息处合成：列出能做的物品，点一个就消耗材料、拿到物品
+func _rest_craft(title: Label, body: Label, vbox: VBoxContainer) -> void:
+	for c in vbox.get_children():
+		c.queue_free()
+	title.text = "合 成"
+	body.text = "手里的东西可以拼一拼。"
+	var combos := Inventory.combinable()
+	if combos.is_empty():
+		body.text = "凑不齐了。"
+		var back := _ink_button("回去")
+		back.pressed.connect(_close_encounter)
+		vbox.add_child(back)
+		return
+	for id in combos:
+		var item_id := str(id)
+		var recipe: Dictionary = ItemDB.recipe_of(item_id)
+		var mats: Array[String] = []
+		for mat in recipe:
+			mats.append("%s×%d" % [DropDB.name_of(str(mat)), int(recipe[mat])])
+		var b := _ink_button("%s　——　%s" % [ItemDB.name_of(item_id), "、".join(mats)])
+		b.pressed.connect(_do_craft.bind(item_id, title, body, vbox))
+		vbox.add_child(b)
+	var leave := _ink_button("离 开")
+	leave.pressed.connect(_close_encounter)
+	vbox.add_child(leave)
+
+func _do_craft(item_id: String, title: Label, body: Label, vbox: VBoxContainer) -> void:
+	if not Inventory.combine(item_id):
+		Toast.show_text("材料不够。")
+		return
+	Toast.show_text("做好了 %s" % ItemDB.name_of(item_id))
+	GameState.save_game()
+	_rest_craft(title, body, vbox)
 
 func _rest_heal(heal: int, body: Label) -> void:
 	GameState.player_hp = min(GameState.player_max_hp, GameState.player_hp + heal)
@@ -706,7 +806,6 @@ func _rest_heal(heal: int, body: Label) -> void:
 func _rest_discard() -> void:
 	_close_encounter()
 	DeckViewer.open_choose("弃掉一张牌", GameState.deck, _discard_from_rest)
-
 func _discard_from_rest(index: int) -> void:
 	if index >= 0 and index < GameState.deck.size():
 		var removed: String = GameState.deck[index]
@@ -982,6 +1081,9 @@ func _maybe_eliminate() -> void:
 	for id in GameState.contestants:
 		if GameState.met_contestants.has(id) or GameState.eliminated.has(id):
 			continue
+		# 自愿退赛的人不参与淘汰
+		if GameState.retired.has(id):
+			continue
 		pool.append(id)
 	if pool.is_empty():
 		return
@@ -1036,9 +1138,61 @@ func _encounter_shop(title: Label, body: Label, vbox: VBoxContainer) -> void:
 	gap.custom_minimum_size = Vector2(0, 18)
 	vbox.add_child(gap)
 
+	# —— 掉落物 / 物品货架（表为空时整块不出现）——
+	var goods := _shop_goods(GameState.act)
+	if not goods.is_empty():
+		var shelf := Label.new()
+		shelf.text = "货 架"
+		shelf.add_theme_font_size_override("font_size", 20)
+		shelf.add_theme_color_override("font_color", Color(0.90, 0.79, 0.50))
+		StoryDB.apply_serif(shelf)
+		vbox.add_child(shelf)
+		for g in goods:
+			var gi: Dictionary = g
+			_add_shop_goods_button(vbox, str(gi["id"]), str(gi["kind"]), int(gi["price"]), body)
+		var gap2 := Control.new()
+		gap2.custom_minimum_size = Vector2(0, 14)
+		vbox.add_child(gap2)
+
 	var leave := _ink_button("离 开")
 	leave.pressed.connect(_close_encounter)
 	vbox.add_child(leave)
+
+# 商店今天摆出来的掉落物 / 物品（表空就空数组）
+func _shop_goods(act: int) -> Array:
+	var out: Array = []
+	var drops: Array = DropDB.shop_pool(3)
+	drops.shuffle()
+	for i in range(min(2, drops.size())):
+		out.append({"kind": "drop", "id": str(drops[i]), "price": DropDB.price_of(str(drops[i]))})
+	var items: Array = ItemDB.shop_pool(act)
+	items.shuffle()
+	for i in range(min(1, items.size())):
+		out.append({"kind": "item", "id": str(items[i]), "price": ItemDB.price_of(str(items[i]))})
+	return out
+
+func _add_shop_goods_button(vbox: VBoxContainer, id: String, kind: String, price: int, body: Label) -> void:
+	var label := DropDB.name_of(id) if kind == "drop" else ItemDB.name_of(id)
+	var desc := DropDB.desc_of(id) if kind == "drop" else ItemDB.desc_of(id)
+	var b := _ink_button("%s　%d 金　—— %s" % [label, price, desc])
+	b.disabled = GameState.gold < price
+	b.pressed.connect(_buy_goods.bind(id, kind, price, body))
+	vbox.add_child(b)
+
+func _buy_goods(id: String, kind: String, price: int, body: Label) -> void:
+	if GameState.gold < price:
+		Toast.show_text("金币不足。")
+		return
+	GameState.gold -= price
+	if kind == "drop":
+		Inventory.add_drop(id, 1)
+		Toast.show_text("买了 %s" % DropDB.name_of(id))
+	else:
+		Inventory.add_item(id, 1)
+		Toast.show_text("买了 %s" % ItemDB.name_of(id))
+	body.text = "金币：%d　　挑一张，加入你的牌组。" % GameState.gold
+	_update_hud()
+	GameState.save_game()
 
 func _ink_button(content: String) -> Button:
 	return UiKit.ink_button(content)

@@ -228,7 +228,7 @@ const CARDS := {
 	"千刀万剐": {"kind": "action", "cost": 3, "damage": 1, "block": 0, "clear_enemy_status": "中毒", "hits_from_enemy_status": "中毒", "price": 95},
 	"处决": {"kind": "effect", "cost": 3, "consume": 3, "damage": 32, "block": 0, "price": 110},
 	"贯心": {"kind": "action", "cost": 2, "damage": 18, "block": 0, "price": 85},
-	"急救术": {"kind": "action", "cost": 0, "consume": 1, "damage": 0, "block": 0, "heal": 4, "price": 40},
+	"急救术": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "heal": 4, "price": 40},
 	"敏捷连刺": {"kind": "action", "cost": 0, "damage": 1, "hits": 5, "block": 0, "self_damage": 2, "price": 40},
 	"过载": {"kind": "action", "cost": 0, "damage": 0, "block": 0, "self_damage": 4, "gain_energy": 1, "price": 55},
 	"薪火": {"kind": "effect", "cost": 1, "consume": 1, "damage": 0, "block": 0, "self_damage": 3, "self_status": {"炽热": 5}, "price": 55},

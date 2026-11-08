@@ -37,7 +37,14 @@ func resolve_cards(reward: Dictionary) -> Array[String]:
 	return result
 
 func pick_roster(count: int) -> Array[String]:
-	var pool: Array = CONTESTANTS.keys()
+	var pool: Array = []
+	for id in CONTESTANTS.keys():
+		# 已经死掉 / 已经自愿退赛的人不会再出现在这一局里
+		if GameState.eliminated.has(str(id)):
+			continue
+		if GameState.retired.has(str(id)):
+			continue
+		pool.append(id)
 	pool.shuffle()
 	var result: Array[String] = []
 	for i in range(min(count, pool.size())):
@@ -104,6 +111,55 @@ func scene_for(id: String, meet: int) -> Dictionary:
 	return {"text": _meet_line(lines, "neutral", c), "choices": NEUTRAL_CHOICES}
 
 var _last_meet := {}
+
+# ============================================================
+# 物品 ↔ 英雄（物品系统的交互入口）
+# ------------------------------------------------------------
+# 好感存在 GameState.impressions[id]，和现有的遇见系统共用同一个数值。
+# ============================================================
+
+# 能劝退的好感门槛
+const RETIRE_FAVOR := 60
+
+
+func favor_of(id: String) -> int:
+	return int(GameState.impressions.get(id, 0))
+
+
+# 送一件物品：加好感，返回要给玩家看的话
+func give_item(id: String, item_id: String) -> Dictionary:
+	if not ItemDB.can_give_to_hero(item_id):
+		return {"ok": false, "text": "他没接。"}
+	if Inventory.item_count(item_id) <= 0:
+		return {"ok": false, "text": "你没有这件东西。"}
+	Inventory.take_item(item_id, 1)
+	var add: int = ItemDB.favor_of(item_id)
+	var before := favor_of(id)
+	GameState.impressions[id] = before + add
+	GameState.save_game()
+	var text := "他收下了%s。" % ItemDB.name_of(item_id)
+	if add != 0:
+		text += "（好感 %+d）" % add
+	if before < RETIRE_FAVOR and before + add >= RETIRE_FAVOR:
+		text += "\n「……你还有事要我帮忙吗。」"
+	return {"ok": true, "favor": add, "text": text}
+
+
+func can_retire(id: String) -> bool:
+	return favor_of(id) >= RETIRE_FAVOR and not GameState.retired.has(id)
+
+
+# 让英雄自愿退出比赛：不再参与守门人之后的清算，本局之后也不再出现在事件里
+func retire(id: String) -> bool:
+	if not can_retire(id):
+		return false
+	if not GameState.retired.has(id):
+		GameState.retired.append(id)
+	# 结盟中的也一起撤掉，避免清算时重复
+	GameState.allies.erase(id)
+	GameState.save_game()
+	return true
+
 
 func _meet_line(lines: Dictionary, tier: String, c: Dictionary) -> String:
 	var v = lines.get(tier, "")

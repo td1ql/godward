@@ -7,6 +7,9 @@ static func _surviving_contestants(b) -> Array[String]:
 	for id in GameState.contestants:
 		if GameState.eliminated.has(id):
 			continue
+		# 自愿退赛的不参与守门人之后的清算
+		if GameState.retired.has(id):
+			continue
 		if GameState.allies.has(id):
 			continue
 		result.append(id)
@@ -95,10 +98,29 @@ static func _start_next_cleanup(b) -> void:
 static func _show_reward(b) -> void:
 	b.hand_view.hide_cards()
 
+	# 掉落物：进背包（表为空时什么都不掉，不影响现有流程）
+	var got: Array = DropDB.roll(b.node_type, NodeRuleDB.drop_count_of(b.node_type))
+	if not got.is_empty():
+		Inventory.add_drops(got)
+
 	var pool: Array = RewardDB.pick_cards(b.node_type, NodeRuleDB.cards_of(b.node_type), GameState.act)
 	var overlay := Modal.open(b, 0.85)
 	var title_key := "reward_title" if pool.size() > 0 else "reward_title_gold"
 	Modal.title(overlay, StoryDB.f(title_key, [b.last_gold_gain]), 110, 24)
+
+	if not got.is_empty():
+		var drop_line := Label.new()
+		var names: Array[String] = []
+		for id in got:
+			names.append(DropDB.name_of(str(id)))
+		drop_line.text = "拾得：" + "、".join(names)
+		drop_line.position = Vector2(0, 158)
+		drop_line.size = Vector2(1280, 28)
+		drop_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		drop_line.add_theme_font_size_override("font_size", 17)
+		drop_line.add_theme_color_override("font_color", Color(0.86, 0.76, 0.48))
+		StoryDB.apply_serif(drop_line)
+		overlay.add_child(drop_line)
 
 	var n: int = pool.size()
 	var spacing := 250.0

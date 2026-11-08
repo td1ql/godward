@@ -24,6 +24,8 @@ var contestants: Array[String] = []
 var met_contestants: Array[String] = []
 var eliminated: Array[String] = []
 var allies: Array[String] = []
+# 自愿退出比赛的英雄：不参与守门人之后的清算，这一局之后也不再出现在事件里
+var retired: Array[String] = []
 var pending_enemy: Dictionary = {}
 var pending_contestant: String = ""
 var pending_cleanup := false
@@ -49,6 +51,12 @@ var impressions := {}
 var npc_seen := {}
 var meet_count := {}
 var energy_bonus := 0
+
+# 背包：掉落物 / 物品（见 scripts/inventory.gd）
+var drops := {}          # { 掉落物id : 数量 }
+var items := {}          # { 物品id : 数量 }
+var item_uses := {}      # { 物品id : 已经用掉几次 }（multi 型用）
+var item_perms := {}     # { 效果键 : 数值 }（perm 型物品挂的永久效果）
 
 # 财富之神那里买到的永久加成
 var wealth_hp := 0
@@ -97,6 +105,10 @@ func reset_run() -> void:
 	impressions.clear()
 	npc_seen.clear()
 	meet_count.clear()
+	drops.clear()
+	items.clear()
+	item_uses.clear()
+	item_perms.clear()
 	_roll_vocation()
 	divinity = 50
 	organs.clear()
@@ -105,6 +117,8 @@ func advance_transmigration() -> void:
 	transmigration += 1
 	if vocation != "":
 		vocation_history.append(vocation)
+	# 本局成长清零：吐锋攒的能量上限属于这一条命，转生后不带进新职业
+	energy_bonus = 0
 	_roll_vocation()
 
 
@@ -168,6 +182,11 @@ func _apply_traits() -> void:
 	milestone_card = false
 	milestone_discard = false
 	allies.clear()
+	retired.clear()
+	drops.clear()
+	items.clear()
+	item_uses.clear()
+	item_perms.clear()
 
 func initial_hand_size() -> int:
 	return max(1, RunConfig.FIRST_HAND + TraitDB.total_hand(traits))
@@ -223,6 +242,11 @@ func save_game() -> void:
 		"met_contestants": met_contestants,
 		"eliminated": eliminated,
 		"allies": allies,
+		"retired": retired,
+		"drops": drops,
+		"items": items,
+		"item_uses": item_uses,
+		"item_perms": item_perms,
 	}
 	var f := FileAccess.open(_slot_path(current_slot), FileAccess.WRITE)
 	if f:
@@ -272,6 +296,9 @@ func load_game(slot: int = -1) -> bool:
 	allies.clear()
 	for c in data.get("allies", []):
 		allies.append(str(c))
+	retired.clear()
+	for c in data.get("retired", []):
+		retired.append(str(c))
 	morality = int(data.get("morality", Morality.START_MORAL))
 	sin = int(data.get("sin", Morality.START_SIN))
 	divinity = clampi(int(data.get("divinity", 50)), 0, 100)
@@ -286,6 +313,10 @@ func load_game(slot: int = -1) -> bool:
 	impressions = data.get("impressions", {})
 	npc_seen = data.get("npc_seen", {})
 	meet_count = data.get("meet_count", {})
+	drops = data.get("drops", {})
+	items = data.get("items", {})
+	item_uses = data.get("item_uses", {})
+	item_perms = data.get("item_perms", {})
 	prologue_seen = bool(data.get("prologue_seen", false))
 	act = int(data.get("act", 1))
 	milestone_card = bool(data.get("milestone_card", false))
